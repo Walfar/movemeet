@@ -4,6 +4,7 @@ check_android_task:
     API_LEVEL: 30
     TARGET: google_apis
     ARCH: x86
+    CC_TEST_REPORTER_ID: ENCRYPTED[f52e6636d94d08297d57b0256998fe9e916c6af888e1f0f3e880ab0349677a81616c7034e215accc40c159d4927a6236]
   container:
     image: reactivecircus/android-emulator-$API_LEVEL:latest
     kvm: true
@@ -20,8 +21,16 @@ check_android_task:
     adb wait-for-device
     adb shell input keyevent 82
   disable_animations_script: |
+    prepare_codeclimate_script: |
+        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        chmod +x ./cc-test-reporter
+        ./cc-test-reporter before-build
     adb shell settings put global window_animation_scale 0.0
     adb shell settings put global transition_animation_scale 0.0
     adb shell settings put global animator_duration_scale 0.0
   check_script:
+    report_codeclimate_script: |
+      export JACOCO_SOURCE_PATH=app/src/main/java/
+      ./cc-test-reporter format-coverage ./app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
+      ./cc-test-reporter upload-coverage
     ./gradlew check connectedCheck
