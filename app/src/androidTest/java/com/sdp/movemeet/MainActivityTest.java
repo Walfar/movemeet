@@ -1,8 +1,12 @@
-package com.github.vvhaleshark.bootcamp;
+package com.sdp.movemeet;
 
 import androidx.test.espresso.intent.Intents;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.sdp.movemeet.MainActivity;
+import com.sdp.movemeet.bootcamp.R;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -29,7 +33,7 @@ public class MainActivityTest {
     public void mainActivity_sendsCorrectData() {
         Intents.init();
 
-        onView(withId(R.id.mainEditName))
+        onView(ViewMatchers.withId(R.id.mainEditName))
                 .perform(typeText(KEYBOARD_INPUT), closeSoftKeyboard());
         onView(withId(R.id.mainGoButton)).perform(click());
 

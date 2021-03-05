@@ -1,4 +1,4 @@
-package com.github.vvhaleshark.bootcamp;
+package com.sdp.movemeet;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +7,10 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.sdp.movemeet.GreetingActivity;
+import com.sdp.movemeet.MainActivity;
+import com.sdp.movemeet.bootcamp.R;
 
 import org.junit.Rule;
 import org.junit.Test;
