@@ -11,7 +11,7 @@ import com.sdp.movemeet.bootcamp.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String EXTRA_MESSAGE = "com.github.vvhaleshark.bootcamp.MESSAGE";
+    public static final String EXTRA_MESSAGE = "com.sdp.movemeet.MESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
