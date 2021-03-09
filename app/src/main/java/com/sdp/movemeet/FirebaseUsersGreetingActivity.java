@@ -6,9 +6,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.sdp.movemeet.bootcamp.R;
-
-public class GreetingActivity extends AppCompatActivity {
+public class FirebaseUsersGreetingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +15,7 @@ public class GreetingActivity extends AppCompatActivity {
 
         // Get the Intent that started this Activity and extract the string
         Intent intent = getIntent();
-        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        String message = intent.getStringExtra(FirebaseUsersMainActivity.EXTRA_MESSAGE);
 
         // Capture the layout's TextView and set the string as its text
         TextView greetingMessage = findViewById(R.id.greetingMessage);
