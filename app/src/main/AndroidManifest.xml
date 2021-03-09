@@ -9,8 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Bootcamp">
-        <activity android:name="com.sdp.movemeet.GreetingActivity"
+        <activity android:name="com.sdp.movemeet.Backend.BackendActivityManagerDebug"></activity>
+        <activity
+            android:name="com.sdp.movemeet.GreetingActivity"
             android:parentActivityName="com.sdp.movemeet.MainActivity">
+
             <!-- The meta-data tag is required if you support API level 15 or lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
