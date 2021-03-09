@@ -17,8 +17,6 @@ import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 
-import static org.junit.Assert.assertThat;
-
 public class BackendActivityManagerDebugTest {
 
     private final String DEBUG_COLLECTION = "debug";
@@ -86,7 +84,7 @@ public class BackendActivityManagerDebugTest {
             assert (false);
         }
 
-        assert(true);
+        assert (true);
     }
 
     @Test
@@ -116,13 +114,12 @@ public class BackendActivityManagerDebugTest {
             assert (false);
         }
 
-        assert(true);
+        assert (true);
     }
 
     @Test
     public void uploadActivityDoesNotOverWriteReference() {
         CountDownLatch latch = new CountDownLatch(2);
-
 
 
         bam.uploadActivity(fakeActivity,
@@ -163,7 +160,7 @@ public class BackendActivityManagerDebugTest {
             assert (false);
         }
 
-        assert(docRef.equals(fakeActivity.getBackendRef()));
+        assert (docRef.equals(fakeActivity.getBackendRef()));
     }
 
     @Test(expected = IllegalArgumentException.class)
