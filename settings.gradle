@@ -1,5 +1,5 @@
 include ':app'
-rootProject.name = "Bootcamp"
+rootProject.name = "movemeet"
 
 ext.isCiServer = System.getenv().containsKey("CIRRUS_CI")
 ext.isDefaultBranch = System.getenv()["CIRRUS_BRANCH"] == "master"
