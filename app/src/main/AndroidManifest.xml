@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.movemeet">
         <activity android:name=".HomeScreenActivity"
-            android:theme="@style/Theme.movemeet.noActionBar">
+            android:theme="@style/Theme.movemeet.noActionBar"
+            android:configChanges="orientation|keyboardHidden|screenSize"   >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
