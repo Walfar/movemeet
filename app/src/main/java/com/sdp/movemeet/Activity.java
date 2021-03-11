@@ -59,9 +59,13 @@ public class Activity {
                     Sport sport,
                     String address){
 
-        if(activityId == null || organisatorId == null || title == null || numberParticipant <= 0 || description == null || date == null || duration <= 0 || sport == null || address == null){
+        if(activityId == null || organisatorId == null || title == null || numberParticipant <= 0 )
             throw new IllegalArgumentException();
-        }
+
+        if(description == null || date == null || duration <= 0 || sport == null || address == null)
+            throw new IllegalArgumentException();
+
+
 
         this.activityId = activityId;
         this.organisatorId = organisatorId;
@@ -290,17 +294,14 @@ public class Activity {
 
     @Override
     public boolean equals(Object o){
-        if(o == null){
+        if(o == null)
             return false;
-        }
 
-        if(this == o){
+        if(this == o)
             return true;
-        }
 
-        if(getClass() != o.getClass()){
+        if(getClass() != o.getClass())
             return false;
-        }
 
         Activity obj = (Activity) o;
 
