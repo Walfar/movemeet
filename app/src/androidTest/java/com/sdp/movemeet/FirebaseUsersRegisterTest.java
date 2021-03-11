@@ -21,12 +21,6 @@ public class FirebaseUsersRegisterTest {
     public static final String KEYBOARD_INPUT_EMAIL = "email";
     public static final String KEYBOARD_INPUT_PASSWORD = "password";
     public static final String KEYBOARD_INPUT_SHORT_PASSWORD = "pass";
-    //mPassword = findViewById(R.id.edit_text_password);
-    //progressBar = findViewById(R.id.progressBar);
-    //fAuth = FirebaseAuth.getInstance();
-    //mLoginBtn = findViewById(R.id.button_login);
-    //mCreateBtn = findViewById(R.id.text_view_create_account);
-    //mLoginBtn.setOnClickListener(new View.OnClickListener()
 
     @Rule
     public ActivityScenarioRule<FirebaseUsersRegister> mActivityRule = new ActivityScenarioRule<>(FirebaseUsersRegister.class);

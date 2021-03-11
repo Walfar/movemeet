@@ -1,5 +1,6 @@
 package com.sdp.movemeet;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -24,6 +25,8 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import com.sdp.movemeet.FirebaseInteraction;
+
 public class FirebaseUsersLogin extends AppCompatActivity {
 
     EditText mEmail, mPassword;
@@ -33,7 +36,7 @@ public class FirebaseUsersLogin extends AppCompatActivity {
 
     TextView fullName, emailTextView, phone;
     FirebaseFirestore fStore;
-    String userId;
+    String userId, email, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,83 +50,71 @@ public class FirebaseUsersLogin extends AppCompatActivity {
         mCreateBtn = findViewById(R.id.text_view_create_account);
         mDetailsGlanceBtn = findViewById(R.id.text_view_details_glance);
 
+    }
 
-        // Defining the OnClickListener for the "text_view_create_account button"
-        mCreateBtn.setOnClickListener(new View.OnClickListener() {
+
+    public void createAccountOnClick(View view) {
+        startActivity(new Intent(getApplicationContext(), FirebaseUsersRegister.class)); // redirecting the user to the "Register" activity
+    }
+
+
+    public void detailsGlanceOnClick(View view) {
+        // When the user clicks on the "text_view_details_glance button" button, we first validate his data
+        email = mEmail.getText().toString().trim();
+        password = mPassword.getText().toString().trim();
+
+        if (TextUtils.isEmpty(email)) { // checking that the email address is not empty
+            mEmail.setError("Email is required.");
+            return;
+        }
+
+        if (TextUtils.isEmpty(password)) { // checking that the password is not empty
+            mPassword.setError("Password is required.");
+            return;
+        }
+
+        if (password.length() < 6) { // checking that the password is at least 6 characters long
+            mPassword.setError("Password must be >= 6 characters.");
+            return;
+        }
+
+        progressBar.setVisibility(View.VISIBLE);
+
+        authenticateUser();
+
+    }
+
+    public void authenticateUser() { // authenticating the user using his email and password
+        fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), FirebaseUsersRegister.class)); // redirecting the user to the "Register" activity
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    Toast toast = Toast.makeText(FirebaseUsersLogin.this, "Account verified.", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.START, 90, 0);
+                    toast.show();
+
+                    displayUserData();
+
+                } else {
+                    Toast.makeText(FirebaseUsersLogin.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                }
             }
+
         });
+    }
 
-        // Defining the OnClickListener for the "text_view_details_glance button"
-        mDetailsGlanceBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // When the user clicks on the "text_view_details_glance button" button, we first validate his data
-                String email = mEmail.getText().toString().trim();
-                String password = mPassword.getText().toString().trim();
+    private void displayUserData() { // displaying user data
+        phone = findViewById(R.id.text_view_profile_phone);
+        fullName = findViewById(R.id.text_view_profile_name);
+        emailTextView = findViewById(R.id.text_view_profile_email);
 
-                if (TextUtils.isEmpty(email)) { // checking that the email address is not empty
-                    mEmail.setError("Email is required.");
-                    return;
-                }
+        fAuth = FirebaseAuth.getInstance();
+        fStore = FirebaseFirestore.getInstance();
 
-                if (TextUtils.isEmpty(password)) { // checking that the password is not empty
-                    mPassword.setError("Password is required.");
-                    return;
-                }
+        userId = fAuth.getCurrentUser().getUid();
 
-                if (password.length() < 6) { // checking that the password is at least 6 characters long
-                    mPassword.setError("Password must be >= 6 characters.");
-                    return;
-                }
-
-                progressBar.setVisibility(View.VISIBLE);
-
-                // Then we authenticate the user using his email and password
-                fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast toast = Toast.makeText(FirebaseUsersLogin.this, "Account verified.", Toast.LENGTH_SHORT);
-                            toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.START, 90, 0);
-                            toast.show();
-
-                            // Displaying user data
-                            //----
-                            phone = findViewById(R.id.text_view_profile_phone);
-                            fullName = findViewById(R.id.text_view_profile_name);
-                            emailTextView = findViewById(R.id.text_view_profile_email);
-
-                            fAuth = FirebaseAuth.getInstance();
-                            fStore = FirebaseFirestore.getInstance();
-
-                            userId = fAuth.getCurrentUser().getUid();
-
-                            // Retrieving the data from the Firestore database
-                            DocumentReference documentReference = fStore.collection("users").document(userId);
-                            documentReference.addSnapshotListener(FirebaseUsersLogin.this, new EventListener<DocumentSnapshot>() {
-                                @Override
-                                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                                    phone.setText(documentSnapshot.getString("phone"));
-                                    fullName.setText(documentSnapshot.getString("fullName"));
-                                    emailTextView.setText(documentSnapshot.getString("email"));
-                                }
-
-                            });
-                            //----
-
-                        } else {
-                            Toast.makeText(FirebaseUsersLogin.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    }
-
-                });
-
-            }
-        });
+        FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, phone, fullName, emailTextView, FirebaseUsersLogin.this);
 
     }
 }

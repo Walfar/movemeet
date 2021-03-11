@@ -17,6 +17,8 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import com.sdp.movemeet.FirebaseInteraction;
+
 public class FirebaseUsersMainActivity extends AppCompatActivity {
 
     public static final String EXTRA_MESSAGE = "com.sdp.movemeet.MESSAGE";
@@ -40,17 +42,7 @@ public class FirebaseUsersMainActivity extends AppCompatActivity {
 
         userId = fAuth.getCurrentUser().getUid();
 
-        // Retrieving the data from the Firestore database
-        DocumentReference documentReference = fStore.collection("users").document(userId);
-        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                phone.setText(documentSnapshot.getString("phone"));
-                fullName.setText(documentSnapshot.getString("fullName"));
-                email.setText(documentSnapshot.getString("email"));
-            }
-
-        });
+        FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, phone, fullName, email, FirebaseUsersMainActivity.this);
 
     }
 

@@ -117,6 +117,7 @@
 
     <Button
         android:id="@+id/button_register"
+        android:onClick="registerOnClick"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -133,6 +134,7 @@
 
     <TextView
         android:id="@+id/text_view_login_here"
+        android:onClick="loginOnClick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

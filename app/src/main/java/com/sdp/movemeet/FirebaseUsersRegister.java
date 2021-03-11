@@ -1,8 +1,5 @@
 package com.sdp.movemeet;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,6 +10,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -37,7 +37,7 @@ public class FirebaseUsersRegister extends AppCompatActivity {
     FirebaseAuth fAuth;
     ProgressBar progressBar;
     FirebaseFirestore fStore;
-    String userID;
+    String userID, email, password, fullName, phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,77 +60,73 @@ public class FirebaseUsersRegister extends AppCompatActivity {
             finish();
         }
 
+    }
 
-        mRegisterBtn.setOnClickListener(new View.OnClickListener() {
+
+    public void registerOnClick(View view) { // when the user clicks on the "REGISTER" button, we validate his data
+
+        email = mEmail.getText().toString().trim();
+        password = mPassword.getText().toString().trim();
+        fullName = mFullName.getText().toString();
+        phone = mPhone.getText().toString();
+
+        if (TextUtils.isEmpty(email)) { // checking that the email address is not empty
+            mEmail.setError("Email is required.");
+            return;
+        }
+
+        if (TextUtils.isEmpty(password)) { // checking that the password is not empty
+            mPassword.setError("Password is required.");
+            return;
+        }
+
+        if (password.length() < 6) { // checking that the password is at least 6 characters long
+            mPassword.setError("Password must be >= 6 characters.");
+            return;
+        }
+
+        progressBar.setVisibility(View.VISIBLE);
+
+        registeringUserToFirebase();
+
+    }
+
+    public void registeringUserToFirebase() { // Registering the user to the Firebase database
+        fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
-            public void onClick(View v) { // when the user clicks on the "REGISTER" button, we validate his data
-                String email = mEmail.getText().toString().trim();
-                String password = mPassword.getText().toString().trim();
-                String fullName = mFullName.getText().toString();
-                String phone = mPhone.getText().toString();
+            public void onComplete(@NonNull Task<AuthResult> task) {
 
-                if (TextUtils.isEmpty(email)) { // checking that the email address is not empty
-                    mEmail.setError("Email is required.");
-                    return;
-                }
-
-                if (TextUtils.isEmpty(password)) { // checking that the password is not empty
-                    mPassword.setError("Password is required.");
-                    return;
-                }
-
-                if (password.length() < 6) { // checking that the password is at least 6 characters long
-                    mPassword.setError("Password must be >= 6 characters.");
-                    return;
-                }
-
-                progressBar.setVisibility(View.VISIBLE);
-
-                // Registering the user to the Firebase database
-                fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-                        if (task.isSuccessful()) { // if the account has been correctly been created, we store his data and launch the "MainActivity"
-                            Toast.makeText(FirebaseUsersRegister.this, "User created.", Toast.LENGTH_SHORT).show();
-                            userID = fAuth.getCurrentUser().getUid(); // retrieving the user id of the currently logged in (registered) user
-                            DocumentReference documentReference = fStore.collection("users").document(userID); // if we first don't have this "users" collection in our database, it will automatically create it in Cloud Firestore
-                            Map<String, Object> user = new HashMap<>(); // map with "String" as keys (that will act as attributes in our document) and "objects" as the data
-                            user.put("fullName", fullName);
-                            user.put("email", email);
-                            user.put("phone", phone);
-                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.d(TAG, "onSuccess: user profile is created for " + userID);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.d(TAG, "onFailure: " + e.toString());
-                                }
-                            });
-                            startActivity(new Intent(getApplicationContext(), FirebaseUsersMainActivity.class));
-
-                        } else {
-                            Toast.makeText(FirebaseUsersRegister.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show(); // an error could for instance happen in case a user tries to register with an email already registered in the database ("Error! The email address is already in use by another account.")
-                            progressBar.setVisibility(View.GONE);
+                if (task.isSuccessful()) { // if the account has been correctly been created, we store his data and launch the "MainActivity"
+                    Toast.makeText(FirebaseUsersRegister.this, "User created.", Toast.LENGTH_SHORT).show();
+                    userID = fAuth.getCurrentUser().getUid(); // retrieving the user id of the currently logged in (registered) user
+                    DocumentReference documentReference = fStore.collection("users").document(userID); // if we first don't have this "users" collection in our database, it will automatically create it in Cloud Firestore
+                    Map<String, Object> user = new HashMap<>(); // map with "String" as keys (that will act as attributes in our document) and "objects" as the data
+                    user.put("fullName", fullName);
+                    user.put("email", email);
+                    user.put("phone", phone);
+                    documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "onSuccess: user profile is created for " + userID);
                         }
-                    }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "onFailure: " + e.toString());
+                        }
+                    });
+                    startActivity(new Intent(getApplicationContext(), FirebaseUsersMainActivity.class));
 
-                });
-
-
+                } else {
+                    Toast.makeText(FirebaseUsersRegister.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show(); // an error could for instance happen in case a user tries to register with an email already registered in the database ("Error! The email address is already in use by another account.")
+                    progressBar.setVisibility(View.GONE);
+                }
             }
+
         });
+    }
 
-
-        mLoginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), FirebaseUsersLogin.class)); // redirecting the user to the "Login" activity
-            }
-        });
-
+    public void loginOnClick(View view) {
+        startActivity(new Intent(getApplicationContext(), FirebaseUsersLogin.class)); // redirecting the user to the "Login" activity
     }
 }
