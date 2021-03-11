@@ -68,7 +68,7 @@ public class BackendActivityManagerDemoTest {
         onView(ViewMatchers.withId(R.id.searchResult)).check(matches(withText(containsString("Success"))));
 
         try {
-            Thread.sleep(5000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             assert (false);
         }
@@ -76,7 +76,7 @@ public class BackendActivityManagerDemoTest {
         onView(withId(R.id.searchButton)).perform(click());
 
         try {
-            Thread.sleep(2000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             assert (false);
         }

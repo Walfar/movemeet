@@ -10,14 +10,15 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sdp.movemeet.Activity.Activity;
+import com.sdp.movemeet.Sport;
 import com.sdp.movemeet.bootcamp.R;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class BackendActivityManagerDemo extends AppCompatActivity {
@@ -39,13 +40,18 @@ public class BackendActivityManagerDemo extends AppCompatActivity {
         String host = editText.getText().toString();
         if (host.isEmpty()) host = "NO_HOST_GIVEN";
 
-        Activity act = new Activity(
+        Activity act = new Activity("activity",
                 host,
-                0,
-                new Date(),
-                1,
-                0
-        );
+                "title",
+        10,
+        new ArrayList<String>(),
+        0,
+        0,
+        "desc",
+        new Date(),
+        10,
+        Sport.Running,
+        "address");
 
         TextView res = findViewById(R.id.searchResult);
 
@@ -69,7 +75,7 @@ public class BackendActivityManagerDemo extends AppCompatActivity {
         String host = editText.getText().toString();
 
         Query q = bam.getActivitiesCollectionReference()
-                .whereEqualTo("hostID", host)
+                .whereEqualTo("organizerId", host)
                 //.orderBy("time")
                 .limit(1);
 
@@ -80,7 +86,7 @@ public class BackendActivityManagerDemo extends AppCompatActivity {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (DocumentSnapshot docSnap: queryDocumentSnapshots.getDocuments()) {
-                    res.setText(docSnap.get("hostID") + "\n" + docSnap.get("time"));
+                    res.setText(docSnap.get("organizerId") + "\n" + docSnap.get("date"));
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -96,7 +102,7 @@ public class BackendActivityManagerDemo extends AppCompatActivity {
         String host = editText.getText().toString();
 
         Query q = bam.getActivitiesCollectionReference()
-                .whereEqualTo("hostID", host)
+                .whereEqualTo("organizerId", host)
                 //.orderBy("time")
                 .limit(1);
 
@@ -106,13 +112,18 @@ public class BackendActivityManagerDemo extends AppCompatActivity {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if (!queryDocumentSnapshots.getDocuments().isEmpty()) {
-                    Activity act = new Activity(
-                            queryDocumentSnapshots.getDocuments().get(0).get("hostID").toString(),
+                    Activity act = new Activity("",
+                            queryDocumentSnapshots.getDocuments().get(0).get("organizerId").toString(),
+                            "title",
+                            10,
+                            new ArrayList<String>(),
                             0,
+                            0,
+                            "desc",
                             new Date(),
-                            1,
-                            0
-                    );
+                            10,
+                            Sport.Running,
+                            "address");
                     act.setBackendRef(queryDocumentSnapshots.getDocuments().get(0).getReference());
 
                     bam.deleteActivity(act, new OnSuccessListener<Void>() {
