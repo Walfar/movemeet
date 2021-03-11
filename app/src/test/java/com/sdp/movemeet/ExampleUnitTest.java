@@ -1,4 +1,4 @@
-package com.github.vvhaleshark.bootcamp;
+package com.github.vvhaleshark.movemeet;
 
 import org.junit.Test;
 

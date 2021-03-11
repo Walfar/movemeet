@@ -1,13 +1,13 @@
-package com.github.vvhaleshark.bootcamp;
+package com.github.vvhaleshark.movemeet;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.github.vvhaleshark.bootcamp.map.MapsActivity;
+import com.github.vvhaleshark.movemeet.R;
+import com.github.vvhaleshark.movemeet.map.MapsActivity;
 
 public class MainActivity extends AppCompatActivity {
 

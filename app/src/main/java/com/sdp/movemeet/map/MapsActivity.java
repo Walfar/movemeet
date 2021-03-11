@@ -1,17 +1,15 @@
-package com.github.vvhaleshark.bootcamp.map;
+package com.sdp.movemeet.map;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.graphics.Camera;
 import android.location.Location;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.github.vvhaleshark.bootcamp.MainActivity;
-import com.github.vvhaleshark.bootcamp.R;
+import com.github.vvhaleshark.movemeet.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -20,7 +18,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -28,7 +25,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location currentLocation;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
-    
+
 
 
     @Override
@@ -48,18 +45,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
-        task.addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    currentLocation = location;
-                    Toast.makeText(getApplicationContext(), currentLocation.getLatitude()+""+currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
-                    SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
-                    supportMapFragment.getMapAsync(MapsActivity.this);
-                }
-            }
-        });
-
+        task.addOnSuccessListener(this::onSuccess);
     }
 
 
@@ -81,6 +67,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     fetchLastLocation();
                 }
                 break;
+        }
+    }
+
+    private void onSuccess(Location location) {
+        if (location != null) {
+            currentLocation = location;
+            Toast.makeText(getApplicationContext(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
+            SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
+            supportMapFragment.getMapAsync(MapsActivity.this);
         }
     }
 }
