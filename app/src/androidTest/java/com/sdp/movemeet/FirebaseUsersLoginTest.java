@@ -25,7 +25,7 @@ public class FirebaseUsersLoginTest {
     public static final String KEYBOARD_INPUT_PASSWORD = "234567";
 
     @Rule
-    public ActivityScenarioRule<FirebaseUsersLogin> mActivityTestRule = new ActivityScenarioRule<>(FirebaseUsersLogin.class);
+    public ActivityScenarioRule<FirebaseUsersLogin> testRule = new ActivityScenarioRule<>(FirebaseUsersLogin.class);
 
     @Test
     public void firebaseUsersLoginEndToEnd() {
