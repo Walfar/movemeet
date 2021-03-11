@@ -45,8 +45,8 @@ public class FirebaseUsersRegister extends AppCompatActivity {
         setContentView(R.layout.activity_firebase_users_register);
 
         mFullName = findViewById(R.id.edit_text_full_name);
-        mEmail = findViewById(R.id.edit_text_email);
-        mPassword = findViewById(R.id.edit_text_password);
+        mEmail = findViewById(R.id.edit_text_email_register);
+        mPassword = findViewById(R.id.edit_text_password_register);
         mPhone = findViewById(R.id.edit_text_phone);
         mRegisterBtn = findViewById(R.id.button_register);
         mLoginBtn = findViewById(R.id.text_view_login_here);

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -41,8 +40,8 @@ public class FirebaseUsersLogin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firebase_users_login);
 
-        mEmail = findViewById(R.id.edit_text_email);
-        mPassword = findViewById(R.id.edit_text_password);
+        mEmail = findViewById(R.id.edit_text_email_register);
+        mPassword = findViewById(R.id.edit_text_password_register);
         progressBar = findViewById(R.id.progressBar);
         fAuth = FirebaseAuth.getInstance();
         mCreateBtn = findViewById(R.id.text_view_create_account);

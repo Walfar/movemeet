@@ -31,10 +31,10 @@ public class FirebaseUsersLoginTest {
     public void firebaseUsersLoginEndToEnd() {
 
         // Filling the email
-        onView(ViewMatchers.withId(R.id.edit_text_email)).perform(typeText(KEYBOARD_INPUT_EMAIL), closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.edit_text_email_register)).perform(typeText(KEYBOARD_INPUT_EMAIL), closeSoftKeyboard());
 
         // Filling the password
-        onView(ViewMatchers.withId(R.id.edit_text_password)).perform(typeText(KEYBOARD_INPUT_PASSWORD), closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.edit_text_password_register)).perform(typeText(KEYBOARD_INPUT_PASSWORD), closeSoftKeyboard());
 
         // Clicking on the LOGIN button
         onView(withId(R.id.text_view_details_glance)).perform(click());
