@@ -11,11 +11,6 @@ import static org.junit.Assert.assertEquals;
  */
 public class UserDatabaseTest {
     @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
-    }
-
-    @Test
     public void DatabaseConstructorIsCorrect() {
         UserDatabase db = new UserDatabase();
     }
@@ -26,6 +21,7 @@ public class UserDatabaseTest {
 
         db.addUser("hello", "world");
         assertEquals(true, db.isInUsers("hello"));
+        assertEquals(false, db.isInUsers("goodbye"));
     }
 
     @Test
