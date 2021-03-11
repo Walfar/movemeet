@@ -32,9 +32,9 @@
             android:value="@string/map_key" />
 
         <activity
-            android:name="com.sdp.movemeet.com.sdp.movemeet.map.MapsActivity"
+            android:name="com.sdp.movemeet.map.MapsActivity"
             android:label="@string/title_activity_maps"></activity>
-        <activity android:name="com.sdp.movemeet.com.sdp.movemeet.MainActivity">
+        <activity android:name="com.sdp.movemeet.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
