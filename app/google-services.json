@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "869980809031",
+    "project_id": "movemeet-4cbf5",
+    "storage_bucket": "movemeet-4cbf5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:869980809031:android:755a6a2b4fa8845cff4e62",
+        "android_client_info": {
+          "package_name": "com.sdp.movemeet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "869980809031-ltdvak2l6as84teok1psbi0us2p48v60.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2MlGe4VJ0w9xzi9034h2n86NzhGku2FY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "869980809031-ltdvak2l6as84teok1psbi0us2p48v60.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

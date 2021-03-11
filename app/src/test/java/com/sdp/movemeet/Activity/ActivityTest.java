@@ -1,11 +1,12 @@
-package com.sdp.movemeet;
+package com.sdp.movemeet.Activity;
+
+import com.sdp.movemeet.Activity.Activity;
+import com.sdp.movemeet.Sport;
 
 import org.junit.*;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.PrimitiveIterator;
 
 import static org.junit.Assert.assertEquals;
 
@@ -41,7 +42,7 @@ public class ActivityTest {
                 DUMMY_ADDRESS);
 
         assertEquals(activity.getActivityId(), DUMMY_ACTIVITY_ID);
-        assertEquals(activity.getOrganisatorId(), DUMMY_ORGANISATOR_ID);
+        assertEquals(activity.getOrganizerId(), DUMMY_ORGANISATOR_ID);
         assertEquals(activity.getTitle(), DUMMY_TITLE);
         assertEquals(activity.getNumberParticipant(), DUMMY_NUMBER_PARTICIPANT);
         assertEquals(activity.getParticipantId(), DUMMY_PARTICIPANTS_ID);
@@ -261,7 +262,7 @@ public class ActivityTest {
                 DUMMY_SPORT,
                 DUMMY_ADDRESS);
 
-        assertEquals(activity.toString(), "ActivityId:" + DUMMY_ACTIVITY_ID + "\nOrganisatorId" + DUMMY_ORGANISATOR_ID + "\nTitle:" + DUMMY_TITLE + "\nNumberParticipant:" + DUMMY_NUMBER_PARTICIPANT +
+        assertEquals(activity.toString(), "ActivityId:" + DUMMY_ACTIVITY_ID + "\nOrganizerId" + DUMMY_ORGANISATOR_ID + "\nTitle:" + DUMMY_TITLE + "\nNumberParticipant:" + DUMMY_NUMBER_PARTICIPANT +
                 "\nParticipantId:" + DUMMY_PARTICIPANTS_ID + "\nLongitude:" + DUMMY_LONGITUDE + "\nLatitude:" + DUMMY_LATITUDE + "\nDescription:" + DUMMY_DESCRIPTION +
                 "\nDate:" + DUMMY_DATE + "\nDuration:" + DUMMY_DURATION + "\nSport:" + DUMMY_SPORT + "\nAddress:" + DUMMY_ADDRESS);
 

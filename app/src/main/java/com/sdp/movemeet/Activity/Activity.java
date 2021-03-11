@@ -1,10 +1,13 @@
-package com.sdp.movemeet;
+package com.sdp.movemeet.Activity;
+
+import com.google.firebase.firestore.DocumentReference;
+import com.sdp.movemeet.Sport;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.List;
+
 /**
  *
  *
@@ -15,7 +18,7 @@ import java.util.List;
 public class Activity {
 
     private final String activityId;
-    private final String organisatorId;
+    private final String organizerId;
     private String title;
     private int numberParticipant;
     private ArrayList<String> participantsId;
@@ -29,12 +32,14 @@ public class Activity {
     private final Sport sport;
     private String address;
 
+    private DocumentReference backendRef;
+
     static  private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
 
     /**
      * Construct a new activity
      * @param activityId id of the activity
-     * @param organisatorId user how create the activity
+     * @param organizerId user how create the activity
      * @param title of the activity
      * @param numberParticipant for the activity
      * @param participantsId how register for the activity
@@ -47,7 +52,7 @@ public class Activity {
      * @param address of the activity
      */
     public Activity(String activityId,
-                    String organisatorId,
+                    String organizerId,
                     String title,
                     int numberParticipant,
                     ArrayList<String> participantsId,
@@ -59,7 +64,7 @@ public class Activity {
                     Sport sport,
                     String address){
 
-        if(activityId == null || organisatorId == null || title == null || numberParticipant <= 0 )
+        if(activityId == null || organizerId == null || title == null || numberParticipant <= 0 )
             throw new IllegalArgumentException();
 
         if(description == null || date == null || duration <= 0 || sport == null || address == null)
@@ -68,7 +73,7 @@ public class Activity {
 
 
         this.activityId = activityId;
-        this.organisatorId = organisatorId;
+        this.organizerId = organizerId;
         this.title = title;
         this.numberParticipant = numberParticipant;
         this.participantsId = participantsId;
@@ -91,10 +96,10 @@ public class Activity {
 
     /**
      *
-     * @return the activity's organisator
+     * @return the activity's organizer
      */
-    public String getOrganisatorId() {
-        return organisatorId;
+    public String getOrganizerId() {
+        return organizerId;
     }
 
     /**
@@ -285,9 +290,28 @@ public class Activity {
         this.participantsId.remove(participant);
     }
 
+    /**
+     *
+     * @return a DocumentReference to the activity
+     */
+    public DocumentReference getBackendRef() {
+        return this.backendRef;
+    }
+
+    /**
+     * Sets the backend reference property if it was previously null, does nothing otherwise.
+     *
+     * @param newRef the new value used to reference this activity in its collection in the backend
+     * @return the DocumentReference used to reference this activity in its collection in the backend
+     */
+    public DocumentReference setBackendRef(DocumentReference newRef) throws IllegalArgumentException {
+        if (backendRef == null) backendRef = newRef;
+        return backendRef;
+    }
+
     @Override
     public String toString(){
-        return "ActivityId:" + activityId + "\nOrganisatorId" + organisatorId + "\nTitle:" + title + "\nNumberParticipant:" + numberParticipant +
+        return "ActivityId:" + activityId + "\nOrganizerId" + organizerId + "\nTitle:" + title + "\nNumberParticipant:" + numberParticipant +
                 "\nParticipantId:" + participantsId + "\nLongitude:" + longitude + "\nLatitude:" + latitude + "\nDescription:" + description +
                 "\nDate:" + date + "\nDuration:" + duration + "\nSport:" + sport + "\nAddress:" + address;
     }
@@ -305,7 +329,7 @@ public class Activity {
 
         Activity obj = (Activity) o;
 
-        return activityId.equals(obj.activityId) && organisatorId.equals(obj.organisatorId) && title.equals(obj.title) &&
+        return activityId.equals(obj.activityId) && organizerId.equals(obj.organizerId) && title.equals(obj.title) &&
                 numberParticipant == obj.numberParticipant && participantsId.equals(obj.participantsId) && longitude == obj.longitude &&
                 latitude == obj.latitude && description.equals(obj.description) && date.equals(obj.date) && duration == obj.duration &&
                 sport.equals(obj.sport) && address.equals(obj.address);
