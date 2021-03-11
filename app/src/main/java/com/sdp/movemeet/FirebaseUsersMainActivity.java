@@ -7,7 +7,12 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+<<<<<<< HEAD:app/src/main/java/com/sdp/movemeet/FirebaseUsersMainActivity.java
 import com.google.firebase.auth.FirebaseAuth;
+=======
+import com.sdp.movemeet.Backend.BackendActivityManagerDemo;
+import com.sdp.movemeet.bootcamp.R;
+>>>>>>> b3de06a76138e6a4334de9a565c91a5ba1152379:app/src/main/java/com/sdp/movemeet/MainActivity.java
 
 public class FirebaseUsersMainActivity extends AppCompatActivity {
 
@@ -29,10 +34,17 @@ public class FirebaseUsersMainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+<<<<<<< HEAD:app/src/main/java/com/sdp/movemeet/FirebaseUsersMainActivity.java
     public void logout(View view) {
         FirebaseAuth.getInstance().signOut(); // this will do the logout of the user from Firebase
         startActivity(new Intent(getApplicationContext(), FirebaseUsersLogin.class)); // sending the user to the "Login" activity
         finish();
     }
 
+=======
+    public void goToFirebaseDebug(View view) {
+        Intent intent = new Intent(this, BackendActivityManagerDemo.class);
+        startActivity(intent);
+    }
+>>>>>>> b3de06a76138e6a4334de9a565c91a5ba1152379:app/src/main/java/com/sdp/movemeet/MainActivity.java
 }

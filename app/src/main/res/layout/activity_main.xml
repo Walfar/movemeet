@@ -33,6 +33,7 @@
         app:layout_constraintTop_toBottomOf="@+id/mainEditName" />
 
     <Button
+<<<<<<< HEAD
         android:id="@+id/button_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,4 +44,15 @@
         app:layout_constraintTop_toBottomOf="@+id/mainGoButton"
         android:onClick="logout" />
 
+=======
+        android:id="@+id/firebaseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="goToFirebaseDebug"
+        android:text="Firebase Debug"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainGoButton" />
+>>>>>>> b3de06a76138e6a4334de9a565c91a5ba1152379
 </androidx.constraintlayout.widget.ConstraintLayout>
