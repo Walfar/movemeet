@@ -1,4 +1,4 @@
-package com.github.vvhaleshark.movemeet;
+package com.sdp.movemeet;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,8 +6,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.github.vvhaleshark.movemeet.R;
-import com.github.vvhaleshark.movemeet.map.MapsActivity;
+import com.sdp.movemeet.map.MapsActivity;
 
 public class MainActivity extends AppCompatActivity {
 

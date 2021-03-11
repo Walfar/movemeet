@@ -1,4 +1,4 @@
-package com.github.vvhaleshark.movemeet;
+package com.sdp.movemeet;
 
 import org.junit.Test;
 

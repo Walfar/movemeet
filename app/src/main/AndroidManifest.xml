@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.github.vvhaleshark.bootcamp">
+    package="com.sdp.movemeet">
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -32,9 +32,9 @@
             android:value="@string/map_key" />
 
         <activity
-            android:name=".map.MapsActivity"
+            android:name="com.sdp.movemeet.com.sdp.movemeet.map.MapsActivity"
             android:label="@string/title_activity_maps"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name="com.sdp.movemeet.com.sdp.movemeet.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
