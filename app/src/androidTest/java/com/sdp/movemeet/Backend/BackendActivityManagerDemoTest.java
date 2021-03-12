@@ -6,7 +6,7 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
-import com.sdp.movemeet.bootcamp.R;
+import com.sdp.movemeet.R;
 
 import org.junit.Rule;
 import org.junit.Test;
