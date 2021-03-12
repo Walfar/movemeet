@@ -7,17 +7,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-
-import com.sdp.movemeet.FirebaseInteraction;
+import com.sdp.movemeet.Backend.BackendActivityManagerDemo;
 
 public class FirebaseUsersMainActivity extends AppCompatActivity {
 
@@ -47,10 +41,11 @@ public class FirebaseUsersMainActivity extends AppCompatActivity {
     }
 
     /* Called when the user taps the Go button */
-    @SuppressWarnings("unused")
     public void sendMessage(View view) {
         Intent intent = new Intent(this, FirebaseUsersGreetingActivity.class);
+
         EditText editText = findViewById(R.id.edit_text_name);
+
         String message = editText.getText().toString();
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
@@ -58,9 +53,16 @@ public class FirebaseUsersMainActivity extends AppCompatActivity {
 
     public void logout(View view) {
         FirebaseAuth.getInstance().signOut(); // this will do the logout of the user from Firebase
+
         Toast.makeText(FirebaseUsersMainActivity.this, "Logged out successfully.", Toast.LENGTH_SHORT).show();
+
         startActivity(new Intent(getApplicationContext(), FirebaseUsersLogin.class)); // sending the user to the "Login" activity
         finish();
     }
 
+
+    public void goToFirebaseDebug(View view) {
+        Intent intent = new Intent(this, BackendActivityManagerDemo.class);
+        startActivity(intent);
+    }
 }

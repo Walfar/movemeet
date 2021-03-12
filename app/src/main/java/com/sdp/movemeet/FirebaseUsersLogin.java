@@ -1,6 +1,5 @@
 package com.sdp.movemeet;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,20 +11,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-
-import com.sdp.movemeet.FirebaseInteraction;
 
 public class FirebaseUsersLogin extends AppCompatActivity {
 
@@ -37,6 +29,7 @@ public class FirebaseUsersLogin extends AppCompatActivity {
     TextView fullName, emailTextView, phone;
     FirebaseFirestore fStore;
     String userId, email, password;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,5 +109,16 @@ public class FirebaseUsersLogin extends AppCompatActivity {
 
         FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, phone, fullName, emailTextView, FirebaseUsersLogin.this);
 
+        fAuth = FirebaseAuth.getInstance();
+        mCreateBtn = findViewById(R.id.text_view_create_account);
+
+
+        // Defining the OnClickListener for the "text view button"
+        mCreateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), FirebaseUsersRegister.class)); // redirecting the user to the "Register" activity
+            }
+        });
     }
 }

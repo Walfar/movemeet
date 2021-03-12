@@ -19,31 +19,25 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 
 @RunWith(AndroidJUnit4.class)
-public class FirebaseUsersMainActivityTest {
-
-    public static final String KEYBOARD_INPUT = "TEST_INPUT_00192qa19";
+public class HomeScreenActivityTest {
 
     @Rule
-    public ActivityScenarioRule<FirebaseUsersMainActivity> testRule = new ActivityScenarioRule<>(FirebaseUsersMainActivity.class);
+    public ActivityScenarioRule<HomeScreenActivity> testRule = new ActivityScenarioRule<>(HomeScreenActivity.class);
 
     @Test
-    public void mainActivity_sendsCorrectData() {
+    public void mainActivity_signIn() {
         Intents.init();
 
-        onView(ViewMatchers.withId(R.id.mainEditName))
-                .perform(typeText(KEYBOARD_INPUT), closeSoftKeyboard());
-        onView(withId(R.id.mainGoButton)).perform(click());
-
-        intended(hasExtra(FirebaseUsersMainActivity.EXTRA_MESSAGE, KEYBOARD_INPUT));
+        onView(withId(R.id.signInButton)).perform(click());
 
         Intents.release();
     }
 
     @Test
-    public void mainActivity_logout() {
+    public void mainActivity_noAccount() {
         Intents.init();
 
-        onView(withId(R.id.button_logout)).perform(click());
+        onView(withId(R.id.noAccountButton)).perform(click());
 
         Intents.release();
     }

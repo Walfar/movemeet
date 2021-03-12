@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sdp.movemeet.Backend.BackendActivityManagerDemo">
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="deleteActivity"
+        android:text="Delete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editHostDelete"
+        app:layout_constraintTop_toTopOf="@+id/editHostDelete" />
+
+    <TextView
+        android:id="@+id/deleteText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="Delete"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editHostUpload"
+        app:layout_constraintTop_toBottomOf="@+id/editHostUpload" />
+
+    <TextView
+        android:id="@+id/searchText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="Search"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editHostDelete"
+        app:layout_constraintTop_toBottomOf="@+id/editHostDelete" />
+
+    <EditText
+        android:id="@+id/editHostDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="Host"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/deleteText"
+        app:layout_constraintTop_toBottomOf="@+id/deleteText" />
+
+    <TextView
+        android:id="@+id/uploadText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.147"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.096" />
+
+    <EditText
+        android:id="@+id/editHostSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="Host"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/searchText"
+        app:layout_constraintTop_toBottomOf="@+id/searchText" />
+
+    <EditText
+        android:id="@+id/editHostUpload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="Host"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/uploadText"
+        app:layout_constraintTop_toBottomOf="@+id/uploadText" />
+
+    <TextView
+        android:id="@+id/searchResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="[      ]"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editHostSearch" />
+
+    <Button
+        android:id="@+id/uploadButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="uploadActivity"
+        android:text="Upload"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editHostUpload"
+        app:layout_constraintTop_toTopOf="@+id/editHostUpload" />
+
+    <Button
+        android:id="@+id/searchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="searchActivity"
+        android:text="Search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editHostSearch"
+        app:layout_constraintTop_toTopOf="@+id/editHostSearch" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

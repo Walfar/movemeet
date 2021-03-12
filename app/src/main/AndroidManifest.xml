@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sdp.movemeet">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,37 +11,53 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.movemeet">
+        <activity android:name=".HomeScreenActivity"
+            android:theme="@style/Theme.movemeet.noActionBar"
+            android:configChanges="orientation|keyboardHidden|screenSize">
+        </activity>
+        <activity android:name="com.sdp.movemeet.Backend.BackendActivityManagerDemo"></activity>
+        <activity android:name="com.sdp.movemeet.Backend.BackendActivityManagerDebug" />
+        <activity
+            android:name="com.sdp.movemeet.GreetingActivity"
+            android:parentActivityName="com.sdp.movemeet.MainActivity">
 
-        <activity android:name=".FirebaseUsersRegister">
+            <!-- The meta-data tag is required if you support API level 15 or lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sdp.movemeet.MainActivity" />
+        </activity>
+        <activity android:name="com.sdp.movemeet.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".FirebaseUsersMainActivity">
+        <activity android:name=".FirebaseUsersRegister"
+            android:parentActivityName=".HomeScreenActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sdp.movemeet.HomeScreenActivity" />
         </activity>
-
-        <activity
-            android:name=".FirebaseUsersLogin">
-        </activity>
-
+        <activity android:name=".FirebaseUsersMainActivity"></activity>
+        <activity android:name=".FirebaseUsersLogin"
+            android:parentActivityName=".HomeScreenActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sdp.movemeet.HomeScreenActivity" /></activity>
         <activity
             android:name=".FirebaseUsersGreetingActivity"
             android:parentActivityName=".FirebaseUsersMainActivity">
+
             <!-- The meta-data tag is required if you support API level 15 or lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sdp.movemeet.FirebaseUsersMainActivity" />
         </activity>
 
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
     </application>
 
 </manifest>
