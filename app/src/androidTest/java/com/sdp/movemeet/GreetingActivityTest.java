@@ -10,7 +10,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.sdp.movemeet.GreetingActivity;
 import com.sdp.movemeet.MainActivity;
-import com.sdp.movemeet.bootcamp.R;
+import com.sdp.movemeet.R;
 
 import org.junit.Rule;
 import org.junit.Test;
