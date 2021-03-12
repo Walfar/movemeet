@@ -97,7 +97,6 @@ public class FirebaseUsersRegister extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) { // if the account has been correctly been created, we store his data and launch the "MainActivity"
-                    Toast.makeText(FirebaseUsersRegister.this, "User created.", Toast.LENGTH_SHORT).show();
                     userID = fAuth.getCurrentUser().getUid(); // retrieving the user id of the currently logged in (registered) user
                     DocumentReference documentReference = fStore.collection("users").document(userID); // if we first don't have this "users" collection in our database, it will automatically create it in Cloud Firestore
                     Map<String, Object> user = registeringData();

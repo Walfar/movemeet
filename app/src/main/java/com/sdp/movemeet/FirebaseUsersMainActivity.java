@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Backend.BackendActivityManagerDemo;
+import com.sdp.movemeet.Backend.FirebaseInteraction;
 
 public class FirebaseUsersMainActivity extends AppCompatActivity {
 
@@ -36,7 +37,8 @@ public class FirebaseUsersMainActivity extends AppCompatActivity {
 
         userId = fAuth.getCurrentUser().getUid();
 
-        FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, phone, fullName, email, FirebaseUsersMainActivity.this);
+        TextView[] textViewArray = {phone, fullName, email};
+        FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, FirebaseUsersMainActivity.this);
 
     }
 

@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.sdp.movemeet.Backend.FirebaseInteraction;
 
 public class FirebaseUsersLogin extends AppCompatActivity {
 
@@ -107,7 +108,8 @@ public class FirebaseUsersLogin extends AppCompatActivity {
 
         userId = fAuth.getCurrentUser().getUid();
 
-        FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, phone, fullName, emailTextView, FirebaseUsersLogin.this);
+        TextView[] textViewArray = {phone, fullName, emailTextView};
+        FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, FirebaseUsersLogin.this);
 
         fAuth = FirebaseAuth.getInstance();
         mCreateBtn = findViewById(R.id.text_view_create_account);

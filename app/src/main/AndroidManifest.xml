@@ -17,15 +17,6 @@
         </activity>
         <activity android:name="com.sdp.movemeet.Backend.BackendActivityManagerDemo"></activity>
         <activity android:name="com.sdp.movemeet.Backend.BackendActivityManagerDebug" />
-        <activity
-            android:name="com.sdp.movemeet.GreetingActivity"
-            android:parentActivityName="com.sdp.movemeet.MainActivity">
-
-            <!-- The meta-data tag is required if you support API level 15 or lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sdp.movemeet.MainActivity" />
-        </activity>
         <activity android:name="com.sdp.movemeet.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

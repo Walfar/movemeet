@@ -17,12 +17,6 @@ public class FirebaseUsersRegisterTest {
     public static final String mEmail = "email";
     public static final String mPassword = "password";
     public static final String shortPassword = "pass";
-    //mPassword = findViewById(R.id.edit_text_password);
-    //progressBar = findViewById(R.id.progressBar);
-    //fAuth = FirebaseAuth.getInstance();
-    //mLoginBtn = findViewById(R.id.button_login);
-    //mCreateBtn = findViewById(R.id.text_view_create_account);
-    //mLoginBtn.setOnClickListener(new View.OnClickListener()
 
     @Rule
     public ActivityScenarioRule<FirebaseUsersRegister> testRule = new ActivityScenarioRule<>(FirebaseUsersRegister.class);
