@@ -37,7 +37,6 @@
         <activity
             android:name="com.sdp.movemeet.map.MapsActivity"
             android:label="@string/title_activity_maps"></activity>
-        android:theme="@style/Theme.movemeet">
         <activity android:name=".HomeScreenActivity"
             android:theme="@style/Theme.movemeet.noActionBar"
             android:configChanges="orientation|keyboardHidden|screenSize">
