@@ -7,11 +7,11 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.sdp.movemeet.bootcamp.R;
+import com.sdp.movemeet.Backend.BackendActivityManagerDemo;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String EXTRA_MESSAGE = "com.github.vvhaleshark.bootcamp.MESSAGE";
+    public static final String EXTRA_MESSAGE = "com.sdp.movemeet.MESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,10 +22,15 @@ public class MainActivity extends AppCompatActivity {
     /* Called when the user taps the Go button */
     @SuppressWarnings("unused")
     public void sendMessage(View view) {
-        Intent intent = new Intent(this, GreetingActivity.class);
+        Intent intent = new Intent(this, FirebaseUsersGreetingActivity.class);
         EditText editText = findViewById(R.id.mainEditName);
         String message = editText.getText().toString();
         intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
+    }
+
+    public void goToFirebaseDebug(View view) {
+        Intent intent = new Intent(this, BackendActivityManagerDemo.class);
         startActivity(intent);
     }
 }

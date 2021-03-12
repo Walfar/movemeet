@@ -1,4 +1,8 @@
 <resources>
-    <string name="app_name">Bootcamp</string>
+    <string name="app_name">MOVEMEƎT</string>
+    <string name="subtitle">Sport together</string>
+    <string name="homeScreenImageDescription">People Running</string>
+    <string name="signInButton">Sign In</string>
+    <string name="noAccount"><u>Continue without account</u></string>
     <string name="greeting_message">Hello, %1$s!</string>
 </resources>

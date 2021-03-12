@@ -8,10 +8,6 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.sdp.movemeet.GreetingActivity;
-import com.sdp.movemeet.MainActivity;
-import com.sdp.movemeet.bootcamp.R;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,21 +21,21 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class GreetingActivityTest {
+public class FirebaseUsersGreetingActivityTest {
 
     public static final String RECEIVED_INPUT = "TEST_INPUT_09820183";
 
     @Rule
-    public ActivityScenarioRule<MainActivity> testRule = new ActivityScenarioRule<>(MainActivity.class);
+    public ActivityScenarioRule<FirebaseUsersMainActivity> testRule = new ActivityScenarioRule<>(FirebaseUsersMainActivity.class);
 
     @Test
     public void greetingActivity_getsCorrectData() {
         Context context = ApplicationProvider.getApplicationContext();
-        Intent intent = new Intent(context, GreetingActivity.class);
-        intent.putExtra(MainActivity.EXTRA_MESSAGE, RECEIVED_INPUT);
+        Intent intent = new Intent(context, FirebaseUsersGreetingActivity.class);
+        intent.putExtra(FirebaseUsersMainActivity.EXTRA_MESSAGE, RECEIVED_INPUT);
 
 
-        try (ActivityScenario<GreetingActivity> scenario = ActivityScenario.launch(intent)) {
+        try (ActivityScenario<FirebaseUsersGreetingActivity> scenario = ActivityScenario.launch(intent)) {
             // Assert stuff on the activity
             String expected = context.getResources().getString(R.string.greeting_message, RECEIVED_INPUT);
             onView(withId(R.id.greetingMessage)).check(matches(withText(expected)));
@@ -49,9 +45,9 @@ public class GreetingActivityTest {
 
     @Test
     public void greetingAction_endToEnd() {
-        onView(withId(R.id.mainEditName))
+        onView(withId(R.id.edit_text_name))
                 .perform(typeText(RECEIVED_INPUT), closeSoftKeyboard());
-        onView(withId(R.id.mainGoButton)).perform(click());
+        onView(withId(R.id.button_greeting)).perform(click());
 
         // Necessary to retrieve context to be able to retrieve resource strings
         Context targetContext = ApplicationProvider.getApplicationContext();
