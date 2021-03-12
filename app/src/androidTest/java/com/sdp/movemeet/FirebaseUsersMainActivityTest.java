@@ -30,9 +30,9 @@ public class FirebaseUsersMainActivityTest {
     public void mainActivity_sendsCorrectData() {
         Intents.init();
 
-        onView(ViewMatchers.withId(R.id.mainEditName))
+        onView(ViewMatchers.withId(R.id.edit_text_name))
                 .perform(typeText(KEYBOARD_INPUT), closeSoftKeyboard());
-        onView(withId(R.id.mainGoButton)).perform(click());
+        onView(withId(R.id.button_greeting)).perform(click());
 
         intended(hasExtra(FirebaseUsersMainActivity.EXTRA_MESSAGE, KEYBOARD_INPUT));
 

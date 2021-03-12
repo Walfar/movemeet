@@ -7,8 +7,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Backend.BackendActivityManagerDemo;
@@ -32,13 +35,7 @@ public class FirebaseUsersMainActivity extends AppCompatActivity {
         fullName = findViewById(R.id.text_view_profile_name);
         email = findViewById(R.id.text_view_profile_email);
 
-        fAuth = FirebaseAuth.getInstance();
-        fStore = FirebaseFirestore.getInstance();
-
-        userId = fAuth.getCurrentUser().getUid();
-
-        TextView[] textViewArray = {phone, fullName, email};
-        FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, FirebaseUsersMainActivity.this);
+        handleRegisterUser();
 
     }
 
@@ -67,4 +64,17 @@ public class FirebaseUsersMainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, BackendActivityManagerDemo.class);
         startActivity(intent);
     }
+
+
+    public void handleRegisterUser() {
+        fAuth = FirebaseAuth.getInstance();
+        fStore = FirebaseFirestore.getInstance();
+        if (fAuth.getCurrentUser() != null) {
+            userId = fAuth.getCurrentUser().getUid();
+            TextView[] textViewArray = {phone, fullName, email};
+            FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, FirebaseUsersMainActivity.this);
+        }
+
+    }
+
 }
