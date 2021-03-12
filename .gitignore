@@ -1,0 +1,9 @@
+/local.properties
+
+Icon?
+
+.gradle/
+
+.idea/
+
+.DS_STORE

@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.sdp.movemeet.bootcamp.R;
+import com.sdp.movemeet.R;
 
 public class BackendActivityManagerDebug extends AppCompatActivity {
 
