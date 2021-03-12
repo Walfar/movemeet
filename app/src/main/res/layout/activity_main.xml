@@ -6,6 +6,69 @@
     android:layout_height="match_parent"
     tools:context="com.sdp.movemeet.FirebaseUsersMainActivity">
 
+    <TextView
+        android:id="@+id/text_view_your_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your Profile"
+        android:fontFamily="@font/armata"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.07999998" />
+
+    <ImageView
+        android:id="@+id/image_view_profile_image"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/text_view_profile_email"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.203"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/text_view_profile_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="230dp"
+        android:layout_marginTop="60dp"
+        android:text="Your Name"
+        android:fontFamily="@font/armata"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_your_profile" />
+
+    <TextView
+        android:id="@+id/text_view_profile_email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="230dp"
+        android:layout_marginTop="12dp"
+        android:text="Your Email Address"
+        android:fontFamily="@font/armata"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_profile_name" />
+
+    <TextView
+        android:id="@+id/text_view_profile_phone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="230dp"
+        android:layout_marginTop="12dp"
+        android:text="Your Phone Number"
+        android:fontFamily="@font/armata"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_profile_email" />
+
     <EditText
         android:id="@+id/mainEditName"
         android:layout_width="wrap_content"
@@ -13,20 +76,22 @@
         android:ems="10"
         android:hint="Name"
         android:inputType="textPersonName"
+        android:fontFamily="@font/armata"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.29000002" />
+        app:layout_constraintVertical_bias="0.63" />
 
     <Button
         android:id="@+id/mainGoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:onClick="sendMessage"
-        android:text="Go !"
+        android:text="Go!"
+        android:fontFamily="@font/armata"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,10 +103,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="Logout"
+        android:fontFamily="@font/armata"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mainGoButton"
         android:onClick="logout" />
+
 
     <Button
         android:id="@+id/firebaseButton"
@@ -52,6 +119,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainGoButton" />
+        app:layout_constraintTop_toBottomOf="@+id/button_logout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -83,13 +83,17 @@ public class FirebaseUsersLogin extends AppCompatActivity {
 
         });
 
-        // Defining the OnClickListener for the "text view button"
-        mCreateBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), FirebaseUsersRegister.class)); // redirecting the user to the "Register" activity
-            }
-        });
+//        // Defining the OnClickListener for the "text view button"
+//        mCreateBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(getApplicationContext(), FirebaseUsersRegister.class)); // redirecting the user to the "Register" activity
+//            }
+//        });
 
+    }
+
+    public void openRegisterActivity(View view) {
+        startActivity(new Intent(getApplicationContext(), FirebaseUsersRegister.class)); // redirecting the user to the "Register" activity
     }
 }
