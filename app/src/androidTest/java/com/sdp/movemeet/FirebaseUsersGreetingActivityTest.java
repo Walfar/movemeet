@@ -45,9 +45,9 @@ public class FirebaseUsersGreetingActivityTest {
 
     @Test
     public void greetingAction_endToEnd() {
-        onView(withId(R.id.mainEditName))
+        onView(withId(R.id.edit_text_name))
                 .perform(typeText(RECEIVED_INPUT), closeSoftKeyboard());
-        onView(withId(R.id.mainGoButton)).perform(click());
+        onView(withId(R.id.button_greeting)).perform(click());
 
         // Necessary to retrieve context to be able to retrieve resource strings
         Context targetContext = ApplicationProvider.getApplicationContext();
