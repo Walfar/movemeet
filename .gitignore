@@ -7,3 +7,5 @@ Icon?
 .idea/
 
 .DS_STORE
+
+app/users.json
