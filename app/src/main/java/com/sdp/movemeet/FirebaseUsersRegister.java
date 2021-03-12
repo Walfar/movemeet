@@ -95,15 +95,11 @@ public class FirebaseUsersRegister extends AppCompatActivity {
         fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-
                 if (task.isSuccessful()) { // if the account has been correctly been created, we store his data and launch the "MainActivity"
                     Toast.makeText(FirebaseUsersRegister.this, "User created.", Toast.LENGTH_SHORT).show();
                     userID = fAuth.getCurrentUser().getUid(); // retrieving the user id of the currently logged in (registered) user
                     DocumentReference documentReference = fStore.collection("users").document(userID); // if we first don't have this "users" collection in our database, it will automatically create it in Cloud Firestore
-                    Map<String, Object> user = new HashMap<>(); // map with "String" as keys (that will act as attributes in our document) and "objects" as the data
-                    user.put("fullName", fullName);
-                    user.put("email", email);
-                    user.put("phone", phone);
+                    Map<String, Object> user = registeringData();
                     documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -122,8 +118,16 @@ public class FirebaseUsersRegister extends AppCompatActivity {
                     progressBar.setVisibility(View.GONE);
                 }
             }
-
         });
+    }
+
+    public Map<String, Object> registeringData() {
+        Map<String, Object> user = new HashMap<>(); // map with "String" as keys (that will act as attributes in our document) and "objects" as the data
+        user.put("fullName", fullName);
+        user.put("email", email);
+        user.put("phone", phone);
+
+        return user;
     }
 
     public void loginOnClick(View view) {

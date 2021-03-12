@@ -22,9 +22,7 @@ public class FirebaseInteraction {
                 fullName.setText(documentSnapshot.getString("fullName"));
                 email.setText(documentSnapshot.getString("email"));
             }
-
         });
     }
-
 
 }
