@@ -6,8 +6,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.sdp.movemeet.R;
-
 public class GreetingActivity extends AppCompatActivity {
 
     @Override

@@ -8,7 +8,6 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.sdp.movemeet.Backend.BackendActivityManagerDemo;
-import com.sdp.movemeet.R;
 
 public class MainActivity extends AppCompatActivity {
 

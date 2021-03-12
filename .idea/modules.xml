@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Bootcamp.iml" filepath="$PROJECT_DIR$/.idea/modules/Bootcamp.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Bootcamp.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Bootcamp.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/movemeet.iml" filepath="$PROJECT_DIR$/.idea/modules/movemeet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/movemeet.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/movemeet.app.iml" />
     </modules>
   </component>
 </project>

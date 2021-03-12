@@ -5,32 +5,40 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.sdp.movemeet.MainActivity;
-import com.sdp.movemeet.R;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static androidx.test.espresso.Espresso.onView;
 
+import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static com.sdp.movemeet.Backend.BackendActivityManagerDemoTest.KEYBOARD_INPUT;
+
 
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
+public class HomeScreenActivityTest {
+
     @Rule
-    public ActivityScenarioRule<MainActivity> testRule = new ActivityScenarioRule<>(MainActivity.class);
+    public ActivityScenarioRule<HomeScreenActivity> testRule = new ActivityScenarioRule<>(HomeScreenActivity.class);
 
     @Test
-    public void mainActivity_sendMessage() {
+    public void mainActivity_signIn() {
         Intents.init();
 
-        onView(ViewMatchers.withId(R.id.mainEditName))
-                .perform(typeText(KEYBOARD_INPUT), closeSoftKeyboard());
-        onView(withId(R.id.mainGoButton)).perform(click());
+        onView(withId(R.id.signInButton)).perform(click());
+
+        Intents.release();
+    }
+
+    @Test
+    public void mainActivity_noAccount() {
+        Intents.init();
+
+        onView(withId(R.id.noAccountButton)).perform(click());
+
         Intents.release();
     }
 }

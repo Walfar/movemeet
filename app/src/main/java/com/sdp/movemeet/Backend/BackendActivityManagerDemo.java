@@ -15,8 +15,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sdp.movemeet.Activity.Activity;
-import com.sdp.movemeet.Sport;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.Sport;
 
 import java.util.ArrayList;
 import java.util.Date;
