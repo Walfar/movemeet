@@ -1,9 +1,16 @@
 package com.sdp.movemeet;
+<<<<<<< HEAD:app/src/androidTest/java/com/sdp/movemeet/MainActivityTest.java
 
+=======
+>>>>>>> main:app/src/androidTest/java/com/github/vvhaleshark/bootcamp/MainActivityTest.java
 
 import androidx.test.espresso.intent.Intents;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.sdp.movemeet.MainActivity;
+import com.sdp.movemeet.bootcamp.R;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -21,6 +28,12 @@ public class MainActivityTest {
     @Test
     public void mainActivity_sendMessage() {
         Intents.init();
+<<<<<<< HEAD:app/src/androidTest/java/com/sdp/movemeet/MainActivityTest.java
+=======
+
+        onView(ViewMatchers.withId(R.id.mainEditName))
+                .perform(typeText(KEYBOARD_INPUT), closeSoftKeyboard());
+>>>>>>> main:app/src/androidTest/java/com/github/vvhaleshark/bootcamp/MainActivityTest.java
         onView(withId(R.id.mainGoButton)).perform(click());
         Intents.release();
     }
