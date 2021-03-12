@@ -72,20 +72,16 @@ public class FirebaseUsersRegister extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
 
                 // Registering the user to the Firebase database
-                fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+                fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
 
-                        if (task.isSuccessful()) { // if the account has been correctly been created, we launch the "MainActivity"
-                            Toast.makeText(FirebaseUsersRegister.this, "User created.", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(), FirebaseUsersMainActivity.class));
+                    if (task.isSuccessful()) { // if the account has been correctly been created, we launch the "MainActivity"
+                        Toast.makeText(FirebaseUsersRegister.this, "User created.", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(), FirebaseUsersMainActivity.class));
 
-                        } else {
-                            Toast.makeText(FirebaseUsersRegister.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.GONE);
-                        }
+                    } else {
+                        Toast.makeText(FirebaseUsersRegister.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
                     }
-
                 });
 
 

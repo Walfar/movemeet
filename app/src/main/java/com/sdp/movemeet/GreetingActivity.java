@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-
 public class GreetingActivity extends AppCompatActivity {
 
     @Override

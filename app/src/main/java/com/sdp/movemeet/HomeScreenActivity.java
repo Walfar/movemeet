@@ -7,6 +7,8 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 
+import com.sdp.movemeet.map.MapsActivity;
+
 public class HomeScreenActivity extends AppCompatActivity {
 
     @Override
@@ -20,6 +22,6 @@ public class HomeScreenActivity extends AppCompatActivity {
     }
 
     public void noAccount(View v) {
-        startActivity(new Intent(getApplicationContext(), FirebaseUsersLogin.class)); // redirecting the user to the "Login" activity
+        startActivity(new Intent(getApplicationContext(), MapsActivity.class)); // redirecting the user to the "Login" activity
     }
 }
