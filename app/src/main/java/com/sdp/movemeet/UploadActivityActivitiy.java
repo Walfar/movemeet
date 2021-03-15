@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -13,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -26,6 +28,11 @@ public class UploadActivityActivitiy extends AppCompatActivity {
     private EditText dateText;
     private int year, month, day;
 
+    private TimePicker timePicker;
+    private EditText durationText;
+    private int hours = 0;
+    private int minutes = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +41,8 @@ public class UploadActivityActivitiy extends AppCompatActivity {
         setupSportSpinner(this);
 
         setupDateInput(this);
+
+        setupDurationInput(this);
     }
 
     private void setupSportSpinner(Context context) {
@@ -50,17 +59,10 @@ public class UploadActivityActivitiy extends AppCompatActivity {
         spinner.setAdapter(adapter);
     }
 
-    private void setupDateInput(Context context) {
-        // Disable keyboard
-        /*View.OnTouchListener otl = new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        };*/
+    // Helper methods for date picker
 
+    private void setupDateInput(Context context) {
         dateText = findViewById(R.id.editTextDate);
-        //dateText.setOnTouchListener(otl);
         calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
@@ -82,9 +84,30 @@ public class UploadActivityActivitiy extends AppCompatActivity {
     @SuppressWarnings("deprecation")
     public void setDate(View view) {
         showDialog(999);
-        Toast.makeText(getApplicationContext(), "ca",
-                Toast.LENGTH_SHORT)
-        .show();
+    }
+
+
+    // Helper methods for duration picker
+
+    private void setupDurationInput(Context context) {
+        durationText = findViewById(R.id.editTextTime);
+        showDuration(hours, minutes);
+    }
+
+    private TimePickerDialog.OnTimeSetListener durationListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            showDuration(hourOfDay, minute);
+        }
+    };
+
+    private void showDuration(int hours, int minutes) {
+        durationText.setText(hours + ":" + ((minutes < 10)?"0" + minutes:minutes));
+    }
+
+    @SuppressWarnings("deprecation")
+    public void setDuration(View view) {
+        showDialog(444);
     }
 
     @Override
@@ -92,6 +115,9 @@ public class UploadActivityActivitiy extends AppCompatActivity {
         if (id == 999) {
             return new DatePickerDialog(this,
                     dateListener, year, month, day);
+        } else if (id == 444) {
+            return new TimePickerDialog(this,
+                    durationListener, hours, minutes, true);
         }
         return null;
     }

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:onClick="setDuration"
     tools:context=".UploadActivityActivitiy">
 
     <TextView
@@ -68,9 +69,10 @@
         android:id="@+id/editTextTime"
         android:layout_width="151dp"
         android:layout_height="wrap_content"
+        android:editable="false"
         android:ems="10"
         android:hint="Duration"
-        android:inputType="time"
+        android:onClick="setDuration"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/editTextDate"
         app:layout_constraintTop_toTopOf="@+id/editTextDate" />
