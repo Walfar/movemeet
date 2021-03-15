@@ -63,6 +63,11 @@ public class FirebaseUsersMainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void goToActivityUpload(View view) {
+        Intent intent = new Intent(this, UploadActivityActivitiy.class);
+        startActivity(intent);
+    }
+
     public void handleRegisterUser() {
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
