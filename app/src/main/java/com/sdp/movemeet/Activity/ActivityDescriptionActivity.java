@@ -6,12 +6,27 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.Sport;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class ActivityDescriptionActivity extends AppCompatActivity {
 
-    private Activity act;
+    private Activity act = new Activity("activityId",
+            "organizerId",
+            "Snowboard",
+            5,
+            new ArrayList<>(),
+            004,
+            005,
+            "BlaBlaBla Description de l'activité",
+            new Date(),
+            90,
+            Sport.Running,
+            "address");
 
 
     @Override
