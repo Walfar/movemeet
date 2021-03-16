@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -23,11 +24,16 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 import com.sdp.movemeet.Activity.Activity;
+import com.sdp.movemeet.Activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.MainActivity;
 import com.sdp.movemeet.R;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import static com.sdp.movemeet.Sport.Soccer;
+import static com.sdp.movemeet.Sport.Tennis;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -36,6 +42,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int REQUEST_CODE = 101;
     private List<Activity> activities;
     private double perimeterRadius = 0.004;
+
+    private static final String TAG = "Maps TAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +68,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+        googleMap.setOnMarkerClickListener(this);
         LatLng userLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions().position(userLatLng).title("I am here !");
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(userLatLng));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, googleMap.getMaxZoomLevel()));
         googleMap.addMarker(markerOptions);
 
-        getNearbyMarkers(googleMap);
+        //Temporary activity test
+        Date date = new Date();
+        date.setTime(1200);
+        ArrayList<String> participants = new ArrayList<>();
+        Activity act1 = new Activity("0", "0", "soccer", 3, participants,
+                currentLocation.getLongitude() - 0.002, currentLocation.getLatitude() + 0.002, "yes", date, 300, Soccer, "here");
+        Activity act2 = new Activity("0", "0", "tennis", 5, participants,
+                currentLocation.getLongitude() + 0.00001, currentLocation.getLatitude() + 0.00050, "yes", date, 300, Tennis, "here");
+        activities.add(act1);
+        activities.add(act2);
+
+        for (Activity act: activities) {
+            LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
+            MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
+            markerOpt.icon(BitmapDescriptorFactory.fromResource(chooseIcon(act)));
+            Marker marker = googleMap.addMarker(markerOpt);
+            marker.setTag(act);
+        }
+
+
+        //getNearbyMarkers(googleMap);
     }
 
     @Override
@@ -82,17 +112,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
-        //Instantiate activity
         Activity act = (Activity) marker.getTag();
-        Intent intent = new Intent(MapsActivity.this, MainActivity.class);
-        intent.putExtra("title", act.getTitle());
-        // put all extras
+        Intent intent = new Intent(MapsActivity.this, ActivityDescriptionActivity.class);
+        intent.putExtra("activity", act);
         startActivity(intent);
-        return false;
+        return true;
     }
 
-    // How to update markers of perimeter when user moves ?
-    private void getNearbyMarkers(GoogleMap googleMap) {
+    //How to update markers of perimeter when user moves ?
+    /*private void getNearbyMarkers(GoogleMap googleMap) {
         LatLngBounds perimeter = new LatLngBounds(new LatLng(currentLocation.getLatitude() - perimeterRadius, currentLocation.getLongitude() - perimeterRadius),
                 new LatLng(currentLocation.getLatitude() + perimeterRadius, currentLocation.getLongitude() + perimeterRadius));
 
@@ -107,7 +135,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Toast.makeText(getApplicationContext(), "Coordinates not in perimeter", Toast.LENGTH_SHORT).show();
             }
         }
-    }
+    }*/
 
     private int chooseIcon(Activity activity) {
         switch (activity.getSport()) {
@@ -117,8 +145,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return R.drawable.icon_running;
             case Tennis:
                 return R.drawable.icon_tennis;
-            case Badminton:
-                return R.drawable.icon_badmington;
             case Swimming:
                 return R.drawable.icon_swim;
             default:
