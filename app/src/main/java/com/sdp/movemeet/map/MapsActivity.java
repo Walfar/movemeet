@@ -73,7 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng userLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions().position(userLatLng).title("I am here !");
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(userLatLng));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, googleMap.getMaxZoomLevel()));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 17.0f));
         googleMap.addMarker(markerOptions);
 
         //Temporary activity test

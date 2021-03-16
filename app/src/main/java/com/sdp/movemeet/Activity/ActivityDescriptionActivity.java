@@ -34,7 +34,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
 
-        //act = (Activity) getIntent().getSerializableExtra("activity");
+        act = (Activity) getIntent().getSerializableExtra("activity");
 
         createTitleView();
         createParticipantNumberView();
