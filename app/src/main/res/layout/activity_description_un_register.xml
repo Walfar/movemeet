@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/activity_image_decription_un_register"
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/run_man" />
+
+    <TextView
+        android:id="@+id/activity_title_description_un_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="20dp"
+        android:textFontWeight="60"
+        android:fontFamily="@font/armata"
+        android:text="title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_image_decription_un_register" />
+
+    <TextView
+        android:id="@+id/activity_sport_description_un_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/armata"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="Sport"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_title_description_un_register" />
+
+    <TextView
+        android:id="@+id/activity_text1_description_un_register"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/armata"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="At"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_sport_description_un_register" />
+
+    <TextView
+        android:id="@+id/activity_address_description_un_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/armata"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="Address"
+        app:layout_constraintStart_toEndOf="@+id/activity_text1_description_un_register"
+        app:layout_constraintTop_toBottomOf="@+id/activity_sport_description_un_register" />
+
+    <TextView
+        android:id="@+id/activity_description_description_un_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/armata"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:text="Description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_address_description_un_register" />
+
+    <Button
+        android:id="@+id/activity_register_description_un_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="150dp"
+        android:fontFamily="@font/armata"
+        android:layout_marginTop="150dp"
+        android:text="Register"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_description_description_un_register" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
