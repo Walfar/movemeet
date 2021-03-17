@@ -13,6 +13,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
@@ -31,7 +32,7 @@ public class FirebaseUsersMainActivityTest {
         Intents.init();
 
         onView(ViewMatchers.withId(R.id.mainEditName))
-                .perform(typeText(KEYBOARD_INPUT), closeSoftKeyboard());
+                .perform(replaceText(KEYBOARD_INPUT), closeSoftKeyboard());
         onView(withId(R.id.mainGoButton)).perform(click());
 
 
@@ -46,6 +47,15 @@ public class FirebaseUsersMainActivityTest {
         Intents.init();
 
         onView(withId(R.id.button_logout)).perform(click());
+
+        Intents.release();
+    }
+
+    @Test
+    public void mainActivityToProfileActivity() {
+        Intents.init();
+
+        onView(withId(R.id.button_user_profile)).perform(click());
 
         Intents.release();
     }

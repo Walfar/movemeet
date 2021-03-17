@@ -74,4 +74,7 @@ public class FirebaseUsersMainActivity extends AppCompatActivity {
 
     }
 
+    public void goToUserProfileActivity(View view) {
+        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+    }
 }

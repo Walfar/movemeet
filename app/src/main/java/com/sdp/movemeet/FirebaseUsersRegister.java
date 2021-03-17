@@ -130,7 +130,6 @@ public class FirebaseUsersRegister extends AppCompatActivity {
 
     public void loginOnClick(View view) {
         startActivity(new Intent(getApplicationContext(), FirebaseUsersLogin.class)); // redirecting the user to the "Login" activity
-
     }
 
 }
