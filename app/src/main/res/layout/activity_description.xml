@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".map.ActivityDescriptionActivity">
+
+    <ImageView
+        android:id="@+id/activity_image_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/ic_launcher_foreground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/activity_title_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="20dp"
+        android:text="title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_image_description" />
+
+    <TextView
+        android:id="@+id/activity_sport_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="Sport"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_title_description" />
+
+    <TextView
+        android:id="@+id/activity_text1_description"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="At"
+        app:layout_constraintStart_toEndOf="@+id/activity_sport_description"
+        app:layout_constraintTop_toBottomOf="@+id/activity_title_description" />
+
+    <TextView
+        android:id="@+id/activity_date_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="date"
+        app:layout_constraintStart_toEndOf="@+id/activity_text1_description"
+        app:layout_constraintTop_toBottomOf="@+id/activity_title_description" />
+
+    <TextView
+        android:id="@+id/activity_text2_description"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="During"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_sport_description" />
+
+    <TextView
+        android:id="@+id/activity_duration_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="Duration"
+        app:layout_constraintStart_toEndOf="@+id/activity_text2_description"
+        app:layout_constraintTop_toBottomOf="@+id/activity_text1_description" />
+
+    <TextView
+        android:id="@+id/activity_text3_description"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="At"
+        app:layout_constraintStart_toEndOf="@+id/activity_duration_description"
+        app:layout_constraintTop_toBottomOf="@+id/activity_text1_description" />
+
+    <TextView
+        android:id="@+id/activity_address_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="Address"
+        app:layout_constraintStart_toEndOf="@+id/activity_text3_description"
+        app:layout_constraintTop_toBottomOf="@+id/activity_date_description" />
+
+    <TextView
+        android:id="@+id/activity_text4_description"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="By"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_text2_description" />
+
+    <TextView
+        android:id="@+id/activity_organisator_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="Organisator"
+        app:layout_constraintStart_toEndOf="@+id/activity_text4_description"
+        app:layout_constraintTop_toBottomOf="@+id/activity_duration_description" />
+
+    <TextView
+        android:id="@+id/activity_text5_description"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="For"
+        app:layout_constraintStart_toEndOf="@+id/activity_organisator_description"
+        app:layout_constraintTop_toBottomOf="@+id/activity_address_description" />
+
+
+    <TextView
+        android:id="@+id/activity_number_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="Number participant"
+        app:layout_constraintStart_toEndOf="@+id/activity_text5_description"
+        app:layout_constraintTop_toBottomOf="@+id/activity_address_description" />
+
+
+    <TextView
+        android:id="@+id/activity_description_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:text="Description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_text4_description" />
+
+    <Button
+        android:id="@+id/activityRegisterDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="100dp"
+        android:text="Register"
+        app:layout_constraintStart_toEndOf="@+id/activityGoDescription"
+        app:layout_constraintTop_toBottomOf="@+id/activity_description_description" />
+    />
+
+    <Button
+        android:id="@+id/activityGoDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="100dp"
+        android:text="How to go"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_description_description" />
+
+    <Button
+        android:id="@+id/activityChatDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="100dp"
+        android:text="Chat"
+        app:layout_constraintStart_toEndOf="@+id/activityRegisterDescription"
+        app:layout_constraintTop_toBottomOf="@+id/activity_description_description" />
+    />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
