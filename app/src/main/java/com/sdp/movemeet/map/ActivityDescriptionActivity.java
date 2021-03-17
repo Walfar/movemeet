@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.content.Intent;
+
+import com.sdp.movemeet.R;
 import com.sdp.movemeet.map.MapsActivity;
 
 
