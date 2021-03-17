@@ -6,15 +6,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.sdp.movemeet.Backend.BackendActivityManagerDemo;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
 
@@ -64,7 +59,7 @@ public class FirebaseUsersMainActivity extends AppCompatActivity {
     }
 
     public void goToActivityUpload(View view) {
-        Intent intent = new Intent(this, UploadActivityActivitiy.class);
+        Intent intent = new Intent(this, UploadActivityActivity.class);
         startActivity(intent);
     }
 
