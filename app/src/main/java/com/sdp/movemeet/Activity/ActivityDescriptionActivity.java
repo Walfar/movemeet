@@ -68,36 +68,30 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void createTitleView() {
         // activityTitle from the activity
         TextView activityTitle = (TextView) findViewById(R.id.activityTitle);
-        String title = act.getTitle();
-        if (title != null) activityTitle.setText(title);
+        if (act != null) activityTitle.setText(act.getTitle());
     }
 
     private void createParticipantNumberView(){
         // number of participants from the activity
         TextView numberParticipantsView = (TextView) findViewById(R.id.numberParticipant);
-        ArrayList<String> partcipantId = act.getParticipantId();
-        int numberParticipants = act.getNumberParticipant();
-
-        if (numberParticipants != 0 && partcipantId != null) {
-            numberParticipantsView.setText("Participants : " + partcipantId.size() + "/" + numberParticipants);
+        if (act != null) {
+            numberParticipantsView.setText("Participants : " + act.getParticipantId().size() + "/" + act.getNumberParticipant());
         }
     }
 
     private void createDescriptionView(){
         // description from the activity
         TextView descriptionView = (TextView) findViewById(R.id.description);
-        String description = act.getDescription();
-        if (description != null) descriptionView.setText(description);
+        if (act != null) descriptionView.setText(act.getDescription());
     }
 
     private void createDateView(){
         // date from the activity
         TextView dateView = (TextView) findViewById(R.id.date);
-        Date date = act.getDate();
-        if (date != null) {
+        if (act != null) {
             String pattern = "MM/dd/yyyy HH:mm:ss";
             DateFormat df = new SimpleDateFormat(pattern);
-            String todayAsString = df.format(date);
+            String todayAsString = df.format(act.getDate());
             dateView.setText(todayAsString);
         }
     }
@@ -105,9 +99,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void createAddressView(){
         // address from the activity
         TextView addressView = (TextView) findViewById(R.id.address);
-        String address = act.getAddress();
-        if (address != null) {
-            addressView.setText(address);
+        if (act != null) {
+            addressView.setText(act.getAddress());
         }
     }
 
