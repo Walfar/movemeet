@@ -61,15 +61,12 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void displayRegisteredUserData() {
         fStore = FirebaseFirestore.getInstance();
-        if (fAuth.getCurrentUser() != null) {
-            TextView[] textViewArray = {fullName, email, phone, description};
-            textViewArray = FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ProfileActivity.this);
-            fullName = textViewArray[0];
-            email = textViewArray[1];
-            phone = textViewArray[2];
-            description = textViewArray[3];
-        }
-
+        TextView[] textViewArray = {fullName, email, phone, description};
+        textViewArray = FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ProfileActivity.this);
+        fullName = textViewArray[0];
+        email = textViewArray[1];
+        phone = textViewArray[2];
+        description = textViewArray[3];
     }
 
 

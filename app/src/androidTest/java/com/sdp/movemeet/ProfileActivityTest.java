@@ -9,6 +9,7 @@ import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,7 +42,7 @@ public class ProfileActivityTest {
         intent.putExtra(ProfileActivity.EXTRA_MESSAGE_EMAIL, TEST_EMAIL);
         intent.putExtra(ProfileActivity.EXTRA_MESSAGE_PHONE, TEST_PHONE);
         intent.putExtra(ProfileActivity.EXTRA_MESSAGE_DESCRIPTION, TEST_DESCRIPTION);
-        
+
         try (ActivityScenario<EditProfileActivity> scenario = ActivityScenario.launch(intent)) {
             onView(withId(R.id.edit_text_edit_profile_full_name)).check(matches(withText(TEST_FULL_NAME)));
             onView(withId(R.id.edit_text_edit_profile_email)).check(matches(withText(TEST_EMAIL)));

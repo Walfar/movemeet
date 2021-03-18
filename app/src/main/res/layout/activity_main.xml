@@ -74,15 +74,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:fontFamily="@font/armata"
         android:hint="Name"
         android:inputType="textPersonName"
-        android:fontFamily="@font/armata"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.63" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/mainGoButton"
@@ -97,11 +96,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mainEditName" />
 
-    <ImageButton
+    <Button
         android:id="@+id/button_user_profile"
         android:onClick="goToUserProfileActivity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:text="Profile"
+        android:layout_height="100sp"
+        android:layout_width="100sp"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -113,7 +113,6 @@
         android:id="@+id/button_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:fontFamily="@font/armata"
         android:onClick="logout"
         android:text="Logout"
