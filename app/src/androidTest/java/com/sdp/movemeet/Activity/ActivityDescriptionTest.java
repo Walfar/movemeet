@@ -24,4 +24,13 @@ public class ActivityDescriptionTest {
 
         Intents.release();
     }
+
+    @Test
+    public void addUserToActivity() {
+        Intents.init();
+
+        onView(withId(R.id.buttonRegisterActivity)).perform(click());
+        
+        Intents.release();
+    }
 }
