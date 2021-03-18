@@ -1,8 +1,12 @@
 package com.sdp.movemeet.Activity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.firestore.DocumentReference;
 import com.sdp.movemeet.Sport;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,7 +19,7 @@ import java.util.Locale;
  *
  * */
 
-public class Activity {
+public class Activity implements Serializable {
 
     private final String activityId;
     private final String organizerId;
@@ -335,4 +339,5 @@ public class Activity {
                 sport.equals(obj.sport) && address.equals(obj.address);
 
     }
+
 }

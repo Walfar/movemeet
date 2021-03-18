@@ -18,7 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class FirebaseUsersLogin extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     EditText mEmail, mPassword;
     Button mLoginBtn;
@@ -68,11 +68,11 @@ public class FirebaseUsersLogin extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(FirebaseUsersLogin.this, "Logged in successfully.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Logged in successfully.", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), FirebaseUsersMainActivity.class)); // we redirect the user to the "MainActivity"
 
                         } else {
-                            Toast.makeText(FirebaseUsersLogin.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
                         }
                     }
@@ -94,6 +94,6 @@ public class FirebaseUsersLogin extends AppCompatActivity {
     }
 
     public void openRegisterActivity(View view) {
-        startActivity(new Intent(getApplicationContext(), FirebaseUsersRegister.class)); // redirecting the user to the "Register" activity
+        startActivity(new Intent(getApplicationContext(), RegisterActivity.class)); // redirecting the user to the "Register" activity
     }
 }

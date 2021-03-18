@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".Activity.ActivityDescriptionActivity">
 
     <ImageView
         android:id="@+id/activity_image_description"
@@ -172,6 +173,7 @@
         android:fontFamily="@font/armata"
         android:layout_marginStart="20dp"
         android:layout_marginTop="100dp"
+        android:onClick="onClick"
         android:text="Register"
         app:layout_constraintStart_toEndOf="@+id/activityGoDescription"
         app:layout_constraintTop_toBottomOf="@+id/activity_description_description" />
@@ -197,6 +199,5 @@
         android:text="Chat"
         app:layout_constraintStart_toEndOf="@+id/activityRegisterDescription"
         app:layout_constraintTop_toBottomOf="@+id/activity_description_description" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
