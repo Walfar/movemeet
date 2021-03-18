@@ -53,14 +53,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        if (intent == null) {
-            Log.d("Intent", "Intent is null :(");
-        }
-
-        try {
+        if (intent != null) {
             act = (Activity) intent.getSerializableExtra("activity");
-        } catch (Exception e) {
-            Log.d("Activity", "activity is null");
         }
 
         createTitleView();
