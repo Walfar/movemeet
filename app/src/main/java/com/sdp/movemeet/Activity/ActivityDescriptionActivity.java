@@ -55,24 +55,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         createDescriptionView();
         createDateView();
         createAddressView();
-
-        RegisterToActivityButton = findViewById(R.id.buttonRegisterActivity);
-        RegisterToActivityButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fAuth = FirebaseAuth.getInstance();
-                if (fAuth.getCurrentUser() != null) {
-                    String userId;
-                    userId = fAuth.getCurrentUser().getUid();
-                    try{
-                    act.addParticipantId(userId);
-                    createParticipantNumberView();}
-                    catch(Exception e){
-                        Toast.makeText(ActivityDescriptionActivity.this, "Already Register", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
     }
 
     private void createTitleView(){
@@ -106,6 +88,20 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         // address from the activity
         TextView address = (TextView) findViewById(R.id.address);
         address.setText(act.getAddress());
+    }
+
+    public void onClick(View v) {
+        fAuth = FirebaseAuth.getInstance();
+        if (fAuth.getCurrentUser() != null) {
+            String userId;
+            userId = fAuth.getCurrentUser().getUid();
+            try{
+                act.addParticipantId(userId);
+                createParticipantNumberView();}
+            catch(Exception e){
+                Toast.makeText(ActivityDescriptionActivity.this, "Already Register", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 }
