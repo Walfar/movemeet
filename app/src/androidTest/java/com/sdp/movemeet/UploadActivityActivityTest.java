@@ -100,6 +100,12 @@ public class UploadActivityActivityTest {
         onView(withText("OK")).perform(click());
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
 
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+
         scenario.onActivity(activity -> {
             assert (((UploadActivityActivity) activity).validStartTime == true);
             assert (((UploadActivityActivity) activity).validDate == false);
@@ -116,6 +122,12 @@ public class UploadActivityActivityTest {
         onView(withText("OK")).perform(click());
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
 
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+
         scenario.onActivity(activity -> {
             assert (((UploadActivityActivity) activity).validDate == true);
         });
@@ -131,6 +143,12 @@ public class UploadActivityActivityTest {
         );
         onView(withText("OK")).perform(click());
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
 
         scenario.onActivity(activity -> {
             assert (((UploadActivityActivity) activity).validDate == true);
