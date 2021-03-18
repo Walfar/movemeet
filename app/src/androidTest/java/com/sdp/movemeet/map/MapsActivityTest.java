@@ -66,19 +66,19 @@ public class MapsActivityTest {
 
         UiObject userMarker = device.findObject(new UiSelector().descriptionContains("I am here !"));
 
-        UiObject marker1 = device.findObject(new UiSelector().descriptionContains("soccer"));
-        UiObject marker2 = device.findObject(new UiSelector().descriptionContains("tennis"));
+       /* UiObject marker1 = device.findObject(new UiSelector().descriptionContains("soccer"));
+        UiObject marker2 = device.findObject(new UiSelector().descriptionContains("tennis")); */
 
         assertNotNull(userMarker);
-        assertNotNull(marker1);
-        assertNotNull(marker2);
+       /* assertNotNull(marker1);
+        assertNotNull(marker2); */
 
-        assertTrue(marker1.isFocusable());
-        assertTrue(marker2.isFocusable());
+      /*  assertTrue(marker1.isFocusable());
+        assertTrue(marker2.isFocusable()); */
         assertTrue(userMarker.isFocusable());
 
-        marker1.click();
-        marker2.click();
+      /*  marker1.click();
+        marker2.click(); */
         userMarker.click();
         // Intents ?
     }
