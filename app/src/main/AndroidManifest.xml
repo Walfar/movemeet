@@ -37,7 +37,12 @@
 
         <activity
             android:name=".map.MapsActivity"
-            android:label="@string/title_activity_maps" />
+            android:label="@string/title_activity_maps"
+            android:parentActivityName=".HomeScreenActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sdp.movemeet.MainActivity" />
+        </activity>
         <activity
             android:name=".HomeScreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -61,7 +66,7 @@
         </activity>
         <activity android:name=".MainActivity"></activity>
         <activity
-            android:name=".FirebaseUsersRegister"
+            android:name=".RegisterActivity"
             android:parentActivityName=".HomeScreenActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -69,7 +74,7 @@
         </activity>
         <activity android:name=".FirebaseUsersMainActivity" />
         <activity
-            android:name=".FirebaseUsersLogin"
+            android:name=".LoginActivity"
             android:parentActivityName=".HomeScreenActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -83,6 +88,8 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sdp.movemeet.FirebaseUsersMainActivity" />
+        </activity>
+        <activity android:name=".Activity.ActivityDescriptionActivity">
         </activity>
 
         <meta-data

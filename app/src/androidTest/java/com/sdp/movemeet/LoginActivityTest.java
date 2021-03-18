@@ -11,8 +11,9 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-public class FirebaseUsersRegisterTest {
+public class LoginActivityTest {
 
     public static final String mEmail = "email";
     public static final String mPassword = "password";
@@ -25,7 +26,7 @@ public class FirebaseUsersRegisterTest {
     //mLoginBtn.setOnClickListener(new View.OnClickListener()
 
     @Rule
-    public ActivityScenarioRule<FirebaseUsersRegister> testRule = new ActivityScenarioRule<>(FirebaseUsersRegister.class);
+    public ActivityScenarioRule<LoginActivity> testRule = new ActivityScenarioRule<>(LoginActivity.class);
 
     @Test
     public void Login_NonEmpty() {
@@ -33,21 +34,21 @@ public class FirebaseUsersRegisterTest {
                 .perform(typeText(mEmail), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password))
                 .perform(typeText(mPassword), closeSoftKeyboard());
-        onView(withId(R.id.button_register)).perform(click());
+        onView(withId(R.id.button_login)).perform(click());
 
     }
 
     @Test
     public void Login_EmptyMail() {
 
-        onView(withId(R.id.button_register)).perform(click());
+        onView(withId(R.id.button_login)).perform(click());
     }
 
     @Test
     public void Login_EmptyPassword() {
         onView(withId(R.id.edit_text_email))
                 .perform(typeText(mEmail), closeSoftKeyboard());
-        onView(withId(R.id.button_register)).perform(click());
+        onView(withId(R.id.button_login)).perform(click());
     }
 
     @Test
@@ -56,14 +57,14 @@ public class FirebaseUsersRegisterTest {
                 .perform(typeText(mEmail), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password))
                 .perform(typeText(shortPassword), closeSoftKeyboard());
-        onView(withId(R.id.button_register)).perform(click());
+        onView(withId(R.id.button_login)).perform(click());
     }
 
     @Test
     public void Register() {
         Intents.init();
 
-        onView(withId(R.id.text_view_login_here)).perform(click());
+        onView(withId(R.id.text_view_create_account)).perform(click());
 
         Intents.release();
     }

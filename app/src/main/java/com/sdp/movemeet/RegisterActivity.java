@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // First activity that the users is going to see when launching the app
-public class FirebaseUsersRegister extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
     public static final String TAG = "TAG";
 
@@ -112,7 +112,7 @@ public class FirebaseUsersRegister extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), FirebaseUsersMainActivity.class));
 
                 } else {
-                    Toast.makeText(FirebaseUsersRegister.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show(); // an error could for instance happen in case a user tries to register with an email already registered in the database ("Error! The email address is already in use by another account.")
+                    Toast.makeText(RegisterActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show(); // an error could for instance happen in case a user tries to register with an email already registered in the database ("Error! The email address is already in use by another account.")
                     progressBar.setVisibility(View.GONE);
                 }
             }
@@ -129,7 +129,7 @@ public class FirebaseUsersRegister extends AppCompatActivity {
     }
 
     public void loginOnClick(View view) {
-        startActivity(new Intent(getApplicationContext(), FirebaseUsersLogin.class)); // redirecting the user to the "Login" activity
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // redirecting the user to the "Login" activity
 
     }
 
