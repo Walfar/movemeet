@@ -1,10 +1,13 @@
 package com.sdp.movemeet;
 
+import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
@@ -14,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,9 +29,13 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.doubleClick;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
@@ -35,6 +43,24 @@ public class UploadActivityActivityTest {
 
     @Rule
     public ActivityScenarioRule<UploadActivityActivity> testRule = new ActivityScenarioRule<>(UploadActivityActivity.class);
+
+    public static ViewAction forceDoubleClick() {
+        return new ViewAction() {
+            @Override public Matcher<View> getConstraints() {
+                return allOf(isClickable(), isEnabled(), isDisplayed());
+            }
+
+            @Override public String getDescription() {
+                return "force click";
+            }
+
+            @Override public void perform(UiController uiController, View view) {
+                view.performClick(); // perform click without checking view coordinates.
+                view.performClick();
+                uiController.loopMainThreadUntilIdle();
+            }
+        };
+    }
 
     @Test
     public void endToEnd() {
@@ -90,13 +116,20 @@ public class UploadActivityActivityTest {
             assert (((UploadActivityActivity) activity).validStartTime == false);
         });
 
-        onView(withId(R.id.editTextStartTime)).perform(doubleClick());
+        onView(withId(R.id.editTextStartTime)).perform(forceDoubleClick());
 
         onView(withClassName(equalTo(TimePicker.class.getName()))).perform(
                 PickerActions.setTime(
                         9, 15
                 )
         );
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+
         onView(withText("OK")).perform(click());
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
 
@@ -111,13 +144,20 @@ public class UploadActivityActivityTest {
             assert (((UploadActivityActivity) activity).validDate == false);
         });
 
-        onView(withId(R.id.editTextTime)).perform(doubleClick());
+        onView(withId(R.id.editTextTime)).perform(forceDoubleClick());
 
         onView(withClassName(equalTo(TimePicker.class.getName()))).perform(
                 PickerActions.setTime(
                         2, 30
                 )
         );
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+
         onView(withText("OK")).perform(click());
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
 
@@ -132,13 +172,20 @@ public class UploadActivityActivityTest {
         });
 
 
-        onView(withId(R.id.editTextDate)).perform(doubleClick());
+        onView(withId(R.id.editTextDate)).perform(forceDoubleClick());
 
         onView(withClassName(equalTo(DatePicker.class.getName()))).perform(
                 PickerActions.setDate(
                         2025, 0, 20
                 )
         );
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+
         onView(withText("OK")).perform(click());
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
 
