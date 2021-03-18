@@ -1,12 +1,27 @@
 package com.sdp.movemeet.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.sdp.movemeet.Backend.FirebaseInteraction;
+import com.sdp.movemeet.FirebaseUsersMainActivity;
+import com.sdp.movemeet.LoginActivity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.Sport;
+import com.sdp.movemeet.User;
 
 import java.text.BreakIterator;
 import java.text.DateFormat;
@@ -16,6 +31,8 @@ import java.util.Date;
 
 public class ActivityDescriptionActivity extends AppCompatActivity {
 
+    FirebaseAuth fAuth;
+    Button RegisterToActivityButton;
     public Activity act = new Activity("activityId",
                      "organizerId",
                      "Snowboard",
@@ -33,12 +50,29 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
-
         createTitleView();
         createParticipantNumberView();
         createDescriptionView();
         createDateView();
         createAddressView();
+
+        RegisterToActivityButton = findViewById(R.id.buttonRegisterActivity);
+        RegisterToActivityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fAuth = FirebaseAuth.getInstance();
+                if (fAuth.getCurrentUser() != null) {
+                    String userId;
+                    userId = fAuth.getCurrentUser().getUid();
+                    try{
+                    act.addParticipantId(userId);
+                    createParticipantNumberView();}
+                    catch(Exception e){
+                        Toast.makeText(ActivityDescriptionActivity.this, "Already Register", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
     }
 
     private void createTitleView(){
@@ -73,7 +107,5 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         TextView address = (TextView) findViewById(R.id.address);
         address.setText(act.getAddress());
     }
-
-
 
 }
