@@ -45,6 +45,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private static final String TAG = "Maps TAG";
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
