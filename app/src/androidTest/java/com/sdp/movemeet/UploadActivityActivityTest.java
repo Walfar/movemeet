@@ -62,6 +62,7 @@ public class UploadActivityActivityTest {
         };
     }
 
+    // This test has to take extra time or the Views won't update fast enough and it'll fail on CI
     @Test
     public void endToEnd() {
         ActivityScenario scenario = testRule.getScenario();
@@ -105,11 +106,7 @@ public class UploadActivityActivityTest {
                 .perform(typeText("Dubai, UAE"), closeSoftKeyboard());
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
+        assert(sleep(1000));
 
         scenario.onActivity(activity -> {
             assert (((UploadActivityActivity) activity).validLocation == true);
@@ -124,20 +121,12 @@ public class UploadActivityActivityTest {
                 )
         );
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
+        assert(sleep(1000));
 
         onView(withText("OK")).perform(click());
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
+        assert(sleep(1000));
 
         scenario.onActivity(activity -> {
             assert (((UploadActivityActivity) activity).validStartTime == true);
@@ -152,20 +141,12 @@ public class UploadActivityActivityTest {
                 )
         );
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
+        assert(sleep(1000));
 
         onView(withText("OK")).perform(click());
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
+        assert(sleep(1000));
 
         scenario.onActivity(activity -> {
             assert (((UploadActivityActivity) activity).validDate == true);
@@ -180,25 +161,27 @@ public class UploadActivityActivityTest {
                 )
         );
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
+        assert(sleep(1000));
 
         onView(withText("OK")).perform(click());
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
+        assert(sleep(1000));
 
         scenario.onActivity(activity -> {
             assert (((UploadActivityActivity) activity).validDate == true);
         });
 
     }
-}
 
+    public boolean sleep(int millis) {
+        try {
+            Thread.sleep(millis);
+            return true;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+}
