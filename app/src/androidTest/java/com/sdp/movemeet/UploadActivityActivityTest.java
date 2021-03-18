@@ -23,6 +23,7 @@ import java.util.concurrent.CountDownLatch;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.doubleClick;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -89,8 +90,7 @@ public class UploadActivityActivityTest {
             assert (((UploadActivityActivity) activity).validStartTime == false);
         });
 
-        onView(withId(R.id.editTextStartTime)).perform(click());
-        onView(withId(R.id.editTextStartTime)).perform(click());
+        onView(withId(R.id.editTextStartTime)).perform(doubleClick());
 
         onView(withClassName(equalTo(TimePicker.class.getName()))).perform(
                 PickerActions.setTime(
@@ -111,8 +111,7 @@ public class UploadActivityActivityTest {
             assert (((UploadActivityActivity) activity).validDate == false);
         });
 
-        onView(withId(R.id.editTextTime)).perform(click());
-        onView(withId(R.id.editTextTime)).perform(click());
+        onView(withId(R.id.editTextTime)).perform(doubleClick());
 
         onView(withClassName(equalTo(TimePicker.class.getName()))).perform(
                 PickerActions.setTime(
@@ -133,8 +132,7 @@ public class UploadActivityActivityTest {
         });
 
 
-        onView(withId(R.id.editTextDate)).perform(click());
-        onView(withId(R.id.editTextDate)).perform(click());
+        onView(withId(R.id.editTextDate)).perform(doubleClick());
 
         onView(withClassName(equalTo(DatePicker.class.getName()))).perform(
                 PickerActions.setDate(
