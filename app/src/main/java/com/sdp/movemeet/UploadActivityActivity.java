@@ -70,13 +70,14 @@ public class UploadActivityActivity extends AppCompatActivity {
         setupDateInput(this);
         validDate = false;
 
-        setupStartTimeInput(this);
+        startTimeText = findViewById(R.id.editTextStartTime);
         validStartTime = false;
 
-        setupDurationInput(this);
+        durationText = findViewById(R.id.editTextTime);
 
-        setupAddressInput(this);
+        addressText = findViewById(R.id.editTextLocation);
         validLocation = false;
+
     }
 
     private void setupSportSpinner(Context context) {
@@ -126,10 +127,6 @@ public class UploadActivityActivity extends AppCompatActivity {
 
 
     // Helper methods for start time picker
-    private void setupStartTimeInput(Context context) {
-        startTimeText = findViewById(R.id.editTextStartTime);
-    }
-
     private TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -150,10 +147,6 @@ public class UploadActivityActivity extends AppCompatActivity {
 
 
     // Helper methods for duration picker
-    private void setupDurationInput(Context context) {
-        durationText = findViewById(R.id.editTextTime);
-    }
-
     private TimePickerDialog.OnTimeSetListener durationListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -194,11 +187,6 @@ public class UploadActivityActivity extends AppCompatActivity {
 
 
     // Helper methods for address geocoding
-
-    private void setupAddressInput(Context context) {
-        addressText = findViewById(R.id.editTextLocation);
-    }
-
     private void tryLocatingAddress(Context context, String address) {
         Geocoder geocoder = new Geocoder(this);
 
