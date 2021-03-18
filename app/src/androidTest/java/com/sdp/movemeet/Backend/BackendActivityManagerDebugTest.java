@@ -6,6 +6,7 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Activity.Activity;
@@ -100,6 +101,9 @@ public class BackendActivityManagerDebugTest {
 
     @Test
     public void uploadActivityFailsOnUnauthorizedDBAccess() {
+        FirebaseAuth fAuth = FirebaseAuth.getInstance();
+        fAuth.signOut();
+
         bam = new BackendActivityManager(db, BackendActivityManager.ACTIVITIES_COLLECTION);
 
         CountDownLatch latch = new CountDownLatch(1);

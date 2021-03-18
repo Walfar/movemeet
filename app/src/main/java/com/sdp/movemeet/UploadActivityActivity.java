@@ -53,6 +53,8 @@ public class UploadActivityActivity extends AppCompatActivity {
     private double latitude = 0;
     private double longitude = 0;
 
+    public boolean validParticipants, validDate, validStartTime, validLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,14 +65,18 @@ public class UploadActivityActivity extends AppCompatActivity {
         titleEditText = findViewById(R.id.editTextTitle);
         descriptionEditText = findViewById(R.id.editTextDescription);
         nParticipantsEditText = findViewById(R.id.editTextNParticipants);
+        validParticipants = false;
 
         setupDateInput(this);
+        validDate = false;
 
         setupStartTimeInput(this);
+        validStartTime = false;
 
         setupDurationInput(this);
 
         setupAddressInput(this);
+        validLocation = false;
     }
 
     private void setupSportSpinner(Context context) {
@@ -223,6 +229,7 @@ public class UploadActivityActivity extends AppCompatActivity {
             return null;
         }
         int nParticipants = Integer.parseInt(nptext);
+        validParticipants = true;
 
         String address = addressText.getText().toString();
         if (address.isEmpty()) {
@@ -231,6 +238,7 @@ public class UploadActivityActivity extends AppCompatActivity {
             return null;
         }
         tryLocatingAddress(this, address);
+        validLocation = true;
 
         String description = descriptionEditText.getText().toString();
 
@@ -239,6 +247,7 @@ public class UploadActivityActivity extends AppCompatActivity {
                     .show();
             return null;
         }
+        validStartTime = true;
 
         if (durationText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Please enter a duration", Toast.LENGTH_SHORT)
@@ -247,12 +256,14 @@ public class UploadActivityActivity extends AppCompatActivity {
         }
         double duration = (double) (hours) + (double) (minutes) / 60;
         Date date = calendar.getTime();
+        validDate = true;
 
         String organizerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         Activity activity = new Activity(
-                organizerId + date, organizerId, title, nParticipants, new ArrayList<String>(),
-                longitude, latitude, description, date, duration, sport, address
+                organizerId + " || " +  date, organizerId, title, nParticipants,
+                new ArrayList<String>(), longitude, latitude, description, date, duration,
+                sport, address
         );
 
         return activity;
