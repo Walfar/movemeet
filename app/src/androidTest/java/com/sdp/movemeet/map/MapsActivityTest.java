@@ -12,8 +12,11 @@ import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.Task;
 import com.sdp.movemeet.R;
+
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 import org.junit.Rule;
@@ -47,9 +50,7 @@ public class MapsActivityTest {
         newLocation.setLatitude(FAKE_GPS_LATITUDE);
         newLocation.setLongitude(FAKE_GPS_LONGITUDE);
         newLocation.setAccuracy(FAKE_GPS_ACCURACY);
-        mLocationClient.setMockMode(true);
-        mLocationClient.setMockLocation(newLocation);
-        when(mLocationClient.getLastLocation().getResult()).thenReturn(newLocation);
+        //when(mLocationClient.getLastLocation(any())).thenReturn(newLocation);
     }
 
 
