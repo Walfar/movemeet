@@ -1,8 +1,5 @@
 package com.sdp.movemeet;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -10,23 +7,19 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.api.Backend;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Activity.Activity;
@@ -36,10 +29,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 public class UploadActivityActivity extends AppCompatActivity {
 
@@ -50,13 +40,15 @@ public class UploadActivityActivity extends AppCompatActivity {
     private EditText dateText;
     private int year, month, day;
 
+    private EditText titleEditText;
+    private EditText descriptionEditText;
+    private EditText nParticipantsEditText;
 
 
     private EditText durationText;
     private int hours = 0;
     private int minutes = 0;
 
-    private Geocoder geocoder;
     private EditText addressText;
     private double latitude = 0;
     private double longitude = 0;
@@ -64,9 +56,13 @@ public class UploadActivityActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upload_activitiy);
+        setContentView(R.layout.activity_upload_activity);
 
         setupSportSpinner(this);
+
+        titleEditText = findViewById(R.id.editTextTitle);
+        descriptionEditText = findViewById(R.id.editTextDescription);
+        nParticipantsEditText = findViewById(R.id.editTextNParticipants);
 
         setupDateInput(this);
 
@@ -92,9 +88,6 @@ public class UploadActivityActivity extends AppCompatActivity {
     }
 
 
-
-
-
     // Helper methods for date picker
 
     private void setupDateInput(Context context) {
@@ -103,16 +96,16 @@ public class UploadActivityActivity extends AppCompatActivity {
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
-        showDate(year, month+1, day);
+        showDate(year, month + 1, day);
     }
 
     private DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
             calendar.set(Calendar.YEAR, year);
-            calendar.set(Calendar.MONTH, month+1);
+            calendar.set(Calendar.MONTH, month + 1);
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            showDate(year, month+1, dayOfMonth);
+            showDate(year, month + 1, dayOfMonth);
         }
     };
 
@@ -124,7 +117,6 @@ public class UploadActivityActivity extends AppCompatActivity {
     public void setDate(View view) {
         showDialog(999);
     }
-
 
 
     // Helper methods for start time picker
@@ -142,14 +134,13 @@ public class UploadActivityActivity extends AppCompatActivity {
     };
 
     private void showStartTime(int hours, int minutes) {
-        startTimeText.setText(hours + ":" + ((minutes < 10)?"0" + minutes:minutes));
+        startTimeText.setText(hours + ":" + ((minutes < 10) ? "0" + minutes : minutes));
     }
 
     @SuppressWarnings("deprecation")
     public void setStartTime(View view) {
         showDialog(222);
     }
-
 
 
     // Helper methods for duration picker
@@ -167,7 +158,9 @@ public class UploadActivityActivity extends AppCompatActivity {
     private void showDuration(int hours, int minutes) {
         this.hours = hours;
         this.minutes = minutes;
-        durationText.setText(hours + ":" + ((minutes < 10)?"0" + minutes:minutes));
+        calendar.set(Calendar.SECOND, hours);
+        calendar.set(Calendar.MILLISECOND, minutes);
+        durationText.setText(hours + ":" + ((minutes < 10) ? "0" + minutes : minutes));
     }
 
     @SuppressWarnings("deprecation")
@@ -188,86 +181,87 @@ public class UploadActivityActivity extends AppCompatActivity {
                     startTimeListener,
                     calendar.get(Calendar.HOUR_OF_DAY),
                     calendar.get(Calendar.MINUTE),
-                    true
-            );
+                    true);
         }
         return null;
     }
 
 
-
-
-
     // Helper methods for address geocoding
 
     private void setupAddressInput(Context context) {
-        geocoder = new Geocoder(context);
-
         addressText = findViewById(R.id.editTextLocation);
-        addressText.setOnEditorActionListener(addressListener);
     }
 
-    private TextView.OnEditorActionListener addressListener = new TextView.OnEditorActionListener() {
-        @Override
-        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            switch(actionId) {
-                case EditorInfo.IME_ACTION_DONE:
-                case EditorInfo.IME_ACTION_NEXT:
-                case EditorInfo.IME_ACTION_PREVIOUS:
-                    String txt = addressText.getText().toString();
-                    try {
-                        List<Address> address = geocoder.getFromLocationName(txt, 1);
-                        if (address.size() > 0) {
-                            latitude = address.get(0).getLatitude();
-                            longitude = address.get(0).getLongitude();
-                            Toast.makeText(getApplicationContext(), "Found address!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            throw new IOException();
-                        }
-                    } catch (IOException e) {
-                        Toast.makeText(getApplicationContext(), "Error: Could not find address!", Toast.LENGTH_SHORT).show();
-                    }
-                    return true;
+    private void tryLocatingAddress(Context context, String address) {
+        Geocoder geocoder = new Geocoder(this);
+
+        try {
+            List<Address> addresses = geocoder.getFromLocationName(address, 1);
+            if (addresses.size() > 0) {
+                latitude = addresses.get(0).getLatitude();
+                longitude = addresses.get(0).getLongitude();
+            } else {
+                throw new IOException();
             }
-            return false;
+        } catch (IOException e) {
+
         }
-    };
+    }
 
-    public void confirmActivityUpload(View view) {
-        EditText text = findViewById(R.id.editTextTitle);
-        String title = text.getText().toString();
 
-        text = findViewById(R.id.editTextNParticipants);
-        int nParticipants = Integer.parseInt(text.getText().toString());
-
-        text = findViewById(R.id.editTextLocation);
-        String address = text.getText().toString();
-
-        text = findViewById(R.id.editTextDescription);
-        String description = text.getText().toString();
-
+    private Activity validateActivity() {
         Sport sport = Sport.valueOf(spinner.getSelectedItem().toString());
 
-        Date date = calendar.getTime();
+        String title = titleEditText.getText().toString();
+        if (title.isEmpty()) title = sport.name();
 
-        double duration = hours + minutes/60;
+        String nptext = nParticipantsEditText.getText().toString();
+        if (nptext.isEmpty() || Integer.parseInt(nptext) <= 0) {
+            Toast.makeText(this, "Please enter a positive number of participants", Toast.LENGTH_SHORT)
+                    .show();
+            return null;
+        }
+        int nParticipants = Integer.parseInt(nptext);
+
+        String address = addressText.getText().toString();
+        if (address.isEmpty()) {
+            Toast.makeText(this, "Please enter a valid location", Toast.LENGTH_SHORT)
+                    .show();
+            return null;
+        }
+        tryLocatingAddress(this, address);
+
+        String description = descriptionEditText.getText().toString();
+
+        if (startTimeText.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Please enter a start time", Toast.LENGTH_SHORT)
+                    .show();
+            return null;
+        }
+
+        if (durationText.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Please enter a duration", Toast.LENGTH_SHORT)
+                    .show();
+            return null;
+        }
+        double duration = (double) (hours) + (double) (minutes) / 60;
+        Date date = calendar.getTime();
 
         String organizerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        Activity toUpload = new Activity(
-                "activity",
-                organizerId,
-                title,
-                nParticipants,
-                new ArrayList<String>(),
-                longitude,
-                latitude,
-                description,
-                date,
-                duration,
-                sport,
-                address
+        Activity activity = new Activity(
+                organizerId + date, organizerId, title, nParticipants, new ArrayList<String>(),
+                longitude, latitude, description, date, duration, sport, address
         );
+
+        return activity;
+    }
+
+    public void confirmActivityUpload(View view) {
+        Activity toUpload = validateActivity();
+
+        if (toUpload == null) return;
 
         BackendActivityManager bam = new BackendActivityManager(FirebaseFirestore.getInstance(),
                 BackendActivityManager.ACTIVITIES_COLLECTION);

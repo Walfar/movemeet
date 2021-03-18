@@ -100,7 +100,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.758" />
+        app:layout_constraintVertical_bias="0.918" />
 
     <EditText
         android:id="@+id/editTextLocation"
@@ -111,22 +111,21 @@
         android:hint="Location"
         android:inputType="textPostalAddress"
         app:layout_constraintEnd_toEndOf="@+id/editTextTime"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/editTextDate"
         app:layout_constraintTop_toBottomOf="@+id/editTextDate" />
 
     <EditText
         android:id="@+id/editTextDescription"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="375dp"
+        android:layout_height="wrap_content"
         android:ems="10"
         android:hint="A short description..."
         android:inputType="textPersonName"
         android:textAlignment="textStart"
-        app:layout_constraintBottom_toTopOf="@+id/buttonConfirmUpload"
         app:layout_constraintEnd_toEndOf="@+id/editTextLocation"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextLocation"
-        app:layout_constraintTop_toBottomOf="@+id/editTextLocation" />
+        tools:layout_editor_absoluteY="364dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
