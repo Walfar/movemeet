@@ -14,6 +14,7 @@ import androidx.test.rule.ActivityTestRule;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.RegisterActivity;
 import com.sdp.movemeet.Sport;
+import com.sdp.movemeet.map.MapsActivity;
 
 import org.junit.Rule;
 import org.junit.Test;

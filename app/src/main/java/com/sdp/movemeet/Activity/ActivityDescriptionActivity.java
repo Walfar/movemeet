@@ -24,6 +24,7 @@ import com.sdp.movemeet.R;
 import com.sdp.movemeet.Sport;
 import com.sdp.movemeet.User;
 
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,34 +68,47 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void createTitleView() {
         // activityTitle from the activity
         TextView activityTitle = (TextView) findViewById(R.id.activityTitle);
-        activityTitle.setText(act.getTitle());
+        String title = act.getTitle();
+        if (title != null) activityTitle.setText(act.getTitle());
     }
 
     private void createParticipantNumberView(){
         // number of participants from the activity
-        TextView numberParticipants = (TextView) findViewById(R.id.numberParticipant);
-        numberParticipants.setText("Participants : " + act.getParticipantId().size() + "/" + act.getNumberParticipant());
+        TextView numberParticipantsView = (TextView) findViewById(R.id.numberParticipant);
+        ArrayList<String> partcipantId = act.getParticipantId();
+        int numberParticipants = act.getNumberParticipant();
+
+        if (numberParticipants != 0 && partcipantId != null) {
+            numberParticipantsView.setText("Participants : " + partcipantId.size() + "/" + numberParticipants);
+        }
     }
 
     private void createDescriptionView(){
         // description from the activity
-        TextView description = (TextView) findViewById(R.id.description);
-        description.setText(act.getDescription());
+        TextView descriptionView = (TextView) findViewById(R.id.description);
+        String description = act.getDescription();
+        if (description != null) descriptionView.setText(description);
     }
 
     private void createDateView(){
         // date from the activity
-        TextView date = (TextView) findViewById(R.id.date);
-        String pattern = "MM/dd/yyyy HH:mm:ss";
-        DateFormat df = new SimpleDateFormat(pattern);
-        String todayAsString = df.format(act.getDate());
-        date.setText(todayAsString);
+        TextView dateView = (TextView) findViewById(R.id.date);
+        Date date = act.getDate();
+        if (date != null) {
+            String pattern = "MM/dd/yyyy HH:mm:ss";
+            DateFormat df = new SimpleDateFormat(pattern);
+            String todayAsString = df.format(act.getDate());
+            dateView.setText(todayAsString);
+        }
     }
 
     private void createAddressView(){
         // address from the activity
-        TextView address = (TextView) findViewById(R.id.address);
-        address.setText(act.getAddress());
+        TextView addressView = (TextView) findViewById(R.id.address);
+        String address = act.getAddress();
+        if (address != null) {
+            addressView.setText(act.getAddress());
+        }
     }
 
     public void onClick(View v) {
