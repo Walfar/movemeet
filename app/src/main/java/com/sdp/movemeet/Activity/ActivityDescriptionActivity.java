@@ -1,12 +1,28 @@
 package com.sdp.movemeet.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.sdp.movemeet.Backend.FirebaseInteraction;
+import com.sdp.movemeet.FirebaseUsersMainActivity;
+import com.sdp.movemeet.LoginActivity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.Sport;
+import com.sdp.movemeet.User;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -15,6 +31,8 @@ import java.util.Date;
 
 public class ActivityDescriptionActivity extends AppCompatActivity {
 
+    FirebaseAuth fAuth;
+    Button RegisterToActivityButton;
     private Activity act = new Activity("activityId",
             "organizerId",
             "Snowboard",
@@ -28,13 +46,22 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             Sport.Running,
             "address");
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
 
-        act = (Activity) getIntent().getSerializableExtra("activity");
+        Intent intent = getIntent();
+
+        if (intent == null) {
+            Log.d("Intent", "Intent is null :(");
+        }
+
+        try {
+            act = (Activity) intent.getSerializableExtra("activity");
+        } catch (Exception e) {
+            Log.d("Activity", "activity is null");
+        }
 
         createTitleView();
         createParticipantNumberView();
@@ -76,6 +103,18 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         address.setText(act.getAddress());
     }
 
-
+    public void onClick(View v) {
+        fAuth = FirebaseAuth.getInstance();
+        if (fAuth.getCurrentUser() != null) {
+            String userId;
+            userId = fAuth.getCurrentUser().getUid();
+            try{
+                act.addParticipantId(userId);
+                createParticipantNumberView();}
+            catch(Exception e){
+                Toast.makeText(ActivityDescriptionActivity.this, "Already Register", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
 }

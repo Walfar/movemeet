@@ -62,7 +62,7 @@ public class MapsActivityTest {
 
     @Test
     public void mapsActivity_checkThatMarkersAreDisplayedAndClickable() throws UiObjectNotFoundException {
-       UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
      /*   UiObject userMarker = device.findObject(new UiSelector().descriptionContains("I am here !"));
 

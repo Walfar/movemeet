@@ -1,5 +1,6 @@
 package com.sdp.movemeet.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 
 import androidx.test.core.app.ActivityScenario;
@@ -7,6 +8,8 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
 
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.RegisterActivity;
@@ -21,6 +24,7 @@ import java.util.Date;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static com.sdp.movemeet.Sport.Soccer;
 
 public class ActivityDescriptionTest {
 
@@ -28,23 +32,20 @@ public class ActivityDescriptionTest {
     public ActivityScenarioRule<ActivityDescriptionActivity> testRule = new ActivityScenarioRule<>(ActivityDescriptionActivity.class);
 
 
-   /* @Test
-    public void create() {
-        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), ActivityDescriptionActivity.class);
-        ActivityScenario.launch(intent);
-        Activity act =  new Activity("activityId",
-                "organizerId",
-                "Snowboard",
-                5,
-                new ArrayList<>(),
-                004,
-                005,
-                "BlaBlaBla Description de l'activité",
-                new Date(),
-                90,
-                Sport.Running,
-                "address");
 
-        intent.putExtra("activity", act);
-    } */
+    @Test
+    public void create() {
+        Intents.init();
+
+        Intents.release();
+    }
+
+    @Test
+    public void addUserToActivity() {
+        Intents.init();
+
+        onView(withId(R.id.buttonRegisterActivity)).perform(click());
+        
+        Intents.release();
+    }
 }

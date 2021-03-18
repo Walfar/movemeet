@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.sdp.movemeet.Activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.Backend.BackendActivityManagerDemo;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
 
@@ -69,4 +70,8 @@ public class FirebaseUsersMainActivity extends AppCompatActivity {
 
     }
 
+    public void startActivity(View view) {
+            Intent intent = new Intent(this, ActivityDescriptionActivity.class);
+            startActivity(intent);
+    }
 }
