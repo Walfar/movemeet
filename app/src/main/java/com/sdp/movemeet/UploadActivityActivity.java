@@ -44,11 +44,13 @@ import java.util.Map;
 public class UploadActivityActivity extends AppCompatActivity {
 
     private Spinner spinner;
-    private Sport sport;
 
     private Calendar calendar;
+    private EditText startTimeText;
     private EditText dateText;
     private int year, month, day;
+
+
 
     private EditText durationText;
     private int hours = 0;
@@ -64,10 +66,11 @@ public class UploadActivityActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_activitiy);
 
-        sport = Sport.Running;
         setupSportSpinner(this);
 
         setupDateInput(this);
+
+        setupStartTimeInput(this);
 
         setupDurationInput(this);
 
@@ -106,6 +109,9 @@ public class UploadActivityActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, month+1);
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             showDate(year, month+1, dayOfMonth);
         }
     };
@@ -121,14 +127,34 @@ public class UploadActivityActivity extends AppCompatActivity {
 
 
 
+    // Helper methods for start time picker
+    private void setupStartTimeInput(Context context) {
+        startTimeText = findViewById(R.id.editTextStartTime);
+    }
+
+    private TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            calendar.set(Calendar.MINUTE, minute);
+            showStartTime(hourOfDay, minute);
+        }
+    };
+
+    private void showStartTime(int hours, int minutes) {
+        startTimeText.setText(hours + ":" + ((minutes < 10)?"0" + minutes:minutes));
+    }
+
+    @SuppressWarnings("deprecation")
+    public void setStartTime(View view) {
+        showDialog(222);
+    }
 
 
 
     // Helper methods for duration picker
-
     private void setupDurationInput(Context context) {
         durationText = findViewById(R.id.editTextTime);
-        showDuration(hours, minutes);
     }
 
     private TimePickerDialog.OnTimeSetListener durationListener = new TimePickerDialog.OnTimeSetListener() {
@@ -156,7 +182,14 @@ public class UploadActivityActivity extends AppCompatActivity {
                     dateListener, year, month, day);
         } else if (id == 444) {
             return new TimePickerDialog(this,
-                    durationListener, hours, minutes, true);
+                    durationListener, hours, minutes, false);
+        } else if (id == 222) {
+            return new TimePickerDialog(this,
+                    startTimeListener,
+                    calendar.get(Calendar.HOUR_OF_DAY),
+                    calendar.get(Calendar.MINUTE),
+                    true
+            );
         }
         return null;
     }
@@ -215,19 +248,15 @@ public class UploadActivityActivity extends AppCompatActivity {
 
         Sport sport = Sport.valueOf(spinner.getSelectedItem().toString());
 
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.MONTH, month);
-        cal.set(Calendar.DAY_OF_MONTH, day);
-        Date date = cal.getTime();
+        Date date = calendar.getTime();
 
         double duration = hours + minutes/60;
 
-        //String organizerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String organizerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         Activity toUpload = new Activity(
                 "activity",
-                "organizerId",
+                organizerId,
                 title,
                 nParticipants,
                 new ArrayList<String>(),

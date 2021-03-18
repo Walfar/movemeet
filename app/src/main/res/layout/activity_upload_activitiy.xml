@@ -7,6 +7,18 @@
     android:onClick="setDuration"
     tools:context=".UploadActivityActivity">
 
+    <EditText
+        android:id="@+id/editTextStartTime"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:editable="false"
+        android:ems="10"
+        android:hint="Time"
+        android:onClick="setStartTime"
+        app:layout_constraintStart_toEndOf="@+id/editTextDate"
+        app:layout_constraintTop_toTopOf="@+id/editTextDate" />
+
     <TextView
         android:id="@+id/uploadActivityTitle"
         android:layout_width="wrap_content"
@@ -55,8 +67,8 @@
 
     <EditText
         android:id="@+id/editTextDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="155dp"
+        android:layout_height="45dp"
         android:layout_marginTop="16dp"
         android:editable="false"
         android:ems="10"
@@ -67,14 +79,14 @@
 
     <EditText
         android:id="@+id/editTextTime"
-        android:layout_width="151dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:editable="false"
         android:ems="10"
         android:hint="Duration"
         android:onClick="setDuration"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editTextDate"
+        app:layout_constraintStart_toEndOf="@+id/editTextStartTime"
         app:layout_constraintTop_toTopOf="@+id/editTextDate" />
 
     <Button
