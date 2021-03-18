@@ -69,7 +69,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         // activityTitle from the activity
         TextView activityTitle = (TextView) findViewById(R.id.activityTitle);
         String title = act.getTitle();
-        if (title != null) activityTitle.setText(act.getTitle());
+        if (title != null) activityTitle.setText(title);
     }
 
     private void createParticipantNumberView(){
@@ -97,7 +97,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (date != null) {
             String pattern = "MM/dd/yyyy HH:mm:ss";
             DateFormat df = new SimpleDateFormat(pattern);
-            String todayAsString = df.format(act.getDate());
+            String todayAsString = df.format(date);
             dateView.setText(todayAsString);
         }
     }
@@ -107,7 +107,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         TextView addressView = (TextView) findViewById(R.id.address);
         String address = act.getAddress();
         if (address != null) {
-            addressView.setText(act.getAddress());
+            addressView.setText(address);
         }
     }
 
