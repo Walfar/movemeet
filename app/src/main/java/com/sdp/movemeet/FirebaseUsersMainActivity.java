@@ -6,15 +6,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.sdp.movemeet.Activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.Backend.BackendActivityManagerDemo;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
 
@@ -53,7 +49,7 @@ public class FirebaseUsersMainActivity extends AppCompatActivity {
 
     public void logout(View view) {
         FirebaseAuth.getInstance().signOut(); // this will do the logout of the user from Firebase
-        startActivity(new Intent(getApplicationContext(), FirebaseUsersLogin.class)); // sending the user to the "Login" activity
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
         finish();
     }
 
@@ -74,4 +70,8 @@ public class FirebaseUsersMainActivity extends AppCompatActivity {
 
     }
 
+    public void startActivity(View view) {
+            Intent intent = new Intent(this, ActivityDescriptionActivity.class);
+            startActivity(intent);
+    }
 }
