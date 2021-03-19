@@ -16,6 +16,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -46,7 +47,7 @@ public class FirebaseUsersGreetingActivityTest {
     @Test
     public void greetingAction_endToEnd() {
         onView(withId(R.id.mainEditName))
-                .perform(typeText(RECEIVED_INPUT), closeSoftKeyboard());
+                .perform(replaceText(RECEIVED_INPUT), closeSoftKeyboard());
         onView(withId(R.id.mainGoButton)).perform(click());
 
         // Necessary to retrieve context to be able to retrieve resource strings
