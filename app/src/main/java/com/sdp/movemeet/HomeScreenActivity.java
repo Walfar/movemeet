@@ -3,7 +3,6 @@ package com.sdp.movemeet;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 
@@ -18,7 +17,7 @@ public class HomeScreenActivity extends AppCompatActivity {
     }
 
     public void signIn(View v) {
-        startActivity(new Intent(getApplicationContext(), FirebaseUsersLogin.class)); // redirecting the user to the "Login" activity
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // redirecting the user to the "Login" activity
     }
 
     public void noAccount(View v) {

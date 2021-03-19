@@ -25,6 +25,23 @@ public class ActivityTest {
     private final static String DUMMY_ADDRESS = "address";
 
 
+    public static Activity createFakeActivity() {
+        return new Activity(
+                DUMMY_ACTIVITY_ID,
+                DUMMY_ORGANISATOR_ID,
+                DUMMY_TITLE,
+                DUMMY_NUMBER_PARTICIPANT,
+                DUMMY_PARTICIPANTS_ID,
+                DUMMY_LONGITUDE,
+                DUMMY_LATITUDE,
+                DUMMY_DESCRIPTION,
+                DUMMY_DATE,
+                DUMMY_DURATION,
+                DUMMY_SPORT,
+                DUMMY_ADDRESS
+        );
+    }
+
     @Test
     public void activityConstructorCorrect(){
         Activity activity = new Activity(
