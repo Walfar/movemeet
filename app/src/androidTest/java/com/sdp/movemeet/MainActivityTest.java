@@ -44,7 +44,6 @@ public class MainActivityTest {
 
     }
 
-
 //    @Test
 //    public void mainActivity_logout() {
 //        Intents.init();
