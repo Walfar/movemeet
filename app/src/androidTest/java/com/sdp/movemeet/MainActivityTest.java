@@ -40,17 +40,19 @@ public class MainActivityTest {
         intended(hasExtra(MainActivity.EXTRA_MESSAGE, KEYBOARD_INPUT));
 
         Intents.release();
+
+
     }
 
 
-    @Test
-    public void mainActivity_logout() {
-        Intents.init();
-
-        onView(withId(R.id.button_logout)).perform(click());
-
-        Intents.release();
-    }
+//    @Test
+//    public void mainActivity_logout() {
+//        Intents.init();
+//
+//        onView(withId(R.id.button_logout)).perform(click());
+//
+//        Intents.release();
+//    }
 
     @Test
     public void mainActivityToProfileActivity() {
