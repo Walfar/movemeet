@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.sdp.movemeet">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -22,7 +23,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.movemeet">
-        <activity android:name=".UploadActivityActivity"></activity>
+        <activity
+            android:name=".EditProfileActivity"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".UploadActivityActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -34,6 +40,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/map_key" />
+
 
         <activity
             android:name=".map.MapsActivity"
@@ -55,16 +62,7 @@
         </activity>
         <activity android:name=".Backend.BackendActivityManagerDemo" />
         <activity android:name=".Backend.BackendActivityManagerDebug" />
-        <activity
-            android:name=".GreetingActivity"
-            android:parentActivityName=".MainActivity">
 
-            <!-- The meta-data tag is required if you support API level 15 or lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sdp.movemeet.MainActivity" />
-        </activity>
-        <activity android:name=".MainActivity"></activity>
         <activity
             android:name=".RegisterActivity"
             android:parentActivityName=".HomeScreenActivity">
@@ -72,7 +70,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sdp.movemeet.HomeScreenActivity" />
         </activity>
-        <activity android:name=".FirebaseUsersMainActivity" />
+        <activity android:name=".MainActivity" />
+
         <activity
             android:name=".LoginActivity"
             android:parentActivityName=".HomeScreenActivity">
@@ -81,13 +80,13 @@
                 android:value="com.sdp.movemeet.HomeScreenActivity" />
         </activity>
         <activity
-            android:name=".FirebaseUsersGreetingActivity"
-            android:parentActivityName=".FirebaseUsersMainActivity">
+            android:name=".GreetingActivity"
+            android:parentActivityName=".MainActivity">
 
             <!-- The meta-data tag is required if you support API level 15 or lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sdp.movemeet.FirebaseUsersMainActivity" />
+                android:value="com.sdp.movemeet.MainActivity" />
         </activity>
         <activity android:name=".Activity.ActivityDescriptionActivity">
         </activity>

@@ -42,7 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_firebase_users_register);
+        setContentView(R.layout.activity_register);
 
         mFullName = findViewById(R.id.edit_text_full_name);
         mEmail = findViewById(R.id.edit_text_email);
@@ -56,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
 
         if (fAuth.getCurrentUser() != null) { // if the user is already logged in (i.e. the current user object is present), we directly send him to the "MainActivity"
-            startActivity(new Intent(getApplicationContext(), FirebaseUsersMainActivity.class));
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
         }
 
@@ -109,10 +109,13 @@ public class RegisterActivity extends AppCompatActivity {
                             Log.d(TAG, "onFailure: " + e.toString());
                         }
                     });
-                    startActivity(new Intent(getApplicationContext(), FirebaseUsersMainActivity.class));
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
                 } else {
-                    Toast.makeText(RegisterActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show(); // an error could for instance happen in case a user tries to register with an email already registered in the database ("Error! The email address is already in use by another account.")
+                    // An error could for instance happen in case a user tries to register with an
+                    // email already registered in the database ("Error! The email address is
+                    // already in use by another account.")
+                    Toast.makeText(RegisterActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                 }
             }
@@ -120,7 +123,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public Map<String, Object> registeringData() {
-        Map<String, Object> user = new HashMap<>(); // map with "String" as keys (that will act as attributes in our document) and "objects" as the data
+        // Map with "String" as keys (that will act as attributes in our document) and "objects" as the data
+        Map<String, Object> user = new HashMap<>();
         user.put("fullName", fullName);
         user.put("email", email);
         user.put("phone", phone);
@@ -129,7 +133,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void loginOnClick(View view) {
-        startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // redirecting the user to the "Login" activity
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
 
     }
 
