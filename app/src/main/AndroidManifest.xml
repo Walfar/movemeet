@@ -23,10 +23,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.movemeet">
+        <activity android:name=".chat.ChatActivity"></activity>
         <activity
             android:name=".EditProfileActivity"
-            android:windowSoftInputMode="adjustPan" >
-        </activity>
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name=".ProfileActivity" />
         <activity android:name=".UploadActivityActivity" />
         <!--
@@ -40,7 +40,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/map_key" />
-
 
         <activity
             android:name=".map.MapsActivity"
@@ -62,7 +61,6 @@
         </activity>
         <activity android:name=".Backend.BackendActivityManagerDemo" />
         <activity android:name=".Backend.BackendActivityManagerDebug" />
-
         <activity
             android:name=".RegisterActivity"
             android:parentActivityName=".HomeScreenActivity">
@@ -71,7 +69,6 @@
                 android:value="com.sdp.movemeet.HomeScreenActivity" />
         </activity>
         <activity android:name=".MainActivity" />
-
         <activity
             android:name=".LoginActivity"
             android:parentActivityName=".HomeScreenActivity">
@@ -88,8 +85,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sdp.movemeet.MainActivity" />
         </activity>
-        <activity android:name=".Activity.ActivityDescriptionActivity">
-        </activity>
+        <activity android:name=".Activity.ActivityDescriptionActivity"></activity>
 
         <meta-data
             android:name="preloaded_fonts"
