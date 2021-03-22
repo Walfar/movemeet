@@ -1,4 +1,4 @@
-package com.sdp.movemeet.UI;
+package com.sdp.movemeet.HomeScreen;
 
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -19,24 +19,16 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 public class HomeScreenActivityTest {
 
     @Rule
-    public ActivityScenarioRule<HomeScreenActivity> testRule = new ActivityScenarioRule<>(HomeScreenActivity.class);
+    public ActivityScenarioRule<HomeScreenActivity> HomeScreenTestRule = new ActivityScenarioRule<>(HomeScreenActivity.class);
 
     @Test
     public void mainActivity_signIn() {
-        Intents.init();
-
         onView(withId(R.id.signInButton)).perform(click());
-
-        Intents.release();
     }
 
     @Test
     public void mainActivity_noAccount() {
-        Intents.init();
-
         onView(withId(R.id.noAccountButton)).perform(click());
-
-        Intents.release();
     }
 }
 

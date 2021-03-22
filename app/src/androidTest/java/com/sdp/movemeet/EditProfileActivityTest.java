@@ -42,12 +42,6 @@ public class EditProfileActivityTest {
         onView(ViewMatchers.withId(R.id.edit_text_edit_profile_description))
                 .perform(replaceText(TEST_DESCRIPTION), closeSoftKeyboard());
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
-
         onView(withId(R.id.button_edit_profile_save_profile_data)).perform(click());
 
     }

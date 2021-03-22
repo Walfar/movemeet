@@ -1,4 +1,4 @@
-package com.sdp.movemeet;
+package com.sdp.movemeet.Activity;
 
 import android.view.View;
 import android.widget.DatePicker;
@@ -16,6 +16,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.sdp.movemeet.R;
+import com.sdp.movemeet.UploadActivityActivity;
 
 import org.hamcrest.Matcher;
 import org.junit.Rule;
@@ -62,9 +64,6 @@ public class UploadActivityActivityTest {
         };
     }
 
-    @Test
-    public void truc(){}
-    /*
     // This test has to take extra time or the Views won't update fast enough and it'll fail on CI
     @Test
     public void endToEnd() {
@@ -175,6 +174,9 @@ public class UploadActivityActivityTest {
             assert (((UploadActivityActivity) activity).validDate == true);
         });
 
+        mAuth.signOut();
+        scenario.close();
+
     }
 
     public boolean sleep(int millis) {
@@ -185,6 +187,6 @@ public class UploadActivityActivityTest {
             e.printStackTrace();
             return false;
         }
-    }*/
+    }
 
 }

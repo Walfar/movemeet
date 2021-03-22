@@ -29,8 +29,10 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static com.sdp.movemeet.Sport.Soccer;
+import static com.sdp.movemeet.Sport.Soccer;;
 
 @RunWith(AndroidJUnit4.class)
 public class ActivityDescriptionTest {
@@ -38,26 +40,24 @@ public class ActivityDescriptionTest {
     @Rule
     public ActivityScenarioRule<ActivityDescriptionActivity> testRule = new ActivityScenarioRule<>(ActivityDescriptionActivity.class);
 
-
-
     @Test
     public void create() {
         Intents.init();
-
+        try{
+            Thread.sleep(500);
+        }catch(Exception e){
+        }
         Intents.release();
     }
 
-
-    /*@Test
+    @Test
     public void addUserToActivity() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
         Intents.init();
-        onView(withId(R.id.activityRegisterDescription)).perform(click(), closeSoftKeyboard());
-
+        try{
+            Thread.sleep(500);
+            onView(withId(R.id.activity_description_description)).check(matches(isDisplayed()));
+        }catch(Exception e){
+        }
         Intents.release();
-    }*/
+    }
 }
