@@ -43,10 +43,6 @@ public class ActivityDescriptionTest {
     @Test
     public void create() {
         Intents.init();
-        try{
-            Thread.sleep(500);
-        }catch(Exception e){
-        }
         Intents.release();
     }
 
@@ -54,7 +50,7 @@ public class ActivityDescriptionTest {
     public void addUserToActivity() {
         Intents.init();
         try{
-            Thread.sleep(500);
+            Thread.sleep(500); //just to wait for the view and the availability of the button
             onView(withId(R.id.activity_description_description)).check(matches(isDisplayed()));
         }catch(Exception e){
         }

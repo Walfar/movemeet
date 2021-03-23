@@ -1,8 +1,11 @@
-package com.sdp.movemeet;
+package com.sdp.movemeet.Profile;
 
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+
+import com.sdp.movemeet.EditProfileActivity;
+import com.sdp.movemeet.R;
 
 import org.junit.Rule;
 import org.junit.Test;
