@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_firebase_users_login);
+        setContentView(R.layout.activity_login);
 
         mEmail = findViewById(R.id.edit_text_email);
         mPassword = findViewById(R.id.edit_text_password);
@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(LoginActivity.this, "Logged in successfully.", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(), FirebaseUsersMainActivity.class)); // we redirect the user to the "MainActivity"
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class)); // we redirect the user to the "MainActivity"
 
                         } else {
                             Toast.makeText(LoginActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -82,14 +82,6 @@ public class LoginActivity extends AppCompatActivity {
             }
 
         });
-
-//        // Defining the OnClickListener for the "text view button"
-//        mCreateBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(getApplicationContext(), FirebaseUsersRegister.class)); // redirecting the user to the "Register" activity
-//            }
-//        });
 
     }
 
