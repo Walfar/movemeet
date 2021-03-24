@@ -10,6 +10,7 @@ import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.filters.LargeTest;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -66,6 +67,7 @@ public class UploadActivityActivityTest {
 
     // This test has to take extra time or the Views won't update fast enough and it'll fail on CI
     @Test
+    @LargeTest
     public void endToEnd() {
         ActivityScenario scenario = testRule.getScenario();
         CountDownLatch latch = new CountDownLatch(1);
