@@ -6,84 +6,70 @@
     android:layout_height="match_parent"
     tools:context=".chat.chat_activity">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rootLayout"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
-        android:orientation="horizontal"
-        xmlns:card_view="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".MainActivity"
+        android:paddingBottom="8dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <LinearLayout
-            android:id="@+id/rltParent"
+            android:id="@+id/inputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/lnrContr"
-                android:orientation="horizontal"
-                android:minWidth="210dp"
-                android:background="#d8e4e7">
-
-            <TextView
-                android:id="@+id/message_user"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingStart="6dp"
-                android:textColor="@color/amaranth_red"
-                android:text="username"
-                android:textStyle="normal"/>
-
-            </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#26abc2"/>
-
-        <TextView
-            android:id="@+id/message_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="6dp"
-            android:paddingEnd="6dp"
-            android:layout_marginTop="2dp"
-            android:textIsSelectable="true"
-            android:text=""
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="16sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:minWidth="200dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/lnrContainer"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:minWidth="210dp"
-            android:layout_marginTop="3dp">
+            android:layout_alignParentBottom="true">
 
-            <TextView
-                android:id="@+id/message_time"
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintTextAppearance="@android:style/TextAppearance.Medium"
+                android:layout_weight="7">
+                <MultiAutoCompleteTextView
+                    android:id="@+id/input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:drawable/editbox_background_normal"
+                    android:hint="Type your post"
+                    app:hintTextAppearance="@android:style/TextAppearance.Medium"></MultiAutoCompleteTextView>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnSend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="6dp"
                 android:layout_weight="1.5"
-                android:text="01-01-2000(00:00am)" />
+                android:clickable="true"
+                android:layout_marginTop="3dp"
+                app:fabSize="mini"
+                android:tint="@color/amaranth_red"
+                android:src="@android:drawable/ic_menu_send" />
 
         </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/loader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/inputLayout"
+            android:scrollbars="none"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="5dp"
+            android:stackFromBottom="true"
+            android:transcriptMode="normal" />
+
+    </RelativeLayout>
 
 
 
