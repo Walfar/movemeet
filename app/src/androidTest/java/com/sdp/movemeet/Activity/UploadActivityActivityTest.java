@@ -119,6 +119,8 @@ public class UploadActivityActivityTest {
 
         onView(withId(R.id.editTextStartTime)).perform(forceDoubleClick());
 
+        assert(sleep(1000));
+
         onView(withClassName(equalTo(TimePicker.class.getName()))).perform(
                 PickerActions.setTime(
                         9, 15
@@ -138,6 +140,8 @@ public class UploadActivityActivityTest {
         });
 
         onView(withId(R.id.editTextTime)).perform(forceDoubleClick());
+
+        assert(sleep(1000));
 
         onView(withClassName(equalTo(TimePicker.class.getName()))).perform(
                 PickerActions.setTime(
