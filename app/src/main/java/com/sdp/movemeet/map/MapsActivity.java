@@ -89,7 +89,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             markerOpt.icon(BitmapDescriptorFactory.fromResource(chooseIcon(act)));
             Marker marker = googleMap.addMarker(markerOpt);
             marker.setTag(act);
-        } */
+        }*/
 
 
         getNearbyMarkers(googleMap);
@@ -139,7 +139,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         dc.calculateDistances();
         dc.sort();
 
-        for (Activity act : dc.getTopActivities(10)) {
+        for (Activity act : dc.getTopActivities(2)) {
             LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
 
             MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
