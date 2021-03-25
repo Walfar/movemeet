@@ -25,9 +25,6 @@ public class BackendActivityManagerDemoTest {
     public ActivityScenarioRule<BackendActivityManagerDemo> testRule = new ActivityScenarioRule<>(BackendActivityManagerDemo.class);
 
     @Test
-    public void test(){}
-
-    @Test
     public void endToEnd() {
 
         onView(ViewMatchers.withId(R.id.editHostUpload))

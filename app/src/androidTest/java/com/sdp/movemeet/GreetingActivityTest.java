@@ -29,9 +29,6 @@ public class GreetingActivityTest {
     public ActivityScenarioRule<MainActivity> testRule = new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void test(){}
-
-    @Test
     public void greetingActivity_getsCorrectData() {
         Context context = ApplicationProvider.getApplicationContext();
         Intent intent = new Intent(context, GreetingActivity.class);

@@ -34,9 +34,6 @@ public class BackendActivityManagerDebugTest {
     @Rule
     public ActivityScenarioRule<BackendActivityManagerDebug> testRule = new ActivityScenarioRule<>(BackendActivityManagerDebug.class);
 
-    @Test
-    public void test(){}
-
     @Before
     public void startUp() {
         Random rand = new Random();
