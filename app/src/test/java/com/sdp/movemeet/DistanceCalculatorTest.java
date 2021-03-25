@@ -278,7 +278,7 @@ public class DistanceCalculatorTest {
 
         dc.setActivities(activityArrayList);
 
-        dc.sortActivities();
+        //dc.sortActivities();
 
         assertEquals(false, dc.isSorted());
 
