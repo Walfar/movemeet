@@ -83,16 +83,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Marker posMarker = googleMap.addMarker(markerOptions);
         posMarker.setTag("my position");
 
-        for (Activity act: activities) {
+        /*for (Activity act: activities) {
             LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
             MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
             markerOpt.icon(BitmapDescriptorFactory.fromResource(chooseIcon(act)));
             Marker marker = googleMap.addMarker(markerOpt);
             marker.setTag(act);
-        }
+        } */
 
 
-        //getNearbyMarkers(googleMap);
+        getNearbyMarkers(googleMap);
     }
 
     @Override
@@ -139,7 +139,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         dc.calculateDistances();
         dc.sort();
 
-        for (Activity act : dc.getTopActivities(3)) {
+        for (Activity act : dc.getTopActivities(10)) {
             LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
 
             MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
@@ -149,24 +149,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    /*
-    private void getNearbyMarkers(GoogleMap googleMap) {
-        LatLngBounds perimeter = new LatLngBounds(new LatLng(currentLocation.getLatitude() - perimeterRadius, currentLocation.getLongitude() - perimeterRadius),
-                new LatLng(currentLocation.getLatitude() + perimeterRadius, currentLocation.getLongitude() + perimeterRadius));
-
-        for (Activity act: activities) {
-            LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
-            if (perimeter.contains(actLatLng)) {
-                MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
-                markerOpt.icon(BitmapDescriptorFactory.fromResource(chooseIcon(act)));
-                Marker marker = googleMap.addMarker(markerOpt);
-                marker.setTag(act);
-            } else {
-                Log.d(TAG, "Coordinates not in perimeter: " + act.getActivityId());
-            }
-        }
-    }
-    */
 
 
 
