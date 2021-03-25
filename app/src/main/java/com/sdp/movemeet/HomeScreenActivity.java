@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.sdp.movemeet.map.GPSRecordingActivity;
 import com.sdp.movemeet.map.MapsActivity;
 
 public class HomeScreenActivity extends AppCompatActivity {
@@ -22,5 +23,9 @@ public class HomeScreenActivity extends AppCompatActivity {
 
     public void noAccount(View v) {
         startActivity(new Intent(getApplicationContext(), MapsActivity.class)); // redirecting the user to the "Login" activity
+    }
+
+    public void RecordRun(View v) {
+        startActivity(new Intent(getApplicationContext(), GPSRecordingActivity.class)); // Redirect the user to the GPS recording activity
     }
 }
