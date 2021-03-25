@@ -4,12 +4,14 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -35,6 +37,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.Backend.BackendActivityManager;
+import com.sdp.movemeet.DistanceCalculator;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.Sport;
 
@@ -86,6 +89,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
@@ -133,6 +137,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         task.addOnSuccessListener(this::onSuccess);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void getNearbyMarkers(GoogleMap googleMap) {
+        DistanceCalculator dc = new DistanceCalculator(currentLocation.getLatitude(), currentLocation.getLongitude());
+
+        dc.setActivities((ArrayList<Activity>) activities);
+        dc.calculateDistances();
+        dc.sort();
+
+        for (Activity act : dc.getTopActivities(3)) {
+            LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
+
+            MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
+            markerOpt.icon(BitmapDescriptorFactory.fromResource(chooseIcon(act)));
+            Marker marker = googleMap.addMarker(markerOpt);
+            marker.setTag(act);
+        }
+    }
+
+    /*
     private void getNearbyMarkers(GoogleMap googleMap) {
         LatLngBounds perimeter = new LatLngBounds(new LatLng(currentLocation.getLatitude() - perimeterRadius, currentLocation.getLongitude() - perimeterRadius),
                 new LatLng(currentLocation.getLatitude() + perimeterRadius, currentLocation.getLongitude() + perimeterRadius));
@@ -149,6 +172,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
+    */
 
     private void updateListActivities() {
        Query q = bam.getActivitiesCollectionReference();
