@@ -31,7 +31,6 @@ Next week, I will keep working on this Activity to better integrate it into the 
 
 ### Mark
 * * *
-
 This week I finalized my work on the DistanceCalculator class and was able to merge it with the GUI of the app. This functionality is now more optimized and thoroughly tested.
 
 I have slightly misjudged the time estimates, because I ran into a lot of problems with the Android emulator. I will take these difficulties into account when working on future Sprints.
@@ -41,18 +40,24 @@ Since the User Stories linked to this functionality are complete, next week I am
 
 ### Roxane
 * * *
+This week I implemented the layout of our future chat activity based on our discussions with Anthony.
 
-Cette semaine, j’ai implémenté le layout de notre futur chat basé sur nos discussions avec Anthony.
+I also created the Message class in order to properly handle the Message objects and later display useful information to the user
 
-La semaine prochaine, je regarderai pour que ce layout soit cohérent avec la version finalement implémentée du backend. Nous prendrons aussi le temps de développer des tests pour le chat.
+Next week, I'll look at making this layout consistent with the finally implemented version of the backend. I will also take the time to develop tests for the chat layout.
 
 
 ### Victor
 * * *
+This week, I made the logged user able to access the map. I added the ActivitiesUpdater class to retrieve the
+activities from the database and add them to a list. This list is then displayed on the map. When a user adds an activity, the list of activities in the database is updated.
+Also, I've worked with Mark on displaying only the markers in a given parameter (the top 4
+activities near the user). 
+This week, the time spent on each task was fitting.
 
-
-
-
+Next week, I intend to let the user choose the location of the activity by clicking
+directly on the map. I'll also make the current location of the user updates in real
+time when he is moving.
 
 
 
