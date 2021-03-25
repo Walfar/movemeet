@@ -65,7 +65,7 @@ public class MapsActivityTest {
     public void mapsActivity_checkThatMarkersAreDisplayedAndClickable() throws UiObjectNotFoundException {
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
-     /*   UiObject userMarker = device.findObject(new UiSelector().descriptionContains("I am here !"));
+        UiObject userMarker = device.findObject(new UiSelector().descriptionContains("I am here !"));
 
         UiObject marker1 = device.findObject(new UiSelector().descriptionContains("soccer"));
         UiObject marker2 = device.findObject(new UiSelector().descriptionContains("tennis"));
@@ -74,13 +74,12 @@ public class MapsActivityTest {
         assertNotNull(marker1);
         assertNotNull(marker2);
 
-        assertTrue(marker1.isFocusable());
-        assertTrue(marker2.isFocusable());
-        assertTrue(userMarker.isFocusable());
+        //assertTrue(marker1.isFocusable());
+        //assertTrue(marker2.isFocusable());
+        //assertTrue(userMarker.isFocusable());
 
-      / marker1.click();
-        marker2.click();
-        userMarker.click();
-        // Intents ?*/
+        //marker1.click();
+        //marker2.click();
+        //userMarker.click();
     }
 }
