@@ -83,7 +83,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void createDuration(){
         TextView durationView = (TextView) findViewById(R.id.activity_duration_description);
         if(act != null){
-            durationView.setText((int) act.getDuration());
+            durationView.setText(String.valueOf((int) act.getDuration()));
         }
     }
 
