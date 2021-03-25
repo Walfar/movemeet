@@ -122,7 +122,7 @@ public class UploadActivityActivityTest {
         ); */
 
         assert(sleep(1000));
-        
+
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
 
         assert(sleep(1000));
