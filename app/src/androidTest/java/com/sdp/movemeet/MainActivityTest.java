@@ -37,20 +37,47 @@ public class MainActivityTest {
 
     }
 
-//    @Test
-//    public void mainActivity_logout() {
-//        Intents.init();
-//
-//        onView(withId(R.id.button_logout)).perform(click());
-//
-//        Intents.release();
-//    }
+    @Test
+    public void mainActivity_logout() {
+        Intents.init();
+
+        onView(withId(R.id.button_logout)).perform(click());
+
+        Intents.release();
+    }
 
     @Test
     public void mainActivityToProfileActivity() {
         Intents.init();
 
         onView(withId(R.id.button_user_profile)).perform(click());
+
+        Intents.release();
+    }
+
+    @Test
+    public void mainActivityToFirebaseDebug() {
+        Intents.init();
+
+        onView(withId(R.id.firebaseButton)).perform(click());
+
+        Intents.release();
+    }
+
+    @Test
+    public void mainActivityToActivityUpload() {
+        Intents.init();
+
+        onView(withId(R.id.goToActivityUploadButton)).perform(click());
+
+        Intents.release();
+    }
+
+    @Test
+    public void mainActivityToStartActivity() {
+        Intents.init();
+
+        onView(withId(R.id.button2)).perform(click());
 
         Intents.release();
     }

@@ -1,4 +1,4 @@
-package com.sdp.movemeet;
+package com.sdp.movemeet.Activity;
 
 import android.view.View;
 import android.widget.DatePicker;

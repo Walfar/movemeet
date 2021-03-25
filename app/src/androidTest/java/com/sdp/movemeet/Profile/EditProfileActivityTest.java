@@ -1,8 +1,11 @@
-package com.sdp.movemeet;
+package com.sdp.movemeet.Profile;
 
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+
+import com.sdp.movemeet.EditProfileActivity;
+import com.sdp.movemeet.R;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -41,12 +44,6 @@ public class EditProfileActivityTest {
 
         onView(ViewMatchers.withId(R.id.edit_text_edit_profile_description))
                 .perform(replaceText(TEST_DESCRIPTION), closeSoftKeyboard());
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
 
         onView(withId(R.id.button_edit_profile_save_profile_data)).perform(click());
 
