@@ -37,9 +37,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         createDescriptionView();
         createDateView();
         createAddressView();
-        createSport();
-        createDuration();
-        createOrganisator();
+        createSportView();
+        createDurationView();
+        createOrganisatorView();
     }
 
     private void createTitleView() {
@@ -73,21 +73,21 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
-    private void createSport(){
+    private void createSportView(){
         TextView sportView = (TextView) findViewById(R.id.activity_sport_description);
         if(act != null){
             sportView.setText(act.getSport().toString());
         }
     }
 
-    private void createDuration(){
+    private void createDurationView(){
         TextView durationView = (TextView) findViewById(R.id.activity_duration_description);
         if(act != null){
-            durationView.setText((int) act.getDuration());
+            durationView.setText(String.valueOf(act.getDuration()));
         }
     }
 
-    private void createOrganisator(){
+    private void createOrganisatorView(){
         TextView organisatorView = (TextView) findViewById(R.id.activity_organisator_description);
         if(act != null){
             organisatorView.setText(act.getOrganizerId());

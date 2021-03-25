@@ -3,7 +3,6 @@ package com.sdp.movemeet;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.Backend.BackendActivityManagerDemo;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
+import com.sdp.movemeet.map.MapsActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -48,13 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @SuppressWarnings("unused")
-    public void sendMessage(View view) {
-        Intent intent = new Intent(this, GreetingActivity.class);
-        EditText editText = findViewById(R.id.mainEditName);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
+    public void goToMaps(View view) {
+        startActivity(new Intent(this, MapsActivity.class));
     }
 
     public void logout(View view) {
