@@ -71,11 +71,14 @@ public class DistanceCalculatorTest {
         activityArrayList.add(activity2);
 
         dc.setActivities(activityArrayList);
-        dc.sortActivities();
+        dc.calculateDistances();
+        dc.sort();
 
         assertNotEquals(dc.getAllActivities(), activityArrayList);
 
         assertEquals(dc.getTopActivities(1).get(0), activity2);
+
+        assertEquals(1, dc.getActivitiesInRadius(10000.0).size());
     }
 
     @Test
