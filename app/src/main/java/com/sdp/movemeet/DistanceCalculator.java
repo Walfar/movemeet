@@ -99,7 +99,15 @@ public class DistanceCalculator {
     }
 
     public Double calculateDistance(Double lat1, Double lng1, Double lat2, Double lng2) {
-        return 2 * EARTH_RADIUS * Math.asin(Math.sqrt(Math.pow(Math.sin((lat2 - lat1)/2),2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin((lng2 - lng1)/2),2)));
+        // Double p = 0.017453292519943295;
+        Double p = Math.PI / 180;
+
+        //Double a =  Math.pow(Math.sin((lat2 - lat1)/2),2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin((lng2 - lng1)/2),2);
+        Double a = 0.5 - Math.cos((lat2 - lat1) * p)/2 +
+                Math.cos(lat1 * p) * Math.cos(lat2 * p) *
+                (1 - Math.cos((lng2 - lng1) * p))/2;
+
+        return 2 * EARTH_RADIUS * Math.asin(Math.sqrt(a));
     }
 
     public class Pair {

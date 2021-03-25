@@ -74,9 +74,9 @@ public class DistanceCalculatorTest {
         dc.calculateDistances();
         dc.sort();
 
-        assertNotEquals(dc.getAllActivities(), activityArrayList);
+        assertNotEquals(activityArrayList, dc.getAllActivities());
 
-        assertEquals(dc.getTopActivities(1).get(0), activity2);
+        assertEquals(activity2, dc.getTopActivities(1).get(0));
 
         assertEquals(1, dc.getActivitiesInRadius(10000.0).size());
     }
@@ -84,7 +84,7 @@ public class DistanceCalculatorTest {
     @Test
     public void distanceCalculationIsCorrect() {
         DistanceCalculator dc = new DistanceCalculator(0.,0.);
-        System.out.println(dc.calculateDistance(0., 0., 2.45, 3.697));
-        System.out.println(dc.calculateDistance(0., 0., 2.45 + 3, 3.697 + 3));
+        assertEquals(493.6, dc.calculateDistance(0., 0., 2.45, 3.697), 0.1);
+        assertEquals(960.3, dc.calculateDistance(0., 0., 2.45 + 3, 3.697 + 3), 0.1);
     }
 }
