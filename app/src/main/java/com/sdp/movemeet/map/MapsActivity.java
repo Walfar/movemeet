@@ -139,7 +139,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         dc.calculateDistances();
         dc.sort();
 
-        for (Activity act : dc.getTopActivities(2)) {
+        for (Activity act : dc.getTopActivities(4)) {
             LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
 
             MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
