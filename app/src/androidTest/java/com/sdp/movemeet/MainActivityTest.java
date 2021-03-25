@@ -29,16 +29,9 @@ public class MainActivityTest {
     public ActivityScenarioRule<MainActivity> testRule = new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void mainActivity_sendMessage() {
+    public void mainActivity_goToMaps() {
         Intents.init();
-
-        onView(ViewMatchers.withId(R.id.mainEditName))
-                .perform(replaceText(KEYBOARD_INPUT), closeSoftKeyboard());
         onView(withId(R.id.mainGoButton)).perform(click());
-
-
-        intended(hasExtra(MainActivity.EXTRA_MESSAGE, KEYBOARD_INPUT));
-
         Intents.release();
 
 

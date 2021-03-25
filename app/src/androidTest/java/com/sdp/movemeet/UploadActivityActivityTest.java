@@ -8,14 +8,17 @@ import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
-//import androidx.test.espresso.contrib.PickerActions;
+import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.filters.LargeTest;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.sdp.movemeet.R;
+import com.sdp.movemeet.UploadActivityActivity;
 
 import org.hamcrest.Matcher;
 import org.junit.Rule;
@@ -64,6 +67,7 @@ public class UploadActivityActivityTest {
 
     // This test has to take extra time or the Views won't update fast enough and it'll fail on CI
     @Test
+    @LargeTest
     public void endToEnd() {
         ActivityScenario scenario = testRule.getScenario();
         CountDownLatch latch = new CountDownLatch(1);
@@ -115,11 +119,13 @@ public class UploadActivityActivityTest {
 
         onView(withId(R.id.editTextStartTime)).perform(forceDoubleClick());
 
-       /* onView(withClassName(equalTo(TimePicker.class.getName()))).perform(
+        assert(sleep(1000));
+
+        onView(withClassName(equalTo(TimePicker.class.getName()))).perform(
                 PickerActions.setTime(
                         9, 15
                 )
-        ); */
+        );
 
         assert(sleep(1000));
 
@@ -133,13 +139,15 @@ public class UploadActivityActivityTest {
             assert (((UploadActivityActivity) activity).validDate == false);
         });
 
-     /*   onView(withId(R.id.editTextTime)).perform(forceDoubleClick());
+        onView(withId(R.id.editTextTime)).perform(forceDoubleClick());
+
+        assert(sleep(1000));
 
         onView(withClassName(equalTo(TimePicker.class.getName()))).perform(
                 PickerActions.setTime(
                         2, 30
                 )
-        ); */
+        );
 
         assert(sleep(1000));
 
@@ -155,11 +163,11 @@ public class UploadActivityActivityTest {
 
         onView(withId(R.id.editTextDate)).perform(forceDoubleClick());
 
-       /* onView(withClassName(equalTo(DatePicker.class.getName()))).perform(
+        onView(withClassName(equalTo(DatePicker.class.getName()))).perform(
                 PickerActions.setDate(
                         2025, 0, 20
                 )
-        ); */
+        );
 
         assert(sleep(1000));
 
@@ -171,6 +179,9 @@ public class UploadActivityActivityTest {
         scenario.onActivity(activity -> {
             assert (((UploadActivityActivity) activity).validDate == true);
         });
+
+        mAuth.signOut();
+        scenario.close();
 
     }
 
