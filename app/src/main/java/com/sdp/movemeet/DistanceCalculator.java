@@ -11,7 +11,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DistanceCalculator {
-    private final Double EARTH_RADIUS = 6.3781 * Math.pow(10, 3);
+    // private final Double EARTH_RADIUS = 6.3781 * Math.pow(10, 3);
+
+    // This constant is more ~canonical~
+    private final Double EARTH_RADIUS = 6.371 * Math.pow(10, 3);
     private Double userLatitude, userLongitude;
     private ArrayList<Pair> activityDistanceMap = null;
     private boolean sorted;
@@ -19,11 +22,10 @@ public class DistanceCalculator {
     public DistanceCalculator(Double userLatitude, Double userLongitude) {
         this.userLatitude = userLatitude;
         this.userLongitude = userLongitude;
+        activityDistanceMap = new ArrayList<Pair>();
     }
 
     public void setActivities(ArrayList<Activity> activities) {
-        activityDistanceMap = new ArrayList<Pair>();
-
         for (Activity activity : activities) {
             activityDistanceMap.add(new Pair(activity, 0.0));
         }
@@ -122,7 +124,7 @@ public class DistanceCalculator {
         public Activity getKey(){ return this.key; }
         public Double getValue(){ return this.value; }
 
-        public void setKey(Activity key){ this.key = key; }
+        // public void setKey(Activity key){ this.key = key; }
         public void setValue(Double value){ this.value = value; }
     }
 }
