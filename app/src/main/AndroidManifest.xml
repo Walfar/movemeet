@@ -75,15 +75,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sdp.movemeet.HomeScreenActivity" />
         </activity>
-        <activity
-            android:name=".GreetingActivity"
-            android:parentActivityName=".MainActivity">
-
-            <!-- The meta-data tag is required if you support API level 15 or lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sdp.movemeet.MainActivity" />
-        </activity>
         <activity android:name=".Activity.ActivityDescriptionActivity">
         </activity>
 
