@@ -1,9 +1,15 @@
 package com.sdp.movemeet;
 
+import android.os.Build;
+import android.provider.MediaStore;
+
+import androidx.annotation.RequiresApi;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,8 +17,11 @@ public class UserDatabase {
     private final String filename = "users.json";
     private Map<String, String> users = new HashMap<String, String>();
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public UserDatabase() {
-        readFromFile();
+        if (Files.exists(new File(filename).toPath())) {
+            readFromFile();
+        }
     }
 
     public void readFromFile() {
@@ -31,6 +40,16 @@ public class UserDatabase {
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(new File(filename), users);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void cleanFile() {
+        File db = new File(filename);
+        try {
+            Files.deleteIfExists(db.toPath());
         } catch (Exception e) {
             e.printStackTrace();
         }

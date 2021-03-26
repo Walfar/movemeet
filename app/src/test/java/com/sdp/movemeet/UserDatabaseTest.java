@@ -27,8 +27,13 @@ public class UserDatabaseTest {
     @Test
     public void SavingAndLoadingIsCorrect() {
         UserDatabase db = new UserDatabase();
-        db.readFromFile();
+
+        db.addUser("hello", "world");
+
         db.writeToFile();
+        db.readFromFile();
+
+        db.cleanFile();
     }
 
 
