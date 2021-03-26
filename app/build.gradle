@@ -34,6 +34,7 @@ android {
 
     testOptions {
         unitTests.returnDefaultValues = true
+        animationsDisabled = true
     }
 }
 
@@ -47,6 +48,11 @@ dependencies {
     // Declare the dependency for the Cloud Firestore library
     // (When using the BoM, you don't specify versions in Firebase library dependencies)
     implementation 'com.google.firebase:firebase-firestore'
+    // Declare the dependency for the Cloud Storage library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-storage'
+    // Picasso is a library used to display an image from its URI (cf.: https://github.com/square/picasso)
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.3.0'
@@ -56,12 +62,21 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.2.6'
 
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.mockito:mockito-core:1.10.19'
+    androidTestImplementation "org.mockito:mockito-core:1.+"
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     androidTestImplementation 'androidx.test:runner:1.3.0'
     androidTestImplementation 'androidx.test:rules:1.3.0'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.3.0'
+    androidTestImplementation("com.android.support.test.espresso:espresso-contrib:2.2.2") {
+        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'support-v7'
+        exclude group: 'com.android.support', module: 'design'
+        exclude module: 'support-annotations'
+        exclude module: 'recyclerview-v7'
+    }
     annotationProcessor 'androidx.room:room-compiler:2.2.6'
 
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
