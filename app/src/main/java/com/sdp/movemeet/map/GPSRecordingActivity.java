@@ -129,6 +129,10 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
 
     }
 
+    public GoogleMap getGoogleMap() {
+        return this.googleMap;
+    }
+
     private void updatePath(Location location) {
         if (location != null && recording) {
             path.add(new LatLng(location.getLatitude(), location.getLongitude()));
@@ -138,6 +142,10 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
                 drawPath();
             }
         }
+    }
+
+    public ArrayList<LatLng> getPath() {
+        return new ArrayList(this.path);
     }
 
     private void drawPath() {
