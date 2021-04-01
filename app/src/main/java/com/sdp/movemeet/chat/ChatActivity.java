@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.sdp.movemeet.R;
 
-public class chat_activity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -6,6 +6,7 @@
     <string name="noAccount"><u>Continue without account</u></string>
     <string name="greeting_message">Hello, %1$s!</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_chat">Chat</string>
     <string name="map_key" translatable="false">AIzaSyB_qsP8AOP_P0MdlPz-48TDaJYjTP3vbjo</string>
     <string name="toast">Logged in successfully.</string>
 </resources>
