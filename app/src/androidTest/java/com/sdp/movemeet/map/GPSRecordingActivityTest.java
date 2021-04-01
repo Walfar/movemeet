@@ -46,7 +46,7 @@ public class GPSRecordingActivityTest {
             assert(((GPSRecordingActivity) activity).getGoogleMap() != null);
         });
 
-        onView(withId(R.id.recordButton)).check(matches(withText("Start")));
+        /*onView(withId(R.id.recordButton)).check(matches(withText("Start")));
         onView(withId(R.id.recordButton)).perform(click());
         onView(withId(R.id.recordButton)).check(matches(withText("Stop")));
 
@@ -57,7 +57,7 @@ public class GPSRecordingActivityTest {
 
         scenario.onActivity(activity -> {
             assert(!((GPSRecordingActivity) activity).getPath().isEmpty());
-        });
+        });*/
 
     }
 
