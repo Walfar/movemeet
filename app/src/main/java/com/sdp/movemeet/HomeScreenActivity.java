@@ -31,8 +31,6 @@ public class HomeScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
-        ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
-        updater.updateListActivities();
     }
 
     public void signIn(View v) {
@@ -40,8 +38,7 @@ public class HomeScreenActivity extends AppCompatActivity {
     }
 
     public void noAccount(View v) {
-        Intent intent = new Intent(getApplicationContext(), MapsActivity.class); // redirecting the user to the "Login" activity
-        startActivity(intent);
+        startActivity(new Intent(getApplicationContext(), MapsActivity.class)); // redirecting user to the "Maps" activity when logged in
     }
 
 

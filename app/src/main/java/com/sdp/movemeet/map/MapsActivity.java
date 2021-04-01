@@ -32,12 +32,13 @@ import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.DistanceCalculator;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.UploadActivityActivity;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMapClickListener {
 
     private Location currentLocation;
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -48,6 +49,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private FirebaseAuth fAuth = FirebaseAuth.getInstance();
     private FirebaseUser user;
+
+    private Marker newActivityMarker;
+
+    private GoogleMap googleMap;
 
     private static final String TAG = "Maps TAG";
 
@@ -61,6 +66,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fetchLastLocation();
 
         ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
+        updater.updateListActivities();
         activities = updater.getActivities();
 
         user = fAuth.getCurrentUser();
@@ -73,8 +79,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
+        this.googleMap = googleMap;
 
         googleMap.setOnMarkerClickListener(this);
+        googleMap.setOnInfoWindowClickListener(this);
+        googleMap.setOnMapClickListener(this::onMapClick);
 
         LatLng userLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions().position(userLatLng).title("I am here !");
@@ -120,6 +129,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return true;
     }
 
+    @Override
+    public void onMapClick(LatLng latLng) {
+        Log.d(TAG, "map is clicked");
+        if (newActivityMarker != null) newActivityMarker.remove();
+        //Only if user is logged we allow the possibility of creating a new activity
+        if (user != null) {
+            Log.d(TAG, "user is logged");
+            Marker newActivity = googleMap.addMarker(
+                    new MarkerOptions().position(latLng).title("new activity").snippet("Click her to create new activity")
+            );
+            newActivityMarker = newActivity;
+            newActivity.showInfoWindow();
+        }
+    }
+
 
     private void fetchLastLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -139,7 +163,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         dc.calculateDistances();
         dc.sort();
 
-        for (Activity act : dc.getTopActivities(4)) {
+        for (Activity act : dc.getTopActivities(activities.size())) {
             LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
 
             MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
@@ -148,7 +172,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             marker.setTag(act);
         }
     }
-
 
 
 
@@ -179,5 +202,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        newActivityMarker.remove();
+        Intent intent = new Intent(MapsActivity.this, UploadActivityActivity.class);
+        //use Bundle to pass latlng instance to intent
+        Bundle arg = new Bundle();
+        arg.putParcelable("position",marker.getPosition() );
+        intent.putExtra("bundle", arg);
+        //remove marker
+        startActivity(intent);
+    }
 }

@@ -28,7 +28,7 @@ public class ActivitiesUpdater {
 
     private static final String TAG = "Activities updater TAG";
 
-    public static final int MAX_NUMBER_ACTIVITIES = 10;
+    public static final int MAX_NUMBER_ACTIVITIES_TO_DISPLAY = 10;
 
     private static ActivitiesUpdater instance;
 
@@ -59,7 +59,7 @@ public class ActivitiesUpdater {
                 int idx = 0;
                 if (!queryDocumentSnapshots.isEmpty()) {
                     for (DocumentSnapshot docSnap: queryDocumentSnapshots.getDocuments()) {
-                        if (idx == MAX_NUMBER_ACTIVITIES) break;
+                        if (idx == MAX_NUMBER_ACTIVITIES_TO_DISPLAY) break;
 
                         Object activityIdobj = docSnap.get("activityId");
                         String activityId;

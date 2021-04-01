@@ -4,9 +4,11 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -18,12 +20,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Backend.BackendActivityManager;
+import com.sdp.movemeet.map.MapsActivity;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
 
 import java.io.IOException;
@@ -33,6 +37,8 @@ import java.util.Date;
 import java.util.List;
 
 public class UploadActivityActivity extends AppCompatActivity {
+
+    private String TAG = "Upload Activity TAG";
 
     private Spinner spinner;
 
@@ -61,6 +67,8 @@ public class UploadActivityActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_activity);
 
+        Log.d(TAG, "in profile");
+
         setupSportSpinner(this);
 
         titleEditText = findViewById(R.id.editTextTitle);
@@ -78,6 +86,12 @@ public class UploadActivityActivity extends AppCompatActivity {
 
         addressText = findViewById(R.id.editTextLocation);
         validLocation = false;
+
+        Intent intent = getIntent();
+
+        if (intent != null) {
+            retrieveAddress(intent);
+        }
 
     }
 
@@ -226,7 +240,7 @@ public class UploadActivityActivity extends AppCompatActivity {
                     .show();
             return null;
         }
-        tryLocatingAddress(this, address);
+        if (!validLocation) tryLocatingAddress(this, address);
         validLocation = true;
 
         String description = descriptionEditText.getText().toString();
@@ -258,6 +272,29 @@ public class UploadActivityActivity extends AppCompatActivity {
         return activity;
     }
 
+    private void retrieveAddress(Intent intent) {
+        Bundle bundle = intent.getParcelableExtra("bundle");
+        if (bundle != null) {
+            LatLng pos = bundle.getParcelable("position");
+
+            latitude = pos.latitude;
+            longitude = pos.longitude;
+
+            Geocoder geocoder = new Geocoder(this);
+
+            try {
+                List<Address> addresses = geocoder.getFromLocation(pos.latitude, pos.longitude, 1);
+                if (addresses.size() > 0) {
+                    addressText.setText(addresses.get(0).getAddressLine(0));
+                    validLocation = true;
+                } else {
+                    throw new IOException();
+                }
+            } catch (IOException e) {}
+
+        }
+    }
+
     public void confirmActivityUpload(View view) {
         Activity toUpload = validateActivity();
 
@@ -282,6 +319,8 @@ public class UploadActivityActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
+        Log.d(TAG, "intent");
+        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
     }
 
 
