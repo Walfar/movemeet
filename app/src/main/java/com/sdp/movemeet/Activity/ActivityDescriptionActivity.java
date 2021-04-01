@@ -39,7 +39,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         createAddressView();
         createSportView();
         createDurationView();
-        createOrganisatorView();
+        createOrganizerView();
     }
 
     private void createTitleView() {
@@ -87,7 +87,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
-    private void createOrganisatorView(){
+    private void createOrganizerView(){
         TextView organisatorView = (TextView) findViewById(R.id.activity_organisator_description);
         if(act != null){
             organisatorView.setText(act.getOrganizerId());

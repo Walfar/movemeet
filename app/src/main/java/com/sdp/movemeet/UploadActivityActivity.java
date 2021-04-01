@@ -38,8 +38,6 @@ import java.util.List;
 
 public class UploadActivityActivity extends AppCompatActivity {
 
-    private String TAG = "Upload Activity TAG";
-
     private Spinner spinner;
 
     private Calendar calendar;
@@ -66,8 +64,6 @@ public class UploadActivityActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_activity);
-
-        Log.d(TAG, "in profile");
 
         setupSportSpinner(this);
 
@@ -262,7 +258,6 @@ public class UploadActivityActivity extends AppCompatActivity {
         validDate = true;
 
         String organizerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
         Activity activity = new Activity(
                 organizerId + " || " +  date, organizerId, title, nParticipants,
                 new ArrayList<String>(), longitude, latitude, description, date, duration,
@@ -295,6 +290,11 @@ public class UploadActivityActivity extends AppCompatActivity {
         }
     }
 
+    public void setLocationOnMap(View view) {
+        Toast.makeText(getApplicationContext(), "Click on the map to set the location !", Toast.LENGTH_LONG).show();
+        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+    }
+
     public void confirmActivityUpload(View view) {
         Activity toUpload = validateActivity();
 
@@ -319,7 +319,6 @@ public class UploadActivityActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-        Log.d(TAG, "intent");
         startActivity(new Intent(getApplicationContext(), MapsActivity.class));
     }
 

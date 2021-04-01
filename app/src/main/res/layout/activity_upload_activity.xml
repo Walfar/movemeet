@@ -66,6 +66,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.918" />
 
+
+    <Button
+        android:id="@+id/buttonSetLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="setLocationOnMap"
+        android:text="Set location"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.700" />
+
     <EditText
         android:id="@+id/editTextLocation"
         android:layout_width="0dp"
@@ -94,12 +108,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="378dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="12dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="195dp"
+        android:layout_marginBottom="302dp"
         app:layout_constraintEnd_toEndOf="@+id/editTextDescription"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextDescription"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNParticipants">
+        app:layout_constraintTop_toTopOf="parent">
 
         <EditText
             android:id="@+id/editTextDate"
@@ -147,5 +162,6 @@
             app:layout_constraintTop_toTopOf="@+id/editTextDate"
             app:layout_constraintVertical_bias="0.6" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
