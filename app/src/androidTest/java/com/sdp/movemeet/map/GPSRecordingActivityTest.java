@@ -26,8 +26,8 @@ public class GPSRecordingActivityTest {
     @Rule
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
 
-    /*@Rule
-    public ActivityScenarioRule<GPSRecordingActivity> testRule = new ActivityScenarioRule<>(GPSRecordingActivity.class);*/
+    @Rule
+    public ActivityScenarioRule<GPSRecordingActivity> testRule = new ActivityScenarioRule<>(GPSRecordingActivity.class);
 
     @Test
     public void mapGetsReady() {
@@ -35,6 +35,9 @@ public class GPSRecordingActivityTest {
         GrantPermissionRule locationPermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
 
         ActivityScenario scenario = ActivityScenario.launch(GPSRecordingActivity.class);
+
+        assert(sleep(2000));
+
         onView(withId(R.id.gmap_recording)).check(matches(isDisplayed()));
 
         assert(sleep(2000));
@@ -58,7 +61,7 @@ public class GPSRecordingActivityTest {
 
     }
 
-    private boolean sleep(long millis) {
+    public boolean sleep(int millis) {
         try {
             Thread.sleep(millis);
             return true;
