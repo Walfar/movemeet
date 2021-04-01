@@ -111,7 +111,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 act.addParticipantId(userId);
                 createParticipantNumberView();}
             catch(Exception e){
-                Toast.makeText(ActivityDescriptionActivity.this, "Already Register", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActivityDescriptionActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
     }
