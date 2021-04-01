@@ -40,11 +40,11 @@ public class GPSRecordingActivityTest {
 
         onView(withId(R.id.gmap_recording)).check(matches(isDisplayed()));
 
-        assert(sleep(2000));
+        assert(sleep(10000));
 
-        /*scenario.onActivity(activity -> {
+        scenario.onActivity(activity -> {
             assert(((GPSRecordingActivity) activity).getGoogleMap() != null);
-        });*/
+        });
 
         /*onView(withId(R.id.recordButton)).check(matches(withText("Start")));
         onView(withId(R.id.recordButton)).perform(click());
