@@ -32,6 +32,8 @@ public class GPSRecordingActivityTest {
     @Test
     public void mapGetsReady() {
 
+        GrantPermissionRule locationPermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
+
         ActivityScenario scenario = ActivityScenario.launch(GPSRecordingActivity.class);
         onView(withId(R.id.gmap_recording)).check(matches(isDisplayed()));
 
@@ -62,8 +64,8 @@ public class GPSRecordingActivityTest {
             return true;
         } catch (InterruptedException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
 }
