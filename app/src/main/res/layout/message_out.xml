@@ -35,6 +35,12 @@
                     android:minWidth="210dp"
                     android:background="#b7bff1">
 
+                    <ImageView
+                        android:id="@+id/imageProfile"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_marginEnd="4dp"/>
+
 
                     <TextView
                         android:id="@+id/message_out_user"
