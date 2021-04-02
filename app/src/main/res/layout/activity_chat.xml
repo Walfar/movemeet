@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".chat.ChatActivity">
+    tools:context="com.sdp.movemeet.chat.ChatActivity">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/rootLayout"
@@ -30,17 +30,19 @@
                 android:layout_height="wrap_content"
                 app:hintTextAppearance="@android:style/TextAppearance.Medium"
                 android:layout_weight="7">
+
                 <MultiAutoCompleteTextView
-                    android:id="@+id/input"
+                    android:id="@+id/messageInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:drawable/editbox_background_normal"
                     android:hint="Type your post"
-                    app:hintTextAppearance="@android:style/TextAppearance.Medium"></MultiAutoCompleteTextView>
+                    app:hintTextAppearance="@android:style/TextAppearance.Medium" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/btnSend"
+                android:onClick="sendMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
@@ -53,13 +55,13 @@
         </LinearLayout>
 
         <ProgressBar
-            android:id="@+id/loader"
+            android:id="@+id/chatLoader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list"
+            android:id="@+id/messageRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/inputLayout"
