@@ -24,7 +24,6 @@ public class ActivityTest {
     private final static Sport DUMMY_SPORT = Sport.Running;
     private final static String DUMMY_ADDRESS = "address";
 
-
     public static Activity createFakeActivity() {
         return new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -70,6 +69,7 @@ public class ActivityTest {
         assertEquals(activity.getDuration(), DUMMY_DURATION, 0.1);
         assertEquals(activity.getSport(), DUMMY_SPORT);
         assertEquals(activity.getAddress(), DUMMY_ADDRESS);
+        activity = null;
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -259,7 +259,7 @@ public class ActivityTest {
         assertEquals(activity.getDate(), newDate);
         assertEquals(activity.getDuration(), 20.4, 0.1);
         assertEquals(activity.getAddress(), "EPFL");
-
+        activity = null;
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -305,6 +305,7 @@ public class ActivityTest {
                 DUMMY_DURATION,
                 DUMMY_SPORT,
                 DUMMY_ADDRESS);
+
         activity.addParticipantId(null);
 
     }
@@ -324,7 +325,9 @@ public class ActivityTest {
                 DUMMY_DURATION,
                 DUMMY_SPORT,
                 DUMMY_ADDRESS);
-        String user = "Bob";
+
+        String user = "Caro";
+
         activity.addParticipantId(user);
         activity.addParticipantId(user);
 
@@ -351,6 +354,7 @@ public class ActivityTest {
         activity.addParticipantId(user2);
 
         assertEquals(2, activity.getParticipantId().size());
+        activity = null;
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -397,6 +401,7 @@ public class ActivityTest {
         activity.removeParticipantId(user1);
 
         assertEquals(1, activity.getParticipantId().size());
+        activity = null;
     }
 
     @Test
@@ -418,6 +423,7 @@ public class ActivityTest {
         assertEquals(activity.toString(), "ActivityId:" + DUMMY_ACTIVITY_ID + "\nOrganizerId" + DUMMY_ORGANISATOR_ID + "\nTitle:" + DUMMY_TITLE + "\nNumberParticipant:" + DUMMY_NUMBER_PARTICIPANT +
                 "\nParticipantId:" + DUMMY_PARTICIPANTS_ID + "\nLongitude:" + DUMMY_LONGITUDE + "\nLatitude:" + DUMMY_LATITUDE + "\nDescription:" + DUMMY_DESCRIPTION +
                 "\nDate:" + DUMMY_DATE + "\nDuration:" + DUMMY_DURATION + "\nSport:" + DUMMY_SPORT + "\nAddress:" + DUMMY_ADDRESS);
+        activity = null;
 
     }
 
@@ -453,6 +459,9 @@ public class ActivityTest {
 
         assertEquals(true, activity1.equals(activity2));
 
+        activity1 = null;
+        activity2 = null;
+
     }
 
     @Test
@@ -473,6 +482,8 @@ public class ActivityTest {
 
         assertEquals(false, activity1.equals(null));
 
+        activity1 = null;
+
     }
 
     @Test
@@ -492,6 +503,8 @@ public class ActivityTest {
                 DUMMY_ADDRESS);
 
         assertEquals(false, activity1.equals("1"));
+
+        activity1 = null;
 
     }
 
@@ -530,6 +543,9 @@ public class ActivityTest {
 
         assertEquals(false, activity1.equals(activity2));
 
+        activity1 = null;
+        activity2 = null;
+
     }
 
     @Test
@@ -563,6 +579,10 @@ public class ActivityTest {
                 DUMMY_ADDRESS);
 
         assertEquals(false, activity1.equals(activity2));
+
+        activity1 = null;
+        activity2 = null;
+
 
     }
 
@@ -598,6 +618,10 @@ public class ActivityTest {
 
         assertEquals(false, activity1.equals(activity2));
 
+        activity1 = null;
+        activity2 = null;
+
+
     }
 
     @Test
@@ -631,6 +655,10 @@ public class ActivityTest {
                 DUMMY_ADDRESS);
 
         assertEquals(false, activity1.equals(activity2));
+
+        activity1 = null;
+        activity2 = null;
+
 
     }
 
@@ -669,6 +697,10 @@ public class ActivityTest {
 
         assertEquals(false, activity1.equals(activity2));
 
+        activity1 = null;
+        activity2 = null;
+
+
     }
 
     @Test
@@ -702,6 +734,10 @@ public class ActivityTest {
                 DUMMY_ADDRESS);
 
         assertEquals(false, activity1.equals(activity2));
+
+        activity1 = null;
+        activity2 = null;
+
 
     }
 
@@ -737,6 +773,10 @@ public class ActivityTest {
 
         assertEquals(false, activity1.equals(activity2));
 
+        activity1 = null;
+        activity2 = null;
+
+
     }
 
     @Test
@@ -770,6 +810,10 @@ public class ActivityTest {
                 DUMMY_ADDRESS);
 
         assertEquals(false, activity1.equals(activity2));
+
+        activity1 = null;
+        activity2 = null;
+
 
     }
 
@@ -805,6 +849,10 @@ public class ActivityTest {
 
         assertEquals(false, activity1.equals(activity2));
 
+        activity1 = null;
+        activity2 = null;
+
+
     }
 
     @Test
@@ -838,6 +886,9 @@ public class ActivityTest {
                 DUMMY_ADDRESS);
 
         assertEquals(false, activity1.equals(activity2));
+
+        activity1 = null;
+        activity2 = null;
 
     }
 
@@ -873,6 +924,10 @@ public class ActivityTest {
 
         assertEquals(false, activity1.equals(activity2));
 
+        activity1 = null;
+        activity2 = null;
+
+
     }
 
     @Test
@@ -907,6 +962,10 @@ public class ActivityTest {
 
         assertEquals(false, activity1.equals(activity2));
 
+        activity1 = null;
+        activity2 = null;
+
+
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -926,6 +985,8 @@ public class ActivityTest {
                 DUMMY_ADDRESS);
 
         activity.setDuration(0);
+
+
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -945,6 +1006,7 @@ public class ActivityTest {
                 DUMMY_ADDRESS);
 
         activity.setDescription(null);
+
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -1004,5 +1066,28 @@ public class ActivityTest {
         activity.setAddress(null);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void activityLimitParticipants(){
+        Activity activity = new Activity(
+                DUMMY_ACTIVITY_ID,
+                DUMMY_ORGANISATOR_ID,
+                DUMMY_TITLE,
+                DUMMY_NUMBER_PARTICIPANT,
+                new ArrayList<String>(),
+                DUMMY_LONGITUDE,
+                DUMMY_LATITUDE,
+                DUMMY_DESCRIPTION,
+                DUMMY_DATE,
+                DUMMY_DURATION,
+                DUMMY_SPORT,
+                DUMMY_ADDRESS);
 
+        String user1 = "Alice";
+        String user2 = "Bob";
+        String user3 = "Caroline";
+
+        activity.addParticipantId(user1);
+        activity.addParticipantId(user2);
+        activity.addParticipantId(user3);
+    }
 }
