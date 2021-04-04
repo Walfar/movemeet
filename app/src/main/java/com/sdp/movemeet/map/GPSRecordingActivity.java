@@ -39,12 +39,15 @@ import java.util.Map;
 
 public class GPSRecordingActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    public static final Map<Boolean, String> buttonTextRes;
+    public static final Map<Boolean, String> BTN_TEXT_RES;
     static {
-        buttonTextRes = new HashMap<>();
-        buttonTextRes.put(true, "Stop");
-        buttonTextRes.put(false, "Start");
+        BTN_TEXT_RES = new HashMap<>();
+        BTN_TEXT_RES.put(true, "Stop");
+        BTN_TEXT_RES.put(false, "Start");
     };
+
+    public final static String MAP_NOT_READY_DESC = "Map isn't ready yet";
+    public final static String MAP_READY_DESC = "Map is ready!";
 
     private final int REQUEST_CODE = 101;
 
@@ -62,8 +65,16 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
     private PolylineOptions pathLineOptions;
 
     private FusedLocationProviderClient fusedLocationClient;
+
     private LocationRequest locationRequest;
-    private LocationCallback locationCallback;
+
+    private LocationCallback locationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(@NonNull LocationResult locationResult) {
+            super.onLocationResult(locationResult);
+            updatePath(locationResult.getLastLocation());
+        }
+    };
 
     @VisibleForTesting
     protected ArrayList<LatLng> path;
@@ -78,16 +89,11 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
         recButton = findViewById(R.id.recordButton);
 
         locationRequest = createLocationRequest(10000, 5000, LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(@NonNull LocationResult locationResult) {
-                updatePath(locationResult.getLastLocation());
-            }
-        };
 
         pathLineOptions = new PolylineOptions().width(25).color(Color.RED).geodesic(true);
 
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap_recording);
+        supportMapFragment.getView().setContentDescription(MAP_NOT_READY_DESC);
         supportMapFragment.getMapAsync(GPSRecordingActivity.this);
 
         path = new ArrayList<LatLng>();
@@ -110,7 +116,7 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
     public void toggleRecording(View view) {
         Log.d("BUTTON", "Toggled!");
         recording = !recording;
-        recButton.setText(buttonTextRes.get(recording));
+        recButton.setText(BTN_TEXT_RES.get(recording));
 
         if (recording) {
             path.clear();
@@ -120,9 +126,10 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
+        supportMapFragment.getView().setContentDescription(MAP_READY_DESC);
         pathLine = this.googleMap.addPolyline(pathLineOptions);
 
-        @SuppressLint("MissingPermission")
+        /*@SuppressLint("MissingPermission")
         Task<Location> task = fusedLocationClient.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
@@ -132,7 +139,8 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
                 markerOptions = new MarkerOptions().position(position).title("Current location");
                 googleMap.addMarker(markerOptions);
             }
-        });
+        });*/
+        startLocationUpdates();
 
     }
 
@@ -195,7 +203,7 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
         switch (requestCode) {
             case REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startLocationUpdates();
+                    //startLocationUpdates();
                 }
                 break;
         }
