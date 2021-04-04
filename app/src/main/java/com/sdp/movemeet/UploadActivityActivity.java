@@ -1,12 +1,15 @@
 package com.sdp.movemeet;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,15 +22,23 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Backend.BackendActivityManager;
-import com.sdp.movemeet.map.MapsActivity;
+import com.sdp.movemeet.map.MapsFragment;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
 
 import java.io.IOException;
@@ -35,6 +46,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import static com.sdp.movemeet.map.MapsFragment.REQUEST_CODE;
 
 public class UploadActivityActivity extends AppCompatActivity {
 
@@ -83,10 +96,14 @@ public class UploadActivityActivity extends AppCompatActivity {
         addressText = findViewById(R.id.editTextLocation);
         validLocation = false;
 
+        //Try to get intent from map, in the case where the user creates an activity on click
         Intent intent = getIntent();
 
         if (intent != null) {
-            retrieveAddress(intent);
+            Bundle bundle = intent.getParcelableExtra("bundle");
+            if (bundle != null) {
+                retrieveAddress(bundle.getParcelable("position"));
+            }
         }
 
     }
@@ -267,32 +284,62 @@ public class UploadActivityActivity extends AppCompatActivity {
         return activity;
     }
 
-    private void retrieveAddress(Intent intent) {
-        Bundle bundle = intent.getParcelableExtra("bundle");
-        if (bundle != null) {
-            LatLng pos = bundle.getParcelable("position");
+    //Inverse of tryLocatingAddress, i.e retrieves the address from a LatLng
+    private void retrieveAddress(LatLng pos) {
 
-            latitude = pos.latitude;
-            longitude = pos.longitude;
+        latitude = pos.latitude;
+        longitude = pos.longitude;
 
-            Geocoder geocoder = new Geocoder(this);
+        Geocoder geocoder = new Geocoder(this);
 
-            try {
-                List<Address> addresses = geocoder.getFromLocation(pos.latitude, pos.longitude, 1);
-                if (addresses.size() > 0) {
-                    addressText.setText(addresses.get(0).getAddressLine(0));
-                    validLocation = true;
-                } else {
-                    throw new IOException();
-                }
-            } catch (IOException e) {}
+        try {
+            List<Address> addresses = geocoder.getFromLocation(pos.latitude, pos.longitude, 1);
+            if (addresses.size() > 0) {
+                addressText.setText(addresses.get(0).getAddressLine(0));
+                validLocation = true;
+            } else {
+                throw new IOException();
+            }
+        } catch (IOException e) {}
 
-        }
     }
 
+    //TODO refactor this ?
     public void setLocationOnMap(View view) {
-        Toast.makeText(getApplicationContext(), "Click on the map to set the location !", Toast.LENGTH_LONG).show();
-        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+        //Toast.makeText(getApplicationContext(), "Click on the map to set the location !", Toast.LENGTH_LONG).show();
+
+        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
+            return;
+        }
+        Task<Location> task = fusedLocationProviderClient.getLastLocation();
+        task.addOnSuccessListener(this::onSuccess);
+
+        //TODO WIP
+        /*MapsFragment mapsFragment = (MapsFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map);
+        mapsFragment = mapsFragment.newInstance();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.activity_maps, mapsFragment).addToBackStack(null).commit();;
+        GoogleMap gMap = mapsFragment.getMap();
+        if (gMap != null) {
+            gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+                @Override
+                public void onMapClick(LatLng point) {
+                    retrieveAddress(point);
+                    fragmentManager.popBackStack();
+                }
+            });
+        } */
+
+    }
+
+    private void onSuccess(Location location) {
+        if (location != null) {
+            retrieveAddress(new LatLng(location.getLatitude(), location.getLongitude()));
+        }
     }
 
     public void confirmActivityUpload(View view) {
@@ -319,7 +366,7 @@ public class UploadActivityActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+        startActivity(new Intent(getApplicationContext(), MapsFragment.class));
     }
 
 

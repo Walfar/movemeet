@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -13,6 +15,7 @@ import com.sdp.movemeet.Activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.Backend.BackendActivityManagerDemo;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
 import com.sdp.movemeet.map.MapsActivity;
+import com.sdp.movemeet.map.MapsFragment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToMaps(View view) {
-        startActivity(new Intent(this, MapsActivity.class));
+        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
     }
 
     public void logout(View view) {

@@ -2,6 +2,9 @@ package com.sdp.movemeet.map;
 
 import android.Manifest;
 import android.location.Location;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -12,12 +15,9 @@ import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.Task;
 import com.sdp.movemeet.R;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,7 +31,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class MapsActivityTest {
+public class MapsFragmentTest {
 
     private static final double FAKE_GPS_LATITUDE = 123.76;
     private static final double FAKE_GPS_LONGITUDE = 37.92;
@@ -41,8 +41,8 @@ public class MapsActivityTest {
     @Rule
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
 
-    @Rule
-    public ActivityScenarioRule<MapsActivity> testRule = new ActivityScenarioRule<>(MapsActivity.class);
+   /* @Rule
+    public ActivityScenarioRule<MapsFragment> testRule = new ActivityScenarioRule<>(MapsFragment.class); */
 
 
     @Test
