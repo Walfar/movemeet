@@ -5,8 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
@@ -18,15 +16,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.sdp.movemeet.Backend.FirebaseInteraction;
 import com.sdp.movemeet.HomeScreenActivity;
 import com.sdp.movemeet.R;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,17 +29,10 @@ import org.junit.runner.RunWith;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.longClick;
-import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -57,56 +45,15 @@ public class ChatActivityTest {
     public ActivityTestRule<HomeScreenActivity> mActivityTestRule = new ActivityTestRule<>(HomeScreenActivity.class);
 
     @Test
-    public void chatActivityTest_2() {
-        ViewInteraction materialButton = onView(
-                Matchers.allOf(ViewMatchers.withId(R.id.signInButton), withText("Sign In"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                4),
-                        isDisplayed()));
-        materialButton.perform(click());
+    public void chatActivityTest() {
 
-        ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.edit_text_email),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
-        appCompatEditText.perform(replaceText("antho2@gmail.com"), closeSoftKeyboard());
+        onView(withId(R.id.signInButton)).perform(click());
 
-        ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.edit_text_password),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        appCompatEditText2.perform(replaceText("234567"), closeSoftKeyboard());
+        onView(withId(R.id.edit_text_email)).perform(replaceText("antho2@gmail.com"), closeSoftKeyboard());
 
-        ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.edit_text_password), withText("234567"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        appCompatEditText3.perform(pressImeActionButton());
+        onView(withId(R.id.edit_text_password)).perform(replaceText("234567"), closeSoftKeyboard());
 
-        ViewInteraction materialButton2 = onView(
-                allOf(withId(R.id.button_login), withText("Login"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                4),
-                        isDisplayed()));
-        materialButton2.perform(click());
+        onView(withId(R.id.button_login)).perform(click());
 
         try {
             Thread.sleep(1500);
@@ -116,15 +63,7 @@ public class ChatActivityTest {
 
         onView(withId(R.id.button2)).perform(click());
 
-        ViewInteraction materialButton4 = onView(
-                allOf(withId(R.id.activityChatDescription), withText("Chat"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                16),
-                        isDisplayed()));
-        materialButton4.perform(click());
+        onView(withId(R.id.activityChatDescription)).perform(click());
 
         try {
             Thread.sleep(1500);
@@ -141,7 +80,6 @@ public class ChatActivityTest {
         } catch (InterruptedException e) {
             assert (false);
         }
-
 
 
         mDatabase = FirebaseDatabase.getInstance();
