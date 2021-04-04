@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sdp.movemeet.R;
 
+import java.text.SimpleDateFormat;
+
 public class MessageViewHolder extends RecyclerView.ViewHolder {
 
     private static final String TAG = "MessageViewHolder";
@@ -27,6 +29,15 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             messageTextView.setText(message.getMessageText());
             messageTextView.setVisibility(TextView.VISIBLE);
         }
+        if (message.getMessageUser() != null) {
+            messengerTextView.setText(message.getMessageUser());
+            messengerTextView.setVisibility(TextView.VISIBLE);
+        }
+        //messageTimeTextView.setText(String.valueOf((int) message.getMessageTime()));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String messageTimeString = simpleDateFormat.format(message.getMessageTime());
+        messageTimeTextView.setText(messageTimeString);
+        messageTimeTextView.setVisibility(TextView.VISIBLE);
     }
 
 

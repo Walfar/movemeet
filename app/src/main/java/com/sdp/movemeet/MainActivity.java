@@ -1,5 +1,6 @@
 package com.sdp.movemeet;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.Backend.BackendActivityManagerDemo;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
+import com.sdp.movemeet.chat.ChatActivity;
 import com.sdp.movemeet.map.MapsActivity;
 
 
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
         if (fAuth.getCurrentUser() != null) {
             userId = fAuth.getCurrentUser().getUid();
-            TextView[] textViewArray = {phone, fullName, email};
+            TextView[] textViewArray = {fullName, email, phone};
             FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, MainActivity.this);
         }
 
@@ -52,12 +54,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, MapsActivity.class));
     }
 
+
     public void logout(View view) {
-        if (fAuth.getCurrentUser() != null) {
-            FirebaseAuth.getInstance().signOut(); // this will do the logout of the user from Firebase
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        }
+        FirebaseInteraction.logoutIfUserNull(fAuth, MainActivity.this);
     }
 
 

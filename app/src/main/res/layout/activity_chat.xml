@@ -18,7 +18,7 @@
         android:paddingRight="10dp">
 
         <LinearLayout
-            android:id="@+id/inputLayout"
+            android:id="@+id/horLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -32,7 +32,7 @@
                 android:layout_weight="7">
 
                 <MultiAutoCompleteTextView
-                    android:id="@+id/messageInput"
+                    android:id="@+id/message_input_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:drawable/editbox_background_normal"
@@ -41,7 +41,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnSend"
+                android:id="@+id/button_send_message"
                 android:onClick="sendMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,17 +54,18 @@
 
         </LinearLayout>
 
+
         <ProgressBar
-            android:id="@+id/chatLoader"
+            android:id="@+id/chat_loader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/messageRecyclerView"
+            android:id="@+id/message_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/inputLayout"
+            android:layout_above="@id/horLayout"
             android:scrollbars="none"
             android:layout_alignParentTop="true"
             android:layout_marginBottom="5dp"
