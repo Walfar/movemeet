@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -50,7 +51,12 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
     private boolean recording;
     private Button recButton;
 
-    private GoogleMap googleMap;
+    @VisibleForTesting
+    protected SupportMapFragment supportMapFragment;
+
+    @VisibleForTesting
+    protected GoogleMap googleMap;
+
     private MarkerOptions markerOptions;
     private Polyline pathLine;
     private PolylineOptions pathLineOptions;
@@ -59,7 +65,8 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
 
-    private ArrayList<LatLng> path;
+    @VisibleForTesting
+    protected ArrayList<LatLng> path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +87,7 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
 
         pathLineOptions = new PolylineOptions().width(25).color(Color.RED).geodesic(true);
 
-        SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap_recording);
+        supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap_recording);
         supportMapFragment.getMapAsync(GPSRecordingActivity.this);
 
         path = new ArrayList<LatLng>();
@@ -127,10 +134,6 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
             }
         });
 
-    }
-
-    public GoogleMap getGoogleMap() {
-        return this.googleMap;
     }
 
     private void updatePath(Location location) {
