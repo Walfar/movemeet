@@ -8,8 +8,6 @@ public class Message {
     private String messageUserId;
     private long messageTime;
 
-    public Message() {
-    }
 
     public Message(String messageUser, String messageText, String messageUserId) {
         if (messageUser == null || messageText == null || messageUserId == null) {
