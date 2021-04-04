@@ -64,8 +64,8 @@ public class ChatActivityTest {
 
         onView(withId(R.id.button2)).perform(click());
 
-        //onView(withId(R.id.activityChatDescription)).perform(click());
-        onView(withId(R.id.activityChatDescription)).perform(scrollTo()).perform(click());
+        onView(withId(R.id.activityChatDescription)).perform(click());
+        //onView(withId(R.id.activityChatDescription)).perform(scrollTo()).perform(click());
 
         try {
             Thread.sleep(1500);
