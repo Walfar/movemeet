@@ -46,6 +46,9 @@ public class RegisterActivityTest {
 
     @Test
     public void Empty_Register(){
+        try{
+            Thread.sleep(5000);
+        } catch (Exception e){}
         onView(withId(R.id.button_register)).perform(click());
     }
 

@@ -29,7 +29,9 @@ public class FirebaseInteraction {
         documentReference.addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if (textViewArray.length > 3) {
+                if (documentSnapshot == null){
+                    return;
+                } else if (textViewArray.length == 4) {
                     textViewArray[0].setText(documentSnapshot.getString("fullName"));
                     textViewArray[1].setText(documentSnapshot.getString("email"));
                     textViewArray[2].setText(documentSnapshot.getString("phone"));
