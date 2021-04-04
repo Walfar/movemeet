@@ -42,7 +42,7 @@
                     android:ems="10"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
+            <ImageButton
                 android:id="@+id/button_send_message"
                 android:onClick="sendMessage"
                 android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
                 android:clickable="true"
                 android:layout_marginTop="3dp"
                 app:fabSize="mini"
-                android:tint="@color/amaranth_red"
+                android:tint="@color/alice_blue"
                 android:src="@android:drawable/ic_menu_send" />
 
         </LinearLayout>

@@ -12,8 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -63,7 +66,8 @@ public class ChatActivity extends AppCompatActivity {
     MultiAutoCompleteTextView messageInput;
     ProgressBar chatLoader;
     RecyclerView messageRecyclerView;
-    FloatingActionButton btnSend;
+    //FloatingActionButton btnSend;
+    ImageButton btnSend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,9 +109,6 @@ public class ChatActivity extends AppCompatActivity {
         mFirebaseAdapter.registerAdapterDataObserver(
                 new MyScrollToBottomObserver(messageRecyclerView, mFirebaseAdapter, mLinearLayoutManager)
         );
-
-        // Disabling the send button when there's no text in the input field
-        messageInput.addTextChangedListener(new MyButtonObserver(btnSend));
 
     }
 
@@ -203,9 +204,12 @@ public class ChatActivity extends AppCompatActivity {
         String userName = fullNameString;
         String messageText = messageInput.getText().toString();
         Message message = new Message(userName, messageText, userId);
-
-        mDatabase.getReference().child(MESSAGE_CHILD).push().setValue(message);
-        messageInput.setText("");
+        if (messageText.length() > 0) {
+            mDatabase.getReference().child(MESSAGE_CHILD).push().setValue(message);
+            messageInput.setText("");
+        } else {
+            Toast.makeText(getApplicationContext(), "Empty message.", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
