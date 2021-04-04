@@ -28,16 +28,17 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:hintTextAppearance="@android:style/TextAppearance.Medium"
+                app:hintEnabled="false"
                 android:layout_weight="7">
 
-                <MultiAutoCompleteTextView
+                <EditText
                     android:id="@+id/messageInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:drawable/editbox_background_normal"
+                    android:fontFamily="@font/armata"
                     android:hint="Type your post"
-                    app:hintTextAppearance="@android:style/TextAppearance.Medium" />
+                    android:inputType="textPersonName"
+                    android:ems="10"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton

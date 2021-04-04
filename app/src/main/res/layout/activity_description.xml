@@ -6,14 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".Activity.ActivityDescriptionActivity">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16sp"
-        android:scrollbarSize="25sp"
-        tools:layout_editor_absoluteX="20dp"
-        tools:layout_editor_absoluteY="87dp">
-
     <ImageView
         android:id="@+id/activity_image_description"
         android:layout_width="150dp"
@@ -208,7 +200,6 @@
         android:text="Chat"
         app:layout_constraintStart_toEndOf="@+id/activityRegisterDescription"
         app:layout_constraintTop_toBottomOf="@+id/activity_description_description" />
-    </ScrollView>
 
 
 
