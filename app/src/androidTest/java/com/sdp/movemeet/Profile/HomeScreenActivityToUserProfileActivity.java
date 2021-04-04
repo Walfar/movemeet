@@ -49,57 +49,11 @@ public class HomeScreenActivityToUserProfileActivity {
 
     @Test
     public void homeScreenActivityToUserProfileActivity() {
-        ViewInteraction materialButton = onView(
-                allOf(withId(R.id.signInButton), withText("Sign In"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                4),
-                        isDisplayed()));
-        materialButton.perform(click());
-
-        ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.edit_text_email),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
-        appCompatEditText.perform(replaceText("antho2@gmail.com"), closeSoftKeyboard());
-
-        ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.edit_text_password),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        appCompatEditText2.perform(replaceText("234567"), closeSoftKeyboard());
-
-        ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.edit_text_password), withText("234567"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        appCompatEditText3.perform(pressImeActionButton());
-
-        ViewInteraction materialButton2 = onView(
-                allOf(withId(R.id.button_login), withText("Login"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                4),
-                        isDisplayed()));
-        materialButton2.perform(click());
-
-        try {
+        onView(withId(R.id.signInButton)).perform(click());
+        onView(withId(R.id.edit_text_email)).perform(replaceText("antho2@gmail.com"), closeSoftKeyboard());
+        onView(withId(R.id.edit_text_password)).perform(replaceText("234567"), closeSoftKeyboard());
+        onView(withId(R.id.button_login)).perform(click());
+        /*try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             assert (false);
@@ -119,7 +73,7 @@ public class HomeScreenActivityToUserProfileActivity {
 
         try{
             Thread.sleep(2000);
-        }catch(Exception e){}
+        }catch(Exception e){}*/
 
         /*ViewInteraction textView = onView(
                 allOf(withId(R.id.text_view_activity_profile_name), withText("Anthony Guinchard"),
