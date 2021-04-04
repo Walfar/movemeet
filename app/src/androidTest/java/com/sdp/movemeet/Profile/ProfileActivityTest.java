@@ -76,7 +76,7 @@ public class ProfileActivityTest {
     }
 
 
-    @Test
+    /*@Test
     public void profileActivityToEditProfileActivity() {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.edit_text_email),
@@ -200,7 +200,7 @@ public class ProfileActivityTest {
                 uiController.loopMainThreadUntilIdle();
             }
         };
-    }
+    }*/
 
 
 }
