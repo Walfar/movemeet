@@ -3,8 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".chat.chat_activity">
+    android:layout_height="wrap_content"
+    android:clipToPadding="false"
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp"
+    tools:context=".chat.ChatActivity">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -17,6 +20,19 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         card_view:ignore="MissingConstraints">
 
+        <ImageView
+            android:id="@+id/imageProfile"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:src="@drawable/ic_person_black_24dp"
+            android:layout_marginEnd="4dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/imageProfile"
+            android:elevation="10dp">
+
         <LinearLayout
             android:id="@+id/rltParent"
             android:layout_width="match_parent"
@@ -28,8 +44,9 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/lnrContr"
                 android:orientation="horizontal"
-                android:minWidth="210dp"
-                android:background="#d8e4e7">
+                android:minWidth="210dp">
+
+
 
                 <TextView
                     android:id="@+id/message_user"
@@ -42,6 +59,7 @@
                     android:textStyle="normal"/>
 
             </LinearLayout>
+
 
             <View
                 android:layout_width="match_parent"
@@ -84,6 +102,7 @@
 
             </LinearLayout>
         </LinearLayout>
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
 
 

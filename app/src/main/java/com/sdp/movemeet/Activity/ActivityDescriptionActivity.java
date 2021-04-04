@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.chat.ChatActivity;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -114,6 +115,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 Toast.makeText(ActivityDescriptionActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public void goToChat(View view) {
+        startActivity(new Intent(getApplicationContext(), ChatActivity.class));
     }
 
 }
