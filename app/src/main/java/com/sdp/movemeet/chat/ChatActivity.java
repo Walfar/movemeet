@@ -113,10 +113,7 @@ public class ChatActivity extends AppCompatActivity {
 
         DatabaseReference messagesRef = mDatabase.getReference().child(MESSAGE_CHILD);
 
-        FirebaseRecyclerOptions<Message> options =
-                new FirebaseRecyclerOptions.Builder<Message>()
-                        .setQuery(messagesRef, Message.class)
-                        .build();
+        FirebaseRecyclerOptions<Message> options = new FirebaseRecyclerOptions.Builder<Message>().setQuery(messagesRef, Message.class).build();
 
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(options) {
 
