@@ -18,7 +18,7 @@
         android:paddingRight="10dp">
 
         <LinearLayout
-            android:id="@+id/horLayout"
+            android:id="@+id/inputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -28,16 +28,18 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:hintTextAppearance="@android:style/TextAppearance.Medium"
+                app:hintEnabled="false"
                 android:layout_weight="7">
 
                 <MultiAutoCompleteTextView
                     android:id="@+id/message_input_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:drawable/editbox_background_normal"
+                    android:padding="3dp"
+                    android:fontFamily="@font/armata"
                     android:hint="Type your post"
-                    app:hintTextAppearance="@android:style/TextAppearance.Medium" />
+                    android:inputType="textPersonName"
+                    android:ems="10"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -65,9 +67,11 @@
             android:id="@+id/message_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/horLayout"
+            android:layout_above="@id/inputLayout"
             android:scrollbars="none"
             android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-1dp"
             android:layout_marginBottom="5dp"
             android:stackFromBottom="true"
             android:transcriptMode="normal" />

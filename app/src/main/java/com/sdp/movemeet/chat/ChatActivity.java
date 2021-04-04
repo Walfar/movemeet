@@ -89,10 +89,30 @@ public class ChatActivity extends AppCompatActivity {
         FirebaseInteraction.checkIfUserSignedIn(fAuth, ChatActivity.this);
 
         // Adding all the existing messages and listening for new child entries under the "messages"
-        // path in our Firebase Realtime Database. It adds a new element to the UI for each message
-        //------↓
+        // path in our Firebase Realtime Database (adding a new element to the UI for each message)
+
         // Initializing Realtime Database
         mDatabase = FirebaseDatabase.getInstance();
+
+        settingUpMessageAdapter();
+
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mLinearLayoutManager.setStackFromEnd(true);
+        messageRecyclerView.setLayoutManager(mLinearLayoutManager);
+        messageRecyclerView.setAdapter(mFirebaseAdapter);
+
+        // Scrolling down when a new message arrives
+        mFirebaseAdapter.registerAdapterDataObserver(
+                new MyScrollToBottomObserver(messageRecyclerView, mFirebaseAdapter, mLinearLayoutManager)
+        );
+
+        // Disabling the send button when there's no text in the input field
+        messageInput.addTextChangedListener(new MyButtonObserver(btnSend));
+
+    }
+
+    private void settingUpMessageAdapter() {
+
         DatabaseReference messagesRef = mDatabase.getReference().child(MESSAGE_CHILD);
 
         // The FirebaseRecyclerAdapter class comes from the FirebaseUI library
@@ -110,12 +130,6 @@ public class ChatActivity extends AppCompatActivity {
                 }
                 return MESSAGE_IN_VIEW_TYPE;
             }
-
-//            @Override
-//            public MessageViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-//                LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-//                return new MessageViewHolder(inflater.inflate(R.layout.message, viewGroup, false));
-//            }
 
             @Override
             public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -136,21 +150,6 @@ public class ChatActivity extends AppCompatActivity {
                 vh.bindMessage(message);
             }
         };
-
-        mLinearLayoutManager = new LinearLayoutManager(this);
-        mLinearLayoutManager.setStackFromEnd(true);
-        messageRecyclerView.setLayoutManager(mLinearLayoutManager);
-        messageRecyclerView.setAdapter(mFirebaseAdapter);
-
-        // Scrolling down when a new message arrives
-        mFirebaseAdapter.registerAdapterDataObserver(
-                new MyScrollToBottomObserver(messageRecyclerView, mFirebaseAdapter, mLinearLayoutManager)
-        );
-        //------↑
-
-        // Disabling the send button when there's no text in the input field
-        messageInput.addTextChangedListener(new MyButtonObserver(btnSend));
-
     }
 
     private void getUserName() {

@@ -201,4 +201,6 @@
         app:layout_constraintStart_toEndOf="@+id/activityRegisterDescription"
         app:layout_constraintTop_toBottomOf="@+id/activity_description_description" />
 
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
