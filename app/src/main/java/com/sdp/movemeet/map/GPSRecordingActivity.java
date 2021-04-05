@@ -51,7 +51,8 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
 
     private final int REQUEST_CODE = 101;
 
-    private boolean recording;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public boolean recording;
     private Button recButton;
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -64,14 +65,16 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
     private Polyline pathLine;
     private PolylineOptions pathLineOptions;
 
-    private FusedLocationProviderClient fusedLocationClient;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public FusedLocationProviderClient fusedLocationClient;
 
     private LocationRequest locationRequest;
 
-    private LocationCallback locationCallback = new LocationCallback() {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(@NonNull LocationResult locationResult) {
-            super.onLocationResult(locationResult);
+            //super.onLocationResult(locationResult);
             updatePath(locationResult.getLastLocation());
         }
     };
@@ -114,7 +117,7 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
 
 
     public void toggleRecording(View view) {
-        Log.d("BUTTON", "Toggled!");
+
         recording = !recording;
         recButton.setText(BTN_TEXT_RES.get(recording));
 
@@ -144,19 +147,18 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
 
     }
 
-    private void updatePath(Location location) {
+
+    public void updatePath(Location location) {
         if (location != null && recording) {
-            path.add(new LatLng(location.getLatitude(), location.getLongitude()));
+
+            LatLng newPosition = new LatLng(location.getLatitude(), location.getLongitude());
+            path.add(newPosition);
+
             if (googleMap != null) {
-                LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 20.0f));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newPosition, 20.0f));
                 drawPath();
             }
         }
-    }
-
-    public ArrayList<LatLng> getPath() {
-        return new ArrayList(this.path);
     }
 
     private void drawPath() {
@@ -183,7 +185,8 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
         stopLocationUpdates();
     }
 
-    private void startLocationUpdates() {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public void startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
             return;
@@ -194,7 +197,8 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
                 Looper.getMainLooper());
     }
 
-    private void stopLocationUpdates() {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public void stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(locationCallback);
     }
 
