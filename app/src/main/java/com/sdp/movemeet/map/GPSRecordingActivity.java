@@ -39,6 +39,7 @@ import java.util.Map;
 
 public class GPSRecordingActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    // ----------------- GENERAL CONSTANTS --------------------------
     public static final Map<Boolean, String> BTN_TEXT_RES;
     static {
         BTN_TEXT_RES = new HashMap<>();
@@ -51,6 +52,7 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
 
     private final int REQUEST_CODE = 101;
 
+    // ------------------ RECORDING VARIABLES -----------------------
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public boolean recording;
     private Button recButton;
@@ -58,7 +60,7 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public SupportMapFragment supportMapFragment;
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    // ------------------ MAP AND DISPLAY OPTIONS --------------------
     public GoogleMap googleMap;
 
     private MarkerOptions markerOptions;
@@ -67,6 +69,7 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
     private Polyline pathLine;
     private PolylineOptions pathLineOptions;
 
+    // -------------- LOCATION REQUEST VALUES -------------------------
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public FusedLocationProviderClient fusedLocationClient;
 
@@ -74,10 +77,8 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
     private final int LOCATION_REQUEST_INTERVAL = 10_000;
     private final int LOCATION_REQUEST_SHORTEST = 5_000;
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public boolean updatingLocation;
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(@NonNull LocationResult locationResult) {
@@ -87,6 +88,8 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public ArrayList<LatLng> path;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,7 +209,7 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
         switch (requestCode) {
             case REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //startLocationUpdates();
+
                 }
                 break;
         }

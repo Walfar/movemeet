@@ -3,14 +3,10 @@ package com.sdp.movemeet.map;
 import android.Manifest;
 import android.location.Location;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Looper;
-import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.By;
@@ -29,8 +25,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
@@ -46,7 +40,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -86,7 +79,6 @@ public class GPSRecordingActivityTest {
         fakeLocation.setLatitude(FAKE_LATITUDE);
         fakeLocation.setLongitude(FAKE_LONGITUDE);
         fakeLocation.setAccuracy(FAKE_ACCURACY);
-        fakeLocation.setElapsedRealtimeNanos(Calendar.getInstance().getTimeInMillis());
         fakeLocation.setTime(Calendar.getInstance().getTimeInMillis());
 
         mockTask = mock(Task.class);
@@ -94,15 +86,12 @@ public class GPSRecordingActivityTest {
 
         device.wait(Until.hasObject(By.desc(GPSRecordingActivity.MAP_READY_DESC)), 60_000);
 
-        // Turn off the updates to change the callback, then turn them back on with the faked function
-
-        /*scenario.onActivity(activity -> {
-            when(mockLocationTask.getResult()).thenReturn(fakeLocation);
-        });*/
 
         scenario.onActivity(activity -> {
             ((GPSRecordingActivity) activity).stopLocationUpdates();
 
+            // This way of mocking the flpc makes it only fire one location callback, when the
+            // location updates are requested.
             ((GPSRecordingActivity) activity).fusedLocationClient = mock(FusedLocationProviderClient.class);
             FusedLocationProviderClient flpc = ((GPSRecordingActivity) activity).fusedLocationClient;
 
@@ -116,19 +105,6 @@ public class GPSRecordingActivityTest {
                         return mockTask;
                     });
         });
-
-        /*scenario.onActivity(activity -> {
-            ((GPSRecordingActivity) activity).stopLocationUpdates();
-
-            ((GPSRecordingActivity) activity).locationCallback = new LocationCallback() {
-                @Override
-                public void onLocationResult(LocationResult locationResult) {
-                    ((GPSRecordingActivity) activity).updatePath(fakeLocation);
-                }
-            };
-
-            ((GPSRecordingActivity) activity).startLocationUpdates();
-        });*/
     }
 
     @Test
@@ -142,13 +118,6 @@ public class GPSRecordingActivityTest {
 
         scenario.onActivity(activity -> {
             ((GPSRecordingActivity) activity).stopLocationUpdates();
-
-            ((GPSRecordingActivity) activity).locationCallback = new LocationCallback() {
-                @Override
-                public void onLocationResult(LocationResult locationResult) {
-                    ((GPSRecordingActivity) activity).updatePath(fakeLocation);
-                }
-            };
 
             ((GPSRecordingActivity) activity).startLocationUpdates();
         });
