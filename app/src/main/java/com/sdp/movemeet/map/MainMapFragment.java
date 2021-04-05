@@ -40,15 +40,13 @@ import com.sdp.movemeet.utility.ActivitiesUpdater;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMapClickListener {
+public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     private Location currentLocation;
-    private FusedLocationProviderClient fusedLocationProviderClient;
 
     public static final int REQUEST_CODE = 101;
 
     private List<Activity> activities;
-    private double perimeterRadius = 0.004;
 
     private FirebaseAuth fAuth = FirebaseAuth.getInstance();
     private FirebaseUser user;
@@ -58,16 +56,17 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     private SupportMapFragment supportMapFragment;
 
     private GoogleMap googleMap;
-    private View view;
+    private FusedLocationProviderClient fusedLocationProviderClient;
 
     private static final String TAG = "Maps TAG";
 
-    public static MapsFragment newInstance() {
-        return new MapsFragment();
+    public static MainMapFragment newInstance() {
+        return new MainMapFragment();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_map, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_map, container, false);
 
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
 
@@ -81,6 +80,36 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         user = fAuth.getCurrentUser();
 
         return view;
+    }
+
+    //TODO deprecated for fragment ?
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    fetchLastLocation();
+                }
+                break;
+        }
+    }
+
+    public void fetchLastLocation() {
+        if (ActivityCompat.checkSelfPermission(supportMapFragment.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(supportMapFragment.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(supportMapFragment.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
+            return;
+        }
+        Task<Location> task = fusedLocationProviderClient.getLastLocation();
+        task.addOnSuccessListener(this::onSuccess);
+    }
+
+    private void onSuccess(Location location) {
+        if (location != null) {
+            currentLocation = location;
+            Toast.makeText(supportMapFragment.getActivity(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
+            supportMapFragment.getMapAsync(MainMapFragment.this);
+        }
     }
 
 
@@ -97,30 +126,21 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         LatLng userLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions().position(userLatLng).title("I am here !");
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(userLatLng));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 17.0f));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 12.0f));
         Marker posMarker = googleMap.addMarker(markerOptions);
         posMarker.setTag("my position");
 
         getNearbyMarkers(googleMap);
     }
 
-    //TODO deprecated permissions ?
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    fetchLastLocation();
-                }
-                break;
-        }
-    }
-
     @Override
     public boolean onMarkerClick(final Marker marker) {
-        if (!marker.getTag().equals("my position")) {
+        //If user accidently touches the marker instead of the infowindow, act like he clicked on the infowindow
+        if (marker.getTag().equals("new activity position")) onInfoWindowClick(marker);
+        else if (!marker.getTag().equals("my position")) {
             Activity act = (Activity) marker.getTag();
             Intent intent;
+            // Different activity if user unregistered
             //if (user == null) intent = new Intent(MapsActivity.this, ActivityDescriptionActivityUnregistered.class);
             //else
             intent = new Intent(supportMapFragment.getActivity(), ActivityDescriptionActivity.class);
@@ -141,22 +161,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                     new MarkerOptions().position(latLng).title("new activity").snippet("Click her to create new activity")
             );
             newActivityMarker = newActivity;
+            newActivityMarker.setTag("new activity position");
             newActivity.showInfoWindow();
         }
-    }
-
-    //Use async instead ?
-    public GoogleMap getMap() {
-        return googleMap;
-    }
-
-    private void fetchLastLocation() {
-        if (ActivityCompat.checkSelfPermission(supportMapFragment.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(supportMapFragment.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(supportMapFragment.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
-            return;
-        }
-        Task<Location> task = fusedLocationProviderClient.getLastLocation();
-        task.addOnSuccessListener(this::onSuccess);
     }
 
 
@@ -194,14 +201,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                 return R.drawable.icon_badminton;
             default:
                 return -1;
-        }
-    }
-    private void onSuccess(Location location) {
-        if (location != null) {
-            Log.d(TAG, "location found !");
-            currentLocation = location;
-            Toast.makeText(supportMapFragment.getActivity(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
-            supportMapFragment.getMapAsync(MapsFragment.this);
         }
     }
 

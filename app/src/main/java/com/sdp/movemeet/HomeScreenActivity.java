@@ -1,19 +1,14 @@
 package com.sdp.movemeet;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sdp.movemeet.map.MapsActivity;
-import com.sdp.movemeet.map.MapsFragment;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
 
 public class HomeScreenActivity extends AppCompatActivity {

@@ -133,7 +133,7 @@ public class ActivitiesUpdater {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "failure");
+                Log.d(TAG, e.toString());
             }
         });
     }

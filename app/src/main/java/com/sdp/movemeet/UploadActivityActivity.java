@@ -11,7 +11,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -24,12 +23,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,7 +34,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Backend.BackendActivityManager;
-import com.sdp.movemeet.map.MapsFragment;
+import com.sdp.movemeet.map.MainMapFragment;
+import com.sdp.movemeet.map.MiniMapFragment;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
 
 import java.io.IOException;
@@ -47,7 +44,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static com.sdp.movemeet.map.MapsFragment.REQUEST_CODE;
+import static com.sdp.movemeet.map.MainMapFragment.REQUEST_CODE;
 
 public class UploadActivityActivity extends AppCompatActivity {
 
@@ -77,6 +74,11 @@ public class UploadActivityActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_activity);
+
+        MiniMapFragment mapsFragment = (MiniMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map);
+        if (mapsFragment == null) mapsFragment = mapsFragment.newInstance();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().add(R.id.map_container_view, mapsFragment).commit();
 
         setupSportSpinner(this);
 
@@ -153,7 +155,11 @@ public class UploadActivityActivity extends AppCompatActivity {
         showDialog(999);
     }
 
-
+    //Returns the adress location if set by user, or null otherwise
+    public LatLng getAddressLocation() {
+        if (addressText.getText().toString() == null) return null;
+        return new LatLng(latitude, longitude);
+    }
     // Helper methods for start time picker
     private TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
@@ -285,7 +291,7 @@ public class UploadActivityActivity extends AppCompatActivity {
     }
 
     //Inverse of tryLocatingAddress, i.e retrieves the address from a LatLng
-    private void retrieveAddress(LatLng pos) {
+    public void retrieveAddress(LatLng pos) {
 
         latitude = pos.latitude;
         longitude = pos.longitude;
@@ -302,44 +308,6 @@ public class UploadActivityActivity extends AppCompatActivity {
             }
         } catch (IOException e) {}
 
-    }
-
-    //TODO refactor this ?
-    public void setLocationOnMap(View view) {
-        //Toast.makeText(getApplicationContext(), "Click on the map to set the location !", Toast.LENGTH_LONG).show();
-
-        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
-            return;
-        }
-        Task<Location> task = fusedLocationProviderClient.getLastLocation();
-        task.addOnSuccessListener(this::onSuccess);
-
-        //TODO WIP
-        /*MapsFragment mapsFragment = (MapsFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map);
-        mapsFragment = mapsFragment.newInstance();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.activity_maps, mapsFragment).addToBackStack(null).commit();;
-        GoogleMap gMap = mapsFragment.getMap();
-        if (gMap != null) {
-            gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-
-                @Override
-                public void onMapClick(LatLng point) {
-                    retrieveAddress(point);
-                    fragmentManager.popBackStack();
-                }
-            });
-        } */
-
-    }
-
-    private void onSuccess(Location location) {
-        if (location != null) {
-            retrieveAddress(new LatLng(location.getLatitude(), location.getLongitude()));
-        }
     }
 
     public void confirmActivityUpload(View view) {
@@ -366,7 +334,7 @@ public class UploadActivityActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-        startActivity(new Intent(getApplicationContext(), MapsFragment.class));
+        startActivity(new Intent(getApplicationContext(), MainMapFragment.class));
     }
 
 
