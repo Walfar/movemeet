@@ -58,17 +58,12 @@ public class GPSRecordingActivityTest {
     @Test
     public void pathGetsRecorded() {
 
-        scenario = testRule.getScenario();//ActivityScenario.launch(GPSRecordingActivity.class);
+        scenario = testRule.getScenario();
 
         Boolean success = device.wait(Until.hasObject(By.desc(GPSRecordingActivity.MAP_READY_DESC)), 60000);
         assertNotNull("Map was not readied in time", success);
 
         onView(withId(R.id.gmap_recording)).check(matches(isDisplayed()));
-
-
-        /*scenario.onActivity(activity -> {
-            assertNotNull("Could not find a GoogleMap", ((GPSRecordingActivity) activity).googleMap);
-        });*/
 
         onView(withId(R.id.recordButton)).check(matches(withText("Start")));
         onView(withId(R.id.recordButton)).perform(click());
@@ -80,11 +75,8 @@ public class GPSRecordingActivityTest {
         onView(withId(R.id.recordButton)).check(matches(withText("Start")));
 
         scenario.onActivity(activity -> {
-            assertNotEquals("Path was empty", true, !((GPSRecordingActivity) activity).path.isEmpty());
+            assertNotEquals("Path was empty", true, ((GPSRecordingActivity) activity).path.isEmpty());
         });
-
-        assert(true);
-
     }
 
     public boolean sleep(int millis) {
