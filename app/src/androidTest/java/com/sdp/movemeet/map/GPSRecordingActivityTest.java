@@ -98,16 +98,16 @@ public class GPSRecordingActivityTest {
 
         /*scenario.onActivity(activity -> {
             when(mockLocationTask.getResult()).thenReturn(fakeLocation);
-        });
+        });*/
 
-        scenario.onActivity(activity -> {*/
-            /*((GPSRecordingActivity) activity).stopLocationUpdates();
+        scenario.onActivity(activity -> {
+            ((GPSRecordingActivity) activity).stopLocationUpdates();
 
             ((GPSRecordingActivity) activity).fusedLocationClient = mock(FusedLocationProviderClient.class);
             FusedLocationProviderClient flpc = ((GPSRecordingActivity) activity).fusedLocationClient;
 
-            when(flpc.getLastLocation()).thenReturn(mockLocationTask);*/
-            /*when(flpc
+            when(flpc.getLastLocation()).thenReturn(mockLocationTask);
+            when(flpc
                     .requestLocationUpdates(any(LocationRequest.class), any(LocationCallback.class), any(Looper.class)))
                     .thenAnswer((Answer<Task<Void>>) invocation -> {
                         LocationCallback listener = (LocationCallback) invocation.getArguments()[1];
@@ -115,7 +115,30 @@ public class GPSRecordingActivityTest {
                         listener.onLocationResult(mockRes);
                         return mockTask;
                     });
+        });
+
+        /*scenario.onActivity(activity -> {
+            ((GPSRecordingActivity) activity).stopLocationUpdates();
+
+            ((GPSRecordingActivity) activity).locationCallback = new LocationCallback() {
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    ((GPSRecordingActivity) activity).updatePath(fakeLocation);
+                }
+            };
+
+            ((GPSRecordingActivity) activity).startLocationUpdates();
         });*/
+    }
+
+    @Test
+    public void checkPathGetsRecorded() {
+
+        onView(withId(R.id.gmap_recording)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.recordButton)).check(matches(withText("Start")));
+        onView(withId(R.id.recordButton)).perform(click());
+        onView(withId(R.id.recordButton)).check(matches(withText("Stop")));
 
         scenario.onActivity(activity -> {
             ((GPSRecordingActivity) activity).stopLocationUpdates();
@@ -129,18 +152,7 @@ public class GPSRecordingActivityTest {
 
             ((GPSRecordingActivity) activity).startLocationUpdates();
         });
-    }
-
-    @Test
-    public void checkPathGetsRecorded() {
-
-        onView(withId(R.id.gmap_recording)).check(matches(isDisplayed()));
-
-        onView(withId(R.id.recordButton)).check(matches(withText("Start")));
-        onView(withId(R.id.recordButton)).perform(click());
-        onView(withId(R.id.recordButton)).check(matches(withText("Stop")));
-
-        assert(sleep(15000));
+        assert(sleep(2_000));
 
         scenario.onActivity(activity -> {
             assertFalse("Path was empty", ((GPSRecordingActivity) activity).path.isEmpty());
@@ -153,7 +165,13 @@ public class GPSRecordingActivityTest {
         onView(withId(R.id.recordButton)).perform(click());
         onView(withId(R.id.recordButton)).check(matches(withText("Start")));
 
-        assert(sleep(10000));
+        scenario.onActivity(activity -> {
+            ((GPSRecordingActivity) activity).stopLocationUpdates();
+
+            ((GPSRecordingActivity) activity).startLocationUpdates();
+        });
+
+        assert(sleep(2_000));
 
         scenario.onActivity(activity -> {
             assertEquals("Activity kept recording but should have stopped", true, ((GPSRecordingActivity) activity).path.isEmpty());
