@@ -54,11 +54,11 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
     private boolean recording;
     private Button recButton;
 
-    @VisibleForTesting
-    protected SupportMapFragment supportMapFragment;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public SupportMapFragment supportMapFragment;
 
-    @VisibleForTesting
-    protected GoogleMap googleMap;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public GoogleMap googleMap;
 
     private MarkerOptions markerOptions;
     private Polyline pathLine;
@@ -76,8 +76,8 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
         }
     };
 
-    @VisibleForTesting
-    protected ArrayList<LatLng> path;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public ArrayList<LatLng> path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +98,7 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
 
         path = new ArrayList<LatLng>();
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED /*&& ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED*/) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
         }
     }
