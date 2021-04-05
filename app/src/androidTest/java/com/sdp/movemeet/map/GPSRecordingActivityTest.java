@@ -94,8 +94,7 @@ public class GPSRecordingActivityTest {
 
         device.wait(Until.hasObject(By.desc(GPSRecordingActivity.MAP_READY_DESC)), 60_000);
 
-        // Map is now ready, so location updates have started. We can turn them off, switch out
-        // the callback, and turn them back on.
+        // Turn off the updates to change the callback, then turn them back on with the faked function
 
         /*scenario.onActivity(activity -> {
             when(mockLocationTask.getResult()).thenReturn(fakeLocation);
