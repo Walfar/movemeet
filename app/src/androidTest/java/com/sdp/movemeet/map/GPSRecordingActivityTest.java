@@ -33,6 +33,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 @RunWith(AndroidJUnit4.class)
@@ -43,8 +45,8 @@ public class GPSRecordingActivityTest {
     @Rule
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
 
-    /*@Rule
-    public ActivityScenarioRule<GPSRecordingActivity> testRule = new ActivityScenarioRule<>(GPSRecordingActivity.class);*/
+    @Rule
+    public ActivityScenarioRule<GPSRecordingActivity> testRule = new ActivityScenarioRule<>(GPSRecordingActivity.class);
 
     private UiDevice device;
 
@@ -56,29 +58,30 @@ public class GPSRecordingActivityTest {
     @Test
     public void pathGetsRecorded() {
 
-        scenario = ActivityScenario.launch(GPSRecordingActivity.class);
+        scenario = testRule.getScenario();//ActivityScenario.launch(GPSRecordingActivity.class);
 
-        device.wait(Until.hasObject(By.desc(GPSRecordingActivity.MAP_READY_DESC)), 60000);
+        Boolean success = device.wait(Until.hasObject(By.desc(GPSRecordingActivity.MAP_READY_DESC)), 60000);
+        assertNotNull("Map was not readied in time", success);
 
         onView(withId(R.id.gmap_recording)).check(matches(isDisplayed()));
 
 
-        /*scenario.onActivity(activity -> {
-            assert(((GPSRecordingActivity) activity).googleMap != null);
-        });*/
+        scenario.onActivity(activity -> {
+            assertNotNull("Could not find a GoogleMap", ((GPSRecordingActivity) activity).googleMap);
+        });
 
         onView(withId(R.id.recordButton)).check(matches(withText("Start")));
         onView(withId(R.id.recordButton)).perform(click());
         onView(withId(R.id.recordButton)).check(matches(withText("Stop")));
 
-        /*assert(sleep(15000));
+        assert(sleep(15000));
 
         onView(withId(R.id.recordButton)).perform(click());
         onView(withId(R.id.recordButton)).check(matches(withText("Start")));
 
         scenario.onActivity(activity -> {
-            assert(!((GPSRecordingActivity) activity).path.isEmpty());
-        });*/
+            assertNotEquals("Path was empty", true, !((GPSRecordingActivity) activity).path.isEmpty());
+        });
 
         assert(true);
 
