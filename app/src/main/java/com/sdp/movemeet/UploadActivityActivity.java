@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Backend.BackendActivityManager;
+import com.sdp.movemeet.utility.ActivitiesUpdater;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -250,7 +251,7 @@ public class UploadActivityActivity extends AppCompatActivity {
 
         Activity activity = new Activity(
                 organizerId + " || " +  date, organizerId, title, nParticipants,
-                new ArrayList<String>(), longitude, latitude, description, date, duration,
+                new ArrayList<String>(nParticipants), longitude, latitude, description, date, duration,
                 sport, address
         );
 
@@ -270,6 +271,8 @@ public class UploadActivityActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(getApplicationContext(), "Activity successfully uploaded!",
                                 Toast.LENGTH_SHORT).show();
+                        ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
+                        updater.updateListActivities();
                     }
                 },
                 new OnFailureListener() {

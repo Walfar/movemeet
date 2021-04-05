@@ -29,35 +29,55 @@ public class MainActivityTest {
     public ActivityScenarioRule<MainActivity> testRule = new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void mainActivity_sendMessage() {
+    public void mainActivity_goToMaps() {
         Intents.init();
-
-        onView(ViewMatchers.withId(R.id.mainEditName))
-                .perform(replaceText(KEYBOARD_INPUT), closeSoftKeyboard());
         onView(withId(R.id.mainGoButton)).perform(click());
-
-
-        intended(hasExtra(MainActivity.EXTRA_MESSAGE, KEYBOARD_INPUT));
-
         Intents.release();
 
 
     }
 
-//    @Test
-//    public void mainActivity_logout() {
-//        Intents.init();
-//
-//        onView(withId(R.id.button_logout)).perform(click());
-//
-//        Intents.release();
-//    }
+    @Test
+    public void mainActivity_logout() {
+        Intents.init();
+
+        onView(withId(R.id.button_logout)).perform(click());
+
+        Intents.release();
+    }
 
     @Test
     public void mainActivityToProfileActivity() {
         Intents.init();
 
         onView(withId(R.id.button_user_profile)).perform(click());
+
+        Intents.release();
+    }
+
+    @Test
+    public void mainActivityToFirebaseDebug() {
+        Intents.init();
+
+        onView(withId(R.id.firebaseButton)).perform(click());
+
+        Intents.release();
+    }
+
+    @Test
+    public void mainActivityToActivityUpload() {
+        Intents.init();
+
+        onView(withId(R.id.goToActivityUploadButton)).perform(click());
+
+        Intents.release();
+    }
+
+    @Test
+    public void mainActivityToStartActivity() {
+        Intents.init();
+
+        onView(withId(R.id.button2)).perform(click());
 
         Intents.release();
     }

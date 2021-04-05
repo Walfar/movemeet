@@ -277,7 +277,10 @@ public class Activity implements Serializable {
             throw new IllegalArgumentException();
         }
         if(participantsId.contains(participant)){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Already Register");
+        }
+        if(participantsId.size() >= this.numberParticipant){
+            throw new IllegalArgumentException("The limit of participants has already been reached");
         }
         this.participantsId.add(participant);
     }

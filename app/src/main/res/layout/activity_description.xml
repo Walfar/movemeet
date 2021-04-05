@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity.ActivityDescriptionActivity">
@@ -67,7 +68,7 @@
 
     <TextView
         android:id="@+id/activity_text2_description"
-        android:layout_width="45dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/armata"
         android:layout_marginStart="20dp"
@@ -159,9 +160,9 @@
         android:id="@+id/activity_description_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/armata"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/armata"
         android:text="Description"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_text4_description" />
@@ -170,9 +171,9 @@
         android:id="@+id/activityRegisterDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/armata"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/armata"
         android:onClick="onClick"
         android:text="Register"
         app:layout_constraintStart_toEndOf="@+id/activityGoDescription"
@@ -182,22 +183,23 @@
         android:id="@+id/activityGoDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/armata"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/armata"
         android:text="How to go"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_description_description" />
 
     <Button
         android:id="@+id/activityChatDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:fontFamily="@font/armata"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="100dp"
+        android:onClick="goToChat"
         android:text="Chat"
-        app:layout_constraintStart_toEndOf="@+id/activityRegisterDescription"
-        app:layout_constraintTop_toBottomOf="@+id/activity_description_description" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_image_description" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -159,17 +159,119 @@ public class UserTest {
     public void userEqualCorrect(){
         User user1 = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID, DUMMY_PHONE_NUMBER, DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
         User user2 = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID, DUMMY_PHONE_NUMBER, DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
-
         assertEquals(user1.equals(user2), true);
     }
 
+
     @Test
-    public void userEqualDifferentUser(){
+    public void userEqualDifferentUser1(){
         User user1 = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID, DUMMY_PHONE_NUMBER, DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
         User user2 = new User("Georges", DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID, DUMMY_PHONE_NUMBER, DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
 
         assertEquals(user1.equals(user2), false);
     }
+
+    @Test
+    public void userEqualDifferentUser2(){
+        User user1 = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID, DUMMY_PHONE_NUMBER, DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
+        User user2 = new User(DUMMY_FIRST_NAME, "CANDEA", DUMMY_EMAIL, DUMMY_USER_ID, DUMMY_PHONE_NUMBER, DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
+
+        assertEquals(user1.equals(user2), false);
+    }
+
+    @Test
+    public void userEqualDifferentUser3(){
+        User user1 = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID, DUMMY_PHONE_NUMBER, DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
+        User user2 = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, "email", DUMMY_USER_ID, DUMMY_PHONE_NUMBER, DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
+
+        assertEquals(user1.equals(user2), false);
+    }
+
+    @Test
+    public void userEqualDifferentUser4(){
+        User user1 = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID, DUMMY_PHONE_NUMBER, DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
+        User user2 = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, "2", DUMMY_PHONE_NUMBER, DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
+
+        assertEquals(user1.equals(user2), false);
+    }
+
+    @Test
+    public void userEqualDifferentUser5(){
+        User user1 = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID, DUMMY_PHONE_NUMBER, DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
+        User user2 = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID, "+41123456780", DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
+
+        assertEquals(user1.equals(user2), false);
+    }
+
+    @Test
+    public void userEqualDifferentUser6(){
+        User user1 = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID, DUMMY_PHONE_NUMBER, DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
+        User user2 = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID, DUMMY_PHONE_NUMBER, "2345", DUMMY_DESCRIPTION);
+
+        assertEquals(user1.equals(user2), false);
+    }
+
+    @Test
+    public void userEqualDifferentUser7(){
+        User user1 = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID, DUMMY_PHONE_NUMBER, DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
+        User user2 = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID, DUMMY_PHONE_NUMBER, DUMMY_IMAGE_ID, "BlaBla");
+
+        assertEquals(user1.equals(user2), false);
+    }
+
+    @Test
+    public void userEqualNull(){
+        User user1 = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID, DUMMY_PHONE_NUMBER, DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
+        assertEquals(user1.equals(null), false);
+    }
+
+    @Test
+    public void userEqualSame(){
+        User user1 = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID, DUMMY_PHONE_NUMBER, DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
+        assertEquals(user1.equals(user1), true);
+    }
+
+    @Test
+    public void userEqualDiffClass(){
+        User user1 = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID, DUMMY_PHONE_NUMBER, DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
+        assertEquals(user1.equals(1), false);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void userConstructorFailsMissingFirstName(){
+        User user = new User(null, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID, "1234", DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void userConstructorFailsMissingLastName(){
+        User user = new User(DUMMY_FIRST_NAME, null, DUMMY_EMAIL, DUMMY_USER_ID, "1234", DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void userConstructorFailsMissingEmail(){
+        User user = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, null, DUMMY_USER_ID, "1234", DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void userConstructorFailsMissingID(){
+        User user = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, null, "1234", DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void userConstructorFailsMissingPhone(){
+        User user = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID, null, DUMMY_IMAGE_ID, DUMMY_DESCRIPTION);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void userConstructorFailsMissingImage(){
+        User user = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID, "1234", null, DUMMY_DESCRIPTION);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void userConstructorFailsMissingDescription(){
+        User user = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID, "1234", DUMMY_IMAGE_ID, null);
+    }
+
 
 
 

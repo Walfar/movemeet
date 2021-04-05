@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.chat.ChatActivity;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -37,9 +38,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         createDescriptionView();
         createDateView();
         createAddressView();
-        createSport();
-        createDuration();
-        createOrganisator();
+        createSportView();
+        createDurationView();
+        createOrganisatorView();
     }
 
     private void createTitleView() {
@@ -73,21 +74,21 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
-    private void createSport(){
+    private void createSportView(){
         TextView sportView = (TextView) findViewById(R.id.activity_sport_description);
         if(act != null){
             sportView.setText(act.getSport().toString());
         }
     }
 
-    private void createDuration(){
+    private void createDurationView(){
         TextView durationView = (TextView) findViewById(R.id.activity_duration_description);
         if(act != null){
-            durationView.setText((int) act.getDuration());
+            durationView.setText(String.valueOf((int) act.getDuration()));
         }
     }
 
-    private void createOrganisator(){
+    private void createOrganisatorView(){
         TextView organisatorView = (TextView) findViewById(R.id.activity_organisator_description);
         if(act != null){
             organisatorView.setText(act.getOrganizerId());
@@ -111,9 +112,13 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 act.addParticipantId(userId);
                 createParticipantNumberView();}
             catch(Exception e){
-                Toast.makeText(ActivityDescriptionActivity.this, "Already Register", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActivityDescriptionActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public void goToChat(View view) {
+        startActivity(new Intent(getApplicationContext(), ChatActivity.class));
     }
 
 }
