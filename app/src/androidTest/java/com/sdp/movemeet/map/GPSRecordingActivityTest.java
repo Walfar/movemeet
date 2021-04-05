@@ -122,7 +122,7 @@ public class GPSRecordingActivityTest {
 
             ((GPSRecordingActivity) activity).locationCallback = new LocationCallback() {
                 @Override
-                public void onLocationResult(@NonNull LocationResult locationResult) {
+                public void onLocationResult(LocationResult locationResult) {
                     ((GPSRecordingActivity) activity).updatePath(fakeLocation);
                 }
             };
@@ -133,9 +133,6 @@ public class GPSRecordingActivityTest {
 
     @Test
     public void checkPathGetsRecorded() {
-
-        Boolean success = device.wait(Until.hasObject(By.desc(GPSRecordingActivity.MAP_READY_DESC)), 60_000);
-        assertNotNull("Map was not readied in time", success);
 
         onView(withId(R.id.gmap_recording)).check(matches(isDisplayed()));
 
@@ -167,7 +164,7 @@ public class GPSRecordingActivityTest {
     @After
     public void teardown() {
         scenario.onActivity(activity -> {
-            ((GPSRecordingActivity) activity).fusedLocationClient.setMockMode(false);
+            ((GPSRecordingActivity) activity).stopLocationUpdates();
         });
     }
 
