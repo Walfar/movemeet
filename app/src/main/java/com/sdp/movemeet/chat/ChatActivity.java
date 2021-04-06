@@ -156,6 +156,7 @@ public class ChatActivity extends AppCompatActivity {
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
+                Navigation.goToHome(this.navigationView);
                 break;
             case R.id.nav_edit_profile:
                 Navigation.goToUserProfileActivity(this.navigationView);
@@ -173,7 +174,6 @@ public class ChatActivity extends AppCompatActivity {
                 Navigation.startActivity(this.navigationView);
                 break;
             case R.id.nav_chat:
-                Navigation.goToChat(this.navigationView);
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START); return true;
