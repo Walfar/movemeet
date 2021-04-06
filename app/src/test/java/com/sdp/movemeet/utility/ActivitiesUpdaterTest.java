@@ -26,12 +26,9 @@ import static org.junit.Assert.assertNotEquals;
 public class ActivitiesUpdaterTest {
 
     @Test
-    public void singletonConstructorReturnsInstanceOrCreates() {
-        ActivitiesUpdater.instance = null;
+    public void instanceIsNeverNull() {
         ActivitiesUpdater instance = ActivitiesUpdater.getInstance();
-        assertNotEquals(null, instance);
-        assertEquals(instance, ActivitiesUpdater.getInstance());
-
+        assertNotNull(instance);
     }
 
     @Test

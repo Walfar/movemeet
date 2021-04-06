@@ -34,7 +34,7 @@ public class ActivitiesUpdater {
     public static final int MAX_NUMBER_ACTIVITIES_TO_DISPLAY = 10;
 
     @VisibleForTesting
-    protected static ActivitiesUpdater instance;
+    private static ActivitiesUpdater instance;
 
     private ActivitiesUpdater() {
         activities = new ArrayList<>();
@@ -43,10 +43,10 @@ public class ActivitiesUpdater {
     }
 
     public static ActivitiesUpdater getInstance() {
-        if (ActivitiesUpdater.instance == null) {
-            ActivitiesUpdater.instance = new ActivitiesUpdater();
+        if (instance == null) {
+            instance = new ActivitiesUpdater();
         }
-        return ActivitiesUpdater.instance;
+        return instance;
     }
 
     public ArrayList<Activity> getActivities() {
