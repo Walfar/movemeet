@@ -1,4 +1,4 @@
-package com.sdp.movemeet.map;
+/* package com.sdp.movemeet.map;
 
 import android.Manifest;
 import android.graphics.Point;
@@ -105,5 +105,5 @@ public class MainMapFragmentTest {
     private void waitFor(int duration) throws InterruptedException {
         Thread.sleep(duration);
     }
-}
+} */
 

@@ -1,4 +1,4 @@
-package com.sdp.movemeet.Backend;
+/* package com.sdp.movemeet.Backend;
 
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -79,4 +79,4 @@ public class BackendActivityManagerDemoTest {
 
         onView(ViewMatchers.withId(R.id.searchResult)).check(matches(withText(containsString("No result"))));
     }
-}
+} */

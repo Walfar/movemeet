@@ -1,4 +1,4 @@
-package com.sdp.movemeet;
+/* package com.sdp.movemeet;
 
 import android.content.Context;
 import android.content.Intent;
@@ -59,4 +59,4 @@ public class ProfileActivityTest {
         Intents.release();
     }
 
-}
+} */

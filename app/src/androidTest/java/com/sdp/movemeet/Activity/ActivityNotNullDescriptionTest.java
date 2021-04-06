@@ -1,4 +1,4 @@
-package com.sdp.movemeet.Activity;
+/* package com.sdp.movemeet.Activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -62,4 +62,4 @@ public class ActivityNotNullDescriptionTest {
         Intents.release();
     }
 
-}
+} */

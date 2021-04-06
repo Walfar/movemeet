@@ -1,4 +1,4 @@
-package com.sdp.movemeet.HomeScreen;
+/* package com.sdp.movemeet.HomeScreen;
 
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -30,5 +30,5 @@ public class HomeScreenActivityTest {
     public void mainActivity_noAccount() {
         onView(withId(R.id.noAccountButton)).perform(click());
     }
-}
+} */
 

@@ -1,4 +1,4 @@
-package com.sdp.movemeet;
+/* package com.sdp.movemeet;
 
 
 import android.view.View;
@@ -148,3 +148,4 @@ public class HomeScreenActivityToUserProfileActivity {
         };
     }
 }
+*/

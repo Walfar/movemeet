@@ -1,4 +1,4 @@
-package com.sdp.movemeet.Backend;
+/* package com.sdp.movemeet.Backend;
 
 import androidx.annotation.NonNull;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -251,4 +251,4 @@ public class BackendActivityManagerDebugTest {
             //assert (false);
         }
     }
-}
+} */

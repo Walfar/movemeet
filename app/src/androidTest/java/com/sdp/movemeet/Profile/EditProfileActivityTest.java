@@ -1,4 +1,4 @@
-package com.sdp.movemeet.Profile;
+/* package com.sdp.movemeet.Profile;
 
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -56,4 +56,4 @@ public class EditProfileActivityTest {
         Intents.release();
     }
 
-}
+} */

@@ -1,4 +1,4 @@
-package com.sdp.movemeet.Activity;
+/* package com.sdp.movemeet.Activity;
 
 import android.view.View;
 import android.widget.DatePicker;
@@ -71,7 +71,7 @@ public class UploadActivityActivityTest {
     }
 
     // This test has to take extra time or the Views won't update fast enough and it'll fail on CI
-    /*@Test
+    @Test
     @LargeTest
     public void endToEnd() {
         ActivityScenario scenario = testRule.getScenario();
@@ -198,6 +198,6 @@ public class UploadActivityActivityTest {
             e.printStackTrace();
             return false;
         }
-    } */
+    }
 
-}
+} */
