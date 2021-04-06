@@ -127,10 +127,10 @@ public class UploadActivityActivity extends AppCompatActivity {
 
         handleRegisterUser();
 
-        if (fAuth.getCurrentUser() == null) {
+        /*if (fAuth.getCurrentUser() == null) {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
-        }
+        }*/
 
     }
 

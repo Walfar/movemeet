@@ -78,16 +78,18 @@ public class UploadActivityActivityTest {
     public void endToEnd() {
         ActivityScenario scenario = testRule.getScenario();
         CountDownLatch latch = new CountDownLatch(1);
+
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
         try{
-            Thread.sleep(500);
+            Thread.sleep(1000);
         }catch(Exception e){}
 
         mAuth.signInWithEmailAndPassword("movemeet@gmail.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
+                    sleep(500);
                     latch.countDown();
                 } else {
                     assert (false);
@@ -102,7 +104,7 @@ public class UploadActivityActivityTest {
         }
 
         try{
-            Thread.sleep(2000);
+            Thread.sleep(1000);
         }catch(Exception e){}
 
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
