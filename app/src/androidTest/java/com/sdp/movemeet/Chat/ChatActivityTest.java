@@ -1,10 +1,15 @@
 package com.sdp.movemeet.Chat;
 
 
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.contrib.DrawerActions;
+import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
@@ -32,8 +37,13 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
+import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -54,7 +64,7 @@ public class ChatActivityTest {
 
         onView(withId(R.id.edit_text_password)).perform(replaceText("234567"), closeSoftKeyboard());
 
-        onView(withId(R.id.button_login)).perform(click());
+        onView(withId(R.id.button_login)).perform(forceDoubleClick());
 
         try {
             Thread.sleep(1500);
@@ -62,9 +72,23 @@ public class ChatActivityTest {
             assert (false);
         }
 
-        onView(withId(R.id.button2)).perform(click());
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+        // Open Drawer to click on navigation.
+        onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
+        try{
+            Thread.sleep(500);
+        }catch(Exception e){}
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_chat));
 
-        onView(withId(R.id.activityChatDescription)).perform(click());
+        try{
+            Thread.sleep(500);
+        }catch(Exception e){}
+
+        //onView(withId(R.id.activityChatDescription)).perform(click());
         //onView(withId(R.id.activityChatDescription)).perform(scrollTo()).perform(click());
 
         try {
@@ -148,4 +172,21 @@ public class ChatActivityTest {
         };
     }
 
+    public static ViewAction forceDoubleClick() {
+        return new ViewAction() {
+            @Override public Matcher<View> getConstraints() {
+                return allOf(isClickable(), isEnabled(), isDisplayed());
+            }
+
+            @Override public String getDescription() {
+                return "force click";
+            }
+
+            @Override public void perform(UiController uiController, View view) {
+                view.performClick(); // perform click without checking view coordinates.
+                view.performClick();
+                uiController.loopMainThreadUntilIdle();
+            }
+        };
+    }
 }

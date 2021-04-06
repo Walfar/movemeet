@@ -18,7 +18,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.movemeet">
+        android:theme="@style/Theme.movemeet.noActionBar">
+
         <activity android:name=".map.GPSRecordingActivity"></activity>
         <activity
             android:name=".EditProfileActivity"
@@ -41,13 +42,18 @@
             android:name=".chat.ChatActivity"
             android:label="@string/title_activity_chat" />
 
+
         <activity
             android:name=".map.MapsActivity"
             android:label="@string/title_activity_maps"
-            android:parentActivityName=".HomeScreenActivity">
+            android:parentActivityName=".HomeScreenActivity"
+            android:theme="@style/Theme.movemeet">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sdp.movemeet.HomeScreenActivity" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".HomeScreenActivity"
@@ -55,15 +61,14 @@
             android:theme="@style/Theme.movemeet.noActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Backend.BackendActivityManagerDemo" />
-        <activity android:name=".Backend.BackendActivityManagerDebug" />
+
         <activity
             android:name=".RegisterActivity"
-            android:parentActivityName=".HomeScreenActivity">
+            android:parentActivityName=".HomeScreenActivity"
+            android:theme="@style/Theme.movemeet">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sdp.movemeet.HomeScreenActivity" />
@@ -71,7 +76,8 @@
         <activity android:name=".MainActivity" />
         <activity
             android:name=".LoginActivity"
-            android:parentActivityName=".HomeScreenActivity">
+            android:parentActivityName=".HomeScreenActivity"
+            android:theme="@style/Theme.movemeet">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sdp.movemeet.HomeScreenActivity" />

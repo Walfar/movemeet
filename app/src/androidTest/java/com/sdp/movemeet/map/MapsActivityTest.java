@@ -44,7 +44,6 @@ public class MapsActivityTest {
     @Rule
     public ActivityScenarioRule<MapsActivity> testRule = new ActivityScenarioRule<>(MapsActivity.class);
 
-
     @Test
     public void mapsActivity_testLocation(){
         Location newLocation = new Location("flp");
