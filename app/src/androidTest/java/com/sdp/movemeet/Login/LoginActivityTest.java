@@ -40,12 +40,6 @@ public class LoginActivityTest {
 
     public static final String Email = "movemeet@gmail.com";
     public static final String Password = "password";
-    //mPassword = findViewById(R.id.edit_text_password);
-    //progressBar = findViewById(R.id.progressBar);
-    //fAuth = FirebaseAuth.getInstance();
-    //mLoginBtn = findViewById(R.id.button_login);
-    //mCreateBtn = findViewById(R.id.text_view_create_account);
-    //mLoginBtn.setOnClickListener(new View.OnClickListener()
 
     @Rule
     public ActivityScenarioRule<LoginActivity> LoginTestRule = new ActivityScenarioRule<>(LoginActivity.class);
