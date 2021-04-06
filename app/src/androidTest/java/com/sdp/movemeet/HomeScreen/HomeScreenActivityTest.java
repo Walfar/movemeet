@@ -31,9 +31,9 @@ public class HomeScreenActivityTest {
         onView(withId(R.id.signInButton)).perform(click());
     }
 
-    /*@Test
+    @Test
     public void mainActivity_noAccount() {
         onView(withId(R.id.noAccountButton)).perform(click());
-    }*/
+    }
 }
 
