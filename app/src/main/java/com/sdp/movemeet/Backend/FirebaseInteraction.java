@@ -3,6 +3,7 @@ package com.sdp.movemeet.Backend;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,7 +60,7 @@ public class FirebaseInteraction {
 
         return edited;
     }
-
+  
     public static void checkIfUserSignedIn(FirebaseAuth fAuth, Activity activity) {
         FirebaseUser user = fAuth.getCurrentUser();
         if (user == null) {

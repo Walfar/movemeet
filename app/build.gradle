@@ -51,6 +51,10 @@ dependencies {
     // Declare the dependency for the Cloud Storage library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-storage'
+    // Declare the dependency for the Firebase Realtime Database library
+    implementation 'com.google.firebase:firebase-database'
+    // Firebase UI Library
+    implementation 'com.firebaseui:firebase-ui-database:7.1.1'
     // Picasso is a library used to display an image from its URI (cf.: https://github.com/square/picasso)
     implementation 'com.squareup.picasso:picasso:2.71828'
 
