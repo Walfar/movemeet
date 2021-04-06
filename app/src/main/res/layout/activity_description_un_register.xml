@@ -6,7 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
+    <ScrollView
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16sp"
+        android:scrollbarSize="25sp">
     <ImageView
         android:id="@+id/activity_image_decription_un_register"
         android:layout_width="150dp"
@@ -87,5 +92,6 @@
         android:text="Register"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_description_description_un_register" />
+</ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

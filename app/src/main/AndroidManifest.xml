@@ -45,6 +45,10 @@
 
 
         <activity
+            android:name=".chat.ChatActivity"
+            android:label="@string/title_activity_chat" />
+
+        <activity
             android:name=".map.MapsActivity"
             android:label="@string/title_activity_maps"
             android:parentActivityName=".HomeScreenActivity"

@@ -43,4 +43,5 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
 
 
 
+<<<<<<< HEAD
 }
