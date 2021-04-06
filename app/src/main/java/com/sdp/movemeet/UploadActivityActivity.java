@@ -283,7 +283,7 @@ public class UploadActivityActivity extends AppCompatActivity {
         String organizerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Activity activity = new Activity(
                 organizerId + " || " +  date, organizerId, title, nParticipants,
-                new ArrayList<String>(), longitude, latitude, description, date, duration,
+                new ArrayList<String>(nParticipants), longitude, latitude, description, date, duration,
                 sport, address
         );
 
