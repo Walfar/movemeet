@@ -46,7 +46,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
     public static final int REQUEST_CODE = 101;
 
-    private List<Activity> activities;
+    private ArrayList<Activity> activities;
 
     private FirebaseAuth fAuth = FirebaseAuth.getInstance();
     private FirebaseUser user;
@@ -74,7 +74,6 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         fetchLastLocation();
 
         ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
-        updater.updateListActivities();
         activities = updater.getActivities();
 
         user = fAuth.getCurrentUser();

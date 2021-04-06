@@ -15,7 +15,7 @@ public class MapsActivity extends AppCompatActivity {
 
         MainMapFragment mapsFragment = (MainMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map);
         if (mapsFragment == null) {
-            mapsFragment = mapsFragment.newInstance();
+            mapsFragment = MainMapFragment.newInstance();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().add(R.id.activity_maps, mapsFragment).commit();
         }

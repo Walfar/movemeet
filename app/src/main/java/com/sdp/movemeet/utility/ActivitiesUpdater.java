@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.common.util.VisibleForTesting;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -15,7 +16,9 @@ import com.sdp.movemeet.Backend.BackendActivityManager;
 import com.sdp.movemeet.Sport;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import static com.sdp.movemeet.Backend.BackendActivityManager.ACTIVITIES_COLLECTION;
 import static com.sdp.movemeet.Sport.Running;
@@ -30,7 +33,8 @@ public class ActivitiesUpdater {
 
     public static final int MAX_NUMBER_ACTIVITIES_TO_DISPLAY = 10;
 
-    private static ActivitiesUpdater instance;
+    @VisibleForTesting
+    protected static ActivitiesUpdater instance;
 
     private ActivitiesUpdater() {
         activities = new ArrayList<>();
@@ -46,6 +50,7 @@ public class ActivitiesUpdater {
     }
 
     public ArrayList<Activity> getActivities() {
+        updateListActivities();
         return activities;
     }
 

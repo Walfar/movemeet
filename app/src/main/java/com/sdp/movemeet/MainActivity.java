@@ -13,6 +13,7 @@ import com.sdp.movemeet.Activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.Backend.BackendActivityManagerDemo;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
 import com.sdp.movemeet.map.MapsActivity;
+import com.sdp.movemeet.utility.ActivitiesUpdater;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
         phone = findViewById(R.id.text_view_profile_phone);
         fullName = findViewById(R.id.text_view_profile_name);
         email = findViewById(R.id.text_view_profile_email);
+
+        ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
+        updater.updateListActivities();
 
         handleRegisterUser();
 
