@@ -33,7 +33,6 @@ public class ActivitiesUpdater {
 
     public static final int MAX_NUMBER_ACTIVITIES_TO_DISPLAY = 10;
 
-    @VisibleForTesting
     private static ActivitiesUpdater instance;
 
     private ActivitiesUpdater() {
