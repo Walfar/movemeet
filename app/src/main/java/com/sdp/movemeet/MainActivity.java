@@ -115,12 +115,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void logout(View view) {
-
-        if (fAuth.getCurrentUser() != null) {
-            fAuth.getInstance().signOut(); // this will do the logout of the user from Firebase
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        }
         FirebaseInteraction.logoutIfUserNull(fAuth, MainActivity.this);
     }
 

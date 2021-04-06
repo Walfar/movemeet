@@ -11,5 +11,4 @@
     <string name="toast">Logged in successfully.</string>
     <string name="navigation_drawer_close">true</string>
     <string name="navigation_drawer_open">true</string>
-    <string name="title_activity_chat">Chat</string>
 </resources>

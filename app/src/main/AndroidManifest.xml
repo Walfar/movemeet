@@ -19,12 +19,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.movemeet.noActionBar">
-        <!--android:theme="@style/Theme.movemeet"-->
 
+        <activity android:name=".map.GPSRecordingActivity"></activity>
         <activity
             android:name=".EditProfileActivity"
-            android:windowSoftInputMode="adjustPan" >
-        </activity>
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name=".ProfileActivity" />
         <activity android:name=".UploadActivityActivity" />
         <!--
@@ -43,10 +42,6 @@
             android:name=".chat.ChatActivity"
             android:label="@string/title_activity_chat" />
 
-
-        <activity
-            android:name=".chat.ChatActivity"
-            android:label="@string/title_activity_chat" />
 
         <activity
             android:name=".map.MapsActivity"
@@ -79,7 +74,6 @@
                 android:value="com.sdp.movemeet.HomeScreenActivity" />
         </activity>
         <activity android:name=".MainActivity" />
-
         <activity
             android:name=".LoginActivity"
             android:parentActivityName=".HomeScreenActivity"

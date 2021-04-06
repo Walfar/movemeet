@@ -60,7 +60,7 @@ public class FirebaseInteraction {
 
         return edited;
     }
-  
+
     public static void checkIfUserSignedIn(FirebaseAuth fAuth, Activity activity) {
         FirebaseUser user = fAuth.getCurrentUser();
         if (user == null) {
