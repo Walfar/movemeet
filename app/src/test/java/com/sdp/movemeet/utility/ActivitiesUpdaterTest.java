@@ -1,6 +1,7 @@
 package com.sdp.movemeet.utility;
 
 
+import android.view.FocusFinder;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.sdp.movemeet.Backend.BackendActivityManager;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.Sport;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -26,27 +28,26 @@ import static org.junit.Assert.assertNotNull;
 
 public class ActivitiesUpdaterTest {
 
+    public static FirebaseFirestore db;
+    public static ActivitiesUpdater updater;
+    public static BackendActivityManager bam;
+
+    @Before
+    public void setUp() {
+        db = FirebaseFirestore.getInstance();
+        updater = ActivitiesUpdater.getInstance();
+        bam = new BackendActivityManager(db, "activities");
+    }
+
 
     @Test
     public void instanceIsNeverNull() {
-        try {
-            ActivitiesUpdater instance = ActivitiesUpdater.getInstance();
-            assertNotNull(instance);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        assertNotNull(updater);
     }
 
     @Test
     public void activitiesUpdatesOnAdd() {
-        try {
-            ActivitiesUpdater instance = ActivitiesUpdater.getInstance();
-            assertNotNull(instance);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        BackendActivityManager bam = new BackendActivityManager(db, "activities");
+
         Activity act = new Activity("activity",
                 "me",
                 "title",
@@ -64,6 +65,19 @@ public class ActivitiesUpdaterTest {
                 new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        List<Activity> activities = updater.getActivities();
+                        Activity act_in_collection = activities.get(activities.size()-1);
+                        assertEquals(act.getActivityId(), act_in_collection.getActivityId());
+                        assertEquals(act.getAddress(), act_in_collection.getAddress());
+                        assertEquals(act.getDate(), act_in_collection.getDate());
+                        assertEquals(act.getDescription(), act_in_collection.getDescription());
+                        //assertEquals(act.getLatitude(), act_in_collection.getLatitude());
+                        //assertEquals(act.getLongitude(), act_in_collection.getLongitude());
+                        assertEquals(act.getNumberParticipant(), act_in_collection.getNumberParticipant());
+                        assertEquals(act.getParticipantId(), act_in_collection.getParticipantId());
+                        assertEquals(act.getTitle(), act_in_collection.getTitle());
+                        assertEquals(act.getOrganizerId(), act_in_collection.getOrganizerId());
+                        assertEquals(act.getSport(), act_in_collection.getSport());
                     }
                 },
                 new OnFailureListener() {
@@ -71,19 +85,7 @@ public class ActivitiesUpdaterTest {
                     public void onFailure(@NonNull Exception e) {
                     }
                 });
-      /*  List<Activity> activities = instance.getActivities();
-        Activity act_in_collection = activities.get(activities.size()-1);
-        assertEquals(act.getActivityId(), act_in_collection.getActivityId());
-        assertEquals(act.getAddress(), act_in_collection.getAddress());
-        assertEquals(act.getDate(), act_in_collection.getDate());
-        assertEquals(act.getDescription(), act_in_collection.getDescription());
-        //assertEquals(act.getLatitude(), act_in_collection.getLatitude());
-        //assertEquals(act.getLongitude(), act_in_collection.getLongitude());
-        assertEquals(act.getNumberParticipant(), act_in_collection.getNumberParticipant());
-        assertEquals(act.getParticipantId(), act_in_collection.getParticipantId());
-        assertEquals(act.getTitle(), act_in_collection.getTitle());
-        assertEquals(act.getOrganizerId(), act_in_collection.getOrganizerId());
-        assertEquals(act.getSport(), act_in_collection.getSport()); */
+
     }
 
 }
