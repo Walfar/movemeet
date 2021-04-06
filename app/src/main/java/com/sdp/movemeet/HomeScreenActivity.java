@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+
+import com.sdp.movemeet.map.GPSRecordingActivity;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -16,6 +19,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Backend.BackendActivityManager;
+
 import com.sdp.movemeet.map.MapsActivity;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
 
@@ -44,5 +48,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
+    public void RecordRun(View v) {
+        startActivity(new Intent(getApplicationContext(), GPSRecordingActivity.class)); // Redirect the user to the GPS recording activity
+    }
 }

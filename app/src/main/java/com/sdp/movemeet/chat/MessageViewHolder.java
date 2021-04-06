@@ -40,7 +40,5 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         messageTimeTextView.setVisibility(TextView.VISIBLE);
     }
 
-
-
-
 }
+
