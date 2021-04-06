@@ -39,10 +39,6 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/nav_firebase_debug"
-                    android:title="Firebase"
-                    android:icon="@drawable/block"></item>
-                <item
                     android:id="@+id/nav_edit_profile"
                     android:title="Edit Profile"
                     android:icon="@drawable/settings"></item>

@@ -30,7 +30,7 @@ public class FirebaseInteraction {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (documentSnapshot == null){
-                    return;
+                    //nothing
                 } else if (textViewArray.length == 4) {
                     textViewArray[0].setText(documentSnapshot.getString("fullName"));
                     textViewArray[1].setText(documentSnapshot.getString("email"));

@@ -61,8 +61,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Backend.BackendActivityManagerDemo" />
-        <activity android:name=".Backend.BackendActivityManagerDebug" />
 
         <activity
             android:name=".RegisterActivity"

@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.sdp.movemeet.Backend.BackendActivityManagerDemo;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
 import com.sdp.movemeet.LoginActivity;
 import com.sdp.movemeet.Navigation.Navigation;
@@ -116,9 +115,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 break;
             case R.id.nav_map:
                 Navigation.goToMaps(this.navigationView);
-                break;
-            case R.id.nav_firebase_debug:
-                Navigation.goToFirebaseDebug(this.navigationView);
                 break;
             case R.id.nav_start_activity:
                 break;

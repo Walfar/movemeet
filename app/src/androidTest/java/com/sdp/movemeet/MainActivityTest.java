@@ -88,12 +88,6 @@ public class MainActivityTest {
     }
 
     @Test
-    public void mainActivityToFirebaseDebug() {
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_firebase_debug));
-        logout();
-    }
-
-    @Test
     public void mainActivityToActivityUpload() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_add_activity));
         logout();
@@ -102,6 +96,23 @@ public class MainActivityTest {
     @Test
     public void mainActivityToStartActivity() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_start_activity));
+        logout();
+    }
+
+    @Test
+    public void mainActivityGotoHome() {
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_start_activity));
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+        // Open Drawer to click on navigation.
+        onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
+        try{
+            Thread.sleep(500);
+        }catch(Exception e){}
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_home));
         logout();
     }
 

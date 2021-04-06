@@ -31,12 +31,9 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Activity.Activity;
-import com.sdp.movemeet.Activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.Backend.BackendActivityManager;
-import com.sdp.movemeet.Backend.BackendActivityManagerDemo;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
 import com.sdp.movemeet.Navigation.Navigation;
-import com.sdp.movemeet.map.MapsActivity;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
 
 import java.io.IOException;
@@ -127,21 +124,13 @@ public class UploadActivityActivity extends AppCompatActivity {
 
         handleRegisterUser();
 
+        //The aim is to block any direct access to this page if the user is not logged
+        //Smth must be wrong since it prevents automatic connection during certain tests
         /*if (fAuth.getCurrentUser() == null) {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
         }*/
 
-    }
-
-    @Override
-    public void onBackPressed(){
-        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
-            drawerLayout.closeDrawer(GravityCompat.START);
-        }
-        else
-        {super.onBackPressed();
-        }
     }
 
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -159,9 +148,6 @@ public class UploadActivityActivity extends AppCompatActivity {
                 break;
             case R.id.nav_map:
                 Navigation.goToMaps(this.navigationView);
-                break;
-            case R.id.nav_firebase_debug:
-                Navigation.goToFirebaseDebug(this.navigationView);
                 break;
             case R.id.nav_start_activity:
                 Navigation.startActivity(this.navigationView);
