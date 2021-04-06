@@ -106,7 +106,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     private void onSuccess(Location location) {
         if (location != null) {
             currentLocation = location;
-            Toast.makeText(supportMapFragment.getActivity(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(supportMapFragment.getActivity(), currentLocation.getLatitude() + ", " + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
             supportMapFragment.getMapAsync(MainMapFragment.this);
         }
     }

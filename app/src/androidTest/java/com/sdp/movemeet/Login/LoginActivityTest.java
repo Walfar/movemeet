@@ -1,4 +1,4 @@
-/* package com.sdp.movemeet.Login;
+package com.sdp.movemeet.Login;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
@@ -91,4 +91,4 @@ public class LoginActivityTest {
     }
 
 
-} */
+}

@@ -1,4 +1,4 @@
-/* package com.sdp.movemeet;
+package com.sdp.movemeet;
 
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -82,4 +82,4 @@ public class MainActivityTest {
         Intents.release();
     }
 
-} */
+}

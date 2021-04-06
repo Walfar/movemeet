@@ -1,4 +1,4 @@
-/*package com.sdp.movemeet;
+package com.sdp.movemeet;
 
 import android.content.Context;
 
@@ -21,4 +21,4 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.sdp.movemeet", appContext.getPackageName());
     }
-} */
+}

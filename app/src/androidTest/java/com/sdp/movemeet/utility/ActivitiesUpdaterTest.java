@@ -10,7 +10,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Backend.BackendActivityManager;
-import com.sdp.movemeet.Backend.BackendActivityManagerDebug;
 import com.sdp.movemeet.Sport;
 
 import org.junit.Before;
