@@ -18,13 +18,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.19" />
+        app:layout_constraintVertical_bias="0.24000001" />
 
     <TextView
         android:id="@+id/subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:text="@string/subtitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,8 +32,8 @@
 
     <ImageView
         android:id="@+id/manRunning"
-        android:layout_width="120dp"
-        android:layout_height="180dp"
+        android:layout_width="80dp"
+        android:layout_height="120dp"
         android:layout_marginStart="40dp"
         android:contentDescription="@string/homeScreenImageDescription"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -42,8 +42,8 @@
 
     <ImageView
         android:id="@+id/womanRunning"
-        android:layout_width="120dp"
-        android:layout_height="180dp"
+        android:layout_width="80dp"
+        android:layout_height="120dp"
         android:layout_marginEnd="160dp"
         android:contentDescription="@string/homeScreenImageDescription"
         app:layout_constraintBottom_toBottomOf="parent"

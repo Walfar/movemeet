@@ -10,6 +10,7 @@ import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.DrawerActions;
+import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -23,12 +24,16 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.intent.Intents.intended;
@@ -39,6 +44,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 
 @RunWith(AndroidJUnit4.class)
 
@@ -50,77 +57,23 @@ public class MainActivityTest {
     @Rule
     public ActivityScenarioRule<HomeScreenActivity> testRule = new ActivityScenarioRule<>(HomeScreenActivity.class);
 
-    @Test
-    public void truc(){
-
-    }
-    /*@Before
+    @Before
     public void signIn(){
-        ViewInteraction materialButton = onView(
-                allOf(withId(R.id.signInButton), withText("Sign In"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                4),
-                        isDisplayed()));
-        materialButton.perform(click());
-
-        ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.edit_text_email),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
-        appCompatEditText.perform(replaceText("antho2@gmail.com"), closeSoftKeyboard());
-
-        ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.edit_text_password),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        appCompatEditText2.perform(replaceText("234567"), closeSoftKeyboard());
-
-        ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.edit_text_password), withText("234567"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        appCompatEditText3.perform(pressImeActionButton());
-
-        ViewInteraction materialButton2 = onView(
-                allOf(withId(R.id.button_login), withText("Login"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                4),
-                        isDisplayed()));
-        materialButton2.perform(click());
-
+        onView(withId(R.id.signInButton)).perform(click());
+        onView(withId(R.id.edit_text_email)).perform(replaceText("antho2@gmail.com"), closeSoftKeyboard());
+        onView(withId(R.id.edit_text_password)).perform(replaceText("234567"), closeSoftKeyboard());
+        onView(withId(R.id.button_login)).perform(click());
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             assert (false);
         }
-
         // Open Drawer to click on navigation.
-        onView(withId(R.id.drawer_layout))
-                .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-                .perform(DrawerActions.open()); // Open Drawer
-
+        onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
         try{
-            Thread.sleep(2000);
+            Thread.sleep(1000);
         }catch(Exception e){}
-    }*/
+    }
 
     /*@Test
     public void mainActivity_goToMaps() {
@@ -128,39 +81,39 @@ public class MainActivityTest {
         logout();
     }*/
 
-    /*@Test
+    @Test
     public void mainActivityToProfileActivity() {
-        onView(withId(R.id.nav_edit_profile)).perform(click());
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_edit_profile));
         logout();
     }
 
     @Test
     public void mainActivityToFirebaseDebug() {
-        onView(withId(R.id.nav_firebase_debug)).perform(click());
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_firebase_debug));
         logout();
     }
 
     @Test
     public void mainActivityToActivityUpload() {
-        onView(withId(R.id.nav_add_activity)).perform(click());
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_add_activity));
         logout();
     }
 
     @Test
     public void mainActivityToStartActivity() {
-        onView(withId(R.id.nav_start_activity)).perform(click());
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_start_activity));
         logout();
     }
 
     @Test
     public void mainActivity_logout() {
-        onView(withId(R.id.nav_logout)).perform(forceClick());
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
     }
 
     public void logout() {
 
         try {
-            Thread.sleep(5000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             assert (false);
         }
@@ -174,43 +127,6 @@ public class MainActivityTest {
             Thread.sleep(500);
         }catch(Exception e){}
 
-        onView(withId(R.id.nav_logout)).perform(forceClick());
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
     }
-
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
-
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
-    }
-
-    public static ViewAction forceClick() {
-        return new ViewAction() {
-            @Override public Matcher<View> getConstraints() {
-                return allOf(isClickable(), isEnabled(), isDisplayed());
-            }
-
-            @Override public String getDescription() {
-                return "force click";
-            }
-
-            @Override public void perform(UiController uiController, View view) {
-                view.performClick(); // perform click without checking view coordinates.
-                uiController.loopMainThreadUntilIdle();
-            }
-        };
-    }*/
-
 }
