@@ -139,6 +139,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             case R.id.nav_start_activity:
                 Navigation.startActivity(this.navigationView);
                 break;
+            case R.id.nav_chat:
+                Navigation.goToChat(this.navigationView);
+                break;
         }
         drawerLayout.closeDrawer(GravityCompat.START); return true;
     }

@@ -118,6 +118,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 break;
             case R.id.nav_start_activity:
                 break;
+            case R.id.nav_chat:
+                Navigation.goToChat(this.navigationView);
+                break;
         }
         drawerLayout.closeDrawer(GravityCompat.START); return true;
     }
