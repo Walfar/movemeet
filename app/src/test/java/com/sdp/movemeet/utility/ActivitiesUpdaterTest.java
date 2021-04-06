@@ -26,17 +26,15 @@ import static org.junit.Assert.assertNotNull;
 
 public class ActivitiesUpdaterTest {
 
+    private ActivitiesUpdater instance = ActivitiesUpdater.getInstance();
+
     @Test
     public void instanceIsNeverNull() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-       /* ActivitiesUpdater instance = ActivitiesUpdater.getInstance();
-        assertNotNull(instance); */
+        assertNotNull(instance);
     }
 
     @Test
     public void activitiesUpdatesOnAdd() {
-        ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         BackendActivityManager bam = new BackendActivityManager(db, "activities");
         Activity act = new Activity("activity",
@@ -63,7 +61,7 @@ public class ActivitiesUpdaterTest {
                     public void onFailure(@NonNull Exception e) {
                     }
                 });
-        List<Activity> activities = updater.getActivities();
+        List<Activity> activities = instance.getActivities();
         Activity act_in_collection = activities.get(activities.size()-1);
         assertEquals(act.getActivityId(), act_in_collection.getActivityId());
         assertEquals(act.getAddress(), act_in_collection.getAddress());
