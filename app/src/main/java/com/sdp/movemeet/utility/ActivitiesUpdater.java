@@ -35,7 +35,7 @@ public class ActivitiesUpdater {
 
     private static ActivitiesUpdater instance;
 
-    public ActivitiesUpdater() {
+    private ActivitiesUpdater() {
         activities = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
         bam = new BackendActivityManager(db, ACTIVITIES_COLLECTION);
