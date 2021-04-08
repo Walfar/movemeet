@@ -11,16 +11,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import com.sdp.movemeet.map.GPSRecordingActivity;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.sdp.movemeet.Activity.Activity;
-import com.sdp.movemeet.Backend.BackendActivityManager;
-
-import com.sdp.movemeet.map.MapsActivity;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
 
 public class HomeScreenActivity extends AppCompatActivity {
@@ -36,13 +26,13 @@ public class HomeScreenActivity extends AppCompatActivity {
         updater.updateListActivities();
     }
 
-    public void signIn(View v) {
+    public void logIn(View v) {
         if (user != null) startActivity(new Intent(this, MainActivity.class));
         else startActivity(new Intent(this, LoginActivity.class)); // redirecting the user to the "Login" activity
     }
 
     public void noAccount(View v) {
-        startActivity(new Intent(this, MapsActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     public void RecordRun(View v) {

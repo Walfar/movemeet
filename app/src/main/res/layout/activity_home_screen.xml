@@ -54,7 +54,7 @@
         android:id="@+id/signInButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="signIn"
+        android:onClick="logIn"
         android:text="@string/signInButton"
         android:backgroundTint="@color/red"
         app:layout_constraintBottom_toBottomOf="parent"

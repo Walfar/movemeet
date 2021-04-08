@@ -1,5 +1,6 @@
  package com.sdp.movemeet.Activity;
 
+import android.view.Gravity;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
@@ -8,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.contrib.DrawerActions;
+import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
@@ -21,6 +24,7 @@ import com.sdp.movemeet.R;
 import com.sdp.movemeet.UploadActivityActivity;
 
 import org.hamcrest.Matcher;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +35,10 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.doubleClick;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
@@ -76,12 +83,18 @@ public class UploadActivityActivityTest {
     public void endToEnd() {
         ActivityScenario scenario = testRule.getScenario();
         CountDownLatch latch = new CountDownLatch(1);
+
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-        mAuth.signInWithEmailAndPassword("test@test.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        try{
+            Thread.sleep(1000);
+        }catch(Exception e){}
+
+        mAuth.signInWithEmailAndPassword("movemeet@gmail.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
+                    sleep(500);
                     latch.countDown();
                 } else {
                     assert (false);
@@ -94,6 +107,10 @@ public class UploadActivityActivityTest {
         } catch (InterruptedException e) {
             assert (false);
         }
+
+        try{
+            Thread.sleep(1000);
+        }catch(Exception e){}
 
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
 
@@ -198,6 +215,10 @@ public class UploadActivityActivityTest {
             e.printStackTrace();
             return false;
         }
+<<<<<<< HEAD
     } */
 
+=======
+    }
+>>>>>>> main
 }

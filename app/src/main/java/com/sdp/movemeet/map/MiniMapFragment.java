@@ -50,6 +50,7 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
         return view;
     }
 
+
     public void fetchLastLocation() {
         if (ActivityCompat.checkSelfPermission(supportMapFragment.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(supportMapFragment.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(supportMapFragment.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
