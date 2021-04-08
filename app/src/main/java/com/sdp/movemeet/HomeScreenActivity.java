@@ -37,14 +37,15 @@ public class HomeScreenActivity extends AppCompatActivity {
     }
 
     public void signIn(View v) {
-        startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // redirecting the user to the "Login" activity
+        if (user != null) startActivity(new Intent(this, MainActivity.class));
+        else startActivity(new Intent(this, LoginActivity.class)); // redirecting the user to the "Login" activity
     }
 
     public void noAccount(View v) {
-        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+        startActivity(new Intent(this, MapsActivity.class));
     }
 
     public void RecordRun(View v) {
-        startActivity(new Intent(getApplicationContext(), GPSRecordingActivity.class)); // Redirect the user to the GPS recording activity
+        startActivity(new Intent(this, GPSRecordingActivity.class)); // Redirect the user to the GPS recording activity
     }
 }

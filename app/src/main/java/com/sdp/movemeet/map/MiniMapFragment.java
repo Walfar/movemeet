@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,6 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
         return view;
     }
 
-    //TODO refactor this ?
     public void fetchLastLocation() {
         if (ActivityCompat.checkSelfPermission(supportMapFragment.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(supportMapFragment.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(supportMapFragment.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
@@ -72,6 +72,8 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
         googleMap.setOnMapClickListener(this::onMapClick);
         LatLng location = ((UploadActivityActivity) getActivity()).getAddressLocation();
         //Zoom on the location that the user set, or on his GPS position if none found
+        Log.d("MiniMapFragment TAG", "user current location is " + currentLocation.toString());
+        if (location != null) Log.d("MiniMapFragmentTAG", "not null location us " + location.toString());
         if (location == null) location = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(location));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 12.0f));

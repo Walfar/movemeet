@@ -1,16 +1,14 @@
 package com.sdp.movemeet;
 
-import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
+import android.location.Geocoder;;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -21,22 +19,17 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Backend.BackendActivityManager;
-import com.sdp.movemeet.map.MainMapFragment;
+import com.sdp.movemeet.map.MapsActivity;
 import com.sdp.movemeet.map.MiniMapFragment;
-import com.sdp.movemeet.utility.ActivitiesUpdater;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,7 +37,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static com.sdp.movemeet.map.MainMapFragment.REQUEST_CODE;
 
 public class UploadActivityActivity extends AppCompatActivity {
 
@@ -151,7 +143,7 @@ public class UploadActivityActivity extends AppCompatActivity {
 
     //Returns the adress location if set by user, or null otherwise
     public LatLng getAddressLocation() {
-        if (addressText.getText().toString() == null) return null;
+        if (addressText.getText().toString().equals("")) return null;
         return new LatLng(latitude, longitude);
     }
     // Helper methods for start time picker
@@ -317,18 +309,17 @@ public class UploadActivityActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(getApplicationContext(), "Activity successfully uploaded!",
                                 Toast.LENGTH_SHORT).show();
-                        ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
-                        updater.updateListActivities();
+                        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
                     }
                 },
                 new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        Log.d("upload activity TAG", "failed");
                         Toast.makeText(getApplicationContext(), "Failed to upload activity",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-        startActivity(new Intent(getApplicationContext(), MainMapFragment.class));
     }
 
 }
