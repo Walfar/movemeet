@@ -191,7 +191,7 @@ public class UploadActivityActivityTest {
                 )
         );
 
-        assert(sleep(1000)); */
+        assert(sleep(1000));
 
         onView(withText("OK")).perform(click());
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
@@ -200,7 +200,7 @@ public class UploadActivityActivityTest {
 
         scenario.onActivity(activity -> {
             assert (((UploadActivityActivity) activity).validDate == true);
-        });
+        }); */
 
         mAuth.signOut();
         scenario.close();
