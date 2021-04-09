@@ -183,7 +183,7 @@ public class UploadActivityActivityTest {
         });
 
 
-        onView(withId(R.id.editTextDate)).perform(forceDoubleClick());
+        /*onView(withId(R.id.editTextDate)).perform(forceDoubleClick());
 
         onView(withClassName(equalTo(DatePicker.class.getName()))).perform(
                 PickerActions.setDate(
@@ -191,7 +191,7 @@ public class UploadActivityActivityTest {
                 )
         );
 
-        assert(sleep(1000));
+        assert(sleep(1000)); */
 
         onView(withText("OK")).perform(click());
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
