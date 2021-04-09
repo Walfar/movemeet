@@ -68,7 +68,7 @@ public class MainMapFragmentTest {
     @Before
     public void setUp() throws InterruptedException {
         fAuth = FirebaseAuth.getInstance();
-        fAuth.signInWithEmailAndPassword("victor.carles@epfl.ch", "1234567890").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        fAuth.signInWithEmailAndPassword("test@test.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 user = fAuth.getCurrentUser();
