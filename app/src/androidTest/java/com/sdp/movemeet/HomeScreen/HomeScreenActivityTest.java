@@ -1,4 +1,4 @@
- package com.sdp.movemeet.HomeScreen;
+package com.sdp.movemeet.HomeScreen;
 
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;

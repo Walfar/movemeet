@@ -189,6 +189,10 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         }
     }
 
+    public GoogleMap getGoogleMap() {
+        return googleMap;
+    }
+
 
     @Override
     public void onInfoWindowClick(Marker marker) {

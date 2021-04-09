@@ -98,7 +98,7 @@ public class HomeScreenActivityToUserProfileActivity {
                         withParent(withParent(withId(android.R.id.content))),
                         isDisplayed()));
         textView4.check(matches(withText("Hi there! I love Judo!")));
-        logout();*/
+        logout(); */
 
     }
 

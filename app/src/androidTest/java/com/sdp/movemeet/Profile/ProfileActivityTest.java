@@ -200,7 +200,7 @@ public class ProfileActivityTest {
                 uiController.loopMainThreadUntilIdle();
             }
         };
-    }*/
+    } */
 
 
 }

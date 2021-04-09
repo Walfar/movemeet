@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 
 import androidx.annotation.NonNull;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.GrantPermissionRule;
@@ -20,6 +21,7 @@ import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,6 +39,8 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
@@ -53,7 +57,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(AndroidJUnit4.class)
 public class MainMapFragmentTest {
 
-    private UiDevice uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    private UiDevice uiDevice;
     private FirebaseAuth fAuth;
     private FirebaseUser user;
 
@@ -72,6 +76,7 @@ public class MainMapFragmentTest {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 user = fAuth.getCurrentUser();
+                uiDevice = UiDevice.getInstance(getInstrumentation());
             }
         });
         waitFor(2000);
@@ -96,37 +101,18 @@ public class MainMapFragmentTest {
         //User must be logged to add new activity
         assertNotNull(user);
 
-        fragmentTestRule.launchFragment(new MainMapFragment());
+        //fragmentTestRule.launchFragment(new MainMapFragment());
 
         waitFor(2000);
 
-        //UiDevice.click doesn't do anything so activities on map are impossible to test
-        uiDevice.click(0, 0);
+        uiDevice.click(200, 500);
 
-        /*
-        waitFor(10000);
+        waitFor(1000);
 
         UiObject marker = uiDevice.findObject(new UiSelector().descriptionContains("new activity"));
         assertNotNull(marker);
-        marker.click();
 
-        // Calculate the (x,y) position of the InfoWindow, using the screen size
-        Display display = fragmentTestRule.getActivity().getDisplay();
-        Point size = new Point();
-        display.getRealSize(size);
-        int screenWidth = size.x;
-        int screenHeight = size.y;
-        int x = screenWidth / 2;
-        int y = (int) (screenHeight * 0.43);
-
-        waitFor(2000);
-
-        // Click on the InfoWindow, using UIAutomator
-        uiDevice.click(x, y);
-
-        UiObject marker2 = uiDevice.findObject(new UiSelector().descriptionContains("new activity"));
-        assertNull(marker2);
-        intended(hasComponent(UploadActivityActivity.class.getName())); */
+        uiDevice.click(200, 400);
     }
 
 
@@ -136,4 +122,3 @@ public class MainMapFragmentTest {
         Thread.sleep(duration);
     }
 }
-
