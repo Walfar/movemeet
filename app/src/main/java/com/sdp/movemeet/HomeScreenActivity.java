@@ -27,8 +27,8 @@ public class HomeScreenActivity extends AppCompatActivity {
     }
 
     public void signIn(View v) {
-        if (user != null) startActivity(new Intent(this, MainActivity.class));
-        else startActivity(new Intent(this, LoginActivity.class)); // redirecting the user to the "Login" activity
+        //if (user != null) startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, LoginActivity.class)); // redirecting the user to the "Login" activity
     }
 
     public void noAccount(View v) {

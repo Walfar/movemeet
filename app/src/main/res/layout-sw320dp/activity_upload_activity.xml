@@ -167,7 +167,7 @@
                 android:editable="false"
                 android:ems="10"
                 android:focusable="true"
-                android:hint="end time"
+                android:hint="Duration"
                 android:onClick="setDuration"
                 app:layout_constraintBottom_toBottomOf="@+id/editTextStartTime"
                 app:layout_constraintEnd_toEndOf="parent"

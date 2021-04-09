@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,15 +37,16 @@ import com.sdp.movemeet.DistanceCalculator;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.UploadActivityActivity;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
+import com.sdp.movemeet.utility.LocationFetcher;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sdp.movemeet.utility.LocationFetcher.REQUEST_CODE;
+
 public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     private Location currentLocation;
-
-    public static final int REQUEST_CODE = 101;
 
     private ArrayList<Activity> activities;
 
@@ -71,7 +73,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(supportMapFragment.getActivity());
-        fetchLastLocation();
+        LocationFetcher.fetchLastLocation(supportMapFragment, fusedLocationProviderClient, this);
 
         ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
         activities = updater.getActivities();
@@ -81,35 +83,18 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         return view;
     }
 
-    //TODO deprecated for fragment ?
+   /*
     @SuppressWarnings("deprecation")
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    fetchLastLocation();
+                    currentLocation = LocationFetcher.fetchLastLocation(supportMapFragment, fusedLocationProviderClient, this);
                 }
                 break;
         }
-    }
-
-    public void fetchLastLocation() {
-        if (ActivityCompat.checkSelfPermission(supportMapFragment.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(supportMapFragment.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(supportMapFragment.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
-            return;
-        }
-        Task<Location> task = fusedLocationProviderClient.getLastLocation();
-        task.addOnSuccessListener(this::onSuccess);
-    }
-
-    private void onSuccess(Location location) {
-        if (location != null) {
-            currentLocation = location;
-            Toast.makeText(supportMapFragment.getActivity(), currentLocation.getLatitude() + ", " + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
-            supportMapFragment.getMapAsync(MainMapFragment.this);
-        }
-    }
+    } */
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -117,6 +102,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     public void onMapReady(GoogleMap googleMap) {
 
         this.googleMap = googleMap;
+        this.currentLocation = LocationFetcher.getLocation();
 
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnInfoWindowClickListener(this);

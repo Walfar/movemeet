@@ -25,8 +25,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.UploadActivityActivity;
-
-import static com.sdp.movemeet.map.MainMapFragment.REQUEST_CODE;
+import com.sdp.movemeet.utility.LocationFetcher;
 
 public class MiniMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
@@ -45,32 +44,15 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(supportMapFragment.getActivity());
-        fetchLastLocation();
+        LocationFetcher.fetchLastLocation(supportMapFragment, fusedLocationProviderClient, this);
 
         return view;
-    }
-
-
-    public void fetchLastLocation() {
-        if (ActivityCompat.checkSelfPermission(supportMapFragment.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(supportMapFragment.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(supportMapFragment.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
-            return;
-        }
-        Task<Location> task = fusedLocationProviderClient.getLastLocation();
-        task.addOnSuccessListener(this::onSuccess);
-    }
-
-    private void onSuccess(Location location) {
-        if (location != null) {
-            currentLocation = location;
-            Toast.makeText(supportMapFragment.getActivity(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
-            supportMapFragment.getMapAsync(MiniMapFragment.this);
-        }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.setOnMapClickListener(this::onMapClick);
+        currentLocation = LocationFetcher.getLocation();
         LatLng location = ((UploadActivityActivity) getActivity()).getAddressLocation();
         //Zoom on the location that the user set, or on his GPS position if none found
         Log.d("MiniMapFragment TAG", "user current location is " + currentLocation.toString());
