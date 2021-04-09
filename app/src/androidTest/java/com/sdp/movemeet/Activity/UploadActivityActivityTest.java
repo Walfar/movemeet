@@ -215,10 +215,6 @@ public class UploadActivityActivityTest {
             e.printStackTrace();
             return false;
         }
-<<<<<<< HEAD
     } */
 
-=======
-    }
->>>>>>> main
 }

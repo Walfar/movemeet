@@ -26,7 +26,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         updater.updateListActivities();
     }
 
-    public void logIn(View v) {
+    public void signIn(View v) {
         if (user != null) startActivity(new Intent(this, MainActivity.class));
         else startActivity(new Intent(this, LoginActivity.class)); // redirecting the user to the "Login" activity
     }
