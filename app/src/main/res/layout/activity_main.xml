@@ -67,9 +67,9 @@
 
         <fragment
             android:id="@+id/fragment_container_view"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="330dp"
-            android:layout_height="500dp"
+            android:name="com.sdp.movemeet.map.MainMapFragment"
+            android:layout_width="360dp"
+            android:layout_height="446dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

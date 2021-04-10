@@ -79,7 +79,7 @@ public class LoginActivityTest {
         onView(withId(R.id.text_view_create_account)).perform(click());
     }
 
-   /* @Test
+    /*@Test
     @LargeTest
     public void Login_TrueNonEmpty(){
         onView(withId(R.id.edit_text_email))
@@ -103,5 +103,5 @@ public class LoginActivityTest {
         // Start the screen of your activity.
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
 
-    }*/
+    } */
 }

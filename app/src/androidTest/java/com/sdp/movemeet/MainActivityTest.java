@@ -79,7 +79,7 @@ public class MainActivityTest {
     public void mainActivity_goToMaps() {
         onView(withId(R.id.nav_map)).perform(forceClick());
         logout();
-    }*/
+    } */
 
     @Test
     public void mainActivityToProfileActivity() {

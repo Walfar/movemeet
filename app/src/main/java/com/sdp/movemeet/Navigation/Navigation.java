@@ -11,19 +11,12 @@ import com.sdp.movemeet.MainActivity;
 import com.sdp.movemeet.ProfileActivity;
 import com.sdp.movemeet.UploadActivityActivity;
 import com.sdp.movemeet.chat.ChatActivity;
-import com.sdp.movemeet.map.MapsActivity;
 
 public class Navigation extends AppCompatActivity{
 
     public static void startActivity(View view) {
         Context mContext = view.getContext();
         Intent intent = new Intent(mContext, ActivityDescriptionActivity.class);
-        mContext.startActivity(intent);
-    }
-
-    public static void goToMaps(View view) {
-        Context mContext = view.getContext();
-        Intent intent = new Intent(mContext, MapsActivity.class);
         mContext.startActivity(intent);
     }
 

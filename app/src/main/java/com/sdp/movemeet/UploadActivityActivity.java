@@ -6,9 +6,13 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
-import android.location.Geocoder;
+import android.location.Geocoder;;
 import android.os.Bundle;
+
+import android.util.Log;
+
 import android.view.MenuItem;
+
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -21,10 +25,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.fragment.app.FragmentManager;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
@@ -32,6 +41,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Backend.BackendActivityManager;
+
+import com.sdp.movemeet.map.MiniMapFragment;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
 import com.sdp.movemeet.Navigation.Navigation;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
@@ -41,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
 
 public class UploadActivityActivity extends AppCompatActivity {
 
@@ -82,6 +94,7 @@ public class UploadActivityActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_activity);
 
+
         setupSportSpinner(this);
 
         fAuth = FirebaseAuth.getInstance();
@@ -101,6 +114,16 @@ public class UploadActivityActivity extends AppCompatActivity {
 
         addressText = findViewById(R.id.editTextLocation);
         validLocation = false;
+
+
+        //Try to get intent from map, in the case where the user creates an activity on click
+        Intent intent = getIntent();
+        if (intent != null) {
+            Bundle bundle = intent.getParcelableExtra("bundle");
+            if (bundle != null) {
+                retrieveAddress(bundle.getParcelable("position"));
+            }
+        }
 
         drawerLayout=findViewById(R.id.drawer_layout);
         navigationView=findViewById(R.id.nav_view);
@@ -146,9 +169,6 @@ public class UploadActivityActivity extends AppCompatActivity {
             case R.id.nav_logout:
                 logout(this.navigationView);
                 break;
-            case R.id.nav_map:
-                Navigation.goToMaps(this.navigationView);
-                break;
             case R.id.nav_start_activity:
                 Navigation.startActivity(this.navigationView);
                 break;
@@ -179,21 +199,16 @@ public class UploadActivityActivity extends AppCompatActivity {
 
     private void setupSportSpinner(Context context) {
         spinner = (Spinner) findViewById(R.id.spinnerSportType);
-
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter adapter = new ArrayAdapter(context,
                 android.R.layout.simple_spinner_dropdown_item, Sport.values());
-
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
     }
 
-
     // Helper methods for date picker
-
     private void setupDateInput(Context context) {
         dateText = findViewById(R.id.editTextDate);
         calendar = Calendar.getInstance();
@@ -222,7 +237,11 @@ public class UploadActivityActivity extends AppCompatActivity {
         showDialog(999);
     }
 
-
+    //Returns the adress location if set by user, or null otherwise
+    public LatLng getAddressLocation() {
+        if (addressText.getText().toString().equals("")) return null;
+        return new LatLng(latitude, longitude);
+    }
     // Helper methods for start time picker
     private TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
@@ -322,7 +341,7 @@ public class UploadActivityActivity extends AppCompatActivity {
                     .show();
             return null;
         }
-        tryLocatingAddress(this, address);
+        if (!validLocation) tryLocatingAddress(this, address);
         validLocation = true;
 
         String description = descriptionEditText.getText().toString();
@@ -344,7 +363,6 @@ public class UploadActivityActivity extends AppCompatActivity {
         validDate = true;
 
         String organizerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
         Activity activity = new Activity(
                 organizerId + " || " +  date, organizerId, title, nParticipants,
                 new ArrayList<String>(nParticipants), longitude, latitude, description, date, duration,
@@ -352,6 +370,26 @@ public class UploadActivityActivity extends AppCompatActivity {
         );
 
         return activity;
+    }
+
+    //Inverse of tryLocatingAddress, i.e retrieves the address from a LatLng
+    public void retrieveAddress(LatLng pos) {
+
+        latitude = pos.latitude;
+        longitude = pos.longitude;
+
+        Geocoder geocoder = new Geocoder(this);
+
+        try {
+            List<Address> addresses = geocoder.getFromLocation(pos.latitude, pos.longitude, 1);
+            if (addresses.size() > 0) {
+                addressText.setText(addresses.get(0).getAddressLine(0));
+                validLocation = true;
+            } else {
+                throw new IOException();
+            }
+        } catch (IOException e) {}
+
     }
 
     public void confirmActivityUpload(View view) {
@@ -367,18 +405,17 @@ public class UploadActivityActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(getApplicationContext(), "Activity successfully uploaded!",
                                 Toast.LENGTH_SHORT).show();
-                        ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
-                        updater.updateListActivities();
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     }
                 },
                 new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        Log.d("upload activity TAG", "failed");
                         Toast.makeText(getApplicationContext(), "Failed to upload activity",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
     }
-
 
 }

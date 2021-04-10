@@ -71,7 +71,7 @@ public class Activity implements Serializable {
         if(activityId == null || organizerId == null || title == null || numberParticipant <= 0 )
             throw new IllegalArgumentException();
 
-        if(description == null || date == null || duration <= 0 || sport == null || address == null)
+        if(date == null || sport == null || address == null || duration <= 0 || description == null)
             throw new IllegalArgumentException();
 
 

@@ -17,10 +17,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import com.sdp.movemeet.Activity.ActivityDescriptionActivity;
+
 import com.sdp.movemeet.Backend.FirebaseInteraction;
 import com.sdp.movemeet.Navigation.Navigation;
-import com.sdp.movemeet.chat.ChatActivity;
-import com.sdp.movemeet.map.MapsActivity;
+import com.sdp.movemeet.utility.ActivitiesUpdater;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
 
         //handleRegisterUser();
 
+
+        ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
+        updater.updateListActivities();
+
         drawerLayout=findViewById(R.id.drawer_layout);
         navigationView=findViewById(R.id.nav_view);
         textView=findViewById(R.id.textView);
@@ -65,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
         navigationView.setCheckedItem(R.id.nav_home);
+
 
         handleRegisterUser();
 
@@ -89,9 +96,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.nav_logout:
                 logout(this.navigationView);
-                break;
-            case R.id.nav_map:
-                Navigation.goToMaps(this.navigationView);
                 break;
             case R.id.nav_start_activity:
                 Navigation.startActivity(this.navigationView);

@@ -167,9 +167,6 @@ public class ChatActivity extends AppCompatActivity {
             case R.id.nav_logout:
                 logout(this.navigationView);
                 break;
-            case R.id.nav_map:
-                Navigation.goToMaps(this.navigationView);
-                break;
             case R.id.nav_start_activity:
                 Navigation.startActivity(this.navigationView);
                 break;

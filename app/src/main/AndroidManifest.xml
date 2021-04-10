@@ -42,19 +42,6 @@
             android:name=".chat.ChatActivity"
             android:label="@string/title_activity_chat" />
 
-
-        <activity
-            android:name=".map.MapsActivity"
-            android:label="@string/title_activity_maps"
-            android:parentActivityName=".HomeScreenActivity"
-            android:theme="@style/Theme.movemeet">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sdp.movemeet.HomeScreenActivity" />
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".HomeScreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

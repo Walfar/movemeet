@@ -60,7 +60,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         createAddressView();
         createSportView();
         createDurationView();
-        createOrganisatorView();
+        createOrganizerView();
 
         drawerLayout=findViewById(R.id.drawer_layout);
         navigationView=findViewById(R.id.nav_view);
@@ -113,9 +113,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 break;
             case R.id.nav_logout:
                 logout(this.navigationView);
-                break;
-            case R.id.nav_map:
-                Navigation.goToMaps(this.navigationView);
                 break;
             case R.id.nav_start_activity:
                 break;
@@ -189,7 +186,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
-    private void createOrganisatorView(){
+    private void createOrganizerView(){
         TextView organisatorView = (TextView) findViewById(R.id.activity_organisator_description);
         if(act != null){
             organisatorView.setText(act.getOrganizerId());

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.common.util.VisibleForTesting;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -15,7 +16,9 @@ import com.sdp.movemeet.Backend.BackendActivityManager;
 import com.sdp.movemeet.Sport;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import static com.sdp.movemeet.Backend.BackendActivityManager.ACTIVITIES_COLLECTION;
 import static com.sdp.movemeet.Sport.Running;
@@ -28,7 +31,7 @@ public class ActivitiesUpdater {
 
     private static final String TAG = "Activities updater TAG";
 
-    public static final int MAX_NUMBER_ACTIVITIES = 10;
+    public static final int MAX_NUMBER_ACTIVITIES_TO_DISPLAY = 10;
 
     private static ActivitiesUpdater instance;
 
@@ -39,13 +42,14 @@ public class ActivitiesUpdater {
     }
 
     public static ActivitiesUpdater getInstance() {
-        if (ActivitiesUpdater.instance == null) {
-            ActivitiesUpdater.instance = new ActivitiesUpdater();
+        if (instance == null) {
+            instance = new ActivitiesUpdater();
         }
-        return ActivitiesUpdater.instance;
+        return instance;
     }
 
     public ArrayList<Activity> getActivities() {
+        updateListActivities();
         return activities;
     }
 
@@ -59,7 +63,7 @@ public class ActivitiesUpdater {
                 int idx = 0;
                 if (!queryDocumentSnapshots.isEmpty()) {
                     for (DocumentSnapshot docSnap: queryDocumentSnapshots.getDocuments()) {
-                        if (idx == MAX_NUMBER_ACTIVITIES) break;
+                        if (idx == MAX_NUMBER_ACTIVITIES_TO_DISPLAY) break;
 
                         Object activityIdobj = docSnap.get("activityId");
                         String activityId;
@@ -133,7 +137,7 @@ public class ActivitiesUpdater {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "failure");
+                Log.d(TAG, e.toString());
             }
         });
     }

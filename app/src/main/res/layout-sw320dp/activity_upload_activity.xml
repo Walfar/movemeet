@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".MainActivity"
+    tools:context=".UploadActivityActivity"
     tools:openDrawer="start">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -68,7 +68,19 @@
         app:layout_constraintStart_toStartOf="@+id/editTextTitle"
         app:layout_constraintTop_toBottomOf="@+id/editTextTitle" />
 
-    <Button
+        <fragment
+            android:id="@+id/fragment_container_view"
+            android:name="com.sdp.movemeet.map.MiniMapFragment"
+            android:layout_width="384dp"
+            android:layout_height="140dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.481"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.78" />
+
+        <Button
         android:id="@+id/buttonConfirmUpload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -106,62 +118,64 @@
         app:layout_constraintStart_toStartOf="@+id/editTextLocation"
         app:layout_constraintTop_toBottomOf="@+id/editTextLocation" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="378dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toEndOf="@+id/editTextDescription"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextDescription"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNParticipants">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="378dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toEndOf="@+id/editTextDescription"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/editTextDescription"
+            app:layout_constraintTop_toBottomOf="@+id/editTextNParticipants">
 
-        <EditText
-            android:id="@+id/editTextDate"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginRight="8dp"
-            android:editable="false"
-            android:ems="10"
-            android:focusable="true"
-            android:hint="Date"
-            android:onClick="setDate"
-            app:layout_constraintBottom_toBottomOf="@+id/editTextStartTime"
-            app:layout_constraintEnd_toStartOf="@+id/editTextStartTime"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/editTextStartTime" />
+            <EditText
+                android:id="@+id/editTextDate"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginRight="8dp"
+                android:editable="false"
+                android:ems="10"
+                android:focusable="true"
+                android:hint="Date"
+                android:onClick="setDate"
+                app:layout_constraintBottom_toBottomOf="@+id/editTextStartTime"
+                app:layout_constraintEnd_toStartOf="@+id/editTextStartTime"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/editTextStartTime" />
 
-        <EditText
-            android:id="@+id/editTextStartTime"
-            android:layout_width="75dp"
-            android:layout_height="wrap_content"
-            android:editable="false"
-            android:ems="10"
-            android:focusable="true"
-            android:hint="Time"
-            android:onClick="setStartTime"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.6" />
+            <EditText
+                android:id="@+id/editTextStartTime"
+                android:layout_width="134dp"
+                android:layout_height="46dp"
+                android:editable="false"
+                android:ems="10"
+                android:focusable="true"
+                android:hint="start time"
+                android:onClick="setStartTime"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.524"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
-        <EditText
-            android:id="@+id/editTextTime"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:editable="false"
-            android:ems="10"
-            android:focusable="true"
-            android:hint="Duration"
-            android:onClick="setDuration"
-            app:layout_constraintBottom_toBottomOf="@+id/editTextStartTime"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/editTextStartTime"
-            app:layout_constraintTop_toTopOf="@+id/editTextDate"
-            app:layout_constraintVertical_bias="0.6" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <EditText
+                android:id="@+id/editTextTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:editable="false"
+                android:ems="10"
+                android:focusable="true"
+                android:hint="Duration"
+                android:onClick="setDuration"
+                app:layout_constraintBottom_toBottomOf="@+id/editTextStartTime"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.524"
+                app:layout_constraintStart_toEndOf="@+id/editTextStartTime"
+                app:layout_constraintTop_toTopOf="@+id/editTextDate"
+                app:layout_constraintVertical_bias="1.0" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
    <com.google.android.material.navigation.NavigationView
