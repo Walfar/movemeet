@@ -23,200 +23,222 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/menu"/>
 
-    <ImageView
-        android:id="@+id/activity_image_description"
-        android:layout_width="150dp"
-        android:layout_height="200dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:src="@drawable/run_woman"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="89dp">
 
-    <TextView
-        android:id="@+id/activity_title_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/armata"
-        android:textFontWeight="60"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="20dp"
-        android:text="title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_image_description" />
-
-    <TextView
-        android:id="@+id/activity_sport_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/armata"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:text="Sport"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_title_description" />
-
-    <TextView
-        android:id="@+id/activity_text1_description"
-        android:layout_width="45dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/armata"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:text="At"
-        app:layout_constraintStart_toEndOf="@+id/activity_sport_description"
-        app:layout_constraintTop_toBottomOf="@+id/activity_title_description" />
-
-    <TextView
-        android:id="@+id/activity_date_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/armata"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:text="date"
-        app:layout_constraintStart_toEndOf="@+id/activity_text1_description"
-        app:layout_constraintTop_toBottomOf="@+id/activity_title_description" />
-
-    <TextView
-        android:id="@+id/activity_text2_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/armata"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:text="During"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_sport_description" />
-
-    <TextView
-        android:id="@+id/activity_duration_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/armata"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:text="Duration"
-        app:layout_constraintStart_toEndOf="@+id/activity_text2_description"
-        app:layout_constraintTop_toBottomOf="@+id/activity_text1_description" />
-
-    <TextView
-        android:id="@+id/activity_text3_description"
-        android:layout_width="35dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:fontFamily="@font/armata"
-        android:layout_marginTop="30dp"
-        android:text="At"
-        app:layout_constraintStart_toEndOf="@+id/activity_duration_description"
-        app:layout_constraintTop_toBottomOf="@+id/activity_text1_description" />
-
-    <TextView
-        android:id="@+id/activity_address_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/armata"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:text="Address"
-        app:layout_constraintStart_toEndOf="@+id/activity_text3_description"
-        app:layout_constraintTop_toBottomOf="@+id/activity_date_description" />
-
-    <TextView
-        android:id="@+id/activity_text4_description"
-        android:layout_width="30dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/armata"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:text="By"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_text2_description" />
-
-    <TextView
-        android:id="@+id/activity_organisator_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/armata"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:text="Organisator"
-        app:layout_constraintStart_toEndOf="@+id/activity_text4_description"
-        app:layout_constraintTop_toBottomOf="@+id/activity_duration_description" />
-
-    <TextView
-        android:id="@+id/activity_text5_description"
-        android:layout_width="30dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/armata"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:text="For"
-        app:layout_constraintStart_toEndOf="@+id/activity_organisator_description"
-        app:layout_constraintTop_toBottomOf="@+id/activity_address_description" />
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:isScrollContainer="true"
+                android:scrollbars="horizontal">
 
 
-    <TextView
-        android:id="@+id/activity_number_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/armata"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:text="Number participant"
-        app:layout_constraintStart_toEndOf="@+id/activity_text5_description"
-        app:layout_constraintTop_toBottomOf="@+id/activity_address_description" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:isScrollContainer="true"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/activity_image_description"
+                        android:layout_width="150dp"
+                        android:layout_height="200dp"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="20dp"
+                        android:src="@drawable/run_woman" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/activity_title_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/armata"
+                            android:paddingStart="20dp"
+                            android:paddingTop="30dp"
+                            android:paddingEnd="20dp"
+                            android:paddingBottom="20dp"
+                            android:text="Title"
+                            android:textFontWeight="60" />
+
+                    </LinearLayout>
 
 
-    <TextView
-        android:id="@+id/activity_description_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/armata"
-        android:text="Description"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_text4_description" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/activityRegisterDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/armata"
-        android:onClick="onClick"
-        android:text="Register"
-        app:layout_constraintStart_toEndOf="@+id/activityGoDescription"
-        app:layout_constraintTop_toBottomOf="@+id/activity_description_description" />
+                        <TextView
+                            android:id="@+id/activity_sport_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/armata"
+                            android:padding="20dp"
+                            android:text="Sport" />
 
-    <Button
-        android:id="@+id/activityGoDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/armata"
-        android:text="How to go"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_description_description" />
+                        <TextView
+                            android:id="@+id/activity_text1_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/armata"
+                            android:padding="20dp"
+                            android:text="At" />
 
-    <Button
-        android:id="@+id/activityChatDescription"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:fontFamily="@font/armata"
-        android:onClick="goToChat"
-        android:text="Chat"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_image_description" />
+                        <TextView
+                            android:id="@+id/activity_date_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/armata"
+                            android:padding="20dp"
+                            android:text="date" />
+                    </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/activity_text2_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/armata"
+                            android:padding="20dp"
+                            android:text="During" />
+
+                        <TextView
+                            android:id="@+id/activity_duration_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/armata"
+                            android:padding="20dp"
+                            android:text="Duration" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/activity_text3_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/armata"
+                            android:padding="20dp"
+                            android:text="At" />
+
+                        <TextView
+                            android:id="@+id/activity_address_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/armata"
+                            android:padding="20dp"
+                            android:text="Address" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/activity_text4_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/armata"
+                            android:padding="20dp"
+                            android:text="By" />
+
+                        <TextView
+                            android:id="@+id/activity_organisator_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/armata"
+                            android:padding="20dp"
+                            android:text="Organisator" />
+
+                        <TextView
+                            android:id="@+id/activity_text5_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/armata"
+                            android:padding="20dp"
+                            android:text="For" />
+
+
+                        <TextView
+                            android:id="@+id/activity_number_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/armata"
+                            android:padding="20dp"
+                            android:text="Number participant" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/activity_description_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/armata"
+                            android:padding="20dp"
+                            android:text="Description" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/activityRegisterDescription"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:fontFamily="@font/armata"
+                            android:onClick="onClick"
+                            android:padding="20dp"
+                            android:text="Register" />
+
+                        <Button
+                            android:id="@+id/activityGoDescription"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:fontFamily="@font/armata"
+                            android:padding="20dp"
+                            android:text="How to go" />
+
+                        <Button
+                            android:id="@+id/activityChatDescription"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:fontFamily="@font/armata"
+                            android:onClick="goToChat"
+                            android:padding="20dp"
+                            android:text="Chat" />
+                    </LinearLayout>
+                </LinearLayout>
+            </HorizontalScrollView>
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.navigation.NavigationView
