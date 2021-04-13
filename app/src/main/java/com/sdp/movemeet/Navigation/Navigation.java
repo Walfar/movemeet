@@ -12,35 +12,35 @@ import com.sdp.movemeet.ProfileActivity;
 import com.sdp.movemeet.UploadActivityActivity;
 import com.sdp.movemeet.chat.ChatActivity;
 
-import org.jetbrains.annotations.NotNull;
+import androidx.annotation.NonNull;
 
 public class Navigation extends AppCompatActivity{
 
-    public static void startActivity(@NotNull View view) {
+    public static void startActivity(@NonNull View view) {
         Context mContext = view.getContext();
         Intent intent = new Intent(mContext, ActivityDescriptionActivity.class);
         mContext.startActivity(intent);
     }
 
-    public static void goToActivityUpload(@NotNull View view) {
+    public static void goToActivityUpload(@NonNull View view) {
         Context mContext = view.getContext();
         Intent intent = new Intent(mContext, UploadActivityActivity.class);
         mContext.startActivity(intent);
     }
 
-    public static void goToUserProfileActivity(@NotNull View view) {
+    public static void goToUserProfileActivity(@NonNull View view) {
         Context mContext = view.getContext();
         Intent intent = new Intent(mContext, ProfileActivity.class);
         mContext.startActivity(intent);
     }
 
-    public static void goToHome(@NotNull View view) {
+    public static void goToHome(@NonNull View view) {
         Context mContext = view.getContext();
         Intent intent = new Intent(mContext, MainActivity.class);
         mContext.startActivity(intent);
     }
 
-    public static void goToChat(@NotNull View view) {
+    public static void goToChat(@NonNull View view) {
         Context mContext = view.getContext();
         Intent intent = new Intent(mContext, ChatActivity.class);
         mContext.startActivity(intent);
