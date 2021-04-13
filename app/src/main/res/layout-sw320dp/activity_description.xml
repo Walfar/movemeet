@@ -53,6 +53,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:orientation="horizontal">
 
                         <TextView
@@ -65,7 +66,9 @@
                             android:paddingEnd="20dp"
                             android:paddingBottom="20dp"
                             android:text="Title"
-                            android:textFontWeight="60" />
+                            android:textSize="30dp"
+                            android:layout_gravity="center_horizontal"
+                            android:height="100dp" />
 
                     </LinearLayout>
 
@@ -80,7 +83,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="20dp"
+                            android:padding="10dp"
                             android:text="Sport" />
 
                         <TextView
@@ -88,15 +91,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="20dp"
-                            android:text="At" />
+                            android:padding="10dp"
+                            android:text="at" />
 
                         <TextView
                             android:id="@+id/activity_date_description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="20dp"
+                            android:padding="10dp"
                             android:text="date" />
                     </LinearLayout>
 
@@ -110,7 +113,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="20dp"
+                            android:padding="10dp"
                             android:text="During" />
 
                         <TextView
@@ -118,8 +121,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="20dp"
+                            android:padding="10dp"
                             android:text="Duration" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/armata"
+                            android:padding="10dp"
+                            android:text="hours" />
 
                     </LinearLayout>
 
@@ -133,7 +143,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="20dp"
+                            android:padding="10dp"
                             android:text="At" />
 
                         <TextView
@@ -141,7 +151,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="20dp"
+                            android:padding="10dp"
                             android:text="Address" />
 
                     </LinearLayout>
@@ -156,7 +166,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="20dp"
+                            android:padding="10dp"
                             android:text="By" />
 
                         <TextView
@@ -164,7 +174,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="20dp"
+                            android:padding="10dp"
                             android:text="Organisator" />
 
                         <TextView
@@ -172,7 +182,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="20dp"
+                            android:padding="10dp"
                             android:text="For" />
 
 
@@ -181,7 +191,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="20dp"
+                            android:padding="10dp"
                             android:text="Number participant" />
 
                     </LinearLayout>
@@ -196,7 +206,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="20dp"
+                            android:padding="10dp"
                             android:text="Description" />
 
                     </LinearLayout>
@@ -213,7 +223,7 @@
                             android:layout_marginLeft="20dp"
                             android:fontFamily="@font/armata"
                             android:onClick="onClick"
-                            android:padding="20dp"
+                            android:padding="15dp"
                             android:text="Register" />
 
                         <Button
@@ -222,7 +232,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
                             android:fontFamily="@font/armata"
-                            android:padding="20dp"
+                            android:padding="15dp"
                             android:text="How to go" />
 
                         <Button
@@ -232,7 +242,7 @@
                             android:layout_marginLeft="20dp"
                             android:fontFamily="@font/armata"
                             android:onClick="goToChat"
-                            android:padding="20dp"
+                            android:padding="15dp"
                             android:text="Chat" />
                     </LinearLayout>
                 </LinearLayout>
