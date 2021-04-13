@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -147,6 +148,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (act != null) activityTitle.setText(act.getTitle());
     }
 
+    @SuppressLint("SetTextI18n")
     private void createParticipantNumberView(){
         // number of participants from the activity
         TextView numberParticipantsView = (TextView) findViewById(R.id.activity_number_description);
@@ -157,7 +159,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
     private void createDescriptionView(){
         // description from the activity
-        TextView descriptionView = (TextView) findViewById(R.id.activity_address_description);
+        TextView descriptionView = (TextView) findViewById(R.id.activity_description_description);
         if (act != null) descriptionView.setText(act.getDescription());
     }
 
@@ -166,7 +168,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         TextView dateView = (TextView) findViewById(R.id.activity_date_description);
         if (act != null) {
             String pattern = "MM/dd/yyyy HH:mm:ss";
-            DateFormat df = new SimpleDateFormat(pattern);
+            @SuppressLint("SimpleDateFormat") DateFormat df = new SimpleDateFormat(pattern);
             String todayAsString = df.format(act.getDate());
             dateView.setText(todayAsString);
         }
