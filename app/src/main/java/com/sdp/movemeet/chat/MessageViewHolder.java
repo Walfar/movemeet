@@ -19,12 +19,13 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
 
     public MessageViewHolder(View v) {
         super(v);
-        messageTextView = (TextView) itemView.findViewById(R.id.message_text);
-        messengerTextView = (TextView) itemView.findViewById(R.id.message_user);
-        messageTimeTextView = (TextView) itemView.findViewById(R.id.message_time);
+        messageTextView = itemView.findViewById(R.id.message_text);
+        messengerTextView = itemView.findViewById(R.id.message_user);
+        messageTimeTextView = itemView.findViewById(R.id.message_time);
     }
 
     public void bindMessage(Message message) {
+
         if (message.getMessageText() != null) {
             messageTextView.setText(message.getMessageText());
             messageTextView.setVisibility(TextView.VISIBLE);
@@ -33,7 +34,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             messengerTextView.setText(message.getMessageUser());
             messengerTextView.setVisibility(TextView.VISIBLE);
         }
-        //messageTimeTextView.setText(String.valueOf((int) message.getMessageTime()));
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String messageTimeString = simpleDateFormat.format(message.getMessageTime());
         messageTimeTextView.setText(messageTimeString);

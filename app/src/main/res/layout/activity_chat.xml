@@ -54,7 +54,7 @@
                     android:padding="3dp"
                     android:fontFamily="@font/armata"
                     android:hint="Type your post"
-                    android:inputType="textPersonName"
+                    android:inputType="textMultiLine"
                     android:ems="10"/>
             </com.google.android.material.textfield.TextInputLayout>
 

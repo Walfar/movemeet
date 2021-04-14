@@ -50,15 +50,7 @@ public class ChatActivity extends AppCompatActivity {
     private static final String TAG = "ChatActivity";
 
     public static final String MESSAGE_CHILD = "messages";
-    public static final String ANONYMOUS_NAME = "anonymous_name";
-    public static final String ANONYMOUS_ID = "anonymous_id";
-    public static final int DEFAULT_MSG_LENGTH_LIMIT = 10;
 
-    private static final String MESSAGE_SENT_EVENT = "message_sent";
-
-    private SharedPreferences mSharedPreferences;
-
-    //private ActivityChatBinding mBinding;
     private LinearLayoutManager mLinearLayoutManager;
 
     // Firebase instance variables
@@ -68,16 +60,12 @@ public class ChatActivity extends AppCompatActivity {
     private FirebaseFirestore fStore;
     private FirebaseRecyclerAdapter<Message, MessageViewHolder> mFirebaseAdapter;
 
-    private final int MESSAGE_IN_VIEW_TYPE  = 1;
-    private final int MESSAGE_OUT_VIEW_TYPE = 2;
-
     String userId;
     String fullNameString;
 
     MultiAutoCompleteTextView messageInput;
     ProgressBar chatLoader;
     RecyclerView messageRecyclerView;
-    //FloatingActionButton btnSend;
     ImageButton btnSend;
 
 
@@ -106,18 +94,22 @@ public class ChatActivity extends AppCompatActivity {
             getUserName();
         }
 
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        //mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Initializing Firebase Auth and checking if the user is signed in
         FirebaseInteraction.checkIfUserSignedIn(fAuth, ChatActivity.this);
 
-        // Adding all the existing messages and listening for new child entries under the "messages"
-        // path in our Firebase Realtime Database (adding a new element to the UI for each message)
+        // The rest of the onCreate is dedicated to add all the existing messages and listening for
+        // new child entries under the "messages" path of the sport activity in our Firebase
+        // Realtime Database. A new element for each message is automatically added to the UI.
 
         // Initializing Realtime Database
         mDatabase = FirebaseDatabase.getInstance();
 
-        settingUpMessageAdapter();
+        DatabaseReference messagesRef = mDatabase.getReference().child(MESSAGE_CHILD);
+        mFirebaseAdapter = new MessageAdapter(messagesRef, userId, ChatActivity.this);
+
+        //settingUpMessageAdapter();
 
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
@@ -186,42 +178,42 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-    private void settingUpMessageAdapter() {
-
-        DatabaseReference messagesRef = mDatabase.getReference().child(MESSAGE_CHILD);
-
-        FirebaseRecyclerOptions<Message> options = new FirebaseRecyclerOptions.Builder<Message>().setQuery(messagesRef, Message.class).build();
-
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(options) {
-
-            @Override
-            public int getItemViewType(int position) {
-                if(getItem(position).getMessageUserId().equals(userId)){
-                    return MESSAGE_OUT_VIEW_TYPE;
-                }
-                return MESSAGE_IN_VIEW_TYPE;
-            }
-
-            @Override
-            public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = null;
-                if(viewType == MESSAGE_IN_VIEW_TYPE) {
-                    view = LayoutInflater.from(parent.getContext())
-                            .inflate(R.layout.message, parent, false);
-                } else {
-                    view = LayoutInflater.from(parent.getContext())
-                            .inflate(R.layout.message_out, parent, false);
-                }
-                return new MessageViewHolder(view);
-            }
-
-            @Override
-            protected void onBindViewHolder(MessageViewHolder vh, int position, Message message) {
-                chatLoader.setVisibility(ProgressBar.INVISIBLE);
-                vh.bindMessage(message);
-            }
-        };
-    }
+//    private void settingUpMessageAdapter() {
+//
+//        DatabaseReference messagesRef = mDatabase.getReference().child(MESSAGE_CHILD);
+//
+//        FirebaseRecyclerOptions<Message> options = new FirebaseRecyclerOptions.Builder<Message>().setQuery(messagesRef, Message.class).build();
+//
+//        mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(options) {
+//
+//            @Override
+//            public int getItemViewType(int position) {
+//                if(getItem(position).getMessageUserId().equals(userId)){
+//                    return MESSAGE_OUT_VIEW_TYPE;
+//                }
+//                return MESSAGE_IN_VIEW_TYPE;
+//            }
+//
+//            @Override
+//            public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+//                View view = null;
+//                if(viewType == MESSAGE_IN_VIEW_TYPE) {
+//                    view = LayoutInflater.from(parent.getContext())
+//                            .inflate(R.layout.message, parent, false);
+//                } else {
+//                    view = LayoutInflater.from(parent.getContext())
+//                            .inflate(R.layout.message_out, parent, false);
+//                }
+//                return new MessageViewHolder(view);
+//            }
+//
+//            @Override
+//            protected void onBindViewHolder(MessageViewHolder vh, int position, Message message) {
+//                chatLoader.setVisibility(ProgressBar.INVISIBLE);
+//                vh.bindMessage(message);
+//            }
+//        };
+//    }
 
     private void getUserName() {
         DocumentReference docRef = fStore.collection("users").document(userId);
