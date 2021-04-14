@@ -213,6 +213,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="100dp"
         android:text="Chat"
+        android:onClick="goToChat"
         app:layout_constraintStart_toEndOf="@+id/activityRegisterDescription"
         app:layout_constraintTop_toBottomOf="@+id/activity_description_description" />
 
