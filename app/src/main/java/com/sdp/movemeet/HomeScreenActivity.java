@@ -68,7 +68,7 @@ public class HomeScreenActivity extends AppCompatActivity {
 
 
         ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
-        updater.checkInternetAndFetchActivities();
+        updater.fetchListActivities();
     }
 
     public void signIn(View v) {

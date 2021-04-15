@@ -22,19 +22,24 @@ import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Activity.Activity;
+import com.sdp.movemeet.Backend.BackendActivityManager;
 import com.sdp.movemeet.LoginActivity;
 import com.sdp.movemeet.MainActivity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.Sport;
 import com.sdp.movemeet.UploadActivityActivity;
+import com.sdp.movemeet.utility.ActivitiesUpdater;
 
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -70,6 +75,7 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -117,6 +123,64 @@ public class MainMapFragmentTest {
     public void mainMapFragment_isDisplayed() throws InterruptedException {
         onView(withId(R.id.fragment_map)).check(matches((isDisplayed())));
     }
+
+    @Test
+    public void activitiesUpdatesOnAdd() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
+        BackendActivityManager bam = new BackendActivityManager(db, "activities");
+
+        MainMapFragment mapFragment = fragmentTestRule.getFragment();
+        updater.fetchListActivities();
+        updater.updateListActivities((SupportMapFragment) mapFragment.getChildFragmentManager().findFragmentById(R.id.google_map), mapFragment);
+
+        Activity act = new Activity("activity",
+                "me",
+                "title",
+                10,
+                new ArrayList<String>(),
+                0,
+                0,
+                "desc",
+                new Date(),
+                10,
+                Sport.Running,
+                "address",
+                new Date());
+
+        bam.uploadActivity(act,
+                new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        updater.updateListActivities((SupportMapFragment) mapFragment.getChildFragmentManager().findFragmentById(R.id.google_map), mapFragment);
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        List<Activity> activities = updater.getActivities();
+                        Activity act_in_collection = activities.get(activities.size()-1);
+                        assertEquals(act.getActivityId(), act_in_collection.getActivityId());
+                        assertEquals(act.getAddress(), act_in_collection.getAddress());
+                        assertEquals(act.getDate(), act_in_collection.getDate());
+                        assertEquals(act.getDescription(), act_in_collection.getDescription());
+                        //assertEquals(act.getLatitude(), act_in_collection.getLatitude());
+                        //assertEquals(act.getLongitude(), act_in_collection.getLongitude());
+                        assertEquals(act.getNumberParticipant(), act_in_collection.getNumberParticipant());
+                        assertEquals(act.getParticipantId(), act_in_collection.getParticipantId());
+                        assertEquals(act.getTitle(), act_in_collection.getTitle());
+                        assertEquals(act.getOrganizerId(), act_in_collection.getOrganizerId());
+                        assertEquals(act.getSport(), act_in_collection.getSport());
+                    }
+                },
+                new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                });
+
+    }
+
 
     @Test
     public void testChooseIcons() {

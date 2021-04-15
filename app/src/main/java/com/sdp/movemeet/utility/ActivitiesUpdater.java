@@ -58,9 +58,9 @@ public class ActivitiesUpdater {
         return instance;
     }
 
-    public void setActivities(ArrayList<Activity> activities) {
+    /* public void setActivities(ArrayList<Activity> activities) {
         this.activities = activities;
-    }
+    } */
 
     public ArrayList<Activity> getActivities() {
         return activities;
@@ -95,12 +95,12 @@ public class ActivitiesUpdater {
         });
     }
 
-    public void checkInternetAndFetchActivities() {
+    /*public void checkInternetAndFetchActivities() {
         if (internetIsConnected()) {
             fetchListActivities();
         } /* else {
             activities = cache.loadActivitiesFromCache();
-        } */
+        }
     }
 
 
@@ -111,7 +111,7 @@ public class ActivitiesUpdater {
         } catch (Exception e) {
             return false;
         }
-    }
+    } */
 
     private Activity convertDocSnapToActivity(DocumentSnapshot docSnap) {
 
