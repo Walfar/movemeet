@@ -1,16 +1,21 @@
 package com.sdp.movemeet;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -23,6 +28,7 @@ import com.sdp.movemeet.Activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
 import com.sdp.movemeet.Navigation.Navigation;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
+import com.sdp.movemeet.utility.LocationFetcher;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -42,15 +48,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         //phone = findViewById(R.id.text_view_profile_phone);
         //fullName = findViewById(R.id.text_view_profile_name);
         //email = findViewById(R.id.text_view_profile_email);
 
         //handleRegisterUser();
-
-
-        ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
-        updater.updateListActivities();
 
         drawerLayout=findViewById(R.id.drawer_layout);
         navigationView=findViewById(R.id.nav_view);
@@ -121,5 +124,6 @@ public class MainActivity extends AppCompatActivity {
     public void logout(View view) {
         FirebaseInteraction.logoutIfUserNull(fAuth, MainActivity.this);
     }
+
 
 }

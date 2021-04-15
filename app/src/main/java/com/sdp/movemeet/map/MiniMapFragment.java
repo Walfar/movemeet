@@ -32,6 +32,7 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
     private SupportMapFragment supportMapFragment;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Location currentLocation;
+    private LocationFetcher locationFetcher;
 
     public static MiniMapFragment newInstance() {
         return new MiniMapFragment();
@@ -44,7 +45,7 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(supportMapFragment.getActivity());
-        LocationFetcher.fetchLastLocation(supportMapFragment, fusedLocationProviderClient, this);
+        LocationFetcher.fetchLastLocation(fusedLocationProviderClient, supportMapFragment, this);
 
         return view;
     }
@@ -52,7 +53,7 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
     @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.setOnMapClickListener(this::onMapClick);
-        currentLocation = LocationFetcher.getLocation();
+        currentLocation = LocationFetcher.currentLocation;
         LatLng location = ((UploadActivityActivity) getActivity()).getAddressLocation();
         //Zoom on the location that the user set, or on his GPS position if none found
         Log.d("MiniMapFragment TAG", "user current location is " + currentLocation.toString());

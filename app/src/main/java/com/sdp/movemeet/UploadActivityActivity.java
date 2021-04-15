@@ -366,7 +366,7 @@ public class UploadActivityActivity extends AppCompatActivity {
         Activity activity = new Activity(
                 organizerId + " || " +  date, organizerId, title, nParticipants,
                 new ArrayList<String>(nParticipants), longitude, latitude, description, date, duration,
-                sport, address
+                sport, address, new Date()
         );
 
         return activity;

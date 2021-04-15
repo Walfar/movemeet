@@ -37,7 +37,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS
+                DUMMY_ADDRESS,
+                DUMMY_DATE
         );
     }
 
@@ -55,7 +56,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         assertEquals(activity.getActivityId(), DUMMY_ACTIVITY_ID);
         assertEquals(activity.getOrganizerId(), DUMMY_ORGANISATOR_ID);
@@ -69,6 +71,7 @@ public class ActivityTest {
         assertEquals(activity.getDuration(), DUMMY_DURATION, 0.1);
         assertEquals(activity.getSport(), DUMMY_SPORT);
         assertEquals(activity.getAddress(), DUMMY_ADDRESS);
+        assertEquals(activity.getCreatedAt(), DUMMY_DATE);
         activity = null;
     }
 
@@ -86,7 +89,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -103,7 +107,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -120,7 +125,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -137,7 +143,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -154,7 +161,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -171,7 +179,8 @@ public class ActivityTest {
                 null,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -188,7 +197,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 0,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -205,7 +215,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 null,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -222,7 +233,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                null);
+                null,
+                DUMMY_DATE);
     }
 
     @Test
@@ -239,7 +251,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         activity.setTitle("Hello");
         activity.setNumberParticipant(3);
@@ -250,7 +263,10 @@ public class ActivityTest {
         activity.setDate(newDate);
         activity.setDuration(20.4);
         activity.setAddress("EPFL");
+        Date createAt = new Date(2022, 11, 10, 1, 10);
+        activity.setCreatedAt(createAt);
 
+        assertEquals(activity.getCreatedAt(), createAt);
         assertEquals(activity.getTitle(), "Hello");
         assertEquals(activity.getNumberParticipant(), 3);
         assertEquals(activity.getLongitude(), 853.4, 0.1);
@@ -276,7 +292,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         activity.setTitle(null);
         activity.setNumberParticipant(3);
@@ -304,7 +321,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         activity.addParticipantId(null);
 
@@ -324,7 +342,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         String user = "Caro";
 
@@ -347,7 +366,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
         String user1 = "BOB";
         String user2 = "bob";
         activity.addParticipantId(user1);
@@ -371,7 +391,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
         activity.removeParticipantId(null);
 
     }
@@ -390,7 +411,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         String user1 = "BOB";
         String user2 = "bob";
@@ -418,7 +440,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         assertEquals(activity.toString(), "ActivityId:" + DUMMY_ACTIVITY_ID + "\nOrganizerId" + DUMMY_ORGANISATOR_ID + "\nTitle:" + DUMMY_TITLE + "\nNumberParticipant:" + DUMMY_NUMBER_PARTICIPANT +
                 "\nParticipantId:" + DUMMY_PARTICIPANTS_ID + "\nLongitude:" + DUMMY_LONGITUDE + "\nLatitude:" + DUMMY_LATITUDE + "\nDescription:" + DUMMY_DESCRIPTION +
@@ -441,7 +464,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         Activity activity2 = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -455,7 +479,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         assertEquals(true, activity1.equals(activity2));
 
@@ -478,7 +503,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         assertEquals(false, activity1.equals(null));
 
@@ -500,7 +526,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         assertEquals(false, activity1.equals("1"));
 
@@ -525,7 +552,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         Activity activity2 = new Activity(
                 "1",
@@ -539,7 +567,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -562,7 +591,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         Activity activity2 = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -576,7 +606,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -600,7 +631,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         Activity activity2 = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -614,7 +646,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -638,7 +671,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         Activity activity2 = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -652,7 +686,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -676,7 +711,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         ArrayList<String> DUMMY_PARTICIPANTS_ID_BIS = new ArrayList<String>();
         DUMMY_PARTICIPANTS_ID_BIS.add("bobx");
@@ -693,7 +729,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -717,7 +754,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         Activity activity2 = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -731,7 +769,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -755,7 +794,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         Activity activity2 = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -769,7 +809,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -793,7 +834,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         Activity activity2 = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -807,7 +849,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -831,7 +874,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         Activity activity2 = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -845,7 +889,8 @@ public class ActivityTest {
                 new Date(2022,3,26),
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -869,7 +914,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         Activity activity2 = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -883,7 +929,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION+1,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -906,7 +953,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         Activity activity2 = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -920,7 +968,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 Sport.Badminton,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -944,7 +993,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         Activity activity2 = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -958,7 +1008,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                "addressBis");
+                "addressBis",
+                DUMMY_DATE);
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -982,7 +1033,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         activity.setDuration(0);
 
@@ -1003,7 +1055,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         activity.setDescription(null);
 
@@ -1023,7 +1076,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         activity.setDate(null);
     }
@@ -1042,7 +1096,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         activity.setNumberParticipant(0);
     }
@@ -1061,7 +1116,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         activity.setAddress(null);
     }
@@ -1080,7 +1136,8 @@ public class ActivityTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         String user1 = "Alice";
         String user2 = "Bob";
