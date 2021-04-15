@@ -34,7 +34,6 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
     private SupportMapFragment supportMapFragment;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Location currentLocation;
-    private LocationFetcher locationFetcher;
 
     public static MiniMapFragment newInstance() {
         return new MiniMapFragment();
@@ -43,6 +42,8 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
      public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_map, container, false);
+
+        currentLocation = LocationFetcher.defaultLocation();
 
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
 

@@ -24,6 +24,7 @@ import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -128,13 +129,13 @@ public class MainMapFragmentTest {
 
     @Test
     public void activitiesUpdatesOnAdd() {
-        SupportMapFragment supportMapFragment = (SupportMapFragment) fragmentTestRule.getFragment().getChildFragmentManager().findFragmentById(R.id.google_map);
+        MainMapFragment mapFragment = fragmentTestRule.getFragment();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
         BackendActivityManager bam = new BackendActivityManager(db, "activities");
 
         updater.fetchListActivities();
-        updater.updateListActivities();
+        updater.updateListActivities(mapFragment);
 
         Activity act = new Activity("activity",
                 "me",
@@ -154,7 +155,7 @@ public class MainMapFragmentTest {
                 new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        updater.updateListActivities();
+                        updater.updateListActivities(mapFragment);
                         try {
                             Thread.sleep(2000);
                         } catch (InterruptedException e) {
@@ -166,8 +167,8 @@ public class MainMapFragmentTest {
                         assertEquals(act.getAddress(), act_in_collection.getAddress());
                         assertEquals(act.getDate(), act_in_collection.getDate());
                         assertEquals(act.getDescription(), act_in_collection.getDescription());
-                        //assertEquals(act.getLatitude(), act_in_collection.getLatitude());
-                        //assertEquals(act.getLongitude(), act_in_collection.getLongitude());
+                        assertEquals(act.getLatitude(), act_in_collection.getLatitude());
+                        assertEquals(act.getLongitude(), act_in_collection.getLongitude());
                         assertEquals(act.getNumberParticipant(), act_in_collection.getNumberParticipant());
                         assertEquals(act.getParticipantId(), act_in_collection.getParticipantId());
                         assertEquals(act.getTitle(), act_in_collection.getTitle());
