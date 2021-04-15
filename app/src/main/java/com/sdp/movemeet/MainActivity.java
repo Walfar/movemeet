@@ -42,16 +42,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //phone = findViewById(R.id.text_view_profile_phone);
-        //fullName = findViewById(R.id.text_view_profile_name);
-        //email = findViewById(R.id.text_view_profile_email);
-
-        //handleRegisterUser();
-
 
         ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
         updater.updateListActivities();
 
+        createDrawer();
+
+        handleRegisterUser();
+
+        //The aim is to block any direct access to this page if the user is not logged
+        //Smth must be wrong since it prevents automatic connection during certain tests
+        /*if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
+            finish();
+        }*/
+
+    }
+
+    public void createDrawer(){
         drawerLayout=findViewById(R.id.drawer_layout);
         navigationView=findViewById(R.id.nav_view);
         textView=findViewById(R.id.textView);
@@ -71,17 +79,6 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
         navigationView.setCheckedItem(R.id.nav_home);
-
-
-        handleRegisterUser();
-
-        //The aim is to block any direct access to this page if the user is not logged
-        //Smth must be wrong since it prevents automatic connection during certain tests
-        /*if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        }*/
-
     }
 
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -95,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 Navigation.goToActivityUpload(this.navigationView);
                 break;
             case R.id.nav_logout:
-                logout(this.navigationView);
+                FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
                 break;
             case R.id.nav_start_activity:
                 Navigation.startActivity(this.navigationView);
@@ -115,11 +112,6 @@ public class MainActivity extends AppCompatActivity {
             TextView[] textViewArray = {fullName, email, phone};
             FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, MainActivity.this);
         }
-    }
-
-
-    public void logout(View view) {
-        FirebaseInteraction.logoutIfUserNull(fAuth, MainActivity.this);
     }
 
 }

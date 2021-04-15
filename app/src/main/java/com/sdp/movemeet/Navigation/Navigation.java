@@ -44,4 +44,5 @@ public class Navigation extends AppCompatActivity{
         intent.putExtra("ACTIVITY_CHAT_ID", "general_chat");
         mContext.startActivity(intent);
     }
+
 }

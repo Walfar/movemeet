@@ -6,5 +6,16 @@ public enum Sport {
     Swimming,
     Tennis,
     Badminton,
-    Windsurfing
+    Boxing,
+    Climbing,
+    Trekking,
+    Windsurfing,
+    Pingpong,
+    Golf,
+    Yoga,
+    Hockey,
+    Rugby,
+    Gym,
+    Dancing,
+    VolleyBall
 }
