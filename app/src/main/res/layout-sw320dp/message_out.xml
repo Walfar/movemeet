@@ -7,7 +7,7 @@
     tools:context=".chat.ChatActivity">
 
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
@@ -16,8 +16,13 @@
         android:orientation="horizontal"
         android:gravity="end"
         xmlns:card_view="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         card_view:ignore="MissingConstraints">
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="10dp">
 
 
             <LinearLayout
@@ -26,15 +31,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/lnrContr"
                     android:orientation="horizontal"
-                    android:minWidth="210dp"
-                    android:background="#b7bff1">
-
+                    android:minWidth="210dp">
 
                     <TextView
                         android:id="@+id/message_user"
@@ -89,6 +91,16 @@
 
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+        </androidx.cardview.widget.CardView>
+        <ImageView
+            android:id="@+id/imageProfile"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:src="@drawable/ic_person_black_24dp"
+            android:layout_marginEnd="4dp"
+            android:paddingEnd="4dp"
+            android:layout_marginStart="4dp" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
