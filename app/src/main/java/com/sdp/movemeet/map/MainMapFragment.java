@@ -75,7 +75,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         LocationFetcher.fetchLastLocation(fusedLocationProviderClient, supportMapFragment, this);
 
         this.updater = ActivitiesUpdater.getInstance();
-        updater.checkInternetAndFetchActivities();
+        updater.updateListActivities(supportMapFragment, this);
 
         user = fAuth.getCurrentUser();
 
