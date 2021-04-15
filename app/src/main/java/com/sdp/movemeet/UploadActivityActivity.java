@@ -169,7 +169,7 @@ public class UploadActivityActivity extends AppCompatActivity {
             case R.id.nav_add_activity:
                 break;
             case R.id.nav_logout:
-                FirebaseInteraction.logoutIfUserNull(fAuth, this);
+                FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
                 break;
             case R.id.nav_start_activity:
                 Navigation.startActivity(this.navigationView);

@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 Navigation.goToActivityUpload(this.navigationView);
                 break;
             case R.id.nav_logout:
-                FirebaseInteraction.logoutIfUserNull(fAuth, this);
+                FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
                 break;
             case R.id.nav_start_activity:
                 Navigation.startActivity(this.navigationView);
