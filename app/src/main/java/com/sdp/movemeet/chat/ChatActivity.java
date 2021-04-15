@@ -18,8 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,7 +41,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
-
 import com.sdp.movemeet.LoginActivity;
 import com.sdp.movemeet.Navigation.Navigation;
 import com.sdp.movemeet.R;
@@ -94,7 +91,7 @@ public class ChatActivity extends AppCompatActivity {
     NavigationView navigationView;
     Toolbar toolbar;
     TextView textView;
-  
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,47 +120,25 @@ public class ChatActivity extends AppCompatActivity {
         FirebaseInteraction.checkIfUserSignedIn(fAuth, ChatActivity.this);
 
         Intent data = getIntent();
-        receivedActivityChatId = data.getStringExtra("ACTIVITY_CHAT_ID");
-        receivedActivityTitle = data.getStringExtra("ACTIVITY_TITLE");
-        if (receivedActivityChatId != null) {
-            Log.d(TAG, "DocumentSnapshot data: " + receivedActivityChatId);
-            activityChatId = receivedActivityChatId;
-            // Dynamically creating a new child under the branch "chats" in Firebase Realtime
-            // Database with the value of "activityChatId" in case it doesn't exist yet
-            chatRoom = chatRef.child(activityChatId);
-        } else {
-            chatRoom = chatRef.child(GENERAL_CHAT_CHILD); // default general chat room
-        }
-
-        countMessagesInChatRoom();
+        settingUpChatRoom(data);
 
         // The rest of the onCreate is dedicated to add all the existing messages and listening for
         // new child entries under the "messages" path of the sport activity in our Firebase
         // Realtime Database. A new element for each message is automatically added to the UI.
 
-        mFirebaseAdapter = new MessageAdapter(chatRoom, userId, ChatActivity.this);
+        addExistingMessagesAndListenForNewMessages();
 
-        mLinearLayoutManager = new LinearLayoutManager(this);
-        mLinearLayoutManager.setStackFromEnd(true);
-        messageRecyclerView.setLayoutManager(mLinearLayoutManager);
-        messageRecyclerView.setAdapter(mFirebaseAdapter);
-
-        // Scrolling down when a new message arrives
-        mFirebaseAdapter.registerAdapterDataObserver(
-                new MyScrollToBottomObserver(messageRecyclerView, mFirebaseAdapter, mLinearLayoutManager)
-        );
-
-        drawerLayout=findViewById(R.id.drawer_layout);
-        navigationView=findViewById(R.id.nav_view);
-        textView=findViewById(R.id.textView);
-        toolbar=findViewById(R.id.toolbar);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        textView = findViewById(R.id.textView);
+        toolbar = findViewById(R.id.toolbar);
 
         navigationView.bringToFront();
-        ActionBarDrawerToggle toggle=new
-                ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new
+                ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
 
-        View hView =  navigationView.inflateHeaderView(R.layout.header);
+        View hView = navigationView.inflateHeaderView(R.layout.header);
 
         fullName = hView.findViewById(R.id.text_view_profile_name);
         phone = hView.findViewById(R.id.text_view_profile_phone);
@@ -177,13 +152,42 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+    private void addExistingMessagesAndListenForNewMessages() {
+        mFirebaseAdapter = new MessageAdapter(chatRoom, userId, ChatActivity.this);
+
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mLinearLayoutManager.setStackFromEnd(true);
+        messageRecyclerView.setLayoutManager(mLinearLayoutManager);
+        messageRecyclerView.setAdapter(mFirebaseAdapter);
+
+        // Scrolling down when a new message arrives
+        mFirebaseAdapter.registerAdapterDataObserver(
+                new MyScrollToBottomObserver(messageRecyclerView, mFirebaseAdapter, mLinearLayoutManager)
+        );
+    }
+
+    private void settingUpChatRoom(Intent data) {
+        receivedActivityChatId = data.getStringExtra("ACTIVITY_CHAT_ID");
+        receivedActivityTitle = data.getStringExtra("ACTIVITY_TITLE");
+        if (receivedActivityChatId != null) {
+            Log.d(TAG, "DocumentSnapshot data: " + receivedActivityChatId);
+            activityChatId = receivedActivityChatId;
+            // Dynamically creating a new child under the branch "chats" in Firebase Realtime
+            // Database with the value of "activityChatId" in case it doesn't exist yet
+            chatRoom = chatRef.child(activityChatId);
+        } else {
+            chatRoom = chatRef.child(GENERAL_CHAT_CHILD); // default general chat room
+        }
+        countMessagesInChatRoom();
+    }
+
     private void countMessagesInChatRoom() {
         // Counting the number of messages (children) in the current chatRoom
         chatRoom.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                    Log.v(TAG,"childDataSnapshot.getKey(): " + childDataSnapshot.getKey());
+                    Log.v(TAG, "childDataSnapshot.getKey(): " + childDataSnapshot.getKey());
                     initialMessageCounter += 1;
                 }
                 Log.v(TAG, "initialMessageCounter: " + initialMessageCounter);
@@ -193,6 +197,7 @@ public class ChatActivity extends AppCompatActivity {
                     initialChatWelcomeMessage.setVisibility(View.VISIBLE);
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.v(TAG, "databaseError: " + databaseError);
@@ -220,7 +225,8 @@ public class ChatActivity extends AppCompatActivity {
             case R.id.nav_chat:
                 break;
         }
-        drawerLayout.closeDrawer(GravityCompat.START); return true;
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     public void logout(View view) {
@@ -275,11 +281,6 @@ public class ChatActivity extends AppCompatActivity {
         mFirebaseAdapter.startListening();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
     public void sendMessage(View view) {
         String userName = fullNameString;
         String messageText = messageInput.getText().toString();
@@ -308,14 +309,10 @@ public class ChatActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK && data != null) {
                 final Uri uri = data.getData();
                 Log.d(TAG, "Uri: " + uri.toString());
-
                 Message tempMessage = new Message(fullNameString, null, userId, LOADING_IMAGE_URL);
-
-                chatRoom.push()
-                        .setValue(tempMessage, new DatabaseReference.CompletionListener() {
+                chatRoom.push().setValue(tempMessage, new DatabaseReference.CompletionListener() {
                             @Override
-                            public void onComplete(DatabaseError databaseError,
-                                                   DatabaseReference databaseReference) {
+                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                                 if (databaseError != null) {
                                     Log.w(TAG, "Unable to write message to database.",
                                             databaseError.toException());
