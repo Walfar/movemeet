@@ -12,8 +12,6 @@ import com.sdp.movemeet.ProfileActivity;
 import com.sdp.movemeet.UploadActivityActivity;
 import com.sdp.movemeet.chat.ChatActivity;
 
-import androidx.annotation.NonNull;
-
 public class Navigation extends AppCompatActivity{
 
     public static void startActivity(View view) {
@@ -40,7 +38,7 @@ public class Navigation extends AppCompatActivity{
         mContext.startActivity(intent);
     }
 
-    public static void goToChat(View view) {
+    public void goToChat(View view) {
         Context mContext = view.getContext();
         Intent intent = new Intent(mContext, ChatActivity.class);
         mContext.startActivity(intent);
