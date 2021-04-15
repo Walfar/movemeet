@@ -1,6 +1,8 @@
 package com.sdp.movemeet.map;
 
 import android.Manifest;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Point;
 import android.location.Location;
@@ -126,14 +128,13 @@ public class MainMapFragmentTest {
 
     @Test
     public void activitiesUpdatesOnAdd() {
-        MainMapFragment mapFragment = new MainMapFragment();
-        fragmentTestRule.launchFragment(mapFragment);
+        SupportMapFragment supportMapFragment = (SupportMapFragment) fragmentTestRule.getFragment().getChildFragmentManager().findFragmentById(R.id.google_map);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
         BackendActivityManager bam = new BackendActivityManager(db, "activities");
 
         updater.fetchListActivities();
-        updater.updateListActivities((SupportMapFragment) mapFragment.getChildFragmentManager().findFragmentById(R.id.google_map), mapFragment);
+        updater.updateListActivities();
 
         Activity act = new Activity("activity",
                 "me",
@@ -153,7 +154,7 @@ public class MainMapFragmentTest {
                 new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        updater.updateListActivities((SupportMapFragment) mapFragment.getChildFragmentManager().findFragmentById(R.id.google_map), mapFragment);
+                        updater.updateListActivities();
                         try {
                             Thread.sleep(2000);
                         } catch (InterruptedException e) {
@@ -185,7 +186,7 @@ public class MainMapFragmentTest {
 
     @Test
     public void testChooseIcons() {
-        MainMapFragment mapFragment = MainMapFragment.newInstance();
+        MainMapFragment mapFragment = fragmentTestRule.getFragment();
         assertEquals(R.drawable.icon_boxing, setSportIcon(Boxing, mapFragment));
         assertEquals(R.drawable.icon_windsurfing, setSportIcon(Windsurfing, mapFragment));
         assertEquals(R.drawable.icon_dancing, setSportIcon(Dancing, mapFragment));

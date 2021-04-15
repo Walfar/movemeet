@@ -41,9 +41,6 @@ public class ActivitiesUpdater {
 
     private static ActivitiesUpdater instance;
 
-    private SupportMapFragment supportMapFragment;
-    private OnMapReadyCallback callback;
-
     private ActivitiesUpdater() {
         activities = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
@@ -77,9 +74,7 @@ public class ActivitiesUpdater {
     /**
      * This method is to be used when the user is accessing the map.
      */
-    public void updateListActivities(SupportMapFragment supportMapFragment, OnMapReadyCallback callback) {
-        this.supportMapFragment = supportMapFragment;
-        this.callback = callback;
+    public void updateListActivities() {
         CollectionReference collection = bam.getActivitiesCollectionReference();
         //Count the number of elements in the collection
         collection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -172,7 +167,7 @@ public class ActivitiesUpdater {
                     Log.d(TAG, "activities size is " + activities.size());
                 }
                 //if (cacheAllowed) cache.saveActivitiesInCache(activities);
-                if (updateMap) supportMapFragment.getMapAsync(callback);
+                //if (updateMap) supportMapFragment.getMapAsync(callback);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
