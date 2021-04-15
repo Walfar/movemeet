@@ -10,9 +10,11 @@ import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.LoginActivity;
 import com.sdp.movemeet.R;
 
+import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -77,6 +79,14 @@ public class LoginActivityTest {
     @Test public void Register() {
 
         onView(withId(R.id.text_view_create_account)).perform(click());
+    }
+
+    @After
+    public void signOut() {
+        FirebaseAuth fAuth = FirebaseAuth.getInstance();
+        if (fAuth.getCurrentUser() != null) {
+            fAuth.signOut();
+        }
     }
 
     /*@Test

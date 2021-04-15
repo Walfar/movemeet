@@ -31,9 +31,11 @@ public class LocationFetcher {
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                currentLocation = location;
-                Toast.makeText(supportMapFragment.getActivity(), currentLocation.getLatitude() + ", " + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
-                supportMapFragment.getMapAsync(callback);
+                if (location != null) {
+                    currentLocation = location;
+                    Toast.makeText(supportMapFragment.getActivity(), currentLocation.getLatitude() + ", " + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
+                    supportMapFragment.getMapAsync(callback);
+                }
             }
         });
     }
