@@ -203,4 +203,14 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             }
         }
     }
+
+    public void goToChat(View view) {
+        startActivity(new Intent(getApplicationContext(), ChatActivity.class));
+        Intent intent = new Intent(ActivityDescriptionActivity.this, ChatActivity.class);
+        String activityChatId = act.getActivityId() + " - chatId";
+        intent.putExtra("ACTIVITY_CHAT_ID", activityChatId);
+        String activityTitle = act.getTitle();
+        intent.putExtra("ACTIVITY_TITLE", activityTitle);
+        startActivity(intent);
+    }
 }
