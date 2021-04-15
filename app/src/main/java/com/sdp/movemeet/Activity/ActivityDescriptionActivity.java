@@ -10,14 +10,19 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
 import com.sdp.movemeet.LoginActivity;
@@ -33,6 +38,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     Button RegisterToActivityButton;
     private Activity act;
+    private static final String TAG = "ActivityDescriptionActivity";
+
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -42,6 +49,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     TextView fullName, email, phone;
     FirebaseFirestore fStore;
     String userId;
+    String fullNameString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +61,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (intent != null) {
             act = (Activity) intent.getSerializableExtra("activity");
         }
+
+        userId = act.getOrganizerId();
+        fStore = FirebaseFirestore.getInstance();
+        getUserName();
 
         createTitleView();
         createParticipantNumberView();
@@ -142,6 +154,28 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
+    private void getUserName() {
+        DocumentReference docRef = fStore.collection("users").document(userId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        fullNameString = (String) document.getData().get("fullName");
+                        Log.i(TAG, "fullNameString: " + fullNameString);
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
     private void createTitleView() {
         // activityTitle from the activity
         TextView activityTitle = (TextView) findViewById(R.id.activity_title_description);
@@ -191,7 +225,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void createOrganizerView(){
         TextView organisatorView = (TextView) findViewById(R.id.activity_organisator_description);
         if(act != null){
-            organisatorView.setText(act.getOrganizerId());
+            getUserName();
+            organisatorView.setText(fullNameString);
         }
     }
 
