@@ -303,8 +303,6 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
-
         if (requestCode == REQUEST_IMAGE) {
             if (resultCode == RESULT_OK && data != null) {
                 final Uri uri = data.getData();
@@ -314,11 +312,9 @@ public class ChatActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                                 if (databaseError != null) {
-                                    Log.w(TAG, "Unable to write message to database.",
-                                            databaseError.toException());
+                                    Log.w(TAG, "Unable to write message to database.", databaseError.toException());
                                     return;
                                 }
-
                                 // Building a StorageReference and then uploading the image file
                                 String key = databaseReference.getKey();
                                 StorageReference fileRef = storageReference

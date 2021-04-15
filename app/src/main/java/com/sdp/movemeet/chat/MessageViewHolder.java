@@ -48,43 +48,46 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             messageTextView.setVisibility(TextView.VISIBLE);
         // Handling the image message
         } else if (message.getImageUrl() != null) {
-            String imageUrl = message.getImageUrl();
-            if (imageUrl.startsWith("gs://")) {
-
-                StorageReference storageReference = FirebaseStorage.getInstance()
-                        .getReferenceFromUrl(imageUrl);
-
-                storageReference.getDownloadUrl()
-                        .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                String downloadUrl = uri.toString();
-                                Glide.with(messageImageView.getContext())
-                                        .load(downloadUrl)
-                                        .into(messageImageView);
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Getting download url was not successful.", e);
-                            }
-                        });
-            } else {
-                Glide.with(messageImageView.getContext())
-                        .load(message.getImageUrl())
-                        .into(messageImageView);
-            }
+            handlingImageMessage(message);
 
             messageImageView.setVisibility(ImageView.VISIBLE);
             messageTextView.setVisibility(TextView.GONE);
         }
 
-
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String messageTimeString = simpleDateFormat.format(message.getMessageTime());
         messageTimeTextView.setText(messageTimeString);
         messageTimeTextView.setVisibility(TextView.VISIBLE);
+    }
+
+    private void handlingImageMessage(Message message) {
+        String imageUrl = message.getImageUrl();
+        if (imageUrl.startsWith("gs://")) {
+
+            StorageReference storageReference = FirebaseStorage.getInstance()
+                    .getReferenceFromUrl(imageUrl);
+
+            storageReference.getDownloadUrl()
+                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String downloadUrl = uri.toString();
+                            Glide.with(messageImageView.getContext())
+                                    .load(downloadUrl)
+                                    .into(messageImageView);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Getting download url was not successful.", e);
+                        }
+                    });
+        } else {
+            Glide.with(messageImageView.getContext())
+                    .load(message.getImageUrl())
+                    .into(messageImageView);
+        }
     }
 
 }
