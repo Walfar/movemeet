@@ -5,5 +5,6 @@ public enum Sport {
     Soccer,
     Swimming,
     Tennis,
-    Badminton
+    Badminton,
+    Windsurfing
 }

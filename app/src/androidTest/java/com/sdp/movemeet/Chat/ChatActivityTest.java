@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.annotation.NonNull;
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.contrib.DrawerActions;
@@ -14,6 +16,9 @@ import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sdp.movemeet.HomeScreenActivity;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.chat.ChatActivity;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -30,6 +36,8 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.concurrent.CountDownLatch;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
@@ -52,13 +60,13 @@ public class ChatActivityTest {
     private FirebaseDatabase mDatabase;
     private FirebaseAuth fAuth;
 
-    @Rule
-    public ActivityTestRule<HomeScreenActivity> mActivityTestRule = new ActivityTestRule<>(HomeScreenActivity.class);
+    /*@Rule
+    public ActivityTestRule<HomeScreenActivity> mActivityTestRule = new ActivityTestRule<>(HomeScreenActivity.class);*/
 
     @Test
     public void chatActivityTest() {
 
-        onView(withId(R.id.signInButton)).perform(click());
+        /*onView(withId(R.id.signInButton)).perform(click());
 
         onView(withId(R.id.edit_text_email)).perform(replaceText("antho2@gmail.com"), closeSoftKeyboard());
 
@@ -95,7 +103,30 @@ public class ChatActivityTest {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
             assert (false);
+        }*/
+
+        CountDownLatch latch = new CountDownLatch(1);
+
+        fAuth = FirebaseAuth.getInstance();
+        fAuth.signInWithEmailAndPassword("movemeet@gmail.com", "password").addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                latch.countDown();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                assert(false);
+            }
+        });
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            assert(false);
         }
+
+        ActivityScenario scenario = ActivityScenario.launch(ChatActivity.class);
 
         onView(withId(R.id.message_input_text)).perform(replaceText("my message"), closeSoftKeyboard());
 
