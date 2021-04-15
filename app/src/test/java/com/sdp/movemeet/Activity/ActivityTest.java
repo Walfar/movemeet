@@ -445,7 +445,7 @@ public class ActivityTest {
 
         assertEquals(activity.toString(), "ActivityId:" + DUMMY_ACTIVITY_ID + "\nOrganizerId" + DUMMY_ORGANISATOR_ID + "\nTitle:" + DUMMY_TITLE + "\nNumberParticipant:" + DUMMY_NUMBER_PARTICIPANT +
                 "\nParticipantId:" + DUMMY_PARTICIPANTS_ID + "\nLongitude:" + DUMMY_LONGITUDE + "\nLatitude:" + DUMMY_LATITUDE + "\nDescription:" + DUMMY_DESCRIPTION +
-                "\nDate:" + DUMMY_DATE + "\nDuration:" + DUMMY_DURATION + "\nSport:" + DUMMY_SPORT + "\nAddress:" + DUMMY_ADDRESS);
+                "\nDate:" + DUMMY_DATE + "\nDuration:" + DUMMY_DURATION + "\nSport:" + DUMMY_SPORT + "\nAddress:" + DUMMY_ADDRESS + "\nCreatedAt:" + DUMMY_DATE);
         activity = null;
 
     }
