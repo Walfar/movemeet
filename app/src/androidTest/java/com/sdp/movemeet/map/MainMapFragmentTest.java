@@ -69,8 +69,10 @@ import static com.sdp.movemeet.Sport.VolleyBall;
 import static com.sdp.movemeet.Sport.Windsurfing;
 import static com.sdp.movemeet.Sport.Yoga;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -113,6 +115,7 @@ public class MainMapFragmentTest {
         });
         waitFor(2000);
     }
+
 
 
     @Test
@@ -233,7 +236,10 @@ public class MainMapFragmentTest {
         uiDevice.click(200, 400);
     }
 
-
+    @After
+    public void after() {
+        fAuth.signOut();
+    }
 
 
     private void waitFor(int duration) throws InterruptedException {
