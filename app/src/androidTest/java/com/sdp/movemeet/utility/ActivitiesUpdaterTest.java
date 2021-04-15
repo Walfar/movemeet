@@ -60,7 +60,8 @@ public class ActivitiesUpdaterTest {
                 new Date(),
                 10,
                 Sport.Running,
-                "address");
+                "address",
+                new Date());
 
         bam.uploadActivity(act,
                 new OnSuccessListener<Void>() {
