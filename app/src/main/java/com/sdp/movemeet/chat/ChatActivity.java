@@ -160,7 +160,7 @@ public class ChatActivity extends AppCompatActivity {
         messageRecyclerView.setLayoutManager(mLinearLayoutManager);
         messageRecyclerView.setAdapter(mFirebaseAdapter);
 
-        // Scrolling down when a new message arrives
+        // Scrolling down when a new message arrives from the database
         mFirebaseAdapter.registerAdapterDataObserver(
                 new MyScrollToBottomObserver(messageRecyclerView, mFirebaseAdapter, mLinearLayoutManager)
         );
