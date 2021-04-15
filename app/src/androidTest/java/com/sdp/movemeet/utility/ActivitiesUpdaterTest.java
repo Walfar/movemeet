@@ -45,6 +45,7 @@ public class ActivitiesUpdaterTest {
         assertNotNull(updater);
     }
 
+    /*
     @Test
     public void activitiesUpdatesOnAdd() {
 
@@ -87,5 +88,6 @@ public class ActivitiesUpdaterTest {
                 });
 
     }
+    */
 
 }
