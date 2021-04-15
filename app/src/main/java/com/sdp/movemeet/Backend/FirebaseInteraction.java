@@ -73,7 +73,7 @@ public class FirebaseInteraction {
         }
     }
 
-    public static void logoutIfUserNull(FirebaseAuth fAuth, Activity activity) {
+    public static void logoutIfUserNonNull(FirebaseAuth fAuth, Activity activity) {
         FirebaseUser user = fAuth.getCurrentUser();
         if (user != null) {
             // Logging out the user from Firebase

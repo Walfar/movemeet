@@ -45,12 +45,15 @@ import com.sdp.movemeet.MainActivity;
 import com.sdp.movemeet.Navigation.Navigation;
 import com.sdp.movemeet.R;
 
+
 public class ChatActivity extends AppCompatActivity {
 
     public static final String CHATS_CHILD = "chats";
     public static final String ROOM_CHILD = "general_chat";
 
     private static final String TAG = "ChatActivity";
+    public static final String CHATS_CHILD = "chats";
+    public static final String ROOM_CHILD = "general_chat";
 
     public static final String MESSAGE_CHILD = "messages";
     public static final String ANONYMOUS_NAME = "anonymous_name";
@@ -132,6 +135,20 @@ public class ChatActivity extends AppCompatActivity {
                 new MyScrollToBottomObserver(messageRecyclerView, mFirebaseAdapter, mLinearLayoutManager)
         );
 
+        createDrawer();
+
+        handleRegisterUser();
+
+        //The aim is to block any direct access to this page if the user is not logged
+        //Smth must be wrong since it prevents automatic connection during certain tests
+        /*if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
+            finish();
+        }*/
+
+    }
+
+    public void createDrawer(){
         drawerLayout=findViewById(R.id.drawer_layout);
         navigationView=findViewById(R.id.nav_view);
         textView=findViewById(R.id.textView);
@@ -150,10 +167,7 @@ public class ChatActivity extends AppCompatActivity {
 
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
-        navigationView.setCheckedItem(R.id.nav_home);
-
-        handleRegisterUser();
-
+        navigationView.setCheckedItem(R.id.nav_chat);
     }
 
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -168,7 +182,7 @@ public class ChatActivity extends AppCompatActivity {
                 Navigation.goToActivityUpload(this.navigationView);
                 break;
             case R.id.nav_logout:
-                logout(this.navigationView);
+                FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
                 break;
             case R.id.nav_start_activity:
                 Navigation.startActivity(this.navigationView);
@@ -177,16 +191,6 @@ public class ChatActivity extends AppCompatActivity {
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START); return true;
-    }
-
-    public void logout(View view) {
-
-        if (fAuth.getCurrentUser() != null) {
-            fAuth.getInstance().signOut(); // this will do the logout of the user from Firebase
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        }
-
     }
 
     private void settingUpMessageAdapter() {

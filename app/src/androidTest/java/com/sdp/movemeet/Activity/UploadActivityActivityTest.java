@@ -83,6 +83,7 @@ public class UploadActivityActivityTest {
         };
     }
 
+
     @Before
     public void signIn() {
         CountDownLatch latch = new CountDownLatch(1);
