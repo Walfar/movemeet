@@ -284,7 +284,11 @@ public class UploadActivityActivity extends AppCompatActivity {
                     dateListener, year, month, day);
         } else if (id == 444) {
             return new TimePickerDialog(this,
-                    durationListener, hours, minutes, false);
+                    durationListener,
+                    calendar.get(Calendar.HOUR_OF_DAY),
+                    calendar.get(Calendar.MINUTE),
+                    true);
+
         } else if (id == 222) {
             return new TimePickerDialog(this,
                     startTimeListener,
