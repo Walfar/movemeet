@@ -242,8 +242,8 @@ public class UploadActivityActivity extends AppCompatActivity {
         if (addressText.getText().toString().equals("")) return null;
         return new LatLng(latitude, longitude);
     }
-    // Helper methods for start time picker
-    private TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener() {
+    // Helper methods for time picker
+    private TimePickerDialog.OnTimeSetListener timeListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -260,17 +260,6 @@ public class UploadActivityActivity extends AppCompatActivity {
     public void setStartTime(View view) {
         showDialog(222);
     }
-
-
-    // Helper methods for duration picker
-    private TimePickerDialog.OnTimeSetListener durationListener = new TimePickerDialog.OnTimeSetListener() {
-        @Override
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            calendar.set(Calendar.MINUTE, minute);
-            showDuration(hourOfDay, minute);
-        }
-    };
 
     private void showDuration(int hours, int minutes) {
         this.hours = hours;
@@ -292,14 +281,14 @@ public class UploadActivityActivity extends AppCompatActivity {
                     dateListener, year, month, day);
         } else if (id == 444) {
             return new TimePickerDialog(this,
-                    durationListener,
+                    timeListener,
                     calendar.get(Calendar.HOUR_OF_DAY),
                     calendar.get(Calendar.MINUTE),
                     true);
 
         } else if (id == 222) {
             return new TimePickerDialog(this,
-                    startTimeListener,
+                    timeListener,
                     calendar.get(Calendar.HOUR_OF_DAY),
                     calendar.get(Calendar.MINUTE),
                     true);
