@@ -52,7 +52,8 @@ public class DistanceCalculatorTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         Activity activity2 = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -66,7 +67,8 @@ public class DistanceCalculatorTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         activityArrayList.add(activity);
         activityArrayList.add(activity2);
@@ -121,7 +123,8 @@ public class DistanceCalculatorTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         Activity activity2 = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -135,7 +138,8 @@ public class DistanceCalculatorTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         activityArrayList.add(activity);
         activityArrayList.add(activity2);
@@ -177,7 +181,8 @@ public class DistanceCalculatorTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         Activity activity2 = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -191,7 +196,8 @@ public class DistanceCalculatorTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         activityArrayList.add(activity);
         activityArrayList.add(activity2);
@@ -242,7 +248,8 @@ public class DistanceCalculatorTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         Activity activity2 = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -256,7 +263,8 @@ public class DistanceCalculatorTest {
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
-                DUMMY_ADDRESS);
+                DUMMY_ADDRESS,
+                DUMMY_DATE);
 
         activityArrayList.add(activity);
         activityArrayList.add(activity2);
