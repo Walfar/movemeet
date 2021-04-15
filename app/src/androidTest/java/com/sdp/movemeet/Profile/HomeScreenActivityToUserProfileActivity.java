@@ -1,6 +1,7 @@
 package com.sdp.movemeet.Profile;
 
 
+import android.Manifest;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
 import com.sdp.movemeet.HomeScreenActivity;
@@ -46,6 +48,9 @@ public class HomeScreenActivityToUserProfileActivity {
 
     @Rule
     public ActivityTestRule<HomeScreenActivity> mActivityTestRule = new ActivityTestRule<>(HomeScreenActivity.class);
+
+    @Rule
+    public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Test
     public void homeScreenActivityToUserProfileActivity() {
