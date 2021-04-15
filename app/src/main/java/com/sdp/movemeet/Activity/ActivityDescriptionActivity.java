@@ -62,9 +62,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             act = (Activity) intent.getSerializableExtra("activity");
         }
 
-        userId = act.getOrganizerId();
-        fStore = FirebaseFirestore.getInstance();
-        getUserName();
+        //userId = act.getOrganizerId();
+        //fStore = FirebaseFirestore.getInstance();
+        //getUserName();
 
         createTitleView();
         createParticipantNumberView();
@@ -154,6 +154,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
+    /*
     private void getUserName() {
         DocumentReference docRef = fStore.collection("users").document(userId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -174,7 +175,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 }
             }
         });
-    }
+    }*/
 
     private void createTitleView() {
         // activityTitle from the activity
@@ -225,8 +226,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void createOrganizerView(){
         TextView organisatorView = (TextView) findViewById(R.id.activity_organisator_description);
         if(act != null){
-            getUserName();
-            organisatorView.setText(fullNameString);
+            organisatorView.setText(act.getOrganizerId());
         }
     }
 
