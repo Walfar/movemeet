@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -38,6 +39,8 @@ public class MessageAdapter extends FirebaseRecyclerAdapter<Message, MessageView
     protected void onBindViewHolder(MessageViewHolder vh, int position, Message message) {
         ProgressBar chatLoader = (chatActivity).findViewById(R.id.chat_loader);
         chatLoader.setVisibility(ProgressBar.INVISIBLE);
+        TextView initialChatWelcomeMessage = (chatActivity).findViewById(R.id.initial_chat_welcome_message);
+        initialChatWelcomeMessage.setVisibility(ProgressBar.INVISIBLE);
         vh.bindMessage(message);
     }
 
