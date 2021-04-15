@@ -28,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
 import com.sdp.movemeet.HomeScreenActivity;
 import com.sdp.movemeet.LoginActivity;
+import com.sdp.movemeet.MainActivity;
 import com.sdp.movemeet.Navigation.Navigation;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.Sport;
@@ -39,7 +40,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class ActivityDescriptionActivity extends AppCompatActivity {
-
+  
     public final static String EXTRA_ACTIVITY_ID = "12345";
     public final static String EXTRA_ORGANISATOR_ID = "1";
     public final static String EXTRA_TITLE = "title";
@@ -98,6 +99,19 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         createDurationView();
         createOrganizerView();
 
+        createDrawer();
+
+        handleRegisterUser();
+
+        //The aim is to block any direct access to this page if the user is not logged
+        //Smth must be wrong since it prevents automatic connection during certain tests
+        /*if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
+            finish();
+        }*/
+    }
+
+    public void createDrawer(){
         drawerLayout=findViewById(R.id.drawer_layout);
         navigationView=findViewById(R.id.nav_view);
         textView=findViewById(R.id.textView);
@@ -117,23 +131,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
         navigationView.setCheckedItem(R.id.nav_start_activity);
-
-        handleRegisterUser();
-
-        if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        }
-    }
-
-    @Override
-    public void onBackPressed(){
-        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
-            drawerLayout.closeDrawer(GravityCompat.START);
-        }
-        else
-        {super.onBackPressed();
-        }
     }
 
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -148,7 +145,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 Navigation.goToActivityUpload(this.navigationView);
                 break;
             case R.id.nav_logout:
-                logout(this.navigationView);
+                FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
                 break;
             case R.id.nav_start_activity:
                 break;
@@ -277,8 +274,13 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
     public void goToChat(View view) {
         startActivity(new Intent(getApplicationContext(), ChatActivity.class));
+        Intent intent = new Intent(ActivityDescriptionActivity.this, ChatActivity.class);
+        String activityChatId = act.getActivityId() + " - chatId";
+        intent.putExtra("ACTIVITY_CHAT_ID", activityChatId);
+        String activityTitle = act.getTitle();
+        intent.putExtra("ACTIVITY_TITLE", activityTitle);
+        startActivity(intent);
     }
-
     /*public void goToHome(View view){
         Intent i = new Intent(ActivityDescriptionActivity.this, HomeScreenActivity.class);
         i.putExtra(EXTRA_ACTIVITY_ID, "1");
@@ -295,5 +297,4 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
         startActivity(i);
     }*/
-
 }
