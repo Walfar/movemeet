@@ -16,31 +16,31 @@ import androidx.annotation.NonNull;
 
 public class Navigation extends AppCompatActivity{
 
-    public static void startActivity(@NonNull View view) {
+    public static void startActivity(View view) {
         Context mContext = view.getContext();
         Intent intent = new Intent(mContext, ActivityDescriptionActivity.class);
         mContext.startActivity(intent);
     }
 
-    public static void goToActivityUpload(@NonNull View view) {
+    public static void goToActivityUpload(View view) {
         Context mContext = view.getContext();
         Intent intent = new Intent(mContext, UploadActivityActivity.class);
         mContext.startActivity(intent);
     }
 
-    public static void goToUserProfileActivity(@NonNull View view) {
+    public static void goToUserProfileActivity(View view) {
         Context mContext = view.getContext();
         Intent intent = new Intent(mContext, ProfileActivity.class);
         mContext.startActivity(intent);
     }
 
-    public static void goToHome(@NonNull View view) {
+    public static void goToHome(View view) {
         Context mContext = view.getContext();
         Intent intent = new Intent(mContext, MainActivity.class);
         mContext.startActivity(intent);
     }
 
-    public static void goToChat(@NonNull View view) {
+    public static void goToChat(View view) {
         Context mContext = view.getContext();
         Intent intent = new Intent(mContext, ChatActivity.class);
         mContext.startActivity(intent);
