@@ -52,7 +52,6 @@ public class ChatActivity extends AppCompatActivity {
     public static final String CHATS_CHILD = "chats";
     public static final String ROOM_CHILD = "general_chat";
 
-    public static final String CHATS_CHILD = "chats";
     public static String GENERAL_CHAT_CHILD = "general_chat";
 
     private static final int REQUEST_IMAGE = 2;
@@ -243,13 +242,12 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     public void logout(View view) {
-
         if (fAuth.getCurrentUser() != null) {
             fAuth.getInstance().signOut(); // this will do the logout of the user from Firebase
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
         }
-
+    }
 
     private void getUserName() {
         DocumentReference docRef = fStore.collection("users").document(userId);
