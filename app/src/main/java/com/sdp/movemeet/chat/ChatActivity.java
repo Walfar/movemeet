@@ -48,9 +48,6 @@ import com.sdp.movemeet.R;
 
 public class ChatActivity extends AppCompatActivity {
 
-    public static final String CHATS_CHILD = "chats";
-    public static final String ROOM_CHILD = "general_chat";
-
     private static final String TAG = "ChatActivity";
     public static final String CHATS_CHILD = "chats";
     public static final String ROOM_CHILD = "general_chat";
