@@ -266,6 +266,8 @@ public class UploadActivityActivity extends AppCompatActivity {
     private TimePickerDialog.OnTimeSetListener durationListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            calendar.set(Calendar.MINUTE, minute);
             showDuration(hourOfDay, minute);
         }
     };
@@ -290,7 +292,11 @@ public class UploadActivityActivity extends AppCompatActivity {
                     dateListener, year, month, day);
         } else if (id == 444) {
             return new TimePickerDialog(this,
-                    durationListener, hours, minutes, false);
+                    durationListener,
+                    calendar.get(Calendar.HOUR_OF_DAY),
+                    calendar.get(Calendar.MINUTE),
+                    true);
+
         } else if (id == 222) {
             return new TimePickerDialog(this,
                     startTimeListener,
