@@ -126,11 +126,12 @@ public class MainMapFragmentTest {
 
     @Test
     public void activitiesUpdatesOnAdd() {
+        MainMapFragment mapFragment = new MainMapFragment();
+        fragmentTestRule.launchFragment(mapFragment);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
         BackendActivityManager bam = new BackendActivityManager(db, "activities");
 
-        MainMapFragment mapFragment = fragmentTestRule.getFragment();
         updater.fetchListActivities();
         updater.updateListActivities((SupportMapFragment) mapFragment.getChildFragmentManager().findFragmentById(R.id.google_map), mapFragment);
 
