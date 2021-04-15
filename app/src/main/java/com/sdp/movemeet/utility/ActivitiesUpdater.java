@@ -18,6 +18,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Backend.BackendActivityManager;
+import com.sdp.movemeet.R;
 import com.sdp.movemeet.Sport;
 import com.sdp.movemeet.map.MainMapFragment;
 
@@ -36,6 +37,7 @@ public class ActivitiesUpdater {
     private ArrayList<Activity> activities;
 
     //private ActivityCache cache;
+    private MainMapFragment mapFragment;
 
     private final String TAG = "Activities updater TAG";
 
@@ -74,7 +76,8 @@ public class ActivitiesUpdater {
     /**
      * This method is to be used when the user is accessing the map.
      */
-    public void updateListActivities() {
+    public void updateListActivities(MainMapFragment mapFragment) {
+        this.mapFragment = mapFragment;
         CollectionReference collection = bam.getActivitiesCollectionReference();
         //Count the number of elements in the collection
         collection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -167,7 +170,7 @@ public class ActivitiesUpdater {
                     Log.d(TAG, "activities size is " + activities.size());
                 }
                 //if (cacheAllowed) cache.saveActivitiesInCache(activities);
-                //if (updateMap) supportMapFragment.getMapAsync(callback);
+                if (updateMap) ((SupportMapFragment) mapFragment.getChildFragmentManager().findFragmentById(R.id.google_map)).getMapAsync(mapFragment);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
