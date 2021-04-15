@@ -97,7 +97,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        // Initializing Realtime Database
+        // Initializing Firebase Realtime Database
         mDatabase = FirebaseDatabase.getInstance();
         chatRef = mDatabase.getReference().child(CHATS_CHILD); // "chats" node reference in Firebase Realtime Database
 
