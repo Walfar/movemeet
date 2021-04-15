@@ -21,25 +21,43 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
+import com.sdp.movemeet.HomeScreenActivity;
 import com.sdp.movemeet.LoginActivity;
 import com.sdp.movemeet.Navigation.Navigation;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.Sport;
 import com.sdp.movemeet.chat.ChatActivity;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class ActivityDescriptionActivity extends AppCompatActivity {
+
+    public final static String EXTRA_ACTIVITY_ID = "12345";
+    public final static String EXTRA_ORGANISATOR_ID = "1";
+    public final static String EXTRA_TITLE = "title";
+    public final static int EXTRA_NUMBER_PARTICIPANT = 2;
+    public final static ArrayList<String> EXTRA_PARTICIPANTS_ID = new ArrayList<String>();
+    public final static double EXTRA_LONGITUDE = 2.45;
+    public final static double EXTRA_LATITUDE = 3.697;
+    public final static String EXTRA_DESCRIPTION = "description";
+    public final static Date EXTRA_DATE = new Date(2021, 11, 10, 1, 10);
+    public final static double EXTRA_DURATION = 10.4;
+    public final static Sport EXTRA_SPORT = Sport.Running;
+    public final static String EXTRA_ADDRESS = "address";
 
     FirebaseAuth fAuth;
     Button RegisterToActivityButton;
     private Activity act;
     private static final String TAG = "ActivityDescriptionActivity";
-
+    private FirebaseUser user;
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -62,9 +80,14 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             act = (Activity) intent.getSerializableExtra("activity");
         }
 
-        userId = act.getOrganizerId();
-        fStore = FirebaseFirestore.getInstance();
-        getUserName();
+        /*fAuth = FirebaseAuth.getInstance();
+        user = fAuth.getCurrentUser();
+
+        if(user != null){
+            userId = act.getOrganizerId();
+            fStore = FirebaseFirestore.getInstance();
+            getUserName();
+        }*/
 
         createTitleView();
         createParticipantNumberView();
@@ -154,7 +177,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
-
+/*
     private void getUserName() {
         DocumentReference docRef = fStore.collection("users").document(userId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -166,6 +189,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         fullNameString = (String) document.getData().get("fullName");
+                        createOrganizerView();
                         Log.i(TAG, "fullNameString: " + fullNameString);
                     } else {
                         Log.d(TAG, "No such document");
@@ -175,7 +199,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 }
             }
         });
-    }
+    }*/
 
     private void createTitleView() {
         // activityTitle from the activity
@@ -183,7 +207,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (act != null) activityTitle.setText(act.getTitle());
     }
 
-    @SuppressLint("SetTextI18n")
     private void createParticipantNumberView(){
         // number of participants from the activity
         TextView numberParticipantsView = (TextView) findViewById(R.id.activity_number_description);
@@ -203,7 +226,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         TextView dateView = (TextView) findViewById(R.id.activity_date_description);
         if (act != null) {
             String pattern = "MM/dd/yyyy HH:mm:ss";
-            @SuppressLint("SimpleDateFormat") DateFormat df = new SimpleDateFormat(pattern);
+            DateFormat df = new SimpleDateFormat(pattern);
             String todayAsString = df.format(act.getDate());
             dateView.setText(todayAsString);
         }
@@ -226,7 +249,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void createOrganizerView(){
         TextView organisatorView = (TextView) findViewById(R.id.activity_organisator_description);
         if(act != null){
-            organisatorView.setText(fullNameString);
+            organisatorView.setText(act.getOrganizerId());
         }
     }
 
@@ -255,5 +278,22 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     public void goToChat(View view) {
         startActivity(new Intent(getApplicationContext(), ChatActivity.class));
     }
+
+    /*public void goToHome(View view){
+        Intent i = new Intent(ActivityDescriptionActivity.this, HomeScreenActivity.class);
+        i.putExtra(EXTRA_ACTIVITY_ID, "1");
+        i.putExtra(EXTRA_ORGANISATOR_ID, "1");
+        i.putExtra(EXTRA_ADDRESS, "1");
+        i.putExtra(String.valueOf(EXTRA_DURATION), 1.0);
+        i.putExtra(EXTRA_DESCRIPTION, "1");
+        i.putExtra(EXTRA_TITLE, "1");
+        i.putExtra(String.valueOf(EXTRA_DATE), "1");
+        i.putExtra(String.valueOf(EXTRA_LATITUDE), 1.0);
+        i.putExtra(String.valueOf(EXTRA_LONGITUDE), 1.0);
+        i.putExtra(String.valueOf(EXTRA_NUMBER_PARTICIPANT), 1.0);
+        i.putExtra(String.valueOf(EXTRA_SPORT), "1.0");
+
+        startActivity(i);
+    }*/
 
 }
