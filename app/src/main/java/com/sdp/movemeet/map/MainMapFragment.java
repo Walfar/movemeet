@@ -61,9 +61,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
     private static final String TAG = "Maps TAG";
 
-    public static MainMapFragment newInstance() {
-        return new MainMapFragment();
-    }
+    public static final float ZOOM_VALUE = 15.0f;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -75,7 +73,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         LocationFetcher.fetchLastLocation(fusedLocationProviderClient, supportMapFragment, this);
 
         this.updater = ActivitiesUpdater.getInstance();
-        updater.updateListActivities(supportMapFragment, this);
+        updater.updateListActivities();
 
         user = fAuth.getCurrentUser();
 
@@ -96,7 +94,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         LatLng userLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions().position(userLatLng).title("I am here !");
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(userLatLng));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15.0f));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, ZOOM_VALUE));
         Marker posMarker = googleMap.addMarker(markerOptions);
         posMarker.setTag("my position");
 

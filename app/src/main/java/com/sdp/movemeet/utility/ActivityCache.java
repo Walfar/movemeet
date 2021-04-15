@@ -1,4 +1,4 @@
-/*package com.sdp.movemeet.utility;
+package com.sdp.movemeet.utility;
 
 
 import android.content.pm.PackageManager;
@@ -53,4 +53,4 @@ public class ActivityCache extends AppCompatActivity {
     }
 
 
-} */
+}

@@ -28,8 +28,8 @@ import com.sdp.movemeet.utility.LocationFetcher;
 public class HomeScreenActivity extends AppCompatActivity {
 
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private SharedPreferences cachePrefs;
-    /* public static boolean cacheAllowed;
+    /*private SharedPreferences cachePrefs;
+    public static boolean cacheAllowed;
 
     private ActivityResultLauncher<String> requestCachePermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {

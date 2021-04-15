@@ -36,6 +36,7 @@ public class DistanceCalculatorTest {
         final double DUMMY_LATITUDE = 3.697;
         final String DUMMY_DESCRIPTION = "description";
         final Date DUMMY_DATE = new Date(2021, 11, 10, 1, 10);
+        final Date DUMMY_CREATION_DATE = new Date();
         final double DUMMY_DURATION = 10.4;
         final Sport DUMMY_SPORT = Sport.Running;
         final String DUMMY_ADDRESS = "address";
@@ -53,7 +54,7 @@ public class DistanceCalculatorTest {
                 DUMMY_DURATION,
                 DUMMY_SPORT,
                 DUMMY_ADDRESS,
-                DUMMY_DATE);
+                DUMMY_CREATION_DATE);
 
         Activity activity2 = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -68,7 +69,7 @@ public class DistanceCalculatorTest {
                 DUMMY_DURATION,
                 DUMMY_SPORT,
                 DUMMY_ADDRESS,
-                DUMMY_DATE);
+                DUMMY_CREATION_DATE);
 
         activityArrayList.add(activity);
         activityArrayList.add(activity2);
@@ -110,6 +111,7 @@ public class DistanceCalculatorTest {
         final double DUMMY_DURATION = 10.4;
         final Sport DUMMY_SPORT = Sport.Running;
         final String DUMMY_ADDRESS = "address";
+        final Date DUMMY_CREATION_DATE = new Date();
 
         Activity activity = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -124,7 +126,7 @@ public class DistanceCalculatorTest {
                 DUMMY_DURATION,
                 DUMMY_SPORT,
                 DUMMY_ADDRESS,
-                DUMMY_DATE);
+                DUMMY_CREATION_DATE);
 
         Activity activity2 = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -139,7 +141,7 @@ public class DistanceCalculatorTest {
                 DUMMY_DURATION,
                 DUMMY_SPORT,
                 DUMMY_ADDRESS,
-                DUMMY_DATE);
+                DUMMY_CREATION_DATE);
 
         activityArrayList.add(activity);
         activityArrayList.add(activity2);
@@ -168,6 +170,7 @@ public class DistanceCalculatorTest {
         final double DUMMY_DURATION = 10.4;
         final Sport DUMMY_SPORT = Sport.Running;
         final String DUMMY_ADDRESS = "address";
+        final Date DUMMY_CREATION_DATE = new Date();
 
         Activity activity = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -182,7 +185,7 @@ public class DistanceCalculatorTest {
                 DUMMY_DURATION,
                 DUMMY_SPORT,
                 DUMMY_ADDRESS,
-                DUMMY_DATE);
+                DUMMY_CREATION_DATE);
 
         Activity activity2 = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -197,7 +200,7 @@ public class DistanceCalculatorTest {
                 DUMMY_DURATION,
                 DUMMY_SPORT,
                 DUMMY_ADDRESS,
-                DUMMY_DATE);
+                DUMMY_CREATION_DATE);
 
         activityArrayList.add(activity);
         activityArrayList.add(activity2);
@@ -235,6 +238,7 @@ public class DistanceCalculatorTest {
         final double DUMMY_DURATION = 10.4;
         final Sport DUMMY_SPORT = Sport.Running;
         final String DUMMY_ADDRESS = "address";
+        final Date DUMMY_CREATION_DATE = new Date();
 
         Activity activity = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -264,7 +268,7 @@ public class DistanceCalculatorTest {
                 DUMMY_DURATION,
                 DUMMY_SPORT,
                 DUMMY_ADDRESS,
-                DUMMY_DATE);
+                DUMMY_CREATION_DATE);
 
         activityArrayList.add(activity);
         activityArrayList.add(activity2);

@@ -27,6 +27,8 @@ import com.sdp.movemeet.R;
 import com.sdp.movemeet.UploadActivityActivity;
 import com.sdp.movemeet.utility.LocationFetcher;
 
+import static com.sdp.movemeet.map.MainMapFragment.ZOOM_VALUE;
+
 public class MiniMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     private SupportMapFragment supportMapFragment;
@@ -60,7 +62,7 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
         if (location != null) Log.d("MiniMapFragmentTAG", "not null location us " + location.toString());
         if (location == null) location = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(location));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 12.0f));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, ZOOM_VALUE));
     }
 
     @Override
