@@ -47,6 +47,9 @@ import com.sdp.movemeet.R;
 
 public class ChatActivity extends AppCompatActivity {
 
+    public static final String CHATS_CHILD = "chats";
+    public static final String ROOM_CHILD = "general_chat";
+
     private static final String TAG = "ChatActivity";
 
     public static final String MESSAGE_CHILD = "messages";
@@ -188,7 +191,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void settingUpMessageAdapter() {
 
-        DatabaseReference messagesRef = mDatabase.getReference().child(MESSAGE_CHILD);
+        DatabaseReference messagesRef = mDatabase.getReference().child(CHATS_CHILD).child(ROOM_CHILD);
 
         FirebaseRecyclerOptions<Message> options = new FirebaseRecyclerOptions.Builder<Message>().setQuery(messagesRef, Message.class).build();
 
@@ -275,7 +278,7 @@ public class ChatActivity extends AppCompatActivity {
         String messageText = messageInput.getText().toString();
         Message message = new Message(userName, messageText, userId);
         if (messageText.length() > 0) {
-            mDatabase.getReference().child(MESSAGE_CHILD).push().setValue(message);
+            mDatabase.getReference().child(CHATS_CHILD).child(ROOM_CHILD).push().setValue(message);
             messageInput.setText("");
         } else {
             Toast.makeText(getApplicationContext(), "Empty message.", Toast.LENGTH_SHORT).show();

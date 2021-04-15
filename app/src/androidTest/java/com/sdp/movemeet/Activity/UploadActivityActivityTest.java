@@ -17,13 +17,21 @@ import androidx.test.filters.LargeTest;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.sdp.movemeet.Backend.BackendActivityManager;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.UploadActivityActivity;
 
 import org.hamcrest.Matcher;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -54,6 +62,9 @@ public class UploadActivityActivityTest {
     @Rule
     public ActivityScenarioRule<UploadActivityActivity> testRule = new ActivityScenarioRule<>(UploadActivityActivity.class);
 
+    public FirebaseAuth mAuth;
+    public String uid;
+
     public static ViewAction forceDoubleClick() {
         return new ViewAction() {
             @Override public Matcher<View> getConstraints() {
@@ -72,23 +83,11 @@ public class UploadActivityActivityTest {
         };
     }
 
-    @Test
-    public void do_nothing() {
-
-    }
-
-    // This test has to take extra time or the Views won't update fast enough and it'll fail on CI
-    @Test
-    @LargeTest
-    public void endToEnd() {
-        ActivityScenario scenario = testRule.getScenario();
+    @Before
+    public void signIn() {
         CountDownLatch latch = new CountDownLatch(1);
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
-        try{
-            Thread.sleep(1000);
-        }catch(Exception e){}
+        mAuth = FirebaseAuth.getInstance();
 
         mAuth.signInWithEmailAndPassword("movemeet@gmail.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -107,6 +106,13 @@ public class UploadActivityActivityTest {
         } catch (InterruptedException e) {
             assert (false);
         }
+    }
+
+    // This test has to take extra time or the Views won't update fast enough and it'll fail on CI
+    @Test
+    @LargeTest
+    public void endToEnd() {
+        ActivityScenario scenario = testRule.getScenario();
 
         try{
             Thread.sleep(1000);
@@ -202,9 +208,50 @@ public class UploadActivityActivityTest {
             assert (((UploadActivityActivity) activity).validDate == true);
         }); */
 
-        mAuth.signOut();
+        //mAuth.signOut();
         scenario.close();
 
+    }
+
+    @After
+    public void deleteAndSignOut() {
+        CountDownLatch latch = new CountDownLatch(1);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        BackendActivityManager bam = new BackendActivityManager(db, BackendActivityManager.ACTIVITIES_COLLECTION);
+
+        bam.getActivitiesCollectionReference()
+                .whereEqualTo("organizerId", mAuth.getCurrentUser().getUid())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (DocumentSnapshot docSnap: queryDocumentSnapshots.getDocuments()) {
+                            docSnap.getReference().delete()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            // Silently fail if document couldn't be deleted ->
+                                            // prevent simultaneous deletions causing problems
+                                            latch.countDown();
+                                        }
+                                    });
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                assert(false);
+            }
+        });
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            assert(false);
+        }
+
+        mAuth.signOut();
     }
 
     public boolean sleep(int millis) {
