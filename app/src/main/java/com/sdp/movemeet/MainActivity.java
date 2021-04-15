@@ -1,16 +1,21 @@
 package com.sdp.movemeet;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -23,6 +28,7 @@ import com.sdp.movemeet.Activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
 import com.sdp.movemeet.Navigation.Navigation;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
+import com.sdp.movemeet.utility.LocationFetcher;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -43,23 +49,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
-        updater.updateListActivities();
+        //phone = findViewById(R.id.text_view_profile_phone);
+        //fullName = findViewById(R.id.text_view_profile_name);
+        //email = findViewById(R.id.text_view_profile_email);
 
-        createDrawer();
+        //handleRegisterUser();
 
-        handleRegisterUser();
-
-        //The aim is to block any direct access to this page if the user is not logged
-        //Smth must be wrong since it prevents automatic connection during certain tests
-        /*if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        }*/
-
-    }
-
-    public void createDrawer(){
         drawerLayout=findViewById(R.id.drawer_layout);
         navigationView=findViewById(R.id.nav_view);
         textView=findViewById(R.id.textView);
@@ -79,6 +74,17 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
         navigationView.setCheckedItem(R.id.nav_home);
+
+
+        handleRegisterUser();
+
+        //The aim is to block any direct access to this page if the user is not logged
+        //Smth must be wrong since it prevents automatic connection during certain tests
+        /*if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
+            finish();
+        }*/
+
     }
 
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -92,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 Navigation.goToActivityUpload(this.navigationView);
                 break;
             case R.id.nav_logout:
-                FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
+                logout(this.navigationView);
                 break;
             case R.id.nav_start_activity:
                 Navigation.startActivity(this.navigationView);
@@ -113,5 +119,11 @@ public class MainActivity extends AppCompatActivity {
             FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, MainActivity.this);
         }
     }
+
+
+    public void logout(View view) {
+        FirebaseInteraction.logoutIfUserNull(fAuth, MainActivity.this);
+    }
+
 
 }

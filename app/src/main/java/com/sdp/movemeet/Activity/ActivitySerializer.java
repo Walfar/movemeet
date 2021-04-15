@@ -24,6 +24,7 @@ public class ActivitySerializer {
     public static final String DURATION_KEY = "duration";
     public static final String SPORT_KEY = "sport";
     public static final String ADDRESS_KEY = "address";
+    public static final String CREATION_KEY = "createdAt";
 
 
     private ActivitySerializer() {
@@ -46,7 +47,8 @@ public class ActivitySerializer {
                 (Date) data.get(DATE_KEY),
                 (double) data.get(DURATION_KEY),
                 (Sport) data.get(SPORT_KEY),
-                (String) data.get(ADDRESS_KEY)
+                (String) data.get(ADDRESS_KEY),
+                (Date) data.get(CREATION_KEY)
         );
     }
 
@@ -68,6 +70,7 @@ public class ActivitySerializer {
         data.put(DURATION_KEY, activity.getDuration());
         data.put(SPORT_KEY, activity.getSport());
         data.put(ADDRESS_KEY, activity.getAddress());
+        data.put(CREATION_KEY, activity.getCreatedAt());
 
         return data;
     }

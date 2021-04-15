@@ -29,9 +29,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.LoginActivity;
 import com.sdp.movemeet.MainActivity;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.Sport;
 import com.sdp.movemeet.UploadActivityActivity;
 
 import static androidx.test.espresso.action.ViewActions.click;
@@ -41,12 +43,33 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static com.sdp.movemeet.Sport.Badminton;
+import static com.sdp.movemeet.Sport.Boxing;
+import static com.sdp.movemeet.Sport.Climbing;
+import static com.sdp.movemeet.Sport.Dancing;
+import static com.sdp.movemeet.Sport.Golf;
+import static com.sdp.movemeet.Sport.Gym;
+import static com.sdp.movemeet.Sport.Hockey;
+import static com.sdp.movemeet.Sport.Pingpong;
+import static com.sdp.movemeet.Sport.Rugby;
+import static com.sdp.movemeet.Sport.Running;
+import static com.sdp.movemeet.Sport.Soccer;
+import static com.sdp.movemeet.Sport.Swimming;
+import static com.sdp.movemeet.Sport.Tennis;
+import static com.sdp.movemeet.Sport.Trekking;
+import static com.sdp.movemeet.Sport.VolleyBall;
+import static com.sdp.movemeet.Sport.Windsurfing;
+import static com.sdp.movemeet.Sport.Yoga;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -93,6 +116,34 @@ public class MainMapFragmentTest {
     @Test
     public void mainMapFragment_isDisplayed() throws InterruptedException {
         onView(withId(R.id.fragment_map)).check(matches((isDisplayed())));
+    }
+
+    @Test
+    public void testChooseIcons() {
+        MainMapFragment mapFragment = MainMapFragment.newInstance();
+        assertEquals(R.drawable.icon_boxing, setSportIcon(Boxing, mapFragment));
+        assertEquals(R.drawable.icon_windsurfing, setSportIcon(Windsurfing, mapFragment));
+        assertEquals(R.drawable.icon_dancing, setSportIcon(Dancing, mapFragment));
+        assertEquals(R.drawable.icon_yoga, setSportIcon(Yoga, mapFragment));
+        assertEquals(R.drawable.icon_climbing, setSportIcon(Climbing, mapFragment));
+        assertEquals(R.drawable.icon_golf, setSportIcon(Golf, mapFragment));
+        assertEquals(R.drawable.icon_gym, setSportIcon(Gym, mapFragment));
+        assertEquals(R.drawable.icon_soccer, setSportIcon(Soccer, mapFragment));
+        assertEquals(R.drawable.icon_tennis, setSportIcon(Tennis, mapFragment));
+        assertEquals(R.drawable.icon_volleyball, setSportIcon(VolleyBall, mapFragment));
+        assertEquals(R.drawable.icon_hockey, setSportIcon(Hockey, mapFragment));
+        assertEquals(R.drawable.icon_pingpong, setSportIcon(Pingpong, mapFragment));
+        assertEquals(R.drawable.icon_trekking, setSportIcon(Trekking, mapFragment));
+        assertEquals(R.drawable.icon_rugby, setSportIcon(Rugby, mapFragment));
+        assertEquals(R.drawable.icon_badminton, setSportIcon(Badminton, mapFragment));
+        assertEquals(R.drawable.icon_running, setSportIcon(Running, mapFragment));
+        assertEquals(R.drawable.icon_swim, setSportIcon(Swimming, mapFragment));
+    }
+
+    private int setSportIcon(Sport sport, MainMapFragment mapFragment) {
+        Activity activity = new Activity("activity id", "organizer id", "title", 2, new ArrayList<>(), 0, 0,
+                "description", new Date(), 1, sport,"here", new Date());
+        return mapFragment.chooseIcon(activity);
     }
 
     @Test
