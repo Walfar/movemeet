@@ -280,6 +280,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         intent.putExtra("ACTIVITY_TITLE", activityTitle);
         startActivity(intent);
     }
+
     /*public void goToHome(View view){
         Intent i = new Intent(ActivityDescriptionActivity.this, HomeScreenActivity.class);
         i.putExtra(EXTRA_ACTIVITY_ID, "1");
@@ -293,7 +294,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         i.putExtra(String.valueOf(EXTRA_LONGITUDE), 1.0);
         i.putExtra(String.valueOf(EXTRA_NUMBER_PARTICIPANT), 1.0);
         i.putExtra(String.valueOf(EXTRA_SPORT), "1.0");
-
         startActivity(i);
     }*/
 }
