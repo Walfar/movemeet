@@ -35,12 +35,13 @@ public class HomeScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
 
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestLocationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
         }
 
         ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
+        // Always clear activities first, to prevent duplicates if multiple intents are created
+        updater.clearLocalActivities();
         updater.fetchListActivities();
     }
 

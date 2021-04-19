@@ -85,6 +85,12 @@ public class ActivitiesUpdater {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 // Calculate the number of newly added activities in the collection
                 int size = queryDocumentSnapshots.getDocuments().size() - activities.size();
+                //If somehow the list contains deprecated activites (activities that are not in the DB), we clear the list and refetch all activities
+                if (size < 0) {
+                    activities.clear();
+                    fetchListActivities();
+                    return;
+                }
                 //add to the list only those newly added activities
                 Log.d(TAG, "activities size is " + activities.size());
                 Log.d(TAG, "diff number of activities is " + size);
@@ -178,5 +184,9 @@ public class ActivitiesUpdater {
                 Log.d(TAG, e.toString());
             }
         });
+    }
+
+    public void clearLocalActivities() {
+        activities.clear();
     }
 }
