@@ -25,8 +25,8 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendStor
     }
 
     @Override
-    public Task<Void> add(T object) {
-        if (object == null) throw new IllegalArgumentException();
+    public Task<Void> add(T object, String path) {
+        if (object == null || path == null || path.isEmpty()) throw new IllegalArgumentException();
 
         String documentPath = db.collection(collection).document().getPath();
         object.setDocumentPath(documentPath);
@@ -36,12 +36,11 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendStor
     }
 
     @Override
-    public Task<Void> delete(T object) {
-        if (object == null) throw new IllegalArgumentException();
-        if (object.getDocumentPath() == null) return null;
+    public Task<Void> delete(String path) {
+        if (path == null || path.isEmpty()) throw new IllegalArgumentException();
 
         return db.collection(collection)
-                .document(object.getDocumentPath())
+                .document(path)
                 .delete();
     }
 

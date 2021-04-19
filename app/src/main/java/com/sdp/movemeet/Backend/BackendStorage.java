@@ -3,9 +3,9 @@ package com.sdp.movemeet.Backend;
 import com.google.android.gms.tasks.Task;
 
 public interface BackendStorage<T> {
-    public Task<?> add(T object);
+    public Task<?> add(T object, String path);
 
-    public Task<?> delete(T object);
+    public Task<?> delete(String path);
 
     public Task<?> get(String path);
 
