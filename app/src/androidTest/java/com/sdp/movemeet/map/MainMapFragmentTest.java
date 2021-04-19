@@ -134,8 +134,8 @@ public class MainMapFragmentTest {
         LocationFetcher.fetchLastLocation(mapFragment.getFusedLocationProviderClient(), mapFragment.getSupportMapFragment(), mapFragment);
         Thread.sleep(3000);
         Location defaultLocation = LocationFetcher.defaultLocation();
-        assertEquals(0, defaultLocation.getLongitude());
-        assertEquals(0, defaultLocation.getLatitude());
+        assertEquals(0, defaultLocation.getLongitude(), 0);
+        assertEquals(0, defaultLocation.getLatitude(), 0);
     }
 
 
@@ -201,23 +201,23 @@ public class MainMapFragmentTest {
     @Test
     public void testChooseIcons() {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
-        assertEquals(R.drawable.icon_boxing, setSportIcon(Boxing, mapFragment));
-        assertEquals(R.drawable.icon_windsurfing, setSportIcon(Windsurfing, mapFragment));
-        assertEquals(R.drawable.icon_dancing, setSportIcon(Dancing, mapFragment));
-        assertEquals(R.drawable.icon_yoga, setSportIcon(Yoga, mapFragment));
-        assertEquals(R.drawable.icon_climbing, setSportIcon(Climbing, mapFragment));
-        assertEquals(R.drawable.icon_golf, setSportIcon(Golf, mapFragment));
-        assertEquals(R.drawable.icon_gym, setSportIcon(Gym, mapFragment));
-        assertEquals(R.drawable.icon_soccer, setSportIcon(Soccer, mapFragment));
-        assertEquals(R.drawable.icon_tennis, setSportIcon(Tennis, mapFragment));
-        assertEquals(R.drawable.icon_volleyball, setSportIcon(VolleyBall, mapFragment));
-        assertEquals(R.drawable.icon_hockey, setSportIcon(Hockey, mapFragment));
-        assertEquals(R.drawable.icon_pingpong, setSportIcon(Pingpong, mapFragment));
-        assertEquals(R.drawable.icon_trekking, setSportIcon(Trekking, mapFragment));
-        assertEquals(R.drawable.icon_rugby, setSportIcon(Rugby, mapFragment));
-        assertEquals(R.drawable.icon_badminton, setSportIcon(Badminton, mapFragment));
-        assertEquals(R.drawable.icon_running, setSportIcon(Running, mapFragment));
-        assertEquals(R.drawable.icon_swim, setSportIcon(Swimming, mapFragment));
+        assertEquals(R.drawable.icon_boxing, setSportIcon(Boxing, mapFragment), 0);
+        assertEquals(R.drawable.icon_windsurfing, setSportIcon(Windsurfing, mapFragment), 0);
+        assertEquals(R.drawable.icon_dancing, setSportIcon(Dancing, mapFragment), 0);
+        assertEquals(R.drawable.icon_yoga, setSportIcon(Yoga, mapFragment), 0);
+        assertEquals(R.drawable.icon_climbing, setSportIcon(Climbing, mapFragment), 0);
+        assertEquals(R.drawable.icon_golf, setSportIcon(Golf, mapFragment), 0);
+        assertEquals(R.drawable.icon_gym, setSportIcon(Gym, mapFragment), 0);
+        assertEquals(R.drawable.icon_soccer, setSportIcon(Soccer, mapFragment), 0);
+        assertEquals(R.drawable.icon_tennis, setSportIcon(Tennis, mapFragment), 0);
+        assertEquals(R.drawable.icon_volleyball, setSportIcon(VolleyBall, mapFragment), 0);
+        assertEquals(R.drawable.icon_hockey, setSportIcon(Hockey, mapFragment), 0);
+        assertEquals(R.drawable.icon_pingpong, setSportIcon(Pingpong, mapFragment), 0);
+        assertEquals(R.drawable.icon_trekking, setSportIcon(Trekking, mapFragment), 0);
+        assertEquals(R.drawable.icon_rugby, setSportIcon(Rugby, mapFragment), 0);
+        assertEquals(R.drawable.icon_badminton, setSportIcon(Badminton, mapFragment), 0);
+        assertEquals(R.drawable.icon_running, setSportIcon(Running, mapFragment), 0);
+        assertEquals(R.drawable.icon_swim, setSportIcon(Swimming, mapFragment), 0);
     }
 
     private int setSportIcon(Sport sport, MainMapFragment mapFragment) {
