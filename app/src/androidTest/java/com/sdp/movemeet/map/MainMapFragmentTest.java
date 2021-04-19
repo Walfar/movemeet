@@ -198,7 +198,7 @@ public class MainMapFragmentTest {
     }
 
 
-   /* @Test
+    @Test
     public void testChooseIcons() {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
         assertEquals(R.drawable.icon_boxing, setSportIcon(Boxing, mapFragment), 0);
@@ -218,7 +218,7 @@ public class MainMapFragmentTest {
         assertEquals(R.drawable.icon_badminton, setSportIcon(Badminton, mapFragment), 0);
         assertEquals(R.drawable.icon_running, setSportIcon(Running, mapFragment), 0);
         assertEquals(R.drawable.icon_swim, setSportIcon(Swimming, mapFragment), 0);
-    } */
+    }
 
     private int setSportIcon(Sport sport, MainMapFragment mapFragment) {
         Activity activity = new Activity("activity id", "organizer id", "title", 2, new ArrayList<>(), 0, 0,
