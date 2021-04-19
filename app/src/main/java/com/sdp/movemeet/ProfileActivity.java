@@ -69,6 +69,20 @@ public class ProfileActivity extends AppCompatActivity {
             loadRegisteredUserProfilePicture();
         }
 
+        createDrawer();
+
+        handleRegisterUser();
+
+        //The aim is to block any direct access to this page if the user is not logged
+        //Smth must be wrong since it prevents automatic connection during certain tests
+        /*if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
+            finish();
+        }*/
+
+    }
+
+    public void createDrawer(){
         drawerLayout=findViewById(R.id.drawer_layout);
         navigationView=findViewById(R.id.nav_view);
         textView=findViewById(R.id.textView);
@@ -87,33 +101,21 @@ public class ProfileActivity extends AppCompatActivity {
 
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
-        navigationView.setCheckedItem(R.id.nav_edit_profile);
-
-        handleRegisterUser();
-
-        //The aim is to block any direct access to this page if the user is not logged
-        //Smth must be wrong since it prevents automatic connection during certain tests
-        /*if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        }*/
-
+        navigationView.setCheckedItem(R.id.nav_chat);
     }
 
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
-                Intent intentHome = new Intent(ProfileActivity.this, MainActivity.class);
-                startActivity(intentHome);
+                Navigation.goToHome(this.navigationView);
                 break;
             case R.id.nav_edit_profile:
                 break;
             case R.id.nav_add_activity:
-                Intent intentAddActivity = new Intent(ProfileActivity.this, UploadActivityActivity.class);
-                startActivity(intentAddActivity);
+                Navigation.goToActivityUpload(this.navigationView);
                 break;
             case R.id.nav_logout:
-                logout(this.navigationView);
+                FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
                 break;
             case R.id.nav_start_activity:
                 Navigation.startActivity(this.navigationView);
@@ -132,14 +134,6 @@ public class ProfileActivity extends AppCompatActivity {
             userId = fAuth.getCurrentUser().getUid();
             TextView[] textViewArray = {fullName, email, phone};
             FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ProfileActivity.this);
-        }
-    }
-
-    public void logout(View view) {
-        if (fAuth.getCurrentUser() != null) {
-            FirebaseAuth.getInstance().signOut(); // this will do the logout of the user from Firebase
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
         }
     }
 

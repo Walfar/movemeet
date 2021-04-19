@@ -1,14 +1,11 @@
 package com.sdp.movemeet.chat;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.ProgressBar;
@@ -21,44 +18,46 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
-
 import com.sdp.movemeet.LoginActivity;
-import com.sdp.movemeet.MainActivity;
 import com.sdp.movemeet.Navigation.Navigation;
 import com.sdp.movemeet.R;
+
 
 public class ChatActivity extends AppCompatActivity {
 
     private static final String TAG = "ChatActivity";
+    public static final String CHATS_CHILD = "chats";
+    public static final String ROOM_CHILD = "general_chat";
 
-    public static final String MESSAGE_CHILD = "messages";
-    public static final String ANONYMOUS_NAME = "anonymous_name";
-    public static final String ANONYMOUS_ID = "anonymous_id";
-    public static final int DEFAULT_MSG_LENGTH_LIMIT = 10;
+    public static String GENERAL_CHAT_CHILD = "general_chat";
 
-    private static final String MESSAGE_SENT_EVENT = "message_sent";
+    private static final int REQUEST_IMAGE = 2;
 
-    private SharedPreferences mSharedPreferences;
+    private static final String LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif";
 
-    //private ActivityChatBinding mBinding;
     private LinearLayoutManager mLinearLayoutManager;
 
     // Firebase instance variables
@@ -66,80 +65,95 @@ public class ChatActivity extends AppCompatActivity {
     private FirebaseUser user;
     private FirebaseDatabase mDatabase;
     private FirebaseFirestore fStore;
+    private StorageReference storageReference;
+    private DatabaseReference chatRef;
+    private DatabaseReference chatRoom;
     private FirebaseRecyclerAdapter<Message, MessageViewHolder> mFirebaseAdapter;
-
-    private final int MESSAGE_IN_VIEW_TYPE  = 1;
-    private final int MESSAGE_OUT_VIEW_TYPE = 2;
 
     String userId;
     String fullNameString;
+    String activityChatId;
+    String receivedActivityChatId;
+    String receivedActivityTitle;
+
+    int initialMessageCounter = 0;
 
     MultiAutoCompleteTextView messageInput;
     ProgressBar chatLoader;
     RecyclerView messageRecyclerView;
-    //FloatingActionButton btnSend;
     ImageButton btnSend;
 
-
-    TextView fullName, email, phone;
+    TextView fullName;
+    TextView email;
+    TextView phone;
+    TextView initialChatWelcomeMessage;
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
     TextView textView;
-  
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        // Initializing Firebase Realtime Database
+        mDatabase = FirebaseDatabase.getInstance();
+        chatRef = mDatabase.getReference().child(CHATS_CHILD); // "chats" node reference in Firebase Realtime Database
+
         messageInput = findViewById(R.id.message_input_text);
         chatLoader = findViewById(R.id.chat_loader);
         messageRecyclerView = findViewById(R.id.message_recycler_view);
         btnSend = findViewById(R.id.button_send_message);
+        initialChatWelcomeMessage = findViewById(R.id.initial_chat_welcome_message);
 
         fAuth = FirebaseAuth.getInstance();
         user = fAuth.getCurrentUser();
         if (user != null) {
             userId = user.getUid();
             fStore = FirebaseFirestore.getInstance();
+            storageReference = FirebaseStorage.getInstance().getReference();
             getUserName();
         }
-
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Initializing Firebase Auth and checking if the user is signed in
         FirebaseInteraction.checkIfUserSignedIn(fAuth, ChatActivity.this);
 
-        // Adding all the existing messages and listening for new child entries under the "messages"
-        // path in our Firebase Realtime Database (adding a new element to the UI for each message)
+        Intent data = getIntent();
+        settingUpChatRoom(data);
 
-        // Initializing Realtime Database
-        mDatabase = FirebaseDatabase.getInstance();
+        // The rest of the onCreate is dedicated to add all the existing messages and listening for
+        // new child entries under the "messages" path of the sport activity in our Firebase
+        // Realtime Database. A new element for each message is automatically added to the UI.
 
-        settingUpMessageAdapter();
+        addExistingMessagesAndListenForNewMessages();
 
-        mLinearLayoutManager = new LinearLayoutManager(this);
-        mLinearLayoutManager.setStackFromEnd(true);
-        messageRecyclerView.setLayoutManager(mLinearLayoutManager);
-        messageRecyclerView.setAdapter(mFirebaseAdapter);
+        createDrawer();
 
-        // Scrolling down when a new message arrives
-        mFirebaseAdapter.registerAdapterDataObserver(
-                new MyScrollToBottomObserver(messageRecyclerView, mFirebaseAdapter, mLinearLayoutManager)
-        );
+        handleRegisterUser();
 
+        //The aim is to block any direct access to this page if the user is not logged
+        //Smth must be wrong since it prevents automatic connection during certain tests
+        /*if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
+            finish();
+        }*/
+
+    }
+
+    public void createDrawer(){
         drawerLayout=findViewById(R.id.drawer_layout);
         navigationView=findViewById(R.id.nav_view);
         textView=findViewById(R.id.textView);
         toolbar=findViewById(R.id.toolbar);
 
         navigationView.bringToFront();
-        ActionBarDrawerToggle toggle=new
-                ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new
+                ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
 
-        View hView =  navigationView.inflateHeaderView(R.layout.header);
+        View hView = navigationView.inflateHeaderView(R.layout.header);
 
         fullName = hView.findViewById(R.id.text_view_profile_name);
         phone = hView.findViewById(R.id.text_view_profile_phone);
@@ -147,10 +161,60 @@ public class ChatActivity extends AppCompatActivity {
 
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
-        navigationView.setCheckedItem(R.id.nav_home);
+        navigationView.setCheckedItem(R.id.nav_chat);
+    }
 
-        handleRegisterUser();
+    private void addExistingMessagesAndListenForNewMessages() {
+        mFirebaseAdapter = new MessageAdapter(chatRoom, userId, ChatActivity.this);
 
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mLinearLayoutManager.setStackFromEnd(true);
+        messageRecyclerView.setLayoutManager(mLinearLayoutManager);
+        messageRecyclerView.setAdapter(mFirebaseAdapter);
+
+        // Scrolling down when a new message arrives from the database
+        mFirebaseAdapter.registerAdapterDataObserver(
+                new MyScrollToBottomObserver(messageRecyclerView, mFirebaseAdapter, mLinearLayoutManager)
+        );
+    }
+
+    private void settingUpChatRoom(Intent data) {
+        receivedActivityChatId = data.getStringExtra("ACTIVITY_CHAT_ID");
+        receivedActivityTitle = data.getStringExtra("ACTIVITY_TITLE");
+        if (receivedActivityChatId != null) {
+            Log.d(TAG, "DocumentSnapshot data: " + receivedActivityChatId);
+            activityChatId = receivedActivityChatId;
+            // Dynamically creating a new child under the branch "chats" in Firebase Realtime
+            // Database with the value of "activityChatId" in case it doesn't exist yet
+            chatRoom = chatRef.child(activityChatId);
+        } else {
+            chatRoom = chatRef.child(GENERAL_CHAT_CHILD); // default general chat room
+        }
+        countMessagesInChatRoom();
+    }
+
+    private void countMessagesInChatRoom() {
+        // Counting the number of messages (children) in the current chatRoom
+        chatRoom.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+                    Log.v(TAG, "childDataSnapshot.getKey(): " + childDataSnapshot.getKey());
+                    initialMessageCounter += 1;
+                }
+                Log.v(TAG, "initialMessageCounter: " + initialMessageCounter);
+                if (initialMessageCounter == 0) {
+                    chatLoader.setVisibility(View.INVISIBLE);
+                    initialChatWelcomeMessage.setText("Welcome to the chat of " + receivedActivityTitle + "! Feel free to initiate the discussion by sending your first message!");
+                    initialChatWelcomeMessage.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.v(TAG, "databaseError: " + databaseError);
+            }
+        });
     }
 
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -165,7 +229,7 @@ public class ChatActivity extends AppCompatActivity {
                 Navigation.goToActivityUpload(this.navigationView);
                 break;
             case R.id.nav_logout:
-                logout(this.navigationView);
+                FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
                 break;
             case R.id.nav_start_activity:
                 Navigation.startActivity(this.navigationView);
@@ -173,54 +237,16 @@ public class ChatActivity extends AppCompatActivity {
             case R.id.nav_chat:
                 break;
         }
-        drawerLayout.closeDrawer(GravityCompat.START); return true;
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     public void logout(View view) {
-
         if (fAuth.getCurrentUser() != null) {
             fAuth.getInstance().signOut(); // this will do the logout of the user from Firebase
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
         }
-
-    }
-
-    private void settingUpMessageAdapter() {
-
-        DatabaseReference messagesRef = mDatabase.getReference().child(MESSAGE_CHILD);
-
-        FirebaseRecyclerOptions<Message> options = new FirebaseRecyclerOptions.Builder<Message>().setQuery(messagesRef, Message.class).build();
-
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(options) {
-
-            @Override
-            public int getItemViewType(int position) {
-                if(getItem(position).getMessageUserId().equals(userId)){
-                    return MESSAGE_OUT_VIEW_TYPE;
-                }
-                return MESSAGE_IN_VIEW_TYPE;
-            }
-
-            @Override
-            public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = null;
-                if(viewType == MESSAGE_IN_VIEW_TYPE) {
-                    view = LayoutInflater.from(parent.getContext())
-                            .inflate(R.layout.message, parent, false);
-                } else {
-                    view = LayoutInflater.from(parent.getContext())
-                            .inflate(R.layout.message_out, parent, false);
-                }
-                return new MessageViewHolder(view);
-            }
-
-            @Override
-            protected void onBindViewHolder(MessageViewHolder vh, int position, Message message) {
-                chatLoader.setVisibility(ProgressBar.INVISIBLE);
-                vh.bindMessage(message);
-            }
-        };
     }
 
     private void getUserName() {
@@ -265,21 +291,78 @@ public class ChatActivity extends AppCompatActivity {
         mFirebaseAdapter.startListening();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
     public void sendMessage(View view) {
         String userName = fullNameString;
         String messageText = messageInput.getText().toString();
-        Message message = new Message(userName, messageText, userId);
+        Message message = new Message(userName, messageText, userId, null /* no image */);
         if (messageText.length() > 0) {
-            mDatabase.getReference().child(MESSAGE_CHILD).push().setValue(message);
+            chatRoom.push().setValue(message);
             messageInput.setText("");
         } else {
             Toast.makeText(getApplicationContext(), "Empty message.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void sendImage(View view) {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("image/*");
+        startActivityForResult(intent, REQUEST_IMAGE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE) {
+            if (resultCode == RESULT_OK && data != null) {
+                final Uri uri = data.getData();
+                Log.d(TAG, "Uri: " + uri.toString());
+                Message tempMessage = new Message(fullNameString, null, userId, LOADING_IMAGE_URL);
+                chatRoom.push().setValue(tempMessage, new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                if (databaseError != null) {
+                                    Log.w(TAG, "Unable to write message to database.", databaseError.toException());
+                                    return;
+                                }
+                                // Building a StorageReference and then uploading the image file
+                                String key = databaseReference.getKey();
+                                StorageReference fileRef = storageReference
+                                        .child(CHATS_CHILD)
+                                        .child(GENERAL_CHAT_CHILD)
+                                        .child(key)
+                                        .child(uri.getLastPathSegment());
+                                putImageInStorage(fileRef, uri, key);
+                            }
+                        });
+            }
+        }
+    }
+
+    private void putImageInStorage(StorageReference storageReference, Uri uri, final String key) {
+        // Uploading the image to Cloud Storage
+        storageReference.putFile(uri)
+                .addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // After the image loads, get a public downloadUrl for the image
+                        // and add it to the message.
+                        taskSnapshot.getMetadata().getReference().getDownloadUrl()
+                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        Message imageMessage = new Message(fullNameString, null, userId, uri.toString());
+                                        chatRoom.child(key).setValue(imageMessage);
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Image upload task was not successful.", e);
+                    }
+                });
     }
 
     public void handleRegisterUser() {

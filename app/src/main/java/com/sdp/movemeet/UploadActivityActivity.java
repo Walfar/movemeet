@@ -94,7 +94,6 @@ public class UploadActivityActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_activity);
 
-
         setupSportSpinner(this);
 
         fAuth = FirebaseAuth.getInstance();
@@ -115,7 +114,6 @@ public class UploadActivityActivity extends AppCompatActivity {
         addressText = findViewById(R.id.editTextLocation);
         validLocation = false;
 
-
         //Try to get intent from map, in the case where the user creates an activity on click
         Intent intent = getIntent();
         if (intent != null) {
@@ -125,6 +123,20 @@ public class UploadActivityActivity extends AppCompatActivity {
             }
         }
 
+        createDrawer();
+
+        handleRegisterUser();
+
+        //The aim is to block any direct access to this page if the user is not logged
+        //Smth must be wrong since it prevents automatic connection during certain tests
+        /*if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
+            finish();
+        }*/
+
+    }
+
+    public void createDrawer(){
         drawerLayout=findViewById(R.id.drawer_layout);
         navigationView=findViewById(R.id.nav_view);
         textView=findViewById(R.id.textView);
@@ -144,16 +156,6 @@ public class UploadActivityActivity extends AppCompatActivity {
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
         navigationView.setCheckedItem(R.id.nav_add_activity);
-
-        handleRegisterUser();
-
-        //The aim is to block any direct access to this page if the user is not logged
-        //Smth must be wrong since it prevents automatic connection during certain tests
-        /*if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        }*/
-
     }
 
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -167,7 +169,7 @@ public class UploadActivityActivity extends AppCompatActivity {
             case R.id.nav_add_activity:
                 break;
             case R.id.nav_logout:
-                logout(this.navigationView);
+                FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
                 break;
             case R.id.nav_start_activity:
                 Navigation.startActivity(this.navigationView);
@@ -186,14 +188,6 @@ public class UploadActivityActivity extends AppCompatActivity {
             userId = fAuth.getCurrentUser().getUid();
             TextView[] textViewArray = {fullName, email, phone};
             FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, UploadActivityActivity.this);
-        }
-    }
-
-    public void logout(View view) {
-        if (fAuth.getCurrentUser() != null) {
-            FirebaseAuth.getInstance().signOut(); // this will do the logout of the user from Firebase
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
         }
     }
 
@@ -290,7 +284,11 @@ public class UploadActivityActivity extends AppCompatActivity {
                     dateListener, year, month, day);
         } else if (id == 444) {
             return new TimePickerDialog(this,
-                    durationListener, hours, minutes, false);
+                    durationListener,
+                    calendar.get(Calendar.HOUR_OF_DAY),
+                    calendar.get(Calendar.MINUTE),
+                    true);
+
         } else if (id == 222) {
             return new TimePickerDialog(this,
                     startTimeListener,
