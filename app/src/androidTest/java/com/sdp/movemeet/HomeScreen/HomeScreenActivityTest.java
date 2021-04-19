@@ -3,6 +3,7 @@ package com.sdp.movemeet.HomeScreen;
 import androidx.annotation.NonNull;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -14,6 +15,7 @@ import com.sdp.movemeet.LoginActivity;
 import com.sdp.movemeet.MainActivity;
 import com.sdp.movemeet.R;
 ;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -31,21 +33,20 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 @RunWith(AndroidJUnit4.class)
 public class HomeScreenActivityTest {
 
-    /*@Rule
-    public ActivityScenarioRule<HomeScreenActivity> HomeScreenTestRule = new ActivityScenarioRule<>(HomeScreenActivity.class);*/
+    @Rule
+    public ActivityScenarioRule<HomeScreenActivity> HomeScreenTestRule = new ActivityScenarioRule<>(HomeScreenActivity.class);
 
     public FirebaseAuth fAuth;
 
     @Test
-    public void mainActivity_signInLogged() throws InterruptedException {
-
+    public void mainActivity_signInUnlogged() throws InterruptedException {
         onView(withId(R.id.signInButton)).perform(click());
         Thread.sleep(2000);
         intended(hasComponent(LoginActivity.class.getName()));
     }
 
 
-    public void mainActivity_signInUnlogged() throws InterruptedException {
+    public void mainActivity_signInLogged() throws InterruptedException {
         CountDownLatch latch = new CountDownLatch(1);
 
         fAuth = FirebaseAuth.getInstance();
