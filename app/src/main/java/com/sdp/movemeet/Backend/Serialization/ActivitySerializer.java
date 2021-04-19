@@ -1,14 +1,16 @@
-package com.sdp.movemeet.Activity;
+package com.sdp.movemeet.Backend.Serialization;
 
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.sdp.movemeet.Sport;
+import com.sdp.movemeet.Activity.Activity;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ActivitySerializer {
+public class ActivitySerializer implements BackendSerializer<Activity> {
 
     public static final String ACTIVITY_KEY = "activityId";
     public static final String ORGANIZER_KEY = "organizerId";
@@ -25,13 +27,11 @@ public class ActivitySerializer {
     public static final String SPORT_KEY = "sport";
     public static final String ADDRESS_KEY = "address";
 
+    public static final String DOCUMENT_PATH_KEY = "documentPath";
 
-    private ActivitySerializer() {
+    public Activity deserialize(Map<String, Object> data) {
 
-    }
-
-    public static Activity deserialize(Map<String, Object> data) {
-        return new Activity(
+        Activity act = new Activity(
                 (String) data.get(ACTIVITY_KEY),
                 (String) data.get(ORGANIZER_KEY),
                 (String) data.get(TITLE_KEY),
@@ -48,9 +48,14 @@ public class ActivitySerializer {
                 (Sport) data.get(SPORT_KEY),
                 (String) data.get(ADDRESS_KEY)
         );
+
+        String path = (String) data.get(DOCUMENT_PATH_KEY);
+        if (path != null) act.setDocumentPath(path);
+
+        return act;
     }
 
-    public static Map<String, Object> serialize(Activity activity) {
+    public Map<String, Object> serialize(Activity activity) {
         Map<String, Object> data = new HashMap<String, Object>();
 
         data.put(ACTIVITY_KEY, activity.getActivityId());
@@ -68,6 +73,8 @@ public class ActivitySerializer {
         data.put(DURATION_KEY, activity.getDuration());
         data.put(SPORT_KEY, activity.getSport());
         data.put(ADDRESS_KEY, activity.getAddress());
+
+        data.put(DOCUMENT_PATH_KEY, activity.getDocumentPath());
 
         return data;
     }

@@ -5,20 +5,20 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.sdp.movemeet.Activity.ActivitySerializer.ACTIVITY_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.ADDRESS_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.DATE_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.DESC_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.DURATION_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.LATITUDE_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.LONGITUDE_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.NPART_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.ORGANIZER_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.PARTICIPANTS_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.SPORT_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.TITLE_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.deserialize;
-import static com.sdp.movemeet.Activity.ActivitySerializer.serialize;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.ACTIVITY_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.ADDRESS_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.DATE_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.DESC_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.DURATION_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.LATITUDE_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.LONGITUDE_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.NPART_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.ORGANIZER_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.PARTICIPANTS_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.SPORT_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.TITLE_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.deserialize;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.serialize;
 import static com.sdp.movemeet.Activity.ActivityTest.createFakeActivity;
 
 public class ActivitySerializerTest {

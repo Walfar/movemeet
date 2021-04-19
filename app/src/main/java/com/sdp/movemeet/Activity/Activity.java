@@ -1,9 +1,7 @@
 package com.sdp.movemeet.Activity;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.firebase.firestore.DocumentReference;
+import com.sdp.movemeet.Backend.Firebase.FirebaseObject;
 import com.sdp.movemeet.Sport;
 
 import java.io.Serializable;
@@ -19,7 +17,7 @@ import java.util.Locale;
  *
  * */
 
-public class Activity implements Serializable {
+public class Activity implements Serializable, FirebaseObject {
 
     private final String activityId;
     private final String organizerId;
@@ -37,6 +35,7 @@ public class Activity implements Serializable {
     private String address;
 
     private DocumentReference backendRef;
+    private String documentPath;
 
     static  private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
 
@@ -314,6 +313,15 @@ public class Activity implements Serializable {
     public DocumentReference setBackendRef(DocumentReference newRef) throws IllegalArgumentException {
         if (backendRef == null) backendRef = newRef;
         return backendRef;
+    }
+
+    public String getDocumentPath() {
+        return this.documentPath;
+    }
+
+    public String setDocumentPath(String path) {
+        if (documentPath == null) documentPath = path;
+        return documentPath;
     }
 
     @Override
