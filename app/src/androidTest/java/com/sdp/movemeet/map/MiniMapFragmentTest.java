@@ -37,7 +37,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
-/*@RunWith(AndroidJUnit4.class)
+@RunWith(AndroidJUnit4.class)
 public class MiniMapFragmentTest {
     private UiDevice uiDevice;
     private FirebaseAuth fAuth;
@@ -81,4 +81,4 @@ public class MiniMapFragmentTest {
     public void miniMapFragment_onclickSetsLocation() throws InterruptedException {
 
     }
-} */
+}

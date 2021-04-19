@@ -48,5 +48,4 @@ public class ActivitiesUpdaterTest {
     public void instanceIsNeverNull() {
         assertNotNull(updater);
     }
-
 }
