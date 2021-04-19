@@ -77,8 +77,4 @@ public class MiniMapFragmentTest {
         onView(withId(R.id.fragment_map)).check(matches((isDisplayed())));
     }
 
-    @Test
-    public void miniMapFragment_onclickSetsLocation() throws InterruptedException {
-
-    }
 }
