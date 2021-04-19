@@ -67,8 +67,6 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
-        this.currentLocation = LocationFetcher.defaultLocation();
-
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(supportMapFragment.getActivity());
@@ -87,7 +85,9 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     public void onMapReady(GoogleMap googleMap) {
 
         this.googleMap = googleMap;
+
         this.currentLocation = LocationFetcher.currentLocation;
+        if (this.currentLocation == null) this.currentLocation = LocationFetcher.defaultLocation();
 
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnInfoWindowClickListener(this);
