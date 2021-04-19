@@ -43,6 +43,7 @@ import com.sdp.movemeet.R;
 import com.sdp.movemeet.Sport;
 import com.sdp.movemeet.UploadActivityActivity;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
+import com.sdp.movemeet.utility.LocationFetcher;
 
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -116,7 +117,10 @@ public class MainMapFragmentTest {
         waitFor(2000);
     }
 
-
+    @Test
+    public void mainMapFragment_isDisplayed() throws InterruptedException {
+        onView(withId(R.id.fragment_map)).check(matches((isDisplayed())));
+    }
 
     @Test
     public void mainMapFragment_MarkerOnMapForUser() throws UiObjectNotFoundException {
@@ -124,11 +128,17 @@ public class MainMapFragmentTest {
         assertNotNull(marker);
     }
 
-
     @Test
-    public void mainMapFragment_isDisplayed() throws InterruptedException {
-        onView(withId(R.id.fragment_map)).check(matches((isDisplayed())));
+    public void locationIsCorrectlyFetched() throws InterruptedException {
+        MainMapFragment mapFragment = fragmentTestRule.getFragment();
+        LocationFetcher.fetchLastLocation(mapFragment.getFusedLocationProviderClient(), mapFragment.getSupportMapFragment(), mapFragment);
+        Thread.sleep(3000);
+        Location defaultLocation = LocationFetcher.defaultLocation();
+        assertEquals(0, defaultLocation.getLongitude());
+        assertEquals(0, defaultLocation.getLatitude());
     }
+
+
 
     @Test
     public void activitiesUpdatesOnAdd() {

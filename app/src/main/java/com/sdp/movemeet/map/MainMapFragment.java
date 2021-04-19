@@ -198,6 +198,14 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         }
     }
 
+    public FusedLocationProviderClient getFusedLocationProviderClient() {
+        return fusedLocationProviderClient;
+    }
+
+    public SupportMapFragment getSupportMapFragment() {
+        return supportMapFragment;
+    }
+
 
     @Override
     public void onInfoWindowClick(Marker marker) {
