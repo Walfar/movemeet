@@ -53,7 +53,7 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendStor
 
     @Override
     public Task<DocumentSnapshot> get(String path) {
-        if (path == null) throw new IllegalArgumentException();
+        if (path == null || path.isEmpty()) throw new IllegalArgumentException();
 
         return db.collection(collection).document(path).get();
     }

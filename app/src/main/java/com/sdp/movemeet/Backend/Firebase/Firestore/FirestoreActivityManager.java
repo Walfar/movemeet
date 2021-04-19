@@ -6,13 +6,15 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Backend.Serialization.BackendSerializer;
 
-public class FirebaseActivityManager extends FirestoreManager<Activity> {
+public class FirestoreActivityManager extends FirestoreManager<Activity> {
+
+    public final static String ACTIVITIES_COLLECTION = "activities";
 
     private final FirebaseFirestore db;
     private final String collection;
 
 
-    public FirebaseActivityManager(FirebaseFirestore db, String collection, BackendSerializer<Activity> serializer) {
+    public FirestoreActivityManager(FirebaseFirestore db, String collection, BackendSerializer<Activity> serializer) {
         super(db, collection, serializer);
         this.db = db;
         this.collection = collection;

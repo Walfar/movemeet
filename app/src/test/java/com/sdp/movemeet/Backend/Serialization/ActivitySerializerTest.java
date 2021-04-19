@@ -1,5 +1,8 @@
-package com.sdp.movemeet.Activity;
+package com.sdp.movemeet.Backend.Serialization;
 
+import com.sdp.movemeet.Activity.Activity;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -17,17 +20,22 @@ import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.ORGANIZE
 import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.PARTICIPANTS_KEY;
 import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.SPORT_KEY;
 import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.TITLE_KEY;
-import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.deserialize;
-import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.serialize;
 import static com.sdp.movemeet.Activity.ActivityTest.createFakeActivity;
 
 public class ActivitySerializerTest {
+
+    private ActivitySerializer serializer;
+
+    @Before
+    public void setup() {
+        serializer = new ActivitySerializer();
+    }
 
     @Test
     public void serializerWorks() {
         Activity fakeActivity = createFakeActivity();
 
-        Map<String, Object> s = serialize(fakeActivity);
+        Map<String, Object> s = serializer.serialize(fakeActivity);
 
         assert(s.get(ACTIVITY_KEY).equals(fakeActivity.getActivityId()));
         assert(s.get(ORGANIZER_KEY).equals(fakeActivity.getOrganizerId()));
@@ -67,7 +75,7 @@ public class ActivitySerializerTest {
         data.put(SPORT_KEY, fakeActivity.getSport());
         data.put(ADDRESS_KEY, fakeActivity.getAddress());
 
-        Activity deserialized = deserialize(data);
+        Activity deserialized = serializer.deserialize(data);
 
         assert(fakeActivity.equals(deserialized));
     }
