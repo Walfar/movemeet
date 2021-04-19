@@ -1,5 +1,7 @@
 package com.sdp.movemeet.HomeScreen;
 
+import android.content.Intent;
+
 import androidx.annotation.NonNull;
 
 import androidx.test.core.app.ActivityScenario;
@@ -37,7 +39,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 public class HomeScreenActivityTest {
 
     @Rule
-    public ActivityScenarioRule<HomeScreenActivity> HomeScreenTestRule = new ActivityScenarioRule<>(HomeScreenActivity.class);
+    public ActivityScenarioRule<HomeScreenActivity> homeScreenTestRule = new ActivityScenarioRule<>(HomeScreenActivity.class);
 
     public FirebaseAuth fAuth;
 
@@ -52,14 +54,14 @@ public class HomeScreenActivityTest {
     }
 
     @Test
-    public void mainActivity_signInUnlogged() throws InterruptedException {
+    public void signInUnlogged() throws InterruptedException {
         onView(withId(R.id.signInButton)).perform(click());
-        Thread.sleep(2000);
+        Thread.sleep(5000);
         intended(hasComponent(LoginActivity.class.getName()));
     }
 
 
-    public void mainActivity_signInLogged() throws InterruptedException {
+    public void signInLogged() throws InterruptedException {
         CountDownLatch latch = new CountDownLatch(1);
 
         fAuth = FirebaseAuth.getInstance();
