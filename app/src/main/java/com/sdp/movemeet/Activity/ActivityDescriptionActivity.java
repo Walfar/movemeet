@@ -272,7 +272,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
-    public void goToChat(View view) {
+    public void goToIndividualChat(View view) {
         Intent intent = new Intent(ActivityDescriptionActivity.this, ChatActivity.class);
         String activityChatId = act.getActivityId() + " - chatId";
         intent.putExtra("ACTIVITY_CHAT_ID", activityChatId);
