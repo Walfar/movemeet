@@ -55,8 +55,11 @@ public class HomeScreenActivityTest {
 
     @Test
     public void signInUnlogged() throws InterruptedException {
+        fAuth = FirebaseAuth.getInstance();
+        if (fAuth.getCurrentUser() != null) fAuth.signOut();
+        Thread.sleep(1000);
         onView(withId(R.id.signInButton)).perform(click());
-        Thread.sleep(5000);
+        Thread.sleep(2000);
         intended(hasComponent(LoginActivity.class.getName()));
     }
 
