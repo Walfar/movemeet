@@ -11,9 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.RequiresApi;
+
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -27,28 +29,23 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.DistanceCalculator;
+import com.sdp.movemeet.HomeScreenActivity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.UploadActivityActivity;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
 import com.sdp.movemeet.utility.LocationFetcher;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import static com.sdp.movemeet.utility.LocationFetcher.REQUEST_CODE;
 
 public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     private Location currentLocation;
-
-    private ArrayList<Activity> activities;
 
     private FirebaseAuth fAuth = FirebaseAuth.getInstance();
     private FirebaseUser user;
@@ -60,11 +57,11 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     private GoogleMap googleMap;
     private FusedLocationProviderClient fusedLocationProviderClient;
 
+    private ActivitiesUpdater updater;
+
     private static final String TAG = "Maps TAG";
 
-    public static MainMapFragment newInstance() {
-        return new MainMapFragment();
-    }
+    public static final float ZOOM_VALUE = 15.0f;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -73,36 +70,24 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(supportMapFragment.getActivity());
-        LocationFetcher.fetchLastLocation(supportMapFragment, fusedLocationProviderClient, this);
+        LocationFetcher.fetchLastLocation(fusedLocationProviderClient, supportMapFragment, this);
 
-        ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
-        activities = updater.getActivities();
+        this.updater = ActivitiesUpdater.getInstance();
+        updater.updateListActivities(this);
 
         user = fAuth.getCurrentUser();
 
         return view;
     }
 
-   /*
-    @SuppressWarnings("deprecation")
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    currentLocation = LocationFetcher.fetchLastLocation(supportMapFragment, fusedLocationProviderClient, this);
-                }
-                break;
-        }
-    } */
-
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
         this.googleMap = googleMap;
-        this.currentLocation = LocationFetcher.getLocation();
+
+        this.currentLocation = LocationFetcher.currentLocation;
+        if (this.currentLocation == null) this.currentLocation = LocationFetcher.defaultLocation();
 
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnInfoWindowClickListener(this);
@@ -111,7 +96,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         LatLng userLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions().position(userLatLng).title("I am here !");
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(userLatLng));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 12.0f));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, ZOOM_VALUE));
         Marker posMarker = googleMap.addMarker(markerOptions);
         posMarker.setTag("my position");
 
@@ -156,11 +141,11 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     private void getNearbyMarkers(GoogleMap googleMap) {
         DistanceCalculator dc = new DistanceCalculator(currentLocation.getLatitude(), currentLocation.getLongitude());
 
-        dc.setActivities((ArrayList<Activity>) activities);
+        dc.setActivities(updater.getActivities());
         dc.calculateDistances();
         dc.sort();
 
-        for (Activity act : dc.getTopActivities(activities.size())) {
+        for (Activity act : dc.getTopActivities(updater.getActivities().size())) {
             LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
 
             MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
@@ -172,7 +157,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
 
 
-    private int chooseIcon(Activity activity) {
+    public int chooseIcon(Activity activity) {
         switch (activity.getSport()) {
             case Soccer:
                 return R.drawable.icon_soccer;
@@ -184,13 +169,45 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
                 return R.drawable.icon_swim;
             case Badminton:
                 return R.drawable.icon_badminton;
+            case Boxing:
+                return R.drawable.icon_boxing;
+            case Yoga:
+                return R.drawable.icon_yoga;
+            case Windsurfing:
+                return R.drawable.icon_windsurfing;
+            case Trekking:
+                return R.drawable.icon_trekking;
+            case Hockey:
+                return R.drawable.icon_hockey;
+            case Gym:
+                return R.drawable.icon_gym;
+            case Pingpong:
+                return R.drawable.icon_pingpong;
+            case Climbing:
+                return R.drawable.icon_climbing;
+            case Golf:
+                return R.drawable.icon_golf;
+            case VolleyBall:
+                return R.drawable.icon_volleyball;
+            case Rugby:
+                return R.drawable.icon_rugby;
+            case Dancing:
+                return R.drawable.icon_dancing;
+            case Tricking:
+                return R.drawable.icon_tricking;
+            case Parkour:
+                return R.drawable.icon_parkour;
             default:
                 return -1;
         }
     }
 
-    public GoogleMap getGoogleMap() {
-        return googleMap;
+    public FusedLocationProviderClient getFusedLocationProviderClient() {
+        return fusedLocationProviderClient;
+    }
+
+    public SupportMapFragment getSupportMapFragment() {
+        return supportMapFragment;
     }
 
 

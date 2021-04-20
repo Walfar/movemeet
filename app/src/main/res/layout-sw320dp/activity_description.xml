@@ -240,7 +240,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
                             android:fontFamily="@font/armata"
-                            android:onClick="goToChat"
+                            android:onClick="goToIndividualChat"
                             android:padding="15dp"
                             android:text="Chat" />
                     </LinearLayout>

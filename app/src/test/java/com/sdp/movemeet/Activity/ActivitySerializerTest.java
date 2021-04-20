@@ -7,6 +7,7 @@ import java.util.Map;
 
 import static com.sdp.movemeet.Activity.ActivitySerializer.ACTIVITY_KEY;
 import static com.sdp.movemeet.Activity.ActivitySerializer.ADDRESS_KEY;
+import static com.sdp.movemeet.Activity.ActivitySerializer.CREATION_KEY;
 import static com.sdp.movemeet.Activity.ActivitySerializer.DATE_KEY;
 import static com.sdp.movemeet.Activity.ActivitySerializer.DESC_KEY;
 import static com.sdp.movemeet.Activity.ActivitySerializer.DURATION_KEY;
@@ -66,6 +67,7 @@ public class ActivitySerializerTest {
         data.put(DURATION_KEY, fakeActivity.getDuration());
         data.put(SPORT_KEY, fakeActivity.getSport());
         data.put(ADDRESS_KEY, fakeActivity.getAddress());
+        data.put(CREATION_KEY, fakeActivity.getCreatedAt());
 
         Activity deserialized = deserialize(data);
 
