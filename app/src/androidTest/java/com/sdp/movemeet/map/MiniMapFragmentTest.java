@@ -66,7 +66,7 @@ public class MiniMapFragmentTest {
         sleep(2000);
     }
 
-    @Test
+    /*@Test
     public void miniMapFragment_isDisplayed() throws InterruptedException {
         onView(withId(R.id.fragment_container_view)).check(matches((isDisplayed())));
     }
