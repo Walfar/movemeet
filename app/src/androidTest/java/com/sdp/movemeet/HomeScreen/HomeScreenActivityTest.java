@@ -1,6 +1,7 @@
 package com.sdp.movemeet.HomeScreen;
 
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -29,6 +30,8 @@ import java.util.concurrent.CountDownLatch;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 
@@ -54,46 +57,29 @@ public class HomeScreenActivityTest {
     }
 
     @Test
-    public void signInUnlogged() throws InterruptedException {
+    public void signInHasCorrectIntentWhenUnlogged()  {
         fAuth = FirebaseAuth.getInstance();
         if (fAuth.getCurrentUser() != null) fAuth.signOut();
-        Thread.sleep(1000);
+        sleep(2000);
         onView(withId(R.id.signInButton)).perform(click());
-        Thread.sleep(2000);
+        sleep(2000);
         intended(hasComponent(LoginActivity.class.getName()));
     }
 
-
-    public void signInLogged() throws InterruptedException {
-        CountDownLatch latch = new CountDownLatch(1);
-
+    @Test
+    public void signInHasCorrectIntentWhenLogged()  {
         fAuth = FirebaseAuth.getInstance();
-
-        fAuth.signInWithEmailAndPassword("movemeet@gmail.com", "password")
-                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                    @Override
-                    public void onSuccess(AuthResult authResult) {
-                        latch.countDown();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                assert(false);
-            }
-        });
-
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            assert(false);
-        }
-
-        assert(sleep(1000));
-
+        if (fAuth.getCurrentUser() != null) fAuth.signOut();
+        sleep(2000);
+        fAuth.signInWithEmailAndPassword("test@test.com", "password");
+        sleep(2000);
         onView(withId(R.id.signInButton)).perform(click());
-        Thread.sleep(2000);
+        sleep(2000);
         intended(hasComponent(MainActivity.class.getName()));
+        fAuth.signOut();
+        sleep(2000);
     }
+
 
     @Test
     public void mainActivity_noAccount() {
@@ -105,7 +91,7 @@ public class HomeScreenActivityTest {
         assert(sleep(1000));
         onView(withId(R.id.noAccountButton)).perform(click());
 
-        // Assert that the correct Intent is fired here
+        intended(hasComponent(MainActivity.class.getName()));
     }
 
     public boolean sleep(long millis) {
