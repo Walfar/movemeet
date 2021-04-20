@@ -1,4 +1,4 @@
-package com.sdp.movemeet.map;
+/*package com.sdp.movemeet.map;
 
 import android.Manifest;
 import android.location.Location;
@@ -83,7 +83,7 @@ public class MiniMapFragmentTest {
             assertEquals(0, address.latitude, 0);
             assertEquals(0, address.longitude, 0);
         });
-    } */
+    } 
 
     public boolean sleep(long millis) {
         try {
@@ -94,4 +94,4 @@ public class MiniMapFragmentTest {
         }
     }
 
-}
+} */
