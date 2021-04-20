@@ -193,6 +193,10 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
                 return R.drawable.icon_rugby;
             case Dancing:
                 return R.drawable.icon_dancing;
+            case Tricking:
+                return R.drawable.icon_tricking;
+            case Parkour:
+                return R.drawable.icon_parkour;
             default:
                 return -1;
         }
