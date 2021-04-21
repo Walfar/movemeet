@@ -95,12 +95,6 @@ public class MainActivityTest {
         }catch(Exception e){}
     }
 
-    /*@Test
-    public void mainActivity_goToMaps() {
-        onView(withId(R.id.nav_map)).perform(forceClick());
-        logout();
-    } */
-
     @Test
     public void mainActivityToProfileActivity() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_edit_profile));
@@ -121,32 +115,13 @@ public class MainActivityTest {
 
     @Test
     public void mainActivityGotoHome() {
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_start_activity));
-
-        /*Context context = ApplicationProvider.getApplicationContext();
-
-        Intent activity = new Intent(context, ActivityDescriptionActivity.class);
-        activity.putExtra(ActivityDescriptionActivity.EXTRA_ACTIVITY_ID ,DUMMY_ACTIVITY_ID);
-        activity.putExtra(String.valueOf(ActivityDescriptionActivity.EXTRA_LATITUDE),DUMMY_LATITUDE);
-        activity.putExtra(ActivityDescriptionActivity.EXTRA_DATE ,DUMMY_DATE);
-        activity.putExtra(ActivityDescriptionActivity.EXTRA_TITLE ,DUMMY_TITLE);
-        activity.putExtra(ActivityDescriptionActivity.EXTRA_DESCRIPTION ,DUMMY_ACTIVITY_ID);
-        activity.putExtra(ActivityDescriptionActivity.EXTRA_ACTIVITY_ID ,DUMMY_ACTIVITY_ID);
-        activity.putExtra(ActivityDescriptionActivity.EXTRA_ACTIVITY_ID ,DUMMY_ACTIVITY_ID);
-
-        ActivityScenario.launch(activity);*/
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
-        // Open Drawer to click on navigation.
-        onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
-        try{
-            Thread.sleep(500);
-        }catch(Exception e){}
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_home));
+        logout();
+    }
+
+    @Test
+    public void mainActivityGotoChat() {
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_chat));
         logout();
     }
 
