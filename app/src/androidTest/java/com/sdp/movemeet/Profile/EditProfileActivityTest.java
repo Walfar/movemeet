@@ -75,11 +75,17 @@ public class EditProfileActivityTest {
             assert(false);
         }
 
-        ActivityScenario scenario = ActivityScenario.launch(EditProfileActivity.class);
+        ActivityScenario scenario = ActivityScenario.launch(ProfileActivity.class);
     }
 
     @Test
     public void updateProfileByEnteringFieldsAndClickingSaveButton() {
+
+        onView(withId(R.id.button_update_profile)).perform(click());
+
+        try{
+            Thread.sleep(500);
+        }catch(Exception e){}
 
         onView(ViewMatchers.withId(R.id.edit_text_edit_profile_full_name))
                 .perform(replaceText(TEST_FULL_NAME), closeSoftKeyboard()); // To solve the "Android :java.lang.SecurityException: Injecting to another application requires INJECT_EVENTS permission" issue --> cf.: "I solved using replaceText instead of TypeText action" (https://stackoverflow.com/questions/22163424/android-java-lang-securityexception-injecting-to-another-application-requires)

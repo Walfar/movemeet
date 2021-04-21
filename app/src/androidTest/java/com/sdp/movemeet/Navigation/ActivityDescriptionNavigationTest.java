@@ -22,7 +22,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
-public class ProfileActivityTest {
+public class ActivityDescriptionNavigationTest {
     @Rule
     public ActivityScenarioRule<HomeScreenActivity> testRule = new ActivityScenarioRule<>(HomeScreenActivity.class);
 
@@ -43,7 +43,7 @@ public class ProfileActivityTest {
             Thread.sleep(500);
         }catch(Exception e){}
 
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_edit_profile));
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_start_activity));
 
         try{
             Thread.sleep(500);
@@ -57,37 +57,37 @@ public class ProfileActivityTest {
     }
 
     @Test
-    public void ProfileActivityToProfileActivity() {
+    public void ActivityDescriptionToProfileActivity() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_edit_profile));
         logout();
     }
 
     @Test
-    public void ProfileActivityToActivityUpload() {
+    public void ActivityDescriptionToActivityUpload() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_add_activity));
         logout();
     }
 
     @Test
-    public void UploadActivityToStartActivity() {
+    public void ActivityDescriptionToStartActivity() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_start_activity));
         logout();
     }
 
     @Test
-    public void UploadActivityGotoHome() {
+    public void ActivityDescriptionGotoHome() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_home));
         logout();
     }
 
     @Test
-    public void ProfileActivityGotoChat() {
+    public void ActivityDescriptionGotoChat() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_chat));
         logout();
     }
 
     @Test
-    public void ProfileActivity_logout() {
+    public void ActivityDescription_logout() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
     }
 
