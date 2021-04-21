@@ -1,4 +1,4 @@
-package com.sdp.movemeet;
+package com.sdp.movemeet.Navigation;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +21,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Activity.ActivityDescriptionActivity;
+import com.sdp.movemeet.HomeScreenActivity;
+import com.sdp.movemeet.R;
+import com.sdp.movemeet.Sport;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -60,26 +63,12 @@ import static org.hamcrest.Matchers.is;
 
 public class MainActivityTest {
 
-    private final static String DUMMY_ACTIVITY_ID = "12345";
-    private final static String DUMMY_ORGANISATOR_ID = "1";
-    private final static String DUMMY_TITLE = "title";
-    private final static int DUMMY_NUMBER_PARTICIPANT = 2;
-    private final static ArrayList<String> DUMMY_PARTICIPANTS_ID = new ArrayList<String>();
-    private final static double DUMMY_LONGITUDE = 2.45;
-    private final static double DUMMY_LATITUDE = 3.697;
-    private final static String DUMMY_DESCRIPTION = "description";
-    private final static Date DUMMY_DATE = new Date(2021, 11, 10, 1, 10);
-    private final static double DUMMY_DURATION = 10.4;
-    private final static Sport DUMMY_SPORT = Sport.Running;
-    private final static String DUMMY_ADDRESS = "address";
-    private Activity act;
-
     @Rule
     public ActivityScenarioRule<HomeScreenActivity> testRule = new ActivityScenarioRule<>(HomeScreenActivity.class);
 
     @Before
     public void signIn(){
-        onView(withId(R.id.signInButton)).perform(click());
+        onView(ViewMatchers.withId(R.id.signInButton)).perform(click());
         onView(withId(R.id.edit_text_email)).perform(replaceText("antho2@gmail.com"), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password)).perform(replaceText("234567"), closeSoftKeyboard());
         onView(withId(R.id.button_login)).perform(click());

@@ -22,7 +22,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
-public class UploadActivityTest {
+public class ProfileActivityTest {
     @Rule
     public ActivityScenarioRule<HomeScreenActivity> testRule = new ActivityScenarioRule<>(HomeScreenActivity.class);
 
@@ -43,7 +43,7 @@ public class UploadActivityTest {
             Thread.sleep(500);
         }catch(Exception e){}
 
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_add_activity));
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_edit_profile));
 
         try{
             Thread.sleep(500);
@@ -57,19 +57,19 @@ public class UploadActivityTest {
     }
 
     @Test
-    public void UploadActivityToProfileActivity() {
+    public void ProfileActivityToProfileActivity() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_edit_profile));
         logout();
     }
 
     @Test
-    public void UploadActivityToActivityUpload() {
+    public void ProfileActivityToActivityUpload() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_add_activity));
         logout();
     }
 
     @Test
-    public void UploadActivityyToStartActivity() {
+    public void UploadActivityToStartActivity() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_start_activity));
         logout();
     }
@@ -81,13 +81,13 @@ public class UploadActivityTest {
     }
 
     @Test
-    public void UploadActivityGotoChat() {
+    public void ProfileActivityGotoChat() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_chat));
         logout();
     }
 
     @Test
-    public void UploadActivity_logout() {
+    public void ProfileActivity_logout() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
     }
 
