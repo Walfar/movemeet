@@ -29,6 +29,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.sdp.movemeet.Backend.BackendActivityManager;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.UploadActivityActivity;
+import com.sdp.movemeet.chat.ChatActivity;
 
 import org.hamcrest.Matcher;
 import org.junit.After;
@@ -59,8 +60,8 @@ import static org.hamcrest.Matchers.equalTo;
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class UploadActivityActivityTest {
 
-    @Rule
-    public ActivityScenarioRule<UploadActivityActivity> testRule = new ActivityScenarioRule<>(UploadActivityActivity.class);
+    //@Rule
+    //public ActivityScenarioRule<UploadActivityActivity> testRule = new ActivityScenarioRule<>(UploadActivityActivity.class);
 
     public FirebaseAuth mAuth;
     public String uid;
@@ -113,7 +114,7 @@ public class UploadActivityActivityTest {
     @Test
     @LargeTest
     public void endToEnd() {
-        ActivityScenario scenario = testRule.getScenario();
+        ActivityScenario scenario = ActivityScenario.launch(UploadActivityActivity.class);
 
         try{
             Thread.sleep(1000);
