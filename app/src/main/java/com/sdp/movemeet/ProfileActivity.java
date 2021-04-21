@@ -45,7 +45,7 @@ public class ProfileActivity extends AppCompatActivity {
     TextView fullName, email, phone, description;
     ProgressBar progressBar;
 
-    String userId;
+    String userId, userImagePath;
 
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
@@ -160,13 +160,9 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     private void loadRegisteredUserProfilePicture() {
-        profileRef = storageReference.child("users/" + userId + "/profile.jpg");
-        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Picasso.get().load(uri).into(profileImage);
-            }
-        });
+        userImagePath = "users/" + userId + "/profile.jpg";
+        profileRef = storageReference.child(userImagePath);
+        FirebaseInteraction.getImageFromFirebase(profileRef, profileImage, null);
     }
 
 
@@ -221,7 +217,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void deleteProfilePicture() {
-        profileRef = storageReference.child("users/" + userId + "/profile.jpg");
+        profileRef = storageReference.child(userImagePath);
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
