@@ -183,6 +183,44 @@ public class ProfileActivity extends AppCompatActivity {
     public void deleteUserAccount(View view) {
 
         // Deleting the profile picture of the user from Firebase Storage (in case it exists)
+        deleteProfilePicture();
+
+        // Deleting all the user data from Firebase Firestore
+        fStore.collection("users").document(userId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+                // Finally, deleting the user from Firebase Authentication
+                deleteUserFromFirebaseAuthentication();
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Firebase Firestore user document could not be fetched!");
+            }
+        });
+    }
+
+    private void deleteUserFromFirebaseAuthentication() {
+        FirebaseUser user = fAuth.getCurrentUser();
+        if (user != null) {
+            user.delete()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(ProfileActivity.this, "Account deleted!", Toast.LENGTH_SHORT).show();
+                                // Sending the user to the login screen
+                                startActivity(new Intent(ProfileActivity.this, HomeScreenActivity.class));
+                                finish();
+                            }
+                        }
+                    });
+        }
+    }
+
+    private void deleteProfilePicture() {
         profileRef = storageReference.child("users/" + userId + "/profile.jpg");
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -200,36 +238,6 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 });
 
-            }
-        });
-
-        // Deleting all the user data from Firebase Firestore
-        fStore.collection("users").document(userId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-
-                // Finally, deleting the user from Firebase Authentication
-                FirebaseUser user = fAuth.getCurrentUser();
-                if (user != null) {
-                    user.delete()
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(ProfileActivity.this, "Account deleted!", Toast.LENGTH_SHORT).show();
-                                        // Sending the user to the login screen
-                                        startActivity(new Intent(ProfileActivity.this, HomeScreenActivity.class));
-                                        finish();
-                                    }
-                                }
-                            });
-                }
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "Firebase Firestore user document could not be fetched!");
             }
         });
     }
