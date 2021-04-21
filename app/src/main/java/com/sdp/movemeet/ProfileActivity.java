@@ -3,11 +3,13 @@ package com.sdp.movemeet;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -16,17 +18,23 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
-import com.squareup.picasso.Picasso;
 import com.sdp.movemeet.Navigation.Navigation;
+import com.squareup.picasso.Picasso;
 
 public class ProfileActivity extends AppCompatActivity {
+
+    private static final String TAG = "ProfileActivity";
 
     public static final String EXTRA_MESSAGE_FULL_NAME = "fullName";
     public static final String EXTRA_MESSAGE_EMAIL = "email";
@@ -42,6 +50,7 @@ public class ProfileActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     StorageReference storageReference;
+    StorageReference profileRef;
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -151,7 +160,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     private void loadRegisteredUserProfilePicture() {
-        StorageReference profileRef = storageReference.child("users/" + userId + "/profile.jpg");
+        profileRef = storageReference.child("users/" + userId + "/profile.jpg");
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -170,4 +179,58 @@ public class ProfileActivity extends AppCompatActivity {
         startActivity(i);
     }
 
+
+    public void deleteUserAccount(View view) {
+
+        // Deleting the profile picture of the user from Firebase Storage (in case it exists)
+        profileRef = storageReference.child("users/" + userId + "/profile.jpg");
+        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+
+                profileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Firebase Storage user profile picture successfully deleted!");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Log.d(TAG, "Firebase Storage user profile picture could not be fetched!");
+                    }
+                });
+
+            }
+        });
+
+        // Deleting all the user data from Firebase Firestore
+        fStore.collection("users").document(userId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+                // Finally, deleting the user from Firebase Authentication
+                FirebaseUser user = fAuth.getCurrentUser();
+                if (user != null) {
+                    user.delete()
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(ProfileActivity.this, "Account deleted!", Toast.LENGTH_SHORT).show();
+                                        // Sending the user to the login screen
+                                        startActivity(new Intent(ProfileActivity.this, HomeScreenActivity.class));
+                                        finish();
+                                    }
+                                }
+                            });
+                }
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Firebase Firestore user document could not be fetched!");
+            }
+        });
+    }
 }

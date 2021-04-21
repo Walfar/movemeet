@@ -26,6 +26,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
+import com.sdp.movemeet.EditProfileActivity;
 import com.sdp.movemeet.HomeScreenActivity;
 import com.sdp.movemeet.LoginActivity;
 import com.sdp.movemeet.MainActivity;
@@ -273,12 +274,17 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
     public void goToIndividualChat(View view) {
-        Intent intent = new Intent(ActivityDescriptionActivity.this, ChatActivity.class);
-        String activityChatId = act.getActivityId() + " - chatId";
-        intent.putExtra("ACTIVITY_CHAT_ID", activityChatId);
-        String activityTitle = act.getTitle();
-        intent.putExtra("ACTIVITY_TITLE", activityTitle);
-        startActivity(intent);
+        // Allowing the access to the chat only if the user is registered to the activity
+        if (act.getParticipantId().contains(userId)) {
+            Intent intent = new Intent(ActivityDescriptionActivity.this, ChatActivity.class);
+            String activityChatId = act.getActivityId() + " - chatId";
+            intent.putExtra("ACTIVITY_CHAT_ID", activityChatId);
+            String activityTitle = act.getTitle();
+            intent.putExtra("ACTIVITY_TITLE", activityTitle);
+            startActivity(intent);
+        } else {
+            Toast.makeText(ActivityDescriptionActivity.this, "Please register if you want to access the chat!", Toast.LENGTH_SHORT).show();
+        }
     }
     /*public void goToHome(View view){
         Intent i = new Intent(ActivityDescriptionActivity.this, HomeScreenActivity.class);

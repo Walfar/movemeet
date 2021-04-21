@@ -143,7 +143,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     public void saveUserData(View view) {
         if (profileFullName.getText().toString().isEmpty() || profileEmail.getText().toString().isEmpty() || profilePhone.getText().toString().isEmpty()) {
-            Toast.makeText(EditProfileActivity.this, "Description is optional, but one ore more contact fields are empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditProfileActivity.this, "Description is optional, but one or more contact fields are empty!", Toast.LENGTH_SHORT).show();
             return;
         }
         final String email = profileEmail.getText().toString();
