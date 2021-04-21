@@ -223,16 +223,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
-        <Button
-            android:id="@+id/button_delete_account"
-            android:onClick="deleteUserAccount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Delete account"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progress_bar_profile" />
-
+    <Button
+        android:id="@+id/button_delete_account"
+        android:onClick="deleteUserAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete account"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progress_bar_profile" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.navigation.NavigationView

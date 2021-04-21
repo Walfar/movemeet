@@ -9,15 +9,21 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,15 +31,19 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
 import com.sdp.movemeet.EditProfileActivity;
 import com.sdp.movemeet.HomeScreenActivity;
 import com.sdp.movemeet.LoginActivity;
 import com.sdp.movemeet.MainActivity;
 import com.sdp.movemeet.Navigation.Navigation;
+import com.sdp.movemeet.ProfileActivity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.Sport;
 import com.sdp.movemeet.chat.ChatActivity;
+import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -68,8 +78,13 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
     TextView fullName, email, phone;
     FirebaseFirestore fStore;
+    StorageReference storageReference;
     String userId;
     String fullNameString;
+
+    ImageView activityImage;
+    String imagePath;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +114,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         createSportView();
         createDurationView();
         createOrganizerView();
+        loadActivityHeaderPicture();
 
         createDrawer();
 
@@ -286,6 +302,37 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             Toast.makeText(ActivityDescriptionActivity.this, "Please register if you want to access the chat!", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void loadActivityHeaderPicture() {
+        activityImage = findViewById(R.id.activity_image_description);
+        progressBar = findViewById(R.id.progress_bar_activity_description);
+        progressBar.setVisibility(View.VISIBLE);
+        storageReference = FirebaseStorage.getInstance().getReference();
+        if (act != null) {
+            imagePath = "activities/"+act.getActivityId()+"/activityImage.jpg";
+            StorageReference imageRef = storageReference.child(imagePath);
+            FirebaseInteraction.getImageFromFirebase(imageRef, activityImage, progressBar);
+        }
+    }
+
+    public void changeActivityPicture(View view) {
+        //Toast.makeText(ActivityDescriptionActivity.this, "Activity image updated!", Toast.LENGTH_SHORT).show();
+        Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(openGalleryIntent, 1000);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1000) {
+            if(resultCode == android.app.Activity.RESULT_OK) {
+                Uri imageUri = data.getData();
+                progressBar.setVisibility(View.VISIBLE);
+                FirebaseInteraction.uploadImageToFirebase(storageReference, imagePath, imageUri, activityImage, progressBar);
+            }
+        }
+    }
+
     /*public void goToHome(View view){
         Intent i = new Intent(ActivityDescriptionActivity.this, HomeScreenActivity.class);
         i.putExtra(EXTRA_ACTIVITY_ID, "1");

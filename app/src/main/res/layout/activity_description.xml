@@ -45,6 +45,7 @@
 
                     <ImageView
                         android:id="@+id/activity_image_description"
+                        android:onClick="changeActivityPicture"
                         android:layout_width="150dp"
                         android:layout_height="200dp"
                         android:layout_gravity="center_horizontal"
@@ -246,6 +247,16 @@
                             android:padding="15dp"
                             android:text="Chat" />
                     </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar_activity_description"
+                        android:paddingTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#F31505"
+                        android:layout_gravity="center_horizontal"
+                        android:visibility="invisible" />
+
                 </LinearLayout>
             </HorizontalScrollView>
         </ScrollView>

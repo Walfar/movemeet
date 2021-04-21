@@ -40,7 +40,7 @@ public class EditProfileActivity extends AppCompatActivity {
     ProgressBar progressBar;
     ImageButton saveBtn;
 
-    String userId, fullNameString, emailString, phoneString, descriptionString;
+    String userId, fullNameString, emailString, phoneString, descriptionString, userImagePath;
 
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
@@ -88,14 +88,9 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void loadRegisteredUserProfilePicture(String userId) {
         progressBar.setVisibility(View.VISIBLE);
-        StorageReference profileRef = storageReference.child("users/"+userId+"/profile.jpg");
-        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Picasso.get().load(uri).into(profileImage);
-                progressBar.setVisibility(View.GONE);
-            }
-        });
+        userImagePath = "users/"+userId+"/profile.jpg";
+        StorageReference profileRef = storageReference.child(userImagePath);
+        FirebaseInteraction.getImageFromFirebase(profileRef, profileImage, progressBar);
     }
 
 
@@ -112,32 +107,11 @@ public class EditProfileActivity extends AppCompatActivity {
             if(resultCode == Activity.RESULT_OK) {
                 Uri imageUri = data.getData();
                 progressBar.setVisibility(View.VISIBLE);
-                uploadImageToFirebase(imageUri);
+                String imagePath = "users/"+userId+"/profile.jpg";
+                FirebaseInteraction.uploadImageToFirebase(storageReference, imagePath, imageUri, profileImage, progressBar);
+                //uploadImageToFirebase(imageUri);
             }
         }
-    }
-
-
-    private void uploadImageToFirebase(Uri imageUri) {
-        final StorageReference fileRef = storageReference.child("users/"+userId+"/profile.jpg");
-        fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Picasso.get().load(uri).into(profileImage); // Picasso helps us link the URI to the ImageView
-                        progressBar.setVisibility(View.GONE);
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), "Failed.", Toast.LENGTH_SHORT).show();
-                progressBar.setVisibility(View.GONE);
-            }
-        });
     }
 
 
