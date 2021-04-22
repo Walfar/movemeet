@@ -79,7 +79,6 @@ public class ActivityNotNullDescriptionTest {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    sleep(500);
                     latch.countDown();
                 } else {
                     assert (false);
