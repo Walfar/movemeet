@@ -1,21 +1,13 @@
 package com.sdp.movemeet.HomeScreen;
 
-import android.content.Intent;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.HomeScreenActivity;
-import com.sdp.movemeet.HomeUnregister;
+import com.sdp.movemeet.MainUnregister;
 import com.sdp.movemeet.LoginActivity;
 import com.sdp.movemeet.MainActivity;
 import com.sdp.movemeet.R;
@@ -26,13 +18,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.CountDownLatch;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 
@@ -92,7 +80,7 @@ public class HomeScreenActivityTest {
         assert(sleep(1000));
         onView(withId(R.id.noAccountButton)).perform(click());
 
-        intended(hasComponent(HomeUnregister.class.getName()));
+        intended(hasComponent(MainUnregister.class.getName()));
     }
 
     public boolean sleep(long millis) {
