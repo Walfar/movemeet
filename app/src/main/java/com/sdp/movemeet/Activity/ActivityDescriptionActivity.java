@@ -7,7 +7,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,8 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,16 +31,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
-import com.sdp.movemeet.EditProfileActivity;
-import com.sdp.movemeet.HomeScreenActivity;
 import com.sdp.movemeet.LoginActivity;
-import com.sdp.movemeet.MainActivity;
 import com.sdp.movemeet.Navigation.Navigation;
-import com.sdp.movemeet.ProfileActivity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.Sport;
 import com.sdp.movemeet.chat.ChatActivity;
-import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -51,7 +43,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class ActivityDescriptionActivity extends AppCompatActivity {
-  
+
     public final static String EXTRA_ACTIVITY_ID = "12345";
     public final static String EXTRA_ORGANISATOR_ID = "1";
     public final static String EXTRA_TITLE = "title";
@@ -68,7 +60,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     Button RegisterToActivityButton;
     private Activity act;
-    private static final String TAG = "ActivityDescriptionActivity";
+    private static final String TAG = "ActDescActivity";
     private FirebaseUser user;
 
     DrawerLayout drawerLayout;
@@ -76,10 +68,11 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     Toolbar toolbar;
     TextView textView;
 
-    TextView fullName, email, phone;
+    TextView fullName, email, phone, organizerView;
     FirebaseFirestore fStore;
     StorageReference storageReference;
     String userId;
+    String organizerId;
     String fullNameString;
 
     ImageView activityImage;
@@ -106,6 +99,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             getUserName();
         }*/
 
+
         createTitleView();
         createParticipantNumberView();
         createDescriptionView();
@@ -117,8 +111,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         loadActivityHeaderPicture();
 
         createDrawer();
-
         handleRegisterUser();
+        getOrganizerName();
 
         //The aim is to block any direct access to this page if the user is not logged
         //Smth must be wrong since it prevents automatic connection during certain tests
@@ -127,6 +121,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             finish();
         }*/
     }
+
 
     public void createDrawer(){
         drawerLayout=findViewById(R.id.drawer_layout);
@@ -261,9 +256,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
     private void createOrganizerView(){
-        TextView organisatorView = (TextView) findViewById(R.id.activity_organisator_description);
+        organizerView = (TextView) findViewById(R.id.activity_organisator_description);
         if(act != null){
-            organisatorView.setText(act.getOrganizerId());
+            organizerView.setText(act.getOrganizerId());
         }
     }
 
@@ -303,6 +298,33 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
+    private void getOrganizerName() {
+        organizerId = act.getOrganizerId();
+        getUserName();
+    }
+
+    private void getUserName() {
+        DocumentReference docRef = fStore.collection("users").document(organizerId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        fullNameString = (String) document.getData().get("fullName");
+                        organizerView.setText(fullNameString);
+                        Log.i(TAG, "fullNameString: " + fullNameString);
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
     private void loadActivityHeaderPicture() {
         activityImage = findViewById(R.id.activity_image_description);
         progressBar = findViewById(R.id.progress_bar_activity_description);
@@ -316,9 +338,12 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
     public void changeActivityPicture(View view) {
-        //Toast.makeText(ActivityDescriptionActivity.this, "Activity image updated!", Toast.LENGTH_SHORT).show();
-        Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(openGalleryIntent, 1000);
+        if (userId.equals(organizerId)) {
+            Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(openGalleryIntent, 1000);
+        } else {
+            Toast.makeText(ActivityDescriptionActivity.this, "Only the organizer can change the header picture!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
