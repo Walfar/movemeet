@@ -60,8 +60,6 @@ public class ProfileActivityTest {
     @Test
     public void deleteAccount() {
 
-        //editProfileActivity_getsCorrectData();
-
         // Trying to directly launch ProfileActivity (even if the "rule" is set to RegisterActivity)
         try (ActivityScenario<ProfileActivity> scenario = ActivityScenario.launch(ProfileActivity.class)) {
             clickDeleteAccountButton();
