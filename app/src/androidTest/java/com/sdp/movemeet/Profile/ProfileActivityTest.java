@@ -38,7 +38,7 @@ public class ProfileActivityTest {
     public static final String TEST_PASSWORD = "123456";
     public static final String TEST_PHONE = "0798841817";
     public static final String TEST_DESCRIPTION = "My yolo description";
-
+  
     @Rule
     public ActivityScenarioRule<RegisterActivity> testRule = new ActivityScenarioRule<>(RegisterActivity.class);
 
