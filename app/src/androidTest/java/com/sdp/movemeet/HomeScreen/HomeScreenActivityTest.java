@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.HomeScreenActivity;
+import com.sdp.movemeet.HomeUnregister;
 import com.sdp.movemeet.LoginActivity;
 import com.sdp.movemeet.MainActivity;
 import com.sdp.movemeet.R;
@@ -91,7 +92,7 @@ public class HomeScreenActivityTest {
         assert(sleep(1000));
         onView(withId(R.id.noAccountButton)).perform(click());
 
-        intended(hasComponent(MainActivity.class.getName()));
+        intended(hasComponent(HomeUnregister.class.getName()));
     }
 
     public boolean sleep(long millis) {
