@@ -26,6 +26,7 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
     public static final String DURATION_KEY = "duration";
     public static final String SPORT_KEY = "sport";
     public static final String ADDRESS_KEY = "address";
+    public static final String CREATION_KEY = "createdAt";
 
     public static final String DOCUMENT_PATH_KEY = "documentPath";
 
@@ -46,7 +47,8 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
                 (Date) data.get(DATE_KEY),
                 (double) data.get(DURATION_KEY),
                 (Sport) data.get(SPORT_KEY),
-                (String) data.get(ADDRESS_KEY)
+                (String) data.get(ADDRESS_KEY),
+                (Date) data.get(CREATION_KEY)
         );
 
         String path = (String) data.get(DOCUMENT_PATH_KEY);
@@ -73,6 +75,7 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
         data.put(DURATION_KEY, activity.getDuration());
         data.put(SPORT_KEY, activity.getSport());
         data.put(ADDRESS_KEY, activity.getAddress());
+        data.put(CREATION_KEY, activity.getCreatedAt());
 
         data.put(DOCUMENT_PATH_KEY, activity.getDocumentPath());
 

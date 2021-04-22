@@ -39,6 +39,8 @@ android {
 }
 
 dependencies {
+    implementation 'org.apache.commons:commons-lang3:3.5'
+    implementation 'com.google.code.gson:gson:2.8.5'
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:26.6.0')
     implementation 'com.google.firebase:firebase-analytics'

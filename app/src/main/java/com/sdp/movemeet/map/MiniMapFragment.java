@@ -27,6 +27,8 @@ import com.sdp.movemeet.R;
 import com.sdp.movemeet.UploadActivityActivity;
 import com.sdp.movemeet.utility.LocationFetcher;
 
+import static com.sdp.movemeet.map.MainMapFragment.ZOOM_VALUE;
+
 public class MiniMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     private SupportMapFragment supportMapFragment;
@@ -41,10 +43,12 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
 
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
+        currentLocation = LocationFetcher.defaultLocation();
+
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(supportMapFragment.getActivity());
-        LocationFetcher.fetchLastLocation(supportMapFragment, fusedLocationProviderClient, this);
+        LocationFetcher.fetchLastLocation(fusedLocationProviderClient, supportMapFragment, this);
 
         return view;
     }
@@ -52,14 +56,14 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
     @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.setOnMapClickListener(this::onMapClick);
-        currentLocation = LocationFetcher.getLocation();
+        currentLocation = LocationFetcher.currentLocation;
         LatLng location = ((UploadActivityActivity) getActivity()).getAddressLocation();
         //Zoom on the location that the user set, or on his GPS position if none found
         Log.d("MiniMapFragment TAG", "user current location is " + currentLocation.toString());
         if (location != null) Log.d("MiniMapFragmentTAG", "not null location us " + location.toString());
         if (location == null) location = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(location));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 12.0f));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, ZOOM_VALUE));
     }
 
     @Override
