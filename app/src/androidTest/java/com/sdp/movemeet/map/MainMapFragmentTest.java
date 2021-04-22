@@ -231,9 +231,10 @@ public class MainMapFragmentTest {
     }
 
 
-    /*@Test
-    public void testChooseIcons() {
+    @Test
+    public void testChooseIcons() throws InterruptedException {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
+        waitFor(2000);
         assertEquals(R.drawable.icon_boxing, setSportIcon(Boxing, mapFragment), 0);
         assertEquals(R.drawable.icon_windsurfing, setSportIcon(Windsurfing, mapFragment), 0);
         assertEquals(R.drawable.icon_dancing, setSportIcon(Dancing, mapFragment), 0);
@@ -257,7 +258,7 @@ public class MainMapFragmentTest {
         Activity activity = new Activity("activity id", "organizer id", "title", 2, new ArrayList<>(), 0, 0,
                 "description", new Date(), 1, sport,"here", new Date());
         return mapFragment.chooseIcon(activity);
-    } */
+    }
 
     @Test
     public void mainMapFragment_userClickingOnMapAddsNewActivity() throws UiObjectNotFoundException, InterruptedException {

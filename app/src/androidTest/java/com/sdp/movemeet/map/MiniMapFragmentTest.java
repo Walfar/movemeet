@@ -1,4 +1,4 @@
-/*package com.sdp.movemeet.map;
+package com.sdp.movemeet.map;
 
 import android.Manifest;
 import android.location.Location;
@@ -66,12 +66,12 @@ public class MiniMapFragmentTest {
         sleep(2000);
     }
 
-    /*@Test
+    @Test
     public void miniMapFragment_isDisplayed() throws InterruptedException {
         onView(withId(R.id.fragment_container_view)).check(matches((isDisplayed())));
     }
 
-    /*
+
     @Test
     public void miniMapFragment_onClickSetsLocation() {
         //What could be the right coords of the mini map ?
@@ -94,4 +94,4 @@ public class MiniMapFragmentTest {
         }
     }
 
-} */
+}
