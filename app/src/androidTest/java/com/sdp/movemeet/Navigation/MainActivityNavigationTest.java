@@ -1,4 +1,4 @@
-package com.sdp.movemeet;
+package com.sdp.movemeet.Navigation;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +21,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Activity.ActivityDescriptionActivity;
+import com.sdp.movemeet.HomeScreenActivity;
+import com.sdp.movemeet.R;
+import com.sdp.movemeet.Sport;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -58,28 +61,14 @@ import static org.hamcrest.Matchers.is;
 
 @RunWith(AndroidJUnit4.class)
 
-public class MainActivityTest {
-
-    private final static String DUMMY_ACTIVITY_ID = "12345";
-    private final static String DUMMY_ORGANISATOR_ID = "1";
-    private final static String DUMMY_TITLE = "title";
-    private final static int DUMMY_NUMBER_PARTICIPANT = 2;
-    private final static ArrayList<String> DUMMY_PARTICIPANTS_ID = new ArrayList<String>();
-    private final static double DUMMY_LONGITUDE = 2.45;
-    private final static double DUMMY_LATITUDE = 3.697;
-    private final static String DUMMY_DESCRIPTION = "description";
-    private final static Date DUMMY_DATE = new Date(2021, 11, 10, 1, 10);
-    private final static double DUMMY_DURATION = 10.4;
-    private final static Sport DUMMY_SPORT = Sport.Running;
-    private final static String DUMMY_ADDRESS = "address";
-    private Activity act;
+public class MainActivityNavigationTest {
 
     @Rule
     public ActivityScenarioRule<HomeScreenActivity> testRule = new ActivityScenarioRule<>(HomeScreenActivity.class);
 
     @Before
     public void signIn(){
-        onView(withId(R.id.signInButton)).perform(click());
+        onView(ViewMatchers.withId(R.id.signInButton)).perform(click());
         onView(withId(R.id.edit_text_email)).perform(replaceText("antho2@gmail.com"), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password)).perform(replaceText("234567"), closeSoftKeyboard());
         onView(withId(R.id.button_login)).perform(click());
@@ -94,12 +83,6 @@ public class MainActivityTest {
             Thread.sleep(1000);
         }catch(Exception e){}
     }
-
-    /*@Test
-    public void mainActivity_goToMaps() {
-        onView(withId(R.id.nav_map)).perform(forceClick());
-        logout();
-    } */
 
     @Test
     public void mainActivityToProfileActivity() {
@@ -121,32 +104,13 @@ public class MainActivityTest {
 
     @Test
     public void mainActivityGotoHome() {
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_start_activity));
-
-        /*Context context = ApplicationProvider.getApplicationContext();
-
-        Intent activity = new Intent(context, ActivityDescriptionActivity.class);
-        activity.putExtra(ActivityDescriptionActivity.EXTRA_ACTIVITY_ID ,DUMMY_ACTIVITY_ID);
-        activity.putExtra(String.valueOf(ActivityDescriptionActivity.EXTRA_LATITUDE),DUMMY_LATITUDE);
-        activity.putExtra(ActivityDescriptionActivity.EXTRA_DATE ,DUMMY_DATE);
-        activity.putExtra(ActivityDescriptionActivity.EXTRA_TITLE ,DUMMY_TITLE);
-        activity.putExtra(ActivityDescriptionActivity.EXTRA_DESCRIPTION ,DUMMY_ACTIVITY_ID);
-        activity.putExtra(ActivityDescriptionActivity.EXTRA_ACTIVITY_ID ,DUMMY_ACTIVITY_ID);
-        activity.putExtra(ActivityDescriptionActivity.EXTRA_ACTIVITY_ID ,DUMMY_ACTIVITY_ID);
-
-        ActivityScenario.launch(activity);*/
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
-        // Open Drawer to click on navigation.
-        onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
-        try{
-            Thread.sleep(500);
-        }catch(Exception e){}
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_home));
+        logout();
+    }
+
+    @Test
+    public void mainActivityGotoChat() {
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_chat));
         logout();
     }
 
