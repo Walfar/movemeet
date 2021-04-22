@@ -72,7 +72,6 @@ public class MiniMapFragmentTest {
         onView(withId(R.id.fragment_map)).check(matches((isDisplayed())));
     }
 
-
     @Test
     public void miniMapFragment_onClickSetsLocation() {
         //What could be the right coords of the mini map ?

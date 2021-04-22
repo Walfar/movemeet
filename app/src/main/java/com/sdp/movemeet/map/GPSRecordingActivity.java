@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.sdp.movemeet.map.MainMapFragment.ZOOM_VALUE;
+
 public class GPSRecordingActivity extends FragmentActivity implements OnMapReadyCallback {
 
     // ----------------- GENERAL CONSTANTS --------------------------
@@ -150,7 +152,7 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
             path.add(newPosition);
 
             if (googleMap != null) {
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newPosition, 20.0f));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newPosition, ZOOM_VALUE));
                 drawPath();
             }
         }

@@ -52,6 +52,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     private FirebaseUser user;
 
     private Marker newActivityMarker;
+    private Marker positionMarker;
 
     private SupportMapFragment supportMapFragment;
 
@@ -72,7 +73,8 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(supportMapFragment.getActivity());
-        LocationFetcher.fetchLastLocation(fusedLocationProviderClient, supportMapFragment, this);
+        //LocationFetcher.fetchLastLocation(fusedLocationProviderClient, supportMapFragment, this);
+        LocationFetcher.updateLocation(fusedLocationProviderClient, supportMapFragment, this);
 
         this.updater = ActivitiesUpdater.getInstance();
         updater.updateListActivities(this);
@@ -87,20 +89,21 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     public void onMapReady(GoogleMap googleMap) {
 
         this.googleMap = googleMap;
-
         this.currentLocation = LocationFetcher.currentLocation;
         if (this.currentLocation == null) this.currentLocation = LocationFetcher.defaultLocation();
+        Log.d(TAG, currentLocation.toString());
 
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnInfoWindowClickListener(this);
         googleMap.setOnMapClickListener(this::onMapClick);
 
+        if (positionMarker != null) positionMarker.remove();
         LatLng userLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions().position(userLatLng).title("I am here !");
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(userLatLng));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, ZOOM_VALUE));
-        Marker posMarker = googleMap.addMarker(markerOptions);
-        posMarker.setTag("my position");
+        positionMarker = googleMap.addMarker(markerOptions);
+        positionMarker.setTag("my position");
 
         getNearbyMarkers(googleMap);
     }
