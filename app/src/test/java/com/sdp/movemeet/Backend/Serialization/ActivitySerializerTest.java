@@ -1,34 +1,42 @@
-package com.sdp.movemeet.Activity;
+package com.sdp.movemeet.Backend.Serialization;
 
+import com.sdp.movemeet.Activity.Activity;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.sdp.movemeet.Activity.ActivitySerializer.ACTIVITY_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.ADDRESS_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.CREATION_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.DATE_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.DESC_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.DURATION_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.LATITUDE_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.LONGITUDE_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.NPART_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.ORGANIZER_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.PARTICIPANTS_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.SPORT_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.TITLE_KEY;
-import static com.sdp.movemeet.Activity.ActivitySerializer.deserialize;
-import static com.sdp.movemeet.Activity.ActivitySerializer.serialize;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.ACTIVITY_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.ADDRESS_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.CREATION_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.DATE_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.DESC_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.DURATION_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.LATITUDE_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.LONGITUDE_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.NPART_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.ORGANIZER_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.PARTICIPANTS_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.SPORT_KEY;
+import static com.sdp.movemeet.Backend.Serialization.ActivitySerializer.TITLE_KEY;
 import static com.sdp.movemeet.Activity.ActivityTest.createFakeActivity;
 
 public class ActivitySerializerTest {
+
+    private ActivitySerializer serializer;
+
+    @Before
+    public void setup() {
+        serializer = new ActivitySerializer();
+    }
 
     @Test
     public void serializerWorks() {
         Activity fakeActivity = createFakeActivity();
 
-        Map<String, Object> s = serialize(fakeActivity);
+        Map<String, Object> s = serializer.serialize(fakeActivity);
 
         assert(s.get(ACTIVITY_KEY).equals(fakeActivity.getActivityId()));
         assert(s.get(ORGANIZER_KEY).equals(fakeActivity.getOrganizerId()));
@@ -69,7 +77,7 @@ public class ActivitySerializerTest {
         data.put(ADDRESS_KEY, fakeActivity.getAddress());
         data.put(CREATION_KEY, fakeActivity.getCreatedAt());
 
-        Activity deserialized = deserialize(data);
+        Activity deserialized = serializer.deserialize(data);
 
         assert(fakeActivity.equals(deserialized));
     }
