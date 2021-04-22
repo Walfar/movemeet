@@ -1,54 +1,32 @@
 package com.sdp.movemeet.Profile;
 
-import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
-import android.widget.Button;
 
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.Espresso;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.contrib.DrawerActions;
-import androidx.test.espresso.contrib.NavigationViewActions;
-import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.sdp.movemeet.EditProfileActivity;
-import com.sdp.movemeet.LoginActivity;
-import com.sdp.movemeet.RegisterActivity;
 import com.sdp.movemeet.ProfileActivity;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.RegisterActivity;
 
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
 
@@ -62,7 +40,6 @@ public class ProfileActivityTest {
     public static final String TEST_DESCRIPTION = "My yolo description";
 
     @Rule
-    //public ActivityScenarioRule<LoginActivity> testRule = new ActivityScenarioRule<>(LoginActivity.class);
     public ActivityScenarioRule<RegisterActivity> testRule = new ActivityScenarioRule<>(RegisterActivity.class);
 
     @Before
@@ -79,25 +56,7 @@ public class ProfileActivityTest {
         }
     }
 
-//    @Test
-//    public void editProfileActivity_getsCorrectData() {
-//        Context context = ApplicationProvider.getApplicationContext();
-//        Intent intent = new Intent(context, EditProfileActivity.class);
-//        intent.putExtra(ProfileActivity.EXTRA_MESSAGE_FULL_NAME, TEST_FULL_NAME);
-//        intent.putExtra(ProfileActivity.EXTRA_MESSAGE_EMAIL, TEST_EMAIL);
-//        intent.putExtra(ProfileActivity.EXTRA_MESSAGE_PHONE, TEST_PHONE);
-//        intent.putExtra(ProfileActivity.EXTRA_MESSAGE_DESCRIPTION, TEST_DESCRIPTION);
-//
-//        try (ActivityScenario<EditProfileActivity> scenario = ActivityScenario.launch(intent)) {
-//            onView(withId(R.id.edit_text_edit_profile_full_name)).check(matches(withText(TEST_FULL_NAME)));
-//            onView(withId(R.id.edit_text_edit_profile_email)).check(matches(withText(TEST_EMAIL)));
-//            onView(withId(R.id.edit_text_edit_profile_phone)).check(matches(withText(TEST_PHONE)));
-//            onView(withId(R.id.edit_text_edit_profile_description)).check(matches(withText(TEST_DESCRIPTION)));
-//        }
-//    }
 
-
-    //----------
     @Test
     public void deleteAccount() {
 
@@ -112,7 +71,7 @@ public class ProfileActivityTest {
             e.printStackTrace();
         }
     }
-    //----------
+
 
     public void clickDeleteAccountButton() {
         try {
@@ -127,6 +86,7 @@ public class ProfileActivityTest {
             assert (false);
         }
     }
+
 
     public static ViewAction forceClick() {
         return new ViewAction() {
@@ -144,7 +104,6 @@ public class ProfileActivityTest {
             }
         };
     }
-
 
 
     /*@Test

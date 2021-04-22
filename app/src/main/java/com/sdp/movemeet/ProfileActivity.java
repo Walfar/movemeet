@@ -30,7 +30,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
 import com.sdp.movemeet.Navigation.Navigation;
-import com.squareup.picasso.Picasso;
 
 public class ProfileActivity extends AppCompatActivity {
 

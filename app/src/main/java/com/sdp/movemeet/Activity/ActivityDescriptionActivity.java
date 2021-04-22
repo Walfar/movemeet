@@ -299,8 +299,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
     private void getOrganizerName() {
-        organizerId = act.getOrganizerId();
-        getUserName();
+        if (act != null) {
+            organizerId = act.getOrganizerId();
+            getUserName();
+        }
     }
 
     private void getUserName() {
