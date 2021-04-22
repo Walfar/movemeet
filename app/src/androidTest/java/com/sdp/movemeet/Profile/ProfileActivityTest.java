@@ -62,53 +62,57 @@ public class ProfileActivityTest {
     public static final String TEST_DESCRIPTION = "My yolo description";
 
     @Rule
-    public ActivityScenarioRule<LoginActivity> testRule = new ActivityScenarioRule<>(LoginActivity.class);
-    //public ActivityScenarioRule<RegisterActivity> testRule = new ActivityScenarioRule<>(RegisterActivity.class);
+    //public ActivityScenarioRule<LoginActivity> testRule = new ActivityScenarioRule<>(LoginActivity.class);
+    public ActivityScenarioRule<RegisterActivity> testRule = new ActivityScenarioRule<>(RegisterActivity.class);
 
-//    @Before
-//    public void createAccount(){
-//        onView(withId(R.id.edit_text_full_name)).perform(replaceText(TEST_FULL_NAME), closeSoftKeyboard());
-//        onView(withId(R.id.edit_text_email)).perform(replaceText(TEST_EMAIL), closeSoftKeyboard());
-//        onView(withId(R.id.edit_text_password)).perform(replaceText(TEST_PASSWORD), closeSoftKeyboard());
-//        onView(withId(R.id.edit_text_phone)).perform(replaceText(TEST_PHONE), closeSoftKeyboard());
-//        onView(withId(R.id.button_register)).perform(click());
-//        try {
-//            Thread.sleep(1500);
-//        } catch (InterruptedException e) {
-//            assert (false);
-//        }
-//    }
-
-    @Test
-    public void editProfileActivity_getsCorrectData() {
-        Context context = ApplicationProvider.getApplicationContext();
-        Intent intent = new Intent(context, EditProfileActivity.class);
-        intent.putExtra(ProfileActivity.EXTRA_MESSAGE_FULL_NAME, TEST_FULL_NAME);
-        intent.putExtra(ProfileActivity.EXTRA_MESSAGE_EMAIL, TEST_EMAIL);
-        intent.putExtra(ProfileActivity.EXTRA_MESSAGE_PHONE, TEST_PHONE);
-        intent.putExtra(ProfileActivity.EXTRA_MESSAGE_DESCRIPTION, TEST_DESCRIPTION);
-
-        try (ActivityScenario<EditProfileActivity> scenario = ActivityScenario.launch(intent)) {
-            onView(withId(R.id.edit_text_edit_profile_full_name)).check(matches(withText(TEST_FULL_NAME)));
-            onView(withId(R.id.edit_text_edit_profile_email)).check(matches(withText(TEST_EMAIL)));
-            onView(withId(R.id.edit_text_edit_profile_phone)).check(matches(withText(TEST_PHONE)));
-            onView(withId(R.id.edit_text_edit_profile_description)).check(matches(withText(TEST_DESCRIPTION)));
+    @Before
+    public void createAccount(){
+        onView(withId(R.id.edit_text_full_name)).perform(replaceText(TEST_FULL_NAME), closeSoftKeyboard());
+        onView(withId(R.id.edit_text_email)).perform(replaceText(TEST_EMAIL), closeSoftKeyboard());
+        onView(withId(R.id.edit_text_password)).perform(replaceText(TEST_PASSWORD), closeSoftKeyboard());
+        onView(withId(R.id.edit_text_phone)).perform(replaceText(TEST_PHONE), closeSoftKeyboard());
+        onView(withId(R.id.button_register)).perform(click());
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            assert (false);
         }
     }
 
 //    @Test
-//    public void deleteAccount() {
+//    public void editProfileActivity_getsCorrectData() {
+//        Context context = ApplicationProvider.getApplicationContext();
+//        Intent intent = new Intent(context, EditProfileActivity.class);
+//        intent.putExtra(ProfileActivity.EXTRA_MESSAGE_FULL_NAME, TEST_FULL_NAME);
+//        intent.putExtra(ProfileActivity.EXTRA_MESSAGE_EMAIL, TEST_EMAIL);
+//        intent.putExtra(ProfileActivity.EXTRA_MESSAGE_PHONE, TEST_PHONE);
+//        intent.putExtra(ProfileActivity.EXTRA_MESSAGE_DESCRIPTION, TEST_DESCRIPTION);
 //
-//        // Trying to directly launch ProfileActivity (even if the "rule" is set to RegisterActivity)
-//        try (ActivityScenario<ProfileActivity> scenario = ActivityScenario.launch(ProfileActivity.class)) {
-//            clickDeleteAccountButton();
-//        }
-//        catch (Exception e){
-//            Log.d("TAG", "deleteAccount Exception: " + e);
-//            e.printStackTrace();
+//        try (ActivityScenario<EditProfileActivity> scenario = ActivityScenario.launch(intent)) {
+//            onView(withId(R.id.edit_text_edit_profile_full_name)).check(matches(withText(TEST_FULL_NAME)));
+//            onView(withId(R.id.edit_text_edit_profile_email)).check(matches(withText(TEST_EMAIL)));
+//            onView(withId(R.id.edit_text_edit_profile_phone)).check(matches(withText(TEST_PHONE)));
+//            onView(withId(R.id.edit_text_edit_profile_description)).check(matches(withText(TEST_DESCRIPTION)));
 //        }
 //    }
 
+
+    //----------
+    @Test
+    public void deleteAccount() {
+
+        //editProfileActivity_getsCorrectData();
+
+        // Trying to directly launch ProfileActivity (even if the "rule" is set to RegisterActivity)
+        try (ActivityScenario<ProfileActivity> scenario = ActivityScenario.launch(ProfileActivity.class)) {
+            clickDeleteAccountButton();
+        }
+        catch (Exception e) {
+            Log.d("TAG", "deleteAccount Exception: " + e);
+            e.printStackTrace();
+        }
+    }
+    //----------
 
     public void clickDeleteAccountButton() {
         try {
@@ -117,6 +121,11 @@ public class ProfileActivityTest {
             assert (false);
         }
         onView(withId(R.id.button_delete_account)).perform(forceClick());
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
     }
 
     public static ViewAction forceClick() {
