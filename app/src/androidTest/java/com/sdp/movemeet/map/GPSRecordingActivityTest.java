@@ -49,10 +49,10 @@ public class GPSRecordingActivityTest {
 
     ActivityScenario scenario;
 
-    private static final double FAKE_LATITUDE = 30.00;
-    private static final double FAKE_LONGITUDE = 5.00;
-    private static final float FAKE_ACCURACY = 3.0f;
-    private Location fakeLocation;
+    public static final double FAKE_LATITUDE = 30.00;
+    public static final double FAKE_LONGITUDE = 5.00;
+    public static final float FAKE_ACCURACY = 3.0f;
+    public Location fakeLocation;
 
     @Rule
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);

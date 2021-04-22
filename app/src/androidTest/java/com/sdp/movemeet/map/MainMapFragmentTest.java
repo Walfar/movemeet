@@ -6,6 +6,8 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Point;
 import android.location.Location;
+import android.location.LocationManager;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -23,6 +25,10 @@ import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -69,6 +75,9 @@ import static com.sdp.movemeet.Sport.Trekking;
 import static com.sdp.movemeet.Sport.VolleyBall;
 import static com.sdp.movemeet.Sport.Windsurfing;
 import static com.sdp.movemeet.Sport.Yoga;
+import static com.sdp.movemeet.map.GPSRecordingActivityTest.FAKE_ACCURACY;
+import static com.sdp.movemeet.map.GPSRecordingActivityTest.FAKE_LATITUDE;
+import static com.sdp.movemeet.map.GPSRecordingActivityTest.FAKE_LONGITUDE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
@@ -78,8 +87,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -88,6 +100,9 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class MainMapFragmentTest {
@@ -95,6 +110,8 @@ public class MainMapFragmentTest {
     private UiDevice uiDevice;
     private FirebaseAuth fAuth;
     private FirebaseUser user;
+    private Location fakeLocation;
+    private Task<Location> mockLocationTask;
 
     @Rule
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -106,6 +123,7 @@ public class MainMapFragmentTest {
 
     @Before
     public void setUp() throws InterruptedException {
+        //The map is tested when the user is logged in
         fAuth = FirebaseAuth.getInstance();
         fAuth.signInWithEmailAndPassword("test@test.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -114,7 +132,24 @@ public class MainMapFragmentTest {
                 uiDevice = UiDevice.getInstance(getInstrumentation());
             }
         });
-        waitFor(2000);
+        fakeLocation = new Location(LocationManager.PASSIVE_PROVIDER);
+        fakeLocation.setLatitude(FAKE_LATITUDE);
+        fakeLocation.setLongitude(FAKE_LONGITUDE);
+        fakeLocation.setAccuracy(FAKE_ACCURACY);
+        fakeLocation.setTime(Calendar.getInstance().getTimeInMillis());
+        //We set the lastLocation to a fake one
+        mockLocationTask = mock(Task.class);
+        Task<Void> mockTask = mock(Task.class);
+        FusedLocationProviderClient fusedLocationProviderClient = fragmentTestRule.getFragment().getFusedLocationProviderClient();
+        when(fusedLocationProviderClient.getLastLocation()).thenReturn(mockLocationTask);
+        when(fusedLocationProviderClient
+                .requestLocationUpdates(any(LocationRequest.class), any(LocationCallback.class), any(Looper.class)))
+                .thenAnswer((Answer<Task<Void>>) invocation -> {
+                    LocationCallback listener = (LocationCallback) invocation.getArguments()[1];
+                    LocationResult mockRes = LocationResult.create(Arrays.asList(fakeLocation, fakeLocation, fakeLocation));
+                    listener.onLocationResult(mockRes);
+                    return mockTask;
+                });
     }
 
     @Test
@@ -133,9 +168,7 @@ public class MainMapFragmentTest {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
         LocationFetcher.fetchLastLocation(mapFragment.getFusedLocationProviderClient(), mapFragment.getSupportMapFragment(), mapFragment);
         Thread.sleep(3000);
-        Location defaultLocation = LocationFetcher.defaultLocation();
-        assertEquals(0, defaultLocation.getLongitude(), 0);
-        assertEquals(0, defaultLocation.getLatitude(), 0);
+        assertEquals(LocationFetcher.currentLocation, mockLocationTask.getResult());
     }
 
 
