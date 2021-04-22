@@ -1,78 +1,106 @@
 package com.sdp.movemeet.Profile;
 
-import android.content.Context;
-import android.content.Intent;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.contrib.DrawerActions;
-import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.sdp.movemeet.EditProfileActivity;
-import com.sdp.movemeet.LoginActivity;
 import com.sdp.movemeet.ProfileActivity;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.RegisterActivity;
 
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
 
 @RunWith(AndroidJUnit4.class)
 public class ProfileActivityTest {
 
-    public static final String TEST_FULL_NAME = "Your Name";
-    public static final String TEST_EMAIL = "Your Email Address";
-    public static final String TEST_PHONE = "Phone Number";
-    public static final String TEST_DESCRIPTION = "Description";
+    public static final String TEST_FULL_NAME = "Yolo Test";
+    public static final String TEST_EMAIL = "yolotest@gmail.com";
+    public static final String TEST_PASSWORD = "123456";
+    public static final String TEST_PHONE = "0798841817";
+    public static final String TEST_DESCRIPTION = "My yolo description";
 
     @Rule
-    public ActivityScenarioRule<LoginActivity> testRule = new ActivityScenarioRule<>(LoginActivity.class);
+    public ActivityScenarioRule<RegisterActivity> testRule = new ActivityScenarioRule<>(RegisterActivity.class);
+
+    @Before
+    public void createAccount(){
+        onView(withId(R.id.edit_text_full_name)).perform(replaceText(TEST_FULL_NAME), closeSoftKeyboard());
+        onView(withId(R.id.edit_text_email)).perform(replaceText(TEST_EMAIL), closeSoftKeyboard());
+        onView(withId(R.id.edit_text_password)).perform(replaceText(TEST_PASSWORD), closeSoftKeyboard());
+        onView(withId(R.id.edit_text_phone)).perform(replaceText(TEST_PHONE), closeSoftKeyboard());
+        onView(withId(R.id.button_register)).perform(click());
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+    }
+
 
     @Test
-    public void editProfileActivity_getsCorrectData() {
-        Context context = ApplicationProvider.getApplicationContext();
-        Intent intent = new Intent(context, EditProfileActivity.class);
-        intent.putExtra(ProfileActivity.EXTRA_MESSAGE_FULL_NAME, TEST_FULL_NAME);
-        intent.putExtra(ProfileActivity.EXTRA_MESSAGE_EMAIL, TEST_EMAIL);
-        intent.putExtra(ProfileActivity.EXTRA_MESSAGE_PHONE, TEST_PHONE);
-        intent.putExtra(ProfileActivity.EXTRA_MESSAGE_DESCRIPTION, TEST_DESCRIPTION);
+    public void deleteAccount() {
 
-        try (ActivityScenario<EditProfileActivity> scenario = ActivityScenario.launch(intent)) {
-            onView(withId(R.id.edit_text_edit_profile_full_name)).check(matches(withText(TEST_FULL_NAME)));
-            onView(withId(R.id.edit_text_edit_profile_email)).check(matches(withText(TEST_EMAIL)));
-            onView(withId(R.id.edit_text_edit_profile_phone)).check(matches(withText(TEST_PHONE)));
-            onView(withId(R.id.edit_text_edit_profile_description)).check(matches(withText(TEST_DESCRIPTION)));
+        // Trying to directly launch ProfileActivity (even if the "rule" is set to RegisterActivity)
+        try (ActivityScenario<ProfileActivity> scenario = ActivityScenario.launch(ProfileActivity.class)) {
+            clickDeleteAccountButton();
         }
+        catch (Exception e) {
+            Log.d("TAG", "deleteAccount Exception: " + e);
+            e.printStackTrace();
+        }
+    }
+
+
+    public void clickDeleteAccountButton() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+        onView(withId(R.id.button_delete_account)).perform(forceClick());
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+    }
+
+
+    public static ViewAction forceClick() {
+        return new ViewAction() {
+            @Override public Matcher<View> getConstraints() {
+                return allOf(isClickable(), isEnabled(), isDisplayed());
+            }
+
+            @Override public String getDescription() {
+                return "force click";
+            }
+
+            @Override public void perform(UiController uiController, View view) {
+                view.performClick(); // perform click without checking view coordinates.
+                uiController.loopMainThreadUntilIdle();
+            }
+        };
     }
 
 
@@ -204,3 +232,4 @@ public class ProfileActivityTest {
 
 
 }
+
