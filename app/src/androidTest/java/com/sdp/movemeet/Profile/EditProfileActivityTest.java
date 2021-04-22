@@ -49,9 +49,6 @@ public class EditProfileActivityTest {
     private FirebaseDatabase mDatabase;
     private FirebaseAuth fAuth;
 
-    //@Rule
-    //public ActivityScenarioRule<EditProfileActivity> testRule = new ActivityScenarioRule<>(EditProfileActivity.class);
-
     @Before
     public void signIn(){
         CountDownLatch latch = new CountDownLatch(1);

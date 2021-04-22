@@ -60,11 +60,7 @@ import static org.hamcrest.Matchers.equalTo;
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class UploadActivityActivityTest {
 
-    //@Rule
-    //public ActivityScenarioRule<UploadActivityActivity> testRule = new ActivityScenarioRule<>(UploadActivityActivity.class);
-
     public FirebaseAuth mAuth;
-    public String uid;
 
     public static ViewAction forceDoubleClick() {
         return new ViewAction() {

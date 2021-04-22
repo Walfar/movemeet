@@ -69,9 +69,6 @@ public class ActivityNotNullDescriptionTest {
             DUMMY_DATE
     );
 
-   //Rule
-   // public ActivityScenarioRule<ActivityDescriptionActivity> testRule = new ActivityScenarioRule<>(new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra("activity", activity));
-
     @Before
     public void signIn() {
         CountDownLatch latch = new CountDownLatch(1);
