@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.sdp.movemeet.map.MainMapFragment.ZOOM_VALUE;
+import static com.sdp.movemeet.utility.LocationFetcher.createLocationRequest;
 
 public class GPSRecordingActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -118,15 +119,6 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
         }
 
         startLocationUpdates();
-    }
-
-    private LocationRequest createLocationRequest(long intervalMillis, long fastestIntervalMillis, int priority) {
-        LocationRequest locreq = LocationRequest.create();
-        locreq.setInterval(intervalMillis);
-        locreq.setFastestInterval(fastestIntervalMillis);
-        locreq.setPriority(priority);
-
-        return locreq;
     }
 
 

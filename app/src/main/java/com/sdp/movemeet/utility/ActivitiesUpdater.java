@@ -176,7 +176,7 @@ public class ActivitiesUpdater {
                     Log.d(TAG, "activities size is " + activities.size());
                 }
                 //if (cacheAllowed) cache.saveActivitiesInCache(activities);
-                if (updateMap) ((SupportMapFragment) mapFragment.getChildFragmentManager().findFragmentById(R.id.google_map)).getMapAsync(mapFragment);
+                if (updateMap && mapFragment.isAdded()) ((SupportMapFragment) mapFragment.getChildFragmentManager().findFragmentById(R.id.google_map)).getMapAsync(mapFragment);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
