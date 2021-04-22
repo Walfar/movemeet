@@ -16,6 +16,8 @@ public enum Sport {
     Hockey,
     Rugby,
     Gym,
-    Dancing,
-    VolleyBall
+    Dancing,    
+    VolleyBall,
+    Parkour,
+    Tricking
 }

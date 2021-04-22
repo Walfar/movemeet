@@ -35,6 +35,7 @@ public class Activity implements Serializable {
     private double duration;
     private final Sport sport;
     private String address;
+    private Date createdAt;
 
     private DocumentReference backendRef;
 
@@ -66,7 +67,8 @@ public class Activity implements Serializable {
                     Date date,
                     double duration,
                     Sport sport,
-                    String address){
+                    String address,
+                    Date createdAt){
 
         if(activityId == null || organizerId == null || title == null || numberParticipant <= 0 )
             throw new IllegalArgumentException();
@@ -88,6 +90,7 @@ public class Activity implements Serializable {
         this.duration = duration;
         this.sport = sport;
         this.address = address;
+        this.createdAt = createdAt;
     }
 
     /**
@@ -299,6 +302,22 @@ public class Activity implements Serializable {
 
     /**
      *
+     * @param createdAt date of creation
+     */
+    public void setCreatedAt(Date createdAt) {
+        if (createdAt != null) this.createdAt = createdAt;
+    }
+
+    /**
+     *
+     * @return date of creation
+     */
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     *
      * @return a DocumentReference to the activity
      */
     public DocumentReference getBackendRef() {
@@ -320,7 +339,7 @@ public class Activity implements Serializable {
     public String toString(){
         return "ActivityId:" + activityId + "\nOrganizerId" + organizerId + "\nTitle:" + title + "\nNumberParticipant:" + numberParticipant +
                 "\nParticipantId:" + participantsId + "\nLongitude:" + longitude + "\nLatitude:" + latitude + "\nDescription:" + description +
-                "\nDate:" + date + "\nDuration:" + duration + "\nSport:" + sport + "\nAddress:" + address;
+                "\nDate:" + date + "\nDuration:" + duration + "\nSport:" + sport + "\nAddress:" + address + "\nCreated at:" + createdAt;
     }
 
     @Override
@@ -339,7 +358,7 @@ public class Activity implements Serializable {
         return activityId.equals(obj.activityId) && organizerId.equals(obj.organizerId) && title.equals(obj.title) &&
                 numberParticipant == obj.numberParticipant && participantsId.equals(obj.participantsId) && longitude == obj.longitude &&
                 latitude == obj.latitude && description.equals(obj.description) && date.equals(obj.date) && duration == obj.duration &&
-                sport.equals(obj.sport) && address.equals(obj.address);
+                sport.equals(obj.sport) && address.equals(obj.address) && createdAt.equals(obj.createdAt);
 
     }
 

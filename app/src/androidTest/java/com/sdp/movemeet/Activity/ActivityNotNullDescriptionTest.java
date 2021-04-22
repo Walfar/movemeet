@@ -50,7 +50,8 @@ public class ActivityNotNullDescriptionTest {
             DUMMY_DATE,
             DUMMY_DURATION,
             DUMMY_SPORT,
-            DUMMY_ADDRESS
+            DUMMY_ADDRESS,
+            DUMMY_DATE
     );
 
     @Rule
