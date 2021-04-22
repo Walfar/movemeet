@@ -51,7 +51,8 @@ public class HomeScreenActivity extends AppCompatActivity {
     }
 
     public void noAccount(View v) {
-        startActivity(new Intent(this, MainUnregister.class));
+        if (user != null) startActivity(new Intent(this, MainActivity.class));
+        else startActivity(new Intent(this, MainUnregister.class));
     }
 
     public void RecordRun(View v) {

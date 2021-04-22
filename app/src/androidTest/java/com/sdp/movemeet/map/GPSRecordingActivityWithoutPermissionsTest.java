@@ -17,6 +17,8 @@ public class GPSRecordingActivityWithoutPermissionsTest {
     @Test
     public void cantUpdateLocationWithNoPermissions() {
         testRule.getScenario().onActivity(activity -> {
+            activity.stopLocationUpdates();
+            activity.startLocationUpdates();
             ((GPSRecordingActivity) activity).startLocationUpdates();
             assertEquals(activity.updatingLocation, false);
         });

@@ -71,16 +71,26 @@ public class HomeScreenActivityTest {
 
 
     @Test
-    public void mainActivity_noAccount() {
+    public void noAccountHasCorrectIntentWhenUnlogged() {
         fAuth = FirebaseAuth.getInstance();
         if (fAuth.getCurrentUser() != null) fAuth.signOut();
-
-        ActivityScenario scenario = ActivityScenario.launch(HomeScreenActivity.class);
 
         assert(sleep(1000));
         onView(withId(R.id.noAccountButton)).perform(click());
 
         intended(hasComponent(MainUnregister.class.getName()));
+    }
+
+    @Test
+    public void noAccountHasCorrectIntentWhenLogged() {
+        fAuth = FirebaseAuth.getInstance();
+        fAuth.signInWithEmailAndPassword("test@test.com", "password");
+        sleep(2000);
+        onView(withId(R.id.noAccountButton)).perform(click());
+        sleep(2000);
+        intended(hasComponent(MainActivity.class.getName()));
+        fAuth.signOut();
+
     }
 
     public boolean sleep(long millis) {

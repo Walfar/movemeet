@@ -125,6 +125,16 @@ public class UploadActivityActivityTest {
             assert (((UploadActivityActivity) activity).validParticipants == false);
         });
 
+        onView(withId(R.id.editTextDate)).perform(forceDoubleClick());
+
+        onView(withClassName(equalTo(DatePicker.class.getName()))).perform(
+                PickerActions.setDate(
+                        2025, 0, 20
+                )
+        );
+
+        assert(sleep(1000));
+
         onView(withId(R.id.editTextNParticipants))
                 .perform(typeText("5"), closeSoftKeyboard());
 
@@ -189,16 +199,6 @@ public class UploadActivityActivityTest {
             assert (((UploadActivityActivity) activity).validDate == true);
         });
 
-
-        onView(withId(R.id.editTextDate)).perform(forceDoubleClick());
-
-        onView(withClassName(equalTo(DatePicker.class.getName()))).perform(
-                PickerActions.setDate(
-                        2025, 0, 20
-                )
-        );
-
-        assert(sleep(1000));
 
         onView(withText("OK")).perform(click());
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
