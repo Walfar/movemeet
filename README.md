@@ -2,7 +2,14 @@
 
 ### SDP - spring semester 2021
 
+## Build
 [![Build Status](https://api.cirrus-ci.com/github/movemeet/movemeet.svg)](https://cirrus-ci.com/github/movemeet/movemeet)
+
+## Maintainability
+[![Maintainability](https://api.codeclimate.com/v1/badges/23a7b536f058d3bfda16/maintainability)](https://codeclimate.com/github/movemeet/movemeet/maintainability)
+
+## Test Coverage
+[![Test Coverage](https://api.codeclimate.com/v1/badges/23a7b536f058d3bfda16/test_coverage)](https://codeclimate.com/github/movemeet/movemeet/test_coverage)
 
 This app was created for the CS-306 Software Development Project course.
 
