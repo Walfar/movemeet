@@ -77,17 +77,8 @@ public class LoginActivityTest {
     }
 
     @Test public void Register() {
-        onView(withId(R.id.text_view_create_account)).perform(click());
-    }
 
-    @Test
-    @LargeTest
-    public void Login_TrueNonEmpty(){
-        onView(withId(R.id.edit_text_email))
-                .perform(typeText(Email), closeSoftKeyboard());
-        onView(withId(R.id.edit_text_password))
-                .perform(typeText(Password), closeSoftKeyboard());
-        onView(withId(R.id.button_login)).perform(click());
+        onView(withId(R.id.text_view_create_account)).perform(click());
     }
 
     @After
@@ -97,4 +88,30 @@ public class LoginActivityTest {
             fAuth.signOut();
         }
     }
+
+    /*@Test
+    @LargeTest
+    public void Login_TrueNonEmpty(){
+        onView(withId(R.id.edit_text_email))
+                .perform(typeText("movemeet@gmail.com"), closeSoftKeyboard());
+        onView(withId(R.id.edit_text_password))
+                .perform(typeText("password"), closeSoftKeyboard());
+        onView(withId(R.id.button_login)).perform(click());
+        try{
+            Thread.sleep(1500);
+        }catch(Exception e){}
+
+        // Open Drawer to click on navigation.
+        onView(withId(R.id.drawer_layout))
+                .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+                .perform(DrawerActions.open()); // Open Drawer
+
+        try{
+            Thread.sleep(500);
+        }catch(Exception e){}
+
+        // Start the screen of your activity.
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
+
+    } */
 }
