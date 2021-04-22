@@ -36,17 +36,13 @@ abstract class FirebaseDBManager<T extends FirebaseObject> implements BackendSto
     @Override
     public Task<?> delete(String path) {
         if (path == null || path.isEmpty()) throw new IllegalArgumentException();
-
-        DatabaseReference toDelete = db.getReference(path);
-        return toDelete.removeValue();
+        return db.getReference(path).removeValue();
     }
 
     @Override
     public Task<?> get(String path) {
         if (path == null || path.isEmpty()) throw new IllegalArgumentException();
-
-        DatabaseReference ref = db.getReference(path);
-        return ref.get();
+        return db.getReference(path).get();
     }
 
     @Override
