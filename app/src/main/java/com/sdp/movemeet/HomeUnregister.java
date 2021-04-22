@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -15,24 +16,24 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
 
 public class HomeUnregister extends AppCompatActivity {
-    TextView fullName, email, phone;
-    FirebaseAuth fAuth;
-    FirebaseFirestore fStore;
-    String userId;
-
     DrawerLayout drawerLayout;
-    NavigationView navigationView;
     Toolbar toolbar;
     TextView textView;
+    FirebaseAuth fAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_unregister);
 
-        ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
-        updater.updateListActivities();
+
         createDrawer();
+
+        /*if(fAuth.getCurrentUser() == null){
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
+            finish();
+        }*/
 
     }
 
