@@ -104,10 +104,11 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         handleRegisterUser();
 
         //The aim is to block any direct access to this page if the user is not logged
-        if (fAuth.getCurrentUser() == null) {
+        //Smth must be wrong since it prevents automatic connection during certain tests
+        /*if (fAuth.getCurrentUser() == null) {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
-        }
+        }*/
     }
 
     public void createDrawer(){

@@ -4,35 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.sdp.movemeet.Backend.BackendActivityManager;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.Sport;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 ;import java.util.ArrayList;
 import java.util.Date;
-import java.util.concurrent.CountDownLatch;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
@@ -51,7 +37,6 @@ public class ActivityNotNullDescriptionTest {
     private final static double DUMMY_DURATION = 10.4;
     private final static Sport DUMMY_SPORT = Sport.Running;
     private final static String DUMMY_ADDRESS = "address";
-    public FirebaseAuth mAuth;
 
     private Activity activity = new Activity(
             DUMMY_ACTIVITY_ID,
@@ -69,31 +54,8 @@ public class ActivityNotNullDescriptionTest {
             DUMMY_DATE
     );
 
-    @Before
-    public void signIn() {
-        CountDownLatch latch = new CountDownLatch(1);
-
-        mAuth = FirebaseAuth.getInstance();
-
-        mAuth.signInWithEmailAndPassword("movemeet@gmail.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    latch.countDown();
-                } else {
-                    assert (false);
-                }
-            }
-        });
-
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            assert (false);
-        }
-
-        ActivityScenarioRule<ActivityDescriptionActivity> testRule = new ActivityScenarioRule<>(new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra("activity", activity));
-    }
+    @Rule
+    public ActivityScenarioRule<ActivityDescriptionActivity> testRule = new ActivityScenarioRule<>(new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra("activity", activity));
 
     @Test
     public void create() {
@@ -101,18 +63,4 @@ public class ActivityNotNullDescriptionTest {
         Intents.release();
     }
 
-    @After
-    public void deleteAndSignOut() {
-        mAuth.signOut();
-    }
-
-    public boolean sleep(int millis) {
-        try {
-            Thread.sleep(millis);
-            return true;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 }
