@@ -7,13 +7,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,10 +28,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
-import com.sdp.movemeet.HomeScreenActivity;
 import com.sdp.movemeet.LoginActivity;
-import com.sdp.movemeet.MainActivity;
 import com.sdp.movemeet.Navigation.Navigation;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.Sport;
@@ -40,7 +43,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class ActivityDescriptionActivity extends AppCompatActivity {
-  
+
     public final static String EXTRA_ACTIVITY_ID = "12345";
     public final static String EXTRA_ORGANISATOR_ID = "1";
     public final static String EXTRA_TITLE = "title";
@@ -57,7 +60,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     Button RegisterToActivityButton;
     private Activity act;
-    private static final String TAG = "ActivityDescriptionActivity";
+    private static final String TAG = "ActDescActivity";
     private FirebaseUser user;
 
     DrawerLayout drawerLayout;
@@ -65,10 +68,16 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     Toolbar toolbar;
     TextView textView;
 
-    TextView fullName, email, phone;
+    TextView fullName, email, phone, organizerView;
     FirebaseFirestore fStore;
+    StorageReference storageReference;
     String userId;
+    String organizerId;
     String fullNameString;
+
+    ImageView activityImage;
+    String imagePath;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +99,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             getUserName();
         }*/
 
+
         createTitleView();
         createParticipantNumberView();
         createDescriptionView();
@@ -98,10 +108,11 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         createSportView();
         createDurationView();
         createOrganizerView();
+        loadActivityHeaderPicture();
 
         createDrawer();
-
         handleRegisterUser();
+        getOrganizerName();
 
         //The aim is to block any direct access to this page if the user is not logged
         if (fAuth.getCurrentUser() == null) {
@@ -109,6 +120,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             finish();
         }
     }
+
 
     public void createDrawer(){
         drawerLayout=findViewById(R.id.drawer_layout);
@@ -243,9 +255,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
     private void createOrganizerView(){
-        TextView organisatorView = (TextView) findViewById(R.id.activity_organisator_description);
+        organizerView = (TextView) findViewById(R.id.activity_organisator_description);
         if(act != null){
-            organisatorView.setText(act.getOrganizerId());
+            organizerView.setText(act.getOrganizerId());
         }
     }
 
@@ -272,13 +284,81 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
     public void goToIndividualChat(View view) {
-        Intent intent = new Intent(ActivityDescriptionActivity.this, ChatActivity.class);
-        String activityChatId = act.getActivityId() + " - chatId";
-        intent.putExtra("ACTIVITY_CHAT_ID", activityChatId);
-        String activityTitle = act.getTitle();
-        intent.putExtra("ACTIVITY_TITLE", activityTitle);
-        startActivity(intent);
+        // Allowing the access to the chat only if the user is registered to the activity
+        if (act.getParticipantId().contains(userId)) {
+            Intent intent = new Intent(ActivityDescriptionActivity.this, ChatActivity.class);
+            String activityChatId = act.getActivityId() + " - chatId";
+            intent.putExtra("ACTIVITY_CHAT_ID", activityChatId);
+            String activityTitle = act.getTitle();
+            intent.putExtra("ACTIVITY_TITLE", activityTitle);
+            startActivity(intent);
+        } else {
+            Toast.makeText(ActivityDescriptionActivity.this, "Please register if you want to access the chat!", Toast.LENGTH_SHORT).show();
+        }
     }
+
+    private void getOrganizerName() {
+        if (act != null) {
+            organizerId = act.getOrganizerId();
+            getUserName();
+        }
+    }
+
+    private void getUserName() {
+        DocumentReference docRef = fStore.collection("users").document(organizerId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        fullNameString = (String) document.getData().get("fullName");
+                        organizerView.setText(fullNameString);
+                        Log.i(TAG, "fullNameString: " + fullNameString);
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+    private void loadActivityHeaderPicture() {
+        activityImage = findViewById(R.id.activity_image_description);
+        progressBar = findViewById(R.id.progress_bar_activity_description);
+        progressBar.setVisibility(View.VISIBLE);
+        storageReference = FirebaseStorage.getInstance().getReference();
+        if (act != null) {
+            imagePath = "activities/"+act.getActivityId()+"/activityImage.jpg";
+            StorageReference imageRef = storageReference.child(imagePath);
+            FirebaseInteraction.getImageFromFirebase(imageRef, activityImage, progressBar);
+        }
+    }
+
+    public void changeActivityPicture(View view) {
+        if (userId.equals(organizerId)) {
+            Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(openGalleryIntent, 1000);
+        } else {
+            Toast.makeText(ActivityDescriptionActivity.this, "Only the organizer can change the header picture!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1000) {
+            if(resultCode == android.app.Activity.RESULT_OK) {
+                Uri imageUri = data.getData();
+                progressBar.setVisibility(View.VISIBLE);
+                FirebaseInteraction.uploadImageToFirebase(storageReference, imagePath, imageUri, activityImage, progressBar);
+            }
+        }
+    }
+
     /*public void goToHome(View view){
         Intent i = new Intent(ActivityDescriptionActivity.this, HomeScreenActivity.class);
         i.putExtra(EXTRA_ACTIVITY_ID, "1");
