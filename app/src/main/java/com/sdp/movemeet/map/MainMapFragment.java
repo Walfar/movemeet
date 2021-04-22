@@ -16,6 +16,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.RequiresApi;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -55,7 +56,8 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     private SupportMapFragment supportMapFragment;
 
     private GoogleMap googleMap;
-    private FusedLocationProviderClient fusedLocationProviderClient;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public FusedLocationProviderClient fusedLocationProviderClient;
 
     private ActivitiesUpdater updater;
 
@@ -193,10 +195,6 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
                 return R.drawable.icon_rugby;
             case Dancing:
                 return R.drawable.icon_dancing;
-            case Tricking:
-                return R.drawable.icon_tricking;
-            case Parkour:
-                return R.drawable.icon_parkour;
             default:
                 return -1;
         }

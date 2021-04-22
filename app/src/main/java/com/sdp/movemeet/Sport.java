@@ -17,7 +17,5 @@ public enum Sport {
     Rugby,
     Gym,
     Dancing,    
-    VolleyBall,
-    Parkour,
-    Tricking
+    VolleyBall
 }

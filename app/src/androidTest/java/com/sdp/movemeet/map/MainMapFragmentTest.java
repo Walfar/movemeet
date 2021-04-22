@@ -140,7 +140,8 @@ public class MainMapFragmentTest {
         //We set the lastLocation to a fake one
         mockLocationTask = mock(Task.class);
         Task<Void> mockTask = mock(Task.class);
-        FusedLocationProviderClient fusedLocationProviderClient = fragmentTestRule.getFragment().getFusedLocationProviderClient();
+        fragmentTestRule.getFragment().fusedLocationProviderClient = mock(FusedLocationProviderClient.class);
+        FusedLocationProviderClient fusedLocationProviderClient = fragmentTestRule.getFragment().fusedLocationProviderClient;
         when(fusedLocationProviderClient.getLastLocation()).thenReturn(mockLocationTask);
         when(fusedLocationProviderClient
                 .requestLocationUpdates(any(LocationRequest.class), any(LocationCallback.class), any(Looper.class)))
