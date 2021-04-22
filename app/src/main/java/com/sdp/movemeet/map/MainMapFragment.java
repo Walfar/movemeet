@@ -62,6 +62,8 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
     private ActivitiesUpdater updater;
 
+    private boolean first_fetch;
+
     private static final String TAG = "Maps TAG";
 
     public static final float ZOOM_VALUE = 15.0f;
@@ -75,6 +77,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(supportMapFragment.getActivity());
         //LocationFetcher.fetchLastLocation(fusedLocationProviderClient, supportMapFragment, this);
         LocationFetcher.updateLocation(fusedLocationProviderClient, supportMapFragment, this);
+        first_fetch = true;
 
         this.updater = ActivitiesUpdater.getInstance();
         updater.updateListActivities(this);
@@ -97,11 +100,16 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         googleMap.setOnInfoWindowClickListener(this);
         googleMap.setOnMapClickListener(this::onMapClick);
 
-        if (positionMarker != null) positionMarker.remove();
         LatLng userLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions().position(userLatLng).title("I am here !");
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(userLatLng));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, ZOOM_VALUE));
+
+        if (positionMarker != null) positionMarker.remove();
+        if (first_fetch) {
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, ZOOM_VALUE));
+            first_fetch = false;
+        }
+
         positionMarker = googleMap.addMarker(markerOptions);
         positionMarker.setTag("my position");
 
