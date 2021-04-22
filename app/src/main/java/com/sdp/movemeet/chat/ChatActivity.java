@@ -50,9 +50,9 @@ public class ChatActivity extends AppCompatActivity {
 
     private static final String TAG = "ChatActivity";
     public static final String CHATS_CHILD = "chats";
-    public static final String ROOM_CHILD = "general_chat";
 
     public static String GENERAL_CHAT_CHILD = "general_chat";
+    public static String CHAT_ROOM_ID;
 
     private static final int REQUEST_IMAGE = 2;
 
@@ -185,10 +185,11 @@ public class ChatActivity extends AppCompatActivity {
             activityChatId = receivedActivityChatId;
             // Dynamically creating a new child under the branch "chats" in Firebase Realtime
             // Database with the value of "activityChatId" in case it doesn't exist yet
-            chatRoom = chatRef.child(activityChatId);
+            CHAT_ROOM_ID = activityChatId;
         } else {
-            chatRoom = chatRef.child(GENERAL_CHAT_CHILD); // default general chat room
+            CHAT_ROOM_ID = GENERAL_CHAT_CHILD; // default general chat room
         }
+        chatRoom = chatRef.child(CHAT_ROOM_ID);
         countMessagesInChatRoom();
     }
 
@@ -328,7 +329,7 @@ public class ChatActivity extends AppCompatActivity {
                                 String key = databaseReference.getKey();
                                 StorageReference fileRef = storageReference
                                         .child(CHATS_CHILD)
-                                        .child(GENERAL_CHAT_CHILD)
+                                        .child(CHAT_ROOM_ID)
                                         .child(key)
                                         .child(uri.getLastPathSegment());
                                 putImageInStorage(fileRef, uri, key);
