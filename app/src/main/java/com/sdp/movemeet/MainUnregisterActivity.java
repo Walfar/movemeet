@@ -7,7 +7,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class MainUnregister extends AppCompatActivity {
+public class MainUnregisterActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     Toolbar toolbar;
     TextView textView;
