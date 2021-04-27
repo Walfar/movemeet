@@ -76,6 +76,8 @@
         <activity android:name=".Activity.ActivityDescriptionActivity">
         </activity>
 
+        <activity android:name=".Activity.ActivityDescriptionActivityUnregister"/>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

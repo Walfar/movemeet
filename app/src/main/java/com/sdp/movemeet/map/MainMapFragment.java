@@ -34,6 +34,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Activity.ActivityDescriptionActivity;
+import com.sdp.movemeet.Activity.ActivityDescriptionActivityUnregister;
 import com.sdp.movemeet.DistanceCalculator;
 import com.sdp.movemeet.HomeScreenActivity;
 import com.sdp.movemeet.R;
@@ -111,12 +112,16 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
             Activity act = (Activity) marker.getTag();
             Intent intent;
             // Different activity if user unregistered
-            //if (user == null) intent = new Intent(MapsActivity.this, ActivityDescriptionActivityUnregistered.class);
-            //else
-            intent = new Intent(supportMapFragment.getActivity(), ActivityDescriptionActivity.class);
+            if (user == null) {
+                intent = new Intent(supportMapFragment.getActivity(), ActivityDescriptionActivityUnregister.class);
+            }
+            else{
+                intent = new Intent(supportMapFragment.getActivity(), ActivityDescriptionActivity.class);
+            }
             intent.putExtra("activity", act);
             startActivity(intent);
         }
+
         return true;
     }
 
