@@ -85,7 +85,7 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
         loadActivityHeaderPicture();
     }
 
-    private void goToLogin(View v){
+    public void goToLogin(View v){
         if (fAuth.getCurrentUser() == null) {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
