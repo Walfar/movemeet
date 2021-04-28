@@ -214,6 +214,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
      * @param activity activity to display
      * @return the drawable corresponding to the icon
      */
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public int chooseIcon(Activity activity) {
         switch (activity.getSport()) {
             case Soccer:

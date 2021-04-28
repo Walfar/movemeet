@@ -39,21 +39,39 @@ public class HomeScreenActivity extends AppCompatActivity {
         updater.fetchListActivities();
     }
 
+
+    /**
+     * Called when the user clicks on the "sign in" button. If logged, brings to the map nav, else brings to log in screen.
+     * @param v view for the sign in button
+     */
     public void signIn(View v) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) startActivity(new Intent(this, MainActivity.class));
-        else
-            startActivity(new Intent(this, LoginActivity.class)); // redirecting the user to the "Login" activity
+        if (isUserLogged()) startActivity(new Intent(this, MainActivity.class));
+        else startActivity(new Intent(this, LoginActivity.class)); // redirecting the user to the "Login" activity
     }
 
+    /**
+     * Called when the user clicks on the "no account" button. If logged, brings to the map nav, else brings to the map without nav
+     * @param v view for the no account button
+     */
     public void noAccount(View v) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) startActivity(new Intent(this, MainActivity.class));
+        if (isUserLogged()) startActivity(new Intent(this, MainActivity.class));
         else startActivity(new Intent(this, MainUnregister.class));
     }
 
+    /**
+     * Called when the user clicks on the "record run" button. Brings to the GPS recording screen.
+     * @param v view for the record run button
+     */
     public void RecordRun(View v) {
         startActivity(new Intent(this, GPSRecordingActivity.class)); // Redirect the user to the GPS recording activity
+    }
+
+    /**
+     * Checks if the user is already logged
+     * @return true if the user is logged, false otherwise
+     */
+    private boolean isUserLogged() {
+        return (FirebaseAuth.getInstance().getCurrentUser() != null);
     }
 
 }

@@ -82,6 +82,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -147,7 +148,7 @@ public class MainMapFragmentTest {
     }
 
 
-    @Test
+   /* @Test
     public void activitiesUpdatesOnAdd() throws InterruptedException {
         waitFor(2000);
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
@@ -186,7 +187,6 @@ public class MainMapFragmentTest {
                         Activity act_in_collection = activities.get(activities.size()-1);
                         assertEquals(act.getActivityId(), act_in_collection.getActivityId());
                         assertEquals(act.getAddress(), act_in_collection.getAddress());
-                        //assertEquals(act.getDate(), act_in_collection.getDate());
                         assertEquals(act.getDescription(), act_in_collection.getDescription());
                         assertEquals(act.getLatitude(), act_in_collection.getLatitude(),0);
                         assertEquals(act.getLongitude(), act_in_collection.getLongitude(), 0);
@@ -203,7 +203,7 @@ public class MainMapFragmentTest {
                     }
                 });
 
-    }
+    } */
 
 
     @Test
@@ -229,7 +229,7 @@ public class MainMapFragmentTest {
         assertEquals(R.drawable.icon_swim, setSportIcon(Swimming, mapFragment), 0);
     }
 
-    private int setSportIcon(Sport sport, MainMapFragment mapFragment) {
+    private int setSportIcon(Sport sport, @NotNull MainMapFragment mapFragment) {
         Activity activity = new Activity("activity id", "organizer id", "title", 2, new ArrayList<>(), 0, 0,
                 "description", new Date(), 1, sport,"here", new Date());
         return mapFragment.chooseIcon(activity);
