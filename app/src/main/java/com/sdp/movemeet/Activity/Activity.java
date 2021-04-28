@@ -50,6 +50,7 @@ public class Activity implements Serializable, FirebaseObject {
      * @param longitude of the activity
      * @param latitude of the activity
      * @param description of the activity
+     * @param documentPath of the activity in Firebase Firestore
      * @param date date and hour of the activity
      * @param duration of the activity 1.0 -> 1 hour
      * @param sport of the activity
@@ -63,6 +64,7 @@ public class Activity implements Serializable, FirebaseObject {
                     double longitude,
                     double latitude,
                     String description,
+                    String documentPath,
                     Date date,
                     double duration,
                     Sport sport,
@@ -85,6 +87,7 @@ public class Activity implements Serializable, FirebaseObject {
         this.longitude = longitude;
         this.latitude = latitude;
         this.description = description;
+        this.documentPath = documentPath;
         this.date = date;
         this.duration = duration;
         this.sport = sport;
@@ -279,7 +282,7 @@ public class Activity implements Serializable, FirebaseObject {
             throw new IllegalArgumentException();
         }
         if(participantsId.contains(participant)){
-            throw new IllegalArgumentException("Already Register");
+            throw new IllegalArgumentException("Already registered");
         }
         if(participantsId.size() >= this.numberParticipant){
             throw new IllegalArgumentException("The limit of participants has already been reached");

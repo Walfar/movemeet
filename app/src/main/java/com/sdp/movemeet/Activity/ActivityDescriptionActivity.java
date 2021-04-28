@@ -27,6 +27,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -41,6 +42,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ActivityDescriptionActivity extends AppCompatActivity {
 
@@ -90,18 +92,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             act = (Activity) intent.getSerializableExtra("activity");
         }
 
-        /*fAuth = FirebaseAuth.getInstance();
-        user = fAuth.getCurrentUser();
-
-        if(user != null){
-            userId = act.getOrganizerId();
-            fStore = FirebaseFirestore.getInstance();
-            getUserName();
-        }*/
-
-
         createTitleView();
         createParticipantNumberView();
+        getParticipantNames();
         createDescriptionView();
         createDateView();
         createAddressView();
@@ -119,6 +112,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
         }
+    }
+
+    private void getParticipantNames() {
+
     }
 
 
@@ -185,30 +182,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
-/*
-    private void getUserName() {
-        DocumentReference docRef = fStore.collection("users").document(userId);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        fullNameString = (String) document.getData().get("fullName");
-                        createOrganizerView();
-                        Log.i(TAG, "fullNameString: " + fullNameString);
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
-    }*/
-
     private void createTitleView() {
         // activityTitle from the activity
         TextView activityTitle = (TextView) findViewById(R.id.activity_title_description);
@@ -250,7 +223,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void createDurationView(){
         TextView durationView = (TextView) findViewById(R.id.activity_duration_description);
         if(act != null){
-            durationView.setText(String.valueOf((int) act.getDuration()));
+            durationView.setText(String.valueOf((double) Math.round(act.getDuration()*100)/100));
         }
     }
 
@@ -274,11 +247,16 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (fAuth.getCurrentUser() != null) {
             String userId;
             userId = fAuth.getCurrentUser().getUid();
-            try{
+            try {
                 act.addParticipantId(userId);
-                createParticipantNumberView();}
-            catch(Exception e){
+                createParticipantNumberView();
+                fStore = FirebaseFirestore.getInstance();
+                DocumentReference actRef = fStore.collection("activities").document(act.getDocumentPath());
+                actRef.update("participantId", FieldValue.arrayUnion(userId));
+                Log.d(TAG, "Participant registered in Firebase Firestore!");
+            } catch(Exception e) {
                 Toast.makeText(ActivityDescriptionActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "An error occurred! Participant may be already registered in Firebase Firestore!");
             }
         }
     }

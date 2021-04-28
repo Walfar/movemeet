@@ -36,8 +36,10 @@ public class BackendActivityManager {
         if (activity.getBackendRef() == null) {
             docRef = getActivitiesCollectionReference().document();
             activity.setBackendRef(docRef);
+            activity.setDocumentPath(docRef.getId());
         } else {
             docRef = activity.getBackendRef();
+            activity.setDocumentPath(docRef.getId());
         }
 
         docRef.set(activity, SetOptions.merge())

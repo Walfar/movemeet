@@ -126,12 +126,13 @@ public class ActivitiesUpdater {
         double longitude = convertObjToDouble(docSnap.get("longitude"));
         double latitude = convertObjToDouble(docSnap.get("latitude"));
         String description = convertObjToString(docSnap.get("description"));
+        String documentPath = convertObjToString(docSnap.get("documentPath"));
         Date date = getDateObj(docSnap.getDate("date"));
         double duration = convertObjToDouble(docSnap.get("duration"));
         String address = convertObjToString(docSnap.get("address"));
         Date createdAt = getDateObj(docSnap.getDate("createdAt"));
 
-        Object participantsIdobj = docSnap.get("participantsId");
+        Object participantsIdobj = docSnap.get("participantId");
         ArrayList<String> partcipantsId;
         if (participantsIdobj == null) partcipantsId = new ArrayList<>();
         else partcipantsId = (ArrayList<String>) participantsIdobj;
@@ -141,7 +142,7 @@ public class ActivitiesUpdater {
         if (sportobj == null) sport = Running;
         else sport = Sport.valueOf(sportobj);; //enum sotred in firebase ?");
 
-        Activity act = new Activity(activityId, organizerId, title, numberParticipant, partcipantsId, longitude, latitude, description, date, duration, sport, address, createdAt);
+        Activity act = new Activity(activityId, organizerId, title, numberParticipant, partcipantsId, longitude, latitude, description, documentPath, date, duration, sport, address, createdAt);
         return act;
     }
 
