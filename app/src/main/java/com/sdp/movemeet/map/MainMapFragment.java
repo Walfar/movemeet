@@ -121,7 +121,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         positionMarker.setTag("my position");
 
         //Those calculations are only needed when this method is called for the first time
-        if (first_callback) {
+       if (first_callback) {
 
             this.googleMap = googleMap;
 

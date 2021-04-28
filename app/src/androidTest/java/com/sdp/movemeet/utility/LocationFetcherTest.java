@@ -4,7 +4,9 @@ import android.Manifest;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Looper;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
@@ -51,6 +53,8 @@ public class LocationFetcherTest {
 
     private LocationFetcher locationFetcher;
 
+    private Location currentLocation;
+
     @Rule
     public FragmentTestRule<?, MainMapFragment> fragmentTestRule =
             FragmentTestRule.create(MainMapFragment.class);
@@ -71,8 +75,16 @@ public class LocationFetcherTest {
         mockLocationTask = mock(Task.class);
 
         FusedLocationProviderClient fusedLocationProviderClient = mock(FusedLocationProviderClient.class);
-        locationFetcher = new LocationFetcher(fragmentTestRule.getFragment().getSupportMapFragment(), fragmentTestRule.getFragment());
-        locationFetcher.fusedLocationProviderClient = fusedLocationProviderClient;
+
+
+        LocationCallback locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                //Whenever we get an update from the fusedLocationProviderClient, we update the current location
+                currentLocation = locationResult.getLastLocation();
+            }
+        };
+        locationFetcher = new LocationFetcher(fragmentTestRule.getFragment().getSupportMapFragment(), locationCallback);
 
         when(fusedLocationProviderClient.getLastLocation()).thenReturn(mockLocationTask);
         when(fusedLocationProviderClient
@@ -83,15 +95,19 @@ public class LocationFetcherTest {
                     listener.onLocationResult(mockRes);
                     return mockTask;
                 });
+
+        locationFetcher.fusedLocationProviderClient = fusedLocationProviderClient;
     }
 
     @Test
     public void fetcherCorrectlyUpdatesLocation() throws InterruptedException {
         locationFetcher.startLocationUpdates();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         locationFetcher.stopLocationUpdates();
-        assertEquals(mockLocationTask.getResult(), locationFetcher.getCurrentLocation());
+        locationFetcher.currentLocation = currentLocation;
+        assertEquals(fakeLocation, locationFetcher.getCurrentLocation());
     }
+
 
     @Test
     public void currentLocationReturnsDefaultWhenNull() {
