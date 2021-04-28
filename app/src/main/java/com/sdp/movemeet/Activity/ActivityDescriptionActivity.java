@@ -269,7 +269,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
-    public void onClick(View v) {
+    public void registerToActivity(View v) {
         fAuth = FirebaseAuth.getInstance();
         if (fAuth.getCurrentUser() != null) {
             String userId;
@@ -317,10 +317,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                         organizerView.setText(fullNameString);
                         Log.i(TAG, "fullNameString: " + fullNameString);
                     } else {
-                        Log.d(TAG, "No such document");
+                        Log.d(TAG, "No such document!");
                     }
                 } else {
-                    Log.d(TAG, "get failed with ", task.getException());
+                    Log.d(TAG, "Get failed with: ", task.getException());
                 }
             }
         });

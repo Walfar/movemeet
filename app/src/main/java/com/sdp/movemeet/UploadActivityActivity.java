@@ -318,6 +318,8 @@ public class UploadActivityActivity extends AppCompatActivity {
 
 
     private Activity validateActivity() {
+        String organizerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         Sport sport = Sport.valueOf(spinner.getSelectedItem().toString());
 
         String title = titleEditText.getText().toString();
@@ -331,6 +333,10 @@ public class UploadActivityActivity extends AppCompatActivity {
         }
         int nParticipants = Integer.parseInt(nptext);
         validParticipants = true;
+
+        // Initializing the list of participants with the organizerId
+        ArrayList<String> participantsId = new ArrayList<String>();
+        participantsId.add(organizerId);
 
         String address = addressText.getText().toString();
         if (address.isEmpty()) {
@@ -359,10 +365,14 @@ public class UploadActivityActivity extends AppCompatActivity {
         Date date = calendar.getTime();
         validDate = true;
 
-        String organizerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        Activity activity = new Activity(
+//                organizerId + " || " +  date, organizerId, title, nParticipants,
+//                new ArrayList<String>(nParticipants), longitude, latitude, description, date, duration,
+//                sport, address, new Date()
+//        );
         Activity activity = new Activity(
                 organizerId + " || " +  date, organizerId, title, nParticipants,
-                new ArrayList<String>(nParticipants), longitude, latitude, description, date, duration,
+                participantsId, longitude, latitude, description, date, duration,
                 sport, address, new Date()
         );
 
