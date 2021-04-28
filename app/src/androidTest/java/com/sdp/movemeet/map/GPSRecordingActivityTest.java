@@ -5,6 +5,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Looper;
 
+import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
@@ -17,8 +18,10 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.tasks.Task;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.utility.LocationFetcher;
 
 import org.junit.After;
 import org.junit.Before;
@@ -30,6 +33,7 @@ import org.mockito.stubbing.Answer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -69,6 +73,8 @@ public class GPSRecordingActivityTest {
     private Task<Void> mockTask;
     private Task<Location> mockLocationTask;
 
+    private LocationFetcher locationFetcher;
+
     @Before
     public void setup() {
         device = UiDevice.getInstance(getInstrumentation());
@@ -88,12 +94,15 @@ public class GPSRecordingActivityTest {
 
 
         scenario.onActivity(activity -> {
-            ((GPSRecordingActivity) activity).stopLocationUpdates();
+            GPSRecordingActivity gpsActivity = (GPSRecordingActivity) activity;
+            SupportMapFragment supportMapFragment = (SupportMapFragment) gpsActivity.getSupportFragmentManager().findFragmentById(R.id.gmap_recording);
+
+            locationFetcher = new LocationFetcher(supportMapFragment, gpsActivity.locationCallback);
 
             // This way of mocking the flpc makes it only fire one location callback, when the
             // location updates are requested.
-            ((GPSRecordingActivity) activity).fusedLocationClient = mock(FusedLocationProviderClient.class);
-            FusedLocationProviderClient flpc = ((GPSRecordingActivity) activity).fusedLocationClient;
+            locationFetcher.fusedLocationProviderClient = mock(FusedLocationProviderClient.class);
+            FusedLocationProviderClient flpc = locationFetcher.fusedLocationProviderClient;
 
             when(flpc.getLastLocation()).thenReturn(mockLocationTask);
             when(flpc
@@ -117,9 +126,8 @@ public class GPSRecordingActivityTest {
         onView(withId(R.id.recordButton)).check(matches(withText("Stop")));
 
         scenario.onActivity(activity -> {
-            ((GPSRecordingActivity) activity).stopLocationUpdates();
-
-            ((GPSRecordingActivity) activity).startLocationUpdates();
+            locationFetcher.stopLocationUpdates();
+            locationFetcher.startLocationUpdates();
         });
         assert(sleep(2_000));
 
@@ -135,9 +143,8 @@ public class GPSRecordingActivityTest {
         onView(withId(R.id.recordButton)).check(matches(withText("Start")));
 
         scenario.onActivity(activity -> {
-            ((GPSRecordingActivity) activity).stopLocationUpdates();
-
-            ((GPSRecordingActivity) activity).startLocationUpdates();
+            locationFetcher.stopLocationUpdates();
+            locationFetcher.startLocationUpdates();
         });
 
         assert(sleep(2_000));
@@ -151,7 +158,7 @@ public class GPSRecordingActivityTest {
     @After
     public void teardown() {
         scenario.onActivity(activity -> {
-            ((GPSRecordingActivity) activity).stopLocationUpdates();
+            locationFetcher.stopLocationUpdates();
         });
     }
 

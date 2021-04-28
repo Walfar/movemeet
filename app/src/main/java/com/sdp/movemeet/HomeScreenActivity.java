@@ -19,25 +19,21 @@ import com.sdp.movemeet.map.GPSRecordingActivity;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
 import com.sdp.movemeet.utility.LocationFetcher;
 
+import static com.sdp.movemeet.utility.LocationFetcher.REQUEST_CODE;
+
 
 public class HomeScreenActivity extends AppCompatActivity {
 
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-    private ActivityResultLauncher<String> requestLocationPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-        if (!isGranted) {
-            LocationFetcher.currentLocation = LocationFetcher.defaultLocation();
-        }
-    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestLocationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
-        }
+       if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
+       }
 
         ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
         // Always clear activities first, to prevent duplicates if multiple intents are created
@@ -47,7 +43,8 @@ public class HomeScreenActivity extends AppCompatActivity {
 
     public void signIn(View v) {
         if (user != null) startActivity(new Intent(this, MainActivity.class));
-        else startActivity(new Intent(this, LoginActivity.class)); // redirecting the user to the "Login" activity
+        else
+            startActivity(new Intent(this, LoginActivity.class)); // redirecting the user to the "Login" activity
     }
 
     public void noAccount(View v) {

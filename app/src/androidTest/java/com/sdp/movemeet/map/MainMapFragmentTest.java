@@ -132,25 +132,6 @@ public class MainMapFragmentTest {
                 uiDevice = UiDevice.getInstance(getInstrumentation());
             }
         });
-        fakeLocation = new Location(LocationManager.PASSIVE_PROVIDER);
-        fakeLocation.setLatitude(FAKE_LATITUDE);
-        fakeLocation.setLongitude(FAKE_LONGITUDE);
-        fakeLocation.setAccuracy(FAKE_ACCURACY);
-        fakeLocation.setTime(Calendar.getInstance().getTimeInMillis());
-        //We set the lastLocation to a fake one
-        mockLocationTask = mock(Task.class);
-        Task<Void> mockTask = mock(Task.class);
-        fragmentTestRule.getFragment().fusedLocationProviderClient = mock(FusedLocationProviderClient.class);
-        FusedLocationProviderClient fusedLocationProviderClient = fragmentTestRule.getFragment().fusedLocationProviderClient;
-        when(fusedLocationProviderClient.getLastLocation()).thenReturn(mockLocationTask);
-        when(fusedLocationProviderClient
-                .requestLocationUpdates(any(LocationRequest.class), any(LocationCallback.class), any(Looper.class)))
-                .thenAnswer((Answer<Task<Void>>) invocation -> {
-                    LocationCallback listener = (LocationCallback) invocation.getArguments()[1];
-                    LocationResult mockRes = LocationResult.create(Arrays.asList(fakeLocation, fakeLocation, fakeLocation));
-                    listener.onLocationResult(mockRes);
-                    return mockTask;
-                });
     }
 
     @Test
@@ -164,15 +145,6 @@ public class MainMapFragmentTest {
         UiObject marker = uiDevice.findObject(new UiSelector().descriptionContains("I am here !"));
         assertNotNull(marker);
     }
-
-    @Test
-    public void locationIsCorrectlyFetched() throws InterruptedException {
-        MainMapFragment mapFragment = fragmentTestRule.getFragment();
-        LocationFetcher.fetchLastLocation(mapFragment.getFusedLocationProviderClient(), mapFragment.getSupportMapFragment(), mapFragment);
-        Thread.sleep(3000);
-        //assertEquals(LocationFetcher.currentLocation, mockLocationTask.getResult());
-    }
-
 
 
     @Test

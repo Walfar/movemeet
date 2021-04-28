@@ -1,9 +1,12 @@
 package com.sdp.movemeet.HomeScreen;
 
+import android.Manifest;
+
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.GrantPermissionRule;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.HomeScreenActivity;
@@ -32,6 +35,9 @@ public class HomeScreenActivityTest {
 
     @Rule
     public ActivityScenarioRule<HomeScreenActivity> homeScreenTestRule = new ActivityScenarioRule<>(HomeScreenActivity.class);
+
+    @Rule
+    public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
 
     public FirebaseAuth fAuth;
 
