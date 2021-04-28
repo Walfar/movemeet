@@ -76,6 +76,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     String userId;
     String organizerId;
     String fullNameString;
+    ArrayList<String> participantNames = new ArrayList<>();
 
     ImageView activityImage;
     String imagePath;
@@ -94,7 +95,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
         createTitleView();
         createParticipantNumberView();
-        getParticipantNames();
         createDescriptionView();
         createDateView();
         createAddressView();
@@ -106,6 +106,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         createDrawer();
         handleRegisterUser();
         getOrganizerName();
+        getParticipantNames();
 
         //The aim is to block any direct access to this page if the user is not logged
         if (fAuth.getCurrentUser() == null) {
@@ -115,7 +116,11 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
     private void getParticipantNames() {
-
+        ArrayList<String> participantIds = act.getParticipantId();
+        for (int i=0; i<act.getParticipantId().size(); i++) {
+            String currentParticipantId = participantIds.get(i);
+            getCurrentParticipantName(currentParticipantId);
+        }
     }
 
 
@@ -192,7 +197,15 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         // number of participants from the activity
         TextView numberParticipantsView = (TextView) findViewById(R.id.activity_number_description);
         if (act != null) {
-            numberParticipantsView.setText(act.getParticipantId().size() + "/" + act.getNumberParticipant());
+            StringBuilder participantNamesString = new StringBuilder();
+            for (int i=0; i<participantNames.size(); i++) {
+                if (i==0) {
+                    participantNamesString.append(participantNames.get(i));
+                } else {
+                    participantNamesString.append(", ").append(participantNames.get(i));
+                }
+            }
+            numberParticipantsView.setText(act.getParticipantId().size() + "/" + act.getNumberParticipant() + " (" + participantNamesString + ")");
         }
     }
 
@@ -278,22 +291,40 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void getOrganizerName() {
         if (act != null) {
             organizerId = act.getOrganizerId();
-            getUserName();
+            DocumentReference docRef = fStore.collection("users").document(organizerId);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                            fullNameString = (String) document.getData().get("fullName");
+                            organizerView.setText(fullNameString);
+                            Log.i(TAG, "fullNameString: " + fullNameString);
+                        } else {
+                            Log.d(TAG, "No such document!");
+                        }
+                    } else {
+                        Log.d(TAG, "Get failed with: ", task.getException());
+                    }
+                }
+            });
         }
     }
 
-    private void getUserName() {
-        DocumentReference docRef = fStore.collection("users").document(organizerId);
+    private void getCurrentParticipantName(String participantId) {
+        DocumentReference docRef = fStore.collection("users").document(participantId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        fullNameString = (String) document.getData().get("fullName");
-                        organizerView.setText(fullNameString);
-                        Log.i(TAG, "fullNameString: " + fullNameString);
+                        String participantName = (String) document.getData().get("fullName");
+                        participantNames.add(participantName);
+                        Log.i(TAG, "current participantName: " + participantName);
+                        createParticipantNumberView();
                     } else {
                         Log.d(TAG, "No such document!");
                     }
