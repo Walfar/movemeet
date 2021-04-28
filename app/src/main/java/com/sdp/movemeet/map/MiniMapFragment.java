@@ -52,7 +52,7 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
 
         first_callback = true;
 
-        locationFetcher = new LocationFetcher(fusedLocationProviderClient, supportMapFragment, this);
+        locationFetcher = new LocationFetcher(supportMapFragment, this);
         locationFetcher.startLocationUpdates();
 
         return view;

@@ -67,6 +67,9 @@ public class EditProfileActivity extends AppCompatActivity {
             userId = user.getUid();
             storageReference = FirebaseStorage.getInstance().getReference();
             loadRegisteredUserProfilePicture(userId);
+        } else {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
+            finish();
         }
     }
 

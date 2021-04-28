@@ -65,46 +65,6 @@ public class ChatActivityTest {
 
     @Test
     public void chatActivityTest() {
-
-        /*onView(withId(R.id.signInButton)).perform(click());
-
-        onView(withId(R.id.edit_text_email)).perform(replaceText("antho2@gmail.com"), closeSoftKeyboard());
-
-        onView(withId(R.id.edit_text_password)).perform(replaceText("234567"), closeSoftKeyboard());
-
-        onView(withId(R.id.button_login)).perform(forceDoubleClick());
-
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
-        // Open Drawer to click on navigation.
-        onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
-        try{
-            Thread.sleep(500);
-        }catch(Exception e){}
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_chat));
-
-        try{
-            Thread.sleep(500);
-        }catch(Exception e){}
-
-        //onView(withId(R.id.activityChatDescription)).perform(click());
-        //onView(withId(R.id.activityChatDescription)).perform(scrollTo()).perform(click());
-
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            assert (false);
-        }*/
-
         CountDownLatch latch = new CountDownLatch(1);
 
         fAuth = FirebaseAuth.getInstance();
@@ -142,7 +102,6 @@ public class ChatActivityTest {
         mDatabase = FirebaseDatabase.getInstance();
 
         DatabaseReference rootRef = mDatabase.getReference();
-        //DatabaseReference messagesRef = rootRef.child("messages");
 
         rootRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -164,26 +123,6 @@ public class ChatActivityTest {
 
 
     }
-
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
-
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
-    }
-
 
     public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
         return new TypeSafeMatcher<View>() {
