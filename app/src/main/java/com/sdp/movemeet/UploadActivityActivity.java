@@ -365,11 +365,6 @@ public class UploadActivityActivity extends AppCompatActivity {
         Date date = calendar.getTime();
         validDate = true;
 
-//        Activity activity = new Activity(
-//                organizerId + " || " +  date, organizerId, title, nParticipants,
-//                new ArrayList<String>(nParticipants), longitude, latitude, description, date, duration,
-//                sport, address, new Date()
-//        );
         Activity activity = new Activity(
                 organizerId + " || " +  date, organizerId, title, nParticipants,
                 participantsId, longitude, latitude, description, null, date, duration,
