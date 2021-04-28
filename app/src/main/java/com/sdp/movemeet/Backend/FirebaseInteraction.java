@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -30,6 +31,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FirebaseInteraction {
+
+    private static final String TAG = "FirebaseInteraction";
 
     public static TextView[] retrieveDataFromFirebase(FirebaseFirestore fStore, String userId, TextView[] textViewArray, Activity activity) {
         DocumentReference documentReference = fStore.collection("users").document(userId);
@@ -94,6 +97,7 @@ public class FirebaseInteraction {
         imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
+                Log.d(TAG, "Image successfully fetched from Firebase Storage!");
                 Picasso.get().load(uri).into(imageView);
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
@@ -102,6 +106,7 @@ public class FirebaseInteraction {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
+                Log.d(TAG, "Image could not be fetched from Firebase Storage!");
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
