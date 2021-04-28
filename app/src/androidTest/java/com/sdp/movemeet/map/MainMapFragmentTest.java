@@ -158,6 +158,7 @@ public class MainMapFragmentTest {
                 0,
                 0,
                 "desc",
+                "documentPath",
                 new Date(),
                 10,
                 Sport.Running,

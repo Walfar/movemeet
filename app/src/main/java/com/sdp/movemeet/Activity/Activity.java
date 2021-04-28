@@ -78,7 +78,6 @@ public class Activity implements Serializable, FirebaseObject {
             throw new IllegalArgumentException();
 
 
-
         this.activityId = activityId;
         this.organizerId = organizerId;
         this.title = title;

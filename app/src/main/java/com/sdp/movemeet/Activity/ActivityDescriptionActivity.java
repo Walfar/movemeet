@@ -116,10 +116,12 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
     private void getParticipantNames() {
-        ArrayList<String> participantIds = act.getParticipantId();
-        for (int i=0; i<act.getParticipantId().size(); i++) {
-            String currentParticipantId = participantIds.get(i);
-            getCurrentParticipantName(currentParticipantId);
+        if (act != null) {
+            ArrayList<String> participantIds = act.getParticipantId();
+            for (int i=0; i<act.getParticipantId().size(); i++) {
+                String currentParticipantId = participantIds.get(i);
+                getCurrentParticipantName(currentParticipantId);
+            }
         }
     }
 

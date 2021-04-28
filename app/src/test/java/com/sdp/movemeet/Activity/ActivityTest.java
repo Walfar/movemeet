@@ -19,6 +19,7 @@ public class ActivityTest {
     private final static double DUMMY_LONGITUDE = 2.45;
     private final static double DUMMY_LATITUDE = 3.697;
     private final static String DUMMY_DESCRIPTION = "description";
+    private final static String DUMMY_DOCUMENT_PATH = "documentPath";
     private final static Date DUMMY_DATE = new Date(2021, 11, 10, 1, 10);
     private final static Date DUMMY_CREATION_DATE = new Date();
     private final static double DUMMY_DURATION = 10.4;
@@ -35,6 +36,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -54,6 +56,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -68,6 +71,7 @@ public class ActivityTest {
         assertEquals(activity.getLongitude(), DUMMY_LONGITUDE, 0.1);
         assertEquals(activity.getLatitude(), DUMMY_LATITUDE, 0.1);
         assertEquals(activity.getDescription(), DUMMY_DESCRIPTION);
+        assertEquals(activity.getDocumentPath(), DUMMY_DOCUMENT_PATH);
         assertEquals(activity.getDate(), DUMMY_DATE);
         assertEquals(activity.getDuration(), DUMMY_DURATION, 0.1);
         assertEquals(activity.getSport(), DUMMY_SPORT);
@@ -87,6 +91,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -105,6 +110,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -123,6 +129,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -141,6 +148,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -159,6 +167,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 null,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -177,6 +186,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 null,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -195,6 +205,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 0,
                 DUMMY_SPORT,
@@ -213,6 +224,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 null,
@@ -231,6 +243,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -249,6 +262,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -260,6 +274,7 @@ public class ActivityTest {
         activity.setLongitude(853.4);
         activity.setLatitude(3456.6);
         activity.setDescription("Running");
+        activity.setDocumentPath("documentPath");
         Date newDate = new Date(2021, 4, 2, 2, 20);
         activity.setDate(newDate);
         activity.setDuration(20.4);
@@ -273,6 +288,7 @@ public class ActivityTest {
         assertEquals(activity.getLongitude(), 853.4, 0.1);
         assertEquals(activity.getLatitude(), 3456.6, 0.1);
         assertEquals(activity.getDescription(), "Running");
+        assertEquals(activity.getDocumentPath(), "documentPath");
         assertEquals(activity.getDate(), newDate);
         assertEquals(activity.getDuration(), 20.4, 0.1);
         assertEquals(activity.getAddress(), "EPFL");
@@ -290,6 +306,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -301,6 +318,7 @@ public class ActivityTest {
         activity.setLongitude(853.4);
         activity.setLatitude(3456.6);
         activity.setDescription("Running");
+        activity.setDescription("documentPath");
         Date newDate = new Date(2021, 4, 2, 2, 20);
         activity.setDate(newDate);
         activity.setDuration(20.4);
@@ -319,6 +337,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -340,6 +359,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -364,6 +384,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -389,6 +410,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -409,6 +431,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -438,6 +461,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -445,7 +469,7 @@ public class ActivityTest {
                 DUMMY_CREATION_DATE);
 
         assertEquals(activity.toString(), "ActivityId:" + DUMMY_ACTIVITY_ID + "\nOrganizerId" + DUMMY_ORGANISATOR_ID + "\nTitle:" + DUMMY_TITLE + "\nNumberParticipant:" + DUMMY_NUMBER_PARTICIPANT +
-                "\nParticipantId:" + DUMMY_PARTICIPANTS_ID + "\nLongitude:" + DUMMY_LONGITUDE + "\nLatitude:" + DUMMY_LATITUDE + "\nDescription:" + DUMMY_DESCRIPTION +
+                "\nParticipantId:" + DUMMY_PARTICIPANTS_ID + "\nLongitude:" + DUMMY_LONGITUDE + "\nLatitude:" + DUMMY_LATITUDE + "\nDescription:" + DUMMY_DESCRIPTION + //"\nDocumentPath:" + DUMMY_DOCUMENT_PATH +
                 "\nDate:" + DUMMY_DATE + "\nDuration:" + DUMMY_DURATION + "\nSport:" + DUMMY_SPORT + "\nAddress:" + DUMMY_ADDRESS + "\nCreated at:" + DUMMY_CREATION_DATE);
         activity = null;
 
@@ -462,6 +486,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -477,6 +502,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -501,6 +527,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -524,6 +551,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -550,6 +578,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -565,6 +594,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -589,6 +619,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -604,6 +635,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -629,6 +661,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -644,6 +677,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -669,6 +703,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -684,6 +719,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -709,6 +745,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -727,6 +764,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -752,6 +790,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -767,6 +806,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE+1,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -792,6 +832,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -807,6 +848,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE+1,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -832,6 +874,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -847,6 +890,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 "AH",
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -872,6 +916,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -887,6 +932,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 new Date(2022,3,26),
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -912,6 +958,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -927,6 +974,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION+1,
                 DUMMY_SPORT,
@@ -951,6 +999,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -966,6 +1015,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 Sport.Badminton,
@@ -991,6 +1041,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -1006,6 +1057,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -1031,6 +1083,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -1053,6 +1106,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -1074,6 +1128,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -1094,6 +1149,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -1114,6 +1170,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -1134,6 +1191,7 @@ public class ActivityTest {
                 DUMMY_LONGITUDE,
                 DUMMY_LATITUDE,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
