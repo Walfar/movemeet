@@ -24,8 +24,6 @@ import static com.sdp.movemeet.utility.LocationFetcher.REQUEST_CODE;
 
 public class HomeScreenActivity extends AppCompatActivity {
 
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,12 +40,14 @@ public class HomeScreenActivity extends AppCompatActivity {
     }
 
     public void signIn(View v) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) startActivity(new Intent(this, MainActivity.class));
         else
             startActivity(new Intent(this, LoginActivity.class)); // redirecting the user to the "Login" activity
     }
 
     public void noAccount(View v) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) startActivity(new Intent(this, MainActivity.class));
         else startActivity(new Intent(this, MainUnregister.class));
     }
