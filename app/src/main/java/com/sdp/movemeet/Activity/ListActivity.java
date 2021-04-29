@@ -19,6 +19,9 @@ import com.sdp.movemeet.Backend.FirebaseInteraction;
 import com.sdp.movemeet.Navigation.Navigation;
 import com.sdp.movemeet.R;
 
+/***
+ *  This class create the list of activities, on witch the user is registered.
+ */
 public class ListActivity extends AppCompatActivity {
 
     TextView fullName, email, phone;
@@ -67,23 +70,30 @@ public class ListActivity extends AppCompatActivity {
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
                 Navigation.goToHome(this.navigationView);
+                finish();
                 break;
             case R.id.nav_edit_profile:
+                Navigation.goToUserProfileActivity(this.navigationView);
+                finish();
                 break;
             case R.id.nav_add_activity:
                 Navigation.goToActivityUpload(this.navigationView);
+                finish();
                 break;
             case R.id.nav_logout:
                 FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
+                finish();
                 break;
             case R.id.nav_start_activity:
                 Navigation.startActivity(this.navigationView);
+                finish();
                 break;
             case R.id.nav_chat:
                 Navigation.goToChat(this.navigationView);
+                finish();
                 break;
             case R.id.nav_list_activities:
-                Navigation.goToListOfActivities(this.navigationView);
+                finish();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);

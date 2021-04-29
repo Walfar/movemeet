@@ -116,23 +116,30 @@ public class ProfileActivity extends AppCompatActivity {
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
                 Navigation.goToHome(this.navigationView);
+                finish();
                 break;
             case R.id.nav_edit_profile:
+                finish();
                 break;
             case R.id.nav_add_activity:
                 Navigation.goToActivityUpload(this.navigationView);
+                finish();
                 break;
             case R.id.nav_logout:
                 FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
+                finish();
                 break;
             case R.id.nav_start_activity:
                 Navigation.startActivity(this.navigationView);
+                finish();
                 break;
             case R.id.nav_chat:
                 Navigation.goToChat(this.navigationView);
+                finish();
                 break;
             case R.id.nav_list_activities:
                 Navigation.goToListOfActivities(this.navigationView);
+                finish();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
