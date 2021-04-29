@@ -45,6 +45,9 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
         }
 
         uri = intent.getData();
+        if(uri != null){
+            loadActivityHeaderPicture();
+        }
 
         createTitleView();
         createParticipantNumberView();
@@ -52,7 +55,6 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
         createAddressView();
         createSportView();
         createDurationView();
-        loadActivityHeaderPicture();
     }
 
     public void goToLogin(View v) {
