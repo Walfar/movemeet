@@ -18,6 +18,6 @@ public enum Sport {
     Gym,
     Dancing,    
     VolleyBall,
-    Parkour,
-    Tricking
+    Tricking,
+    Parkour
 }
