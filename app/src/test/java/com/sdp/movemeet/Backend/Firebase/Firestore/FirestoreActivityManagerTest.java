@@ -360,17 +360,6 @@ public class FirestoreActivityManagerTest {
         assertThrows(IllegalArgumentException.class, () -> {
             fam.add(null, "path");
         });
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            fam.add(fakeActivity, null);
-        });
-    }
-
-    @Test
-    public void addThrowsIllegalArgumentExceptionOnEmptyPath() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            fam.add(fakeActivity, "");
-        });
     }
 
     @Test
