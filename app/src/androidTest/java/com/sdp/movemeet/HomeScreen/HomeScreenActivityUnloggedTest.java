@@ -61,8 +61,6 @@ public class HomeScreenActivityUnloggedTest {
     @Test
     public void noAccountHasCorrectIntentWhenUnlogged() {
         onView(withId(R.id.noAccountButton)).perform(click());
-
-        intended(hasComponent(MainUnregisterActivity.class.getName()));
         intended(hasComponent(MainUnregisterActivity.class.getName()));
     }
 }
