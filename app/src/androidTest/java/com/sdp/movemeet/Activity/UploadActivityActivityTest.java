@@ -122,6 +122,21 @@ public class UploadActivityActivityTest {
             assert (((UploadActivityActivity) activity).validParticipants == false);
         });
 
+        onView(withId(R.id.editTextDate)).perform(forceDoubleClick());
+
+        onView(withClassName(equalTo(DatePicker.class.getName()))).perform(
+                PickerActions.setDate(
+                        2025, 0, 20
+                )
+        );
+
+        assert(sleep(1000));
+
+        onView(withText("OK")).perform(click());
+        onView(withId(R.id.buttonConfirmUpload)).perform(click());
+
+        assert(sleep(1000));
+
         onView(withId(R.id.editTextNParticipants))
                 .perform(typeText("5"), closeSoftKeyboard());
 
@@ -131,6 +146,8 @@ public class UploadActivityActivityTest {
             assert (((UploadActivityActivity) activity).validParticipants == true);
             assert (((UploadActivityActivity) activity).validLocation == false);
         });
+
+        assert(sleep(1000));
 
         onView(withId(R.id.editTextLocation))
                 .perform(typeText("Dubai, UAE"), closeSoftKeyboard());
@@ -179,32 +196,6 @@ public class UploadActivityActivityTest {
 
         onView(withText("OK")).perform(click());
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
-
-        assert(sleep(1000));
-
-        scenario.onActivity(activity -> {
-            assert (((UploadActivityActivity) activity).validDate == true);
-        });
-
-
-        /*onView(withId(R.id.editTextDate)).perform(forceDoubleClick());
-
-        onView(withClassName(equalTo(DatePicker.class.getName()))).perform(
-                PickerActions.setDate(
-                        2025, 0, 20
-                )
-        );
-
-        assert(sleep(1000));
-
-        onView(withText("OK")).perform(click());
-        onView(withId(R.id.buttonConfirmUpload)).perform(click());
-
-        assert(sleep(1000));
-
-        scenario.onActivity(activity -> {
-            assert (((UploadActivityActivity) activity).validDate == true);
-        }); */
 
         //mAuth.signOut();
         scenario.close();
