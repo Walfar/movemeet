@@ -3,22 +3,24 @@ package com.sdp.movemeet.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
 import com.sdp.movemeet.LoginActivity;
 import com.sdp.movemeet.R;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
 
@@ -29,6 +31,7 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
     ImageView activityImage;
     String imagePath;
     ProgressBar progressBar;
+    Uri uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +44,11 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
             act = (Activity) intent.getSerializableExtra("activity");
         }
 
+        uri = intent.getData();
+
         createTitleView();
         createParticipantNumberView();
         createDescriptionView();
-        createDateView();
         createAddressView();
         createSportView();
         createDurationView();
@@ -78,16 +82,6 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
         if (act != null) descriptionView.setText(act.getDescription());
     }
 
-    private void createDateView() {
-        // date from the activity
-        TextView dateView = (TextView) findViewById(R.id.activity_date_description);
-        if (act != null) {
-            String pattern = "MM/dd/yyyy HH:mm:ss";
-            DateFormat df = new SimpleDateFormat(pattern);
-            String todayAsString = df.format(act.getDate());
-            dateView.setText(todayAsString);
-        }
-    }
 
     private void createSportView() {
         TextView sportView = (TextView) findViewById(R.id.activity_sport_description);
@@ -119,7 +113,18 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
         if (act != null) {
             imagePath = "activities/" + act.getActivityId() + "/activityImage.jpg";
             StorageReference imageRef = storageReference.child(imagePath);
-            FirebaseInteraction.getImageFromFirebase(imageRef, activityImage, progressBar);
+            imageRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "Get image: SUCCESS");
+                        FirebaseInteraction.getImageFromFirebase(imageRef, activityImage, progressBar);
+                    } else {
+                        Log.d(TAG, "Activity have no image");
+                        activityImage.setImageAlpha(R.drawable.run_woman);
+                    }
+                }
+            });
         }
     }
 
