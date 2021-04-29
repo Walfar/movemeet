@@ -11,7 +11,7 @@ public class MainUnregister extends AppCompatActivity {
     DrawerLayout drawerLayout;
     Toolbar toolbar;
     TextView textView;
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,9 +21,9 @@ public class MainUnregister extends AppCompatActivity {
         createDrawer();
     }
 
-    public void createDrawer(){
-        drawerLayout=findViewById(R.id.drawer_layout_unregister);
-        textView=findViewById(R.id.textViewUnregister);
-        toolbar=findViewById(R.id.toolbarUnregister);
+    public void createDrawer() {
+        drawerLayout = findViewById(R.id.drawer_layout_unregister);
+        textView = findViewById(R.id.textViewUnregister);
+        toolbar = findViewById(R.id.toolbarUnregister);
     }
 }

@@ -5,6 +5,7 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import com.sdp.movemeet.Activity.Activity;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.stream.Collectors;
@@ -16,7 +17,7 @@ public class DistanceCalculator {
     // This constant is more ~canonical~
     private final Double EARTH_RADIUS = 6.371 * Math.pow(10, 3);
     private Double userLatitude, userLongitude;
-    private ArrayList<Pair> activityDistanceMap = null;
+    private ArrayList<Pair> activityDistanceMap;
     private boolean sorted;
 
     public DistanceCalculator(Double userLatitude, Double userLongitude) {
@@ -36,7 +37,7 @@ public class DistanceCalculator {
     public ArrayList<Activity> getAllActivities() {
         if (sorted) {
             ArrayList<Activity> activities = new ArrayList<Activity>();
-            for (Pair pair: activityDistanceMap) {
+            for (Pair pair : activityDistanceMap) {
                 activities.add(pair.getKey());
             }
 
@@ -105,9 +106,9 @@ public class DistanceCalculator {
         Double p = Math.PI / 180;
 
         //Double a =  Math.pow(Math.sin((lat2 - lat1)/2),2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin((lng2 - lng1)/2),2);
-        Double a = 0.5 - Math.cos((lat2 - lat1) * p)/2 +
+        Double a = 0.5 - Math.cos((lat2 - lat1) * p) / 2 +
                 Math.cos(lat1 * p) * Math.cos(lat2 * p) *
-                (1 - Math.cos((lng2 - lng1) * p))/2;
+                        (1 - Math.cos((lng2 - lng1) * p)) / 2;
 
         return 2 * EARTH_RADIUS * Math.asin(Math.sqrt(a));
     }
@@ -116,15 +117,22 @@ public class DistanceCalculator {
         private Activity key;
         private Double value;
 
-        public Pair(Activity key, Double value){
+        public Pair(Activity key, Double value) {
             this.key = key;
             this.value = value;
         }
 
-        public Activity getKey(){ return this.key; }
-        public Double getValue(){ return this.value; }
+        public Activity getKey() {
+            return this.key;
+        }
+
+        public Double getValue() {
+            return this.value;
+        }
 
         // public void setKey(Activity key){ this.key = key; }
-        public void setValue(Double value){ this.value = value; }
+        public void setValue(Double value) {
+            this.value = value;
+        }
     }
 }

@@ -141,7 +141,6 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-
     public void createDrawer() {
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
