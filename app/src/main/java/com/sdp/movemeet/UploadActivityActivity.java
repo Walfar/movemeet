@@ -36,12 +36,17 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Backend.BackendActivityManager;
 
+import com.sdp.movemeet.Backend.BackendManager;
+import com.sdp.movemeet.Backend.Firebase.Firestore.FirestoreActivityManager;
+import com.sdp.movemeet.Backend.Serialization.ActivitySerializer;
+import com.sdp.movemeet.Backend.Serialization.BackendSerializer;
 import com.sdp.movemeet.map.MiniMapFragment;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
 import com.sdp.movemeet.Navigation.Navigation;
@@ -394,7 +399,7 @@ public class UploadActivityActivity extends AppCompatActivity {
 
         if (toUpload == null) return;
 
-        BackendActivityManager bam = new BackendActivityManager(FirebaseFirestore.getInstance(),
+        /*BackendActivityManager bam = new BackendActivityManager(FirebaseFirestore.getInstance(),
                 BackendActivityManager.ACTIVITIES_COLLECTION);
 
         bam.uploadActivity(toUpload, new OnSuccessListener<Void>() {
@@ -412,7 +417,30 @@ public class UploadActivityActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Failed to upload activity",
                                 Toast.LENGTH_SHORT).show();
                     }
-                });
+                });*/
+
+        BackendSerializer<Activity> serializer = new ActivitySerializer();
+        BackendManager<Activity> bm = new FirestoreActivityManager(
+                FirebaseFirestore.getInstance(),
+                FirestoreActivityManager.ACTIVITIES_COLLECTION,
+                serializer
+        );
+
+        ((Task<Void>) bm.add(toUpload, "")).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(getApplicationContext(), "Activity successfully uploaded!",
+                        Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("upload activity TAG", "failed");
+                Toast.makeText(getApplicationContext(), "Failed to upload activity",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

@@ -51,16 +51,14 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendMana
         object.setDocumentPath(documentPath);
         Map<String, Object> data = serializer.serialize(object);
 
-        return db.collection(collection).document(object.getDocumentPath()).set(data);
+        return db.document(object.getDocumentPath()).set(data);
     }
 
     @Override
     public Task<Void> delete(String path) {
         if (path == null || path.isEmpty()) throw new IllegalArgumentException();
 
-        return db.collection(collection)
-                .document(path)
-                .delete();
+        return db.document(path).delete();
     }
 
     @Override
@@ -74,6 +72,6 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendMana
     public Task<DocumentSnapshot> get(String path) {
         if (path == null || path.isEmpty()) throw new IllegalArgumentException();
 
-        return db.collection(collection).document(path).get();
+        return db.document(path).get();
     }
 }

@@ -335,6 +335,7 @@ public class FirestoreActivityManagerTest {
         querySnap = mock(QuerySnapshot.class);
 
         when(db.collection(any())).thenReturn(colRef);
+        when(db.document(any())).thenReturn(docRef);
         when(colRef.document(any())).thenReturn(docRef);
         when(colRef.document()).thenReturn(docRef);
 
