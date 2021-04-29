@@ -7,7 +7,6 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -24,7 +23,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -59,23 +57,22 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     public final static String EXTRA_ADDRESS = "address";
 
     FirebaseAuth fAuth;
-    Button RegisterToActivityButton;
     private Activity act;
     private static final String TAG = "ActDescActivity";
-    private FirebaseUser user;
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
     TextView textView;
 
-    TextView fullName, email, phone, organizerView;
+    TextView fullName, email, phone, organizerView, numberParticipantsView;
     FirebaseFirestore fStore;
     StorageReference storageReference;
     String userId;
     String organizerId;
     String fullNameString;
     ArrayList<String> participantNames = new ArrayList<>();
+    StringBuilder participantNamesString = new StringBuilder();
 
     ImageView activityImage;
     String imagePath;
@@ -117,6 +114,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void getParticipantNames() {
         if (act != null) {
             ArrayList<String> participantIds = act.getParticipantId();
+            participantNames = new ArrayList<>();
+            participantNamesString = new StringBuilder();
             for (int i = 0; i < act.getParticipantId().size(); i++) {
                 String currentParticipantId = participantIds.get(i);
                 getCurrentParticipantName(currentParticipantId);
@@ -190,35 +189,27 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
     private void createTitleView() {
-        // activityTitle from the activity
+        // Title of the activity
         TextView activityTitle = (TextView) findViewById(R.id.activity_title_description);
         if (act != null) activityTitle.setText(act.getTitle());
     }
 
     private void createParticipantNumberView() {
-        // number of participants from the activity
-        TextView numberParticipantsView = (TextView) findViewById(R.id.activity_number_description);
+        // Number of participants of the activity
+        numberParticipantsView = (TextView) findViewById(R.id.activity_number_description);
         if (act != null) {
-            StringBuilder participantNamesString = new StringBuilder();
-            for (int i = 0; i < participantNames.size(); i++) {
-                if (i == 0) {
-                    participantNamesString.append(participantNames.get(i));
-                } else {
-                    participantNamesString.append(", ").append(participantNames.get(i));
-                }
-            }
-            numberParticipantsView.setText(act.getParticipantId().size() + "/" + act.getNumberParticipant() + " (" + participantNamesString + ")");
+            numberParticipantsView.setText(act.getParticipantId().size() + "/" + act.getNumberParticipant());
         }
     }
 
     private void createDescriptionView() {
-        // Description from the activity
+        // Description of the activity
         TextView descriptionView = (TextView) findViewById(R.id.activity_description_description);
         if (act != null) descriptionView.setText(act.getDescription());
     }
 
     private void createDateView() {
-        // Date from the activity
+        // Date of the activity
         TextView dateView = (TextView) findViewById(R.id.activity_date_description);
         if (act != null) {
             String pattern = "MM/dd/yyyy HH:mm:ss";
@@ -273,6 +264,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 DocumentReference actRef = fStore.collection("activities").document(act.getDocumentPath());
                 actRef.update("participantId", FieldValue.arrayUnion(userId));
                 Log.d(TAG, "Participant registered in Firebase Firestore!");
+                getParticipantNames();
             } catch (Exception e) {
                 Toast.makeText(ActivityDescriptionActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "An error occurred! Participant may be already registered in Firebase Firestore!");
@@ -331,8 +323,11 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                     if (document.exists()) {
                         String participantName = (String) document.getData().get("fullName");
                         participantNames.add(participantName);
+                        // Add participant name to the
+                        participantNamesString.append(participantName).append(", ");
+                        numberParticipantsView.setText(act.getParticipantId().size() + "/" + act.getNumberParticipant() + " (" + participantNamesString + ")");
                         Log.i(TAG, "current participantName: " + participantName);
-                        createParticipantNumberView();
+                        //createParticipantNumberView();
                     } else {
                         Log.d(TAG, "No such document!");
                     }
