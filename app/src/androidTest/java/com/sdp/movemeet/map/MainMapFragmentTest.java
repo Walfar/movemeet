@@ -138,7 +138,7 @@ public class MainMapFragmentTest {
     @Test
     public void mainMapFragmentIsDisplayedAndGMapsNotNull() throws InterruptedException {
         onView(withId(R.id.fragment_map)).check(matches((isDisplayed())));
-        waitFor(2000);
+        waitFor(3000);
         assertNotNull(fragmentTestRule.getFragment().getGoogleMap());
     }
 
