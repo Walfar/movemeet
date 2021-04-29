@@ -47,11 +47,13 @@ public class MiniMapFragmentTest {
     private FirebaseAuth fAuth;
     private FirebaseUser user;
 
+
     @Rule
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Rule
-    public ActivityScenarioRule<UploadActivityActivity> rule = new ActivityScenarioRule<>(UploadActivityActivity.class);
+    public FragmentTestRule<?, MiniMapFragment> fragmentTestRule =
+            FragmentTestRule.create(MiniMapFragment.class);
 
     @Before
     public void setUp() throws InterruptedException {
@@ -66,24 +68,22 @@ public class MiniMapFragmentTest {
         sleep(2000);
     }
 
-    /*@Test
+    @Test
     public void miniMapFragment_isDisplayed() throws InterruptedException {
-        onView(withId(R.id.fragment_container_view)).check(matches((isDisplayed())));
+        onView(withId(R.id.fragment_map)).check(matches((isDisplayed())));
     }
 
-    /*
-    @Test
+   /* @Test
     public void miniMapFragment_onClickSetsLocation() {
         //What could be the right coords of the mini map ?
-        uiDevice.click(uiDevice.getDisplaySizeDp().x/2, uiDevice.getDisplaySizeDp().y);
+        sleep(3000);
+        uiDevice.click(uiDevice.getDisplaySizeDp().x/2, uiDevice.getDisplaySizeDp().y/2);
         sleep(2000);
-        rule.getScenario().onActivity(activity -> {
-            LatLng address = activity.getAddressLocation();
-            assertNotNull(address);
-            assertEquals(0, address.latitude, 0);
-            assertEquals(0, address.longitude, 0);
-        });
-    } 
+        //Casting not possible. Attach fragment to upload activity ?
+        /*UploadActivityActivity act = new UploadActivityActivity();
+        LatLng address = act.getAddressLocation();
+        assertNotNull(address);
+    }
 
     public boolean sleep(long millis) {
         try {

@@ -19,7 +19,7 @@ public class MessageAdapter extends FirebaseRecyclerAdapter<Message, MessageView
 
     private static final String TAG = "MessageAdaper";
 
-    private final int MESSAGE_IN_VIEW_TYPE  = 1;
+    private final int MESSAGE_IN_VIEW_TYPE = 1;
     private final int MESSAGE_OUT_VIEW_TYPE = 2;
 
     Activity chatActivity;
@@ -46,7 +46,7 @@ public class MessageAdapter extends FirebaseRecyclerAdapter<Message, MessageView
 
     @Override
     public int getItemViewType(int position) {
-        if(getItem(position).getMessageUserId().equals(userId)){
+        if (getItem(position).getMessageUserId().equals(userId)) {
             return MESSAGE_OUT_VIEW_TYPE;
         }
         return MESSAGE_IN_VIEW_TYPE;
@@ -55,7 +55,7 @@ public class MessageAdapter extends FirebaseRecyclerAdapter<Message, MessageView
     @Override
     public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = null;
-        if(viewType == MESSAGE_IN_VIEW_TYPE) {
+        if (viewType == MESSAGE_IN_VIEW_TYPE) {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.message, parent, false);
         } else {

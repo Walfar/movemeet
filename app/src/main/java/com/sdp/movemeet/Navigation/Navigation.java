@@ -12,7 +12,7 @@ import com.sdp.movemeet.ProfileActivity;
 import com.sdp.movemeet.UploadActivityActivity;
 import com.sdp.movemeet.chat.ChatActivity;
 
-public class Navigation extends AppCompatActivity{
+public class Navigation extends AppCompatActivity {
 
     public static void startActivity(View view) {
         Context mContext = view.getContext();

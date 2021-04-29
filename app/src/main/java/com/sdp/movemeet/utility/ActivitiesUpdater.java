@@ -1,8 +1,10 @@
 package com.sdp.movemeet.utility;
 
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.google.android.gms.common.util.VisibleForTesting;
 import com.google.android.gms.dynamic.SupportFragmentWrapper;
@@ -58,7 +60,7 @@ public class ActivitiesUpdater {
     }
 
     /* public void setActivities(ArrayList<Activity> activities) {
-        this.activities = activities;
+        this.activities = activities;x
     } */
 
     public ArrayList<Activity> getActivities() {
@@ -94,28 +96,11 @@ public class ActivitiesUpdater {
                 //add to the list only those newly added activities
                 Log.d(TAG, "activities size is " + activities.size());
                 Log.d(TAG, "diff number of activities is " + size);
-                if (size > 0) addListeners(collection.orderBy("createdAt", Query.Direction.DESCENDING).limit(size), true);
+                if (size > 0)
+                    addListeners(collection.orderBy("createdAt", Query.Direction.DESCENDING).limit(size), true);
             }
         });
     }
-
-    /*public void checkInternetAndFetchActivities() {
-        if (internetIsConnected()) {
-            fetchListActivities();
-        } /* else {
-            activities = cache.loadActivitiesFromCache();
-        }
-    }
-
-
-    private boolean internetIsConnected() {
-        try {
-            String command = "ping -c 1 google.com";
-            return (Runtime.getRuntime().exec(command).waitFor() == 0);
-        } catch (Exception e) {
-            return false;
-        }
-    } */
 
     private Activity convertDocSnapToActivity(DocumentSnapshot docSnap) {
 
@@ -136,10 +121,11 @@ public class ActivitiesUpdater {
         if (participantsIdobj == null) partcipantsId = new ArrayList<>();
         else partcipantsId = (ArrayList<String>) participantsIdobj;
 
-        String sportobj =  docSnap.getString("sport");
+        String sportobj = docSnap.getString("sport");
         Sport sport;
         if (sportobj == null) sport = Running;
-        else sport = Sport.valueOf(sportobj);; //enum sotred in firebase ?");
+        else sport = Sport.valueOf(sportobj);
+        ; //enum sotred in firebase ?");
 
         Activity act = new Activity(activityId, organizerId, title, numberParticipant, partcipantsId, longitude, latitude, description, date, duration, sport, address, createdAt);
         return act;
@@ -169,14 +155,16 @@ public class ActivitiesUpdater {
     private void addListeners(Query q, boolean updateMap) {
         //Log.d(TAG, "cache allowed is" + cacheAllowed);
         q.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (DocumentSnapshot docSnap: queryDocumentSnapshots.getDocuments()) {
+                for (DocumentSnapshot docSnap : queryDocumentSnapshots.getDocuments()) {
                     activities.add(convertDocSnapToActivity(docSnap));
                     Log.d(TAG, "activities size is " + activities.size());
                 }
                 //if (cacheAllowed) cache.saveActivitiesInCache(activities);
-                if (updateMap) ((SupportMapFragment) mapFragment.getChildFragmentManager().findFragmentById(R.id.google_map)).getMapAsync(mapFragment);
+                if (updateMap && mapFragment.isAdded() && mapFragment.getGoogleMap() != null)
+                    mapFragment.displayNearbyMarkers();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
