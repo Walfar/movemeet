@@ -141,11 +141,11 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-    public void createDrawer(){
-        drawerLayout=findViewById(R.id.drawer_layout);
-        navigationView=findViewById(R.id.nav_view);
-        textView=findViewById(R.id.textView);
-        toolbar=findViewById(R.id.toolbar);
+    public void createDrawer() {
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        textView = findViewById(R.id.textView);
+        toolbar = findViewById(R.id.toolbar);
 
         navigationView.bringToFront();
         ActionBarDrawerToggle toggle = new
@@ -324,22 +324,22 @@ public class ChatActivity extends AppCompatActivity {
                 Log.d(TAG, "Uri: " + uri.toString());
                 Message tempMessage = new Message(fullNameString, null, userId, LOADING_IMAGE_URL);
                 chatRoom.push().setValue(tempMessage, new DatabaseReference.CompletionListener() {
-                            @Override
-                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                                if (databaseError != null) {
-                                    Log.w(TAG, "Unable to write message to database.", databaseError.toException());
-                                    return;
-                                }
-                                // Building a StorageReference and then uploading the image file
-                                String key = databaseReference.getKey();
-                                StorageReference fileRef = storageReference
-                                        .child(CHATS_CHILD)
-                                        .child(CHAT_ROOM_ID)
-                                        .child(key)
-                                        .child(uri.getLastPathSegment());
-                                putImageInStorage(fileRef, uri, key);
-                            }
-                        });
+                    @Override
+                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                        if (databaseError != null) {
+                            Log.w(TAG, "Unable to write message to database.", databaseError.toException());
+                            return;
+                        }
+                        // Building a StorageReference and then uploading the image file
+                        String key = databaseReference.getKey();
+                        StorageReference fileRef = storageReference
+                                .child(CHATS_CHILD)
+                                .child(CHAT_ROOM_ID)
+                                .child(key)
+                                .child(uri.getLastPathSegment());
+                        putImageInStorage(fileRef, uri, key);
+                    }
+                });
             }
         }
     }

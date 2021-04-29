@@ -6,6 +6,8 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Point;
 import android.location.Location;
+import android.location.LocationManager;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -23,6 +25,10 @@ import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -69,17 +75,24 @@ import static com.sdp.movemeet.Sport.Trekking;
 import static com.sdp.movemeet.Sport.VolleyBall;
 import static com.sdp.movemeet.Sport.Windsurfing;
 import static com.sdp.movemeet.Sport.Yoga;
+import static com.sdp.movemeet.map.GPSRecordingActivityTest.FAKE_ACCURACY;
+import static com.sdp.movemeet.map.GPSRecordingActivityTest.FAKE_LATITUDE;
+import static com.sdp.movemeet.map.GPSRecordingActivityTest.FAKE_LONGITUDE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -88,6 +101,9 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class MainMapFragmentTest {
@@ -95,6 +111,8 @@ public class MainMapFragmentTest {
     private UiDevice uiDevice;
     private FirebaseAuth fAuth;
     private FirebaseUser user;
+    private Location fakeLocation;
+    private Task<Location> mockLocationTask;
 
     @Rule
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -106,6 +124,7 @@ public class MainMapFragmentTest {
 
     @Before
     public void setUp() throws InterruptedException {
+        //The map is tested when the user is logged in
         fAuth = FirebaseAuth.getInstance();
         fAuth.signInWithEmailAndPassword("test@test.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -114,34 +133,24 @@ public class MainMapFragmentTest {
                 uiDevice = UiDevice.getInstance(getInstrumentation());
             }
         });
-        waitFor(2000);
     }
 
     @Test
-    public void mainMapFragment_isDisplayed() throws InterruptedException {
+    public void mainMapFragmentIsDisplayedAndGMapsNotNull() throws InterruptedException {
         onView(withId(R.id.fragment_map)).check(matches((isDisplayed())));
     }
 
     @Test
-    public void mainMapFragment_MarkerOnMapForUser() throws UiObjectNotFoundException {
+    public void mainMapFragment_MarkerOnMapForUser() throws UiObjectNotFoundException, InterruptedException {
+        waitFor(3000);
         UiObject marker = uiDevice.findObject(new UiSelector().descriptionContains("I am here !"));
         assertNotNull(marker);
     }
 
-    @Test
-    public void locationIsCorrectlyFetched() throws InterruptedException {
-        MainMapFragment mapFragment = fragmentTestRule.getFragment();
-        LocationFetcher.fetchLastLocation(mapFragment.getFusedLocationProviderClient(), mapFragment.getSupportMapFragment(), mapFragment);
-        Thread.sleep(3000);
-        Location defaultLocation = LocationFetcher.defaultLocation();
-        assertEquals(0, defaultLocation.getLongitude(), 0);
-        assertEquals(0, defaultLocation.getLatitude(), 0);
-    }
 
-
-
-    @Test
-    public void activitiesUpdatesOnAdd() {
+   /* @Test
+    public void activitiesUpdatesOnAdd() throws InterruptedException {
+        waitFor(2000);
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
@@ -178,10 +187,9 @@ public class MainMapFragmentTest {
                         Activity act_in_collection = activities.get(activities.size()-1);
                         assertEquals(act.getActivityId(), act_in_collection.getActivityId());
                         assertEquals(act.getAddress(), act_in_collection.getAddress());
-                        assertEquals(act.getDate(), act_in_collection.getDate());
                         assertEquals(act.getDescription(), act_in_collection.getDescription());
-                        assertEquals(act.getLatitude(), act_in_collection.getLatitude());
-                        assertEquals(act.getLongitude(), act_in_collection.getLongitude());
+                        assertEquals(act.getLatitude(), act_in_collection.getLatitude(),0);
+                        assertEquals(act.getLongitude(), act_in_collection.getLongitude(), 0);
                         assertEquals(act.getNumberParticipant(), act_in_collection.getNumberParticipant());
                         assertEquals(act.getParticipantId(), act_in_collection.getParticipantId());
                         assertEquals(act.getTitle(), act_in_collection.getTitle());
@@ -195,12 +203,13 @@ public class MainMapFragmentTest {
                     }
                 });
 
-    }
+    } */
 
 
-    /*@Test
-    public void testChooseIcons() {
+    @Test
+    public void testChooseIcons() throws InterruptedException {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
+        waitFor(2000);
         assertEquals(R.drawable.icon_boxing, setSportIcon(Boxing, mapFragment), 0);
         assertEquals(R.drawable.icon_windsurfing, setSportIcon(Windsurfing, mapFragment), 0);
         assertEquals(R.drawable.icon_dancing, setSportIcon(Dancing, mapFragment), 0);
@@ -220,15 +229,15 @@ public class MainMapFragmentTest {
         assertEquals(R.drawable.icon_swim, setSportIcon(Swimming, mapFragment), 0);
     }
 
-    private int setSportIcon(Sport sport, MainMapFragment mapFragment) {
+    private int setSportIcon(Sport sport, @NotNull MainMapFragment mapFragment) {
         Activity activity = new Activity("activity id", "organizer id", "title", 2, new ArrayList<>(), 0, 0,
                 "description", new Date(), 1, sport,"here", new Date());
         return mapFragment.chooseIcon(activity);
-    } */
+    }
 
     @Test
     public void mainMapFragment_userClickingOnMapAddsNewActivity() throws UiObjectNotFoundException, InterruptedException {
-
+        waitFor(3000);
         //User must be logged to add new activity
         assertNotNull(user);
 
