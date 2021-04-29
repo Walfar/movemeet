@@ -4,13 +4,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.sdp.movemeet.Backend.BackendStorage;
+import com.sdp.movemeet.Backend.BackendManager;
 import com.sdp.movemeet.Backend.Firebase.FirebaseObject;
 import com.sdp.movemeet.Backend.Serialization.BackendSerializer;
 
 import java.util.Map;
 
-abstract class FirestoreManager<T extends FirebaseObject> implements BackendStorage<T> {
+abstract class FirestoreManager<T extends FirebaseObject> implements BackendManager<T> {
 
     private final BackendSerializer<T> serializer;
     private final FirebaseFirestore db;

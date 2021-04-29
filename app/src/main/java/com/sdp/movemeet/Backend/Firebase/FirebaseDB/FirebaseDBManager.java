@@ -3,14 +3,13 @@ package com.sdp.movemeet.Backend.Firebase.FirebaseDB;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
-import com.sdp.movemeet.Backend.BackendStorage;
+import com.sdp.movemeet.Backend.BackendManager;
 import com.sdp.movemeet.Backend.Firebase.FirebaseObject;
 import com.sdp.movemeet.Backend.Serialization.BackendSerializer;
 
 import java.util.Map;
 
-abstract class FirebaseDBManager<T extends FirebaseObject> implements BackendStorage<T> {
+abstract class FirebaseDBManager<T extends FirebaseObject> implements BackendManager<T> {
 
     private final static String PATH_SEPARATOR = "/";
 

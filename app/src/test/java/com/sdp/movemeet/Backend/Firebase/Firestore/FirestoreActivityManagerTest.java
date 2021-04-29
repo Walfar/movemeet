@@ -14,6 +14,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Activity.ActivityTest;
+import com.sdp.movemeet.Backend.BackendManager;
 import com.sdp.movemeet.Backend.Serialization.ActivitySerializer;
 
 import org.junit.Before;
@@ -33,7 +34,7 @@ import static org.mockito.Mockito.when;
 
 public class FirestoreActivityManagerTest {
 
-    private FirestoreActivityManager fam;
+    private BackendManager<Activity> fam;
     private ActivitySerializer serializer;
     private Activity fakeActivity;
 
@@ -376,7 +377,7 @@ public class FirestoreActivityManagerTest {
 
     @Test
     public void addReturnsCorrectTask() {
-        Task<Void> result = fam.add(fakeActivity, "doc");
+        Task<Void> result = (Task<Void>) fam.add(fakeActivity, "doc");
         assertEquals(fakeActivity.getDocumentPath(), "doc");
         assertEquals(fakeAddTask, result);
     }
