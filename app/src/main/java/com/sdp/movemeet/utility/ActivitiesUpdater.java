@@ -163,7 +163,7 @@ public class ActivitiesUpdater {
                     Log.d(TAG, "activities size is " + activities.size());
                 }
                 //if (cacheAllowed) cache.saveActivitiesInCache(activities);
-                if (updateMap && mapFragment.isAdded())
+                if (updateMap && mapFragment.isAdded() && mapFragment.getGoogleMap() != null)
                     mapFragment.displayNearbyMarkers();
             }
         }).addOnFailureListener(new OnFailureListener() {

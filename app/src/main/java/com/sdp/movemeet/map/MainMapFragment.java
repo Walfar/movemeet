@@ -97,8 +97,6 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {
-                //Whenever we get an update from the fusedLocationProviderClient, we update the current location
-                Log.d(TAG, "inside callback");
                 currentLocation = locationResult.getLastLocation();
                 if (googleMap != null) {
                     displayUserMarker();
@@ -269,6 +267,14 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
             default:
                 return -1;
         }
+    }
+
+    /**
+     * Getter for the map associated to this fragment
+     * @return google map associated
+     */
+    public GoogleMap getGoogleMap() {
+        return googleMap;
     }
 
     /**
