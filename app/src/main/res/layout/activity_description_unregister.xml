@@ -89,21 +89,6 @@
                             android:padding="10dp"
                             android:text="Sport" />
 
-                        <TextView
-                            android:id="@+id/activity_text1_description"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/armata"
-                            android:padding="10dp"
-                            android:text="at" />
-
-                        <TextView
-                            android:id="@+id/activity_date_description"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/armata"
-                            android:padding="10dp"
-                            android:text="date" />
                     </LinearLayout>
 
                     <LinearLayout
