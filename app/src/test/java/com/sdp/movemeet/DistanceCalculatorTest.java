@@ -35,6 +35,7 @@ public class DistanceCalculatorTest {
         final double DUMMY_LONGITUDE = 2.45;
         final double DUMMY_LATITUDE = 3.697;
         final String DUMMY_DESCRIPTION = "description";
+        final String DUMMY_DOCUMENT_PATH = "documentPath";
         final Date DUMMY_DATE = new Date(2021, 11, 10, 1, 10);
         final Date DUMMY_CREATION_DATE = new Date();
         final double DUMMY_DURATION = 10.4;
@@ -50,6 +51,7 @@ public class DistanceCalculatorTest {
                 DUMMY_LONGITUDE + 30,
                 DUMMY_LATITUDE + 30,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -65,6 +67,7 @@ public class DistanceCalculatorTest {
                 DUMMY_LONGITUDE + 0,
                 DUMMY_LATITUDE + 0,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -107,6 +110,7 @@ public class DistanceCalculatorTest {
         final double DUMMY_LONGITUDE = 2.45;
         final double DUMMY_LATITUDE = 3.697;
         final String DUMMY_DESCRIPTION = "description";
+        final String DUMMY_DOCUMENT_PATH = "documentPath";
         final Date DUMMY_DATE = new Date(2021, 11, 10, 1, 10);
         final double DUMMY_DURATION = 10.4;
         final Sport DUMMY_SPORT = Sport.Running;
@@ -122,6 +126,7 @@ public class DistanceCalculatorTest {
                 DUMMY_LONGITUDE + 30,
                 DUMMY_LATITUDE + 30,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -137,6 +142,7 @@ public class DistanceCalculatorTest {
                 DUMMY_LONGITUDE + 0,
                 DUMMY_LATITUDE + 0,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -166,6 +172,7 @@ public class DistanceCalculatorTest {
         final double DUMMY_LONGITUDE = 2.45;
         final double DUMMY_LATITUDE = 3.697;
         final String DUMMY_DESCRIPTION = "description";
+        final String DUMMY_DOCUMENT_PATH = "documentPath";
         final Date DUMMY_DATE = new Date(2021, 11, 10, 1, 10);
         final double DUMMY_DURATION = 10.4;
         final Sport DUMMY_SPORT = Sport.Running;
@@ -181,6 +188,7 @@ public class DistanceCalculatorTest {
                 DUMMY_LONGITUDE + 30,
                 DUMMY_LATITUDE + 30,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -196,6 +204,7 @@ public class DistanceCalculatorTest {
                 DUMMY_LONGITUDE + 0,
                 DUMMY_LATITUDE + 0,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -234,6 +243,7 @@ public class DistanceCalculatorTest {
         final double DUMMY_LONGITUDE = 2.45;
         final double DUMMY_LATITUDE = 3.697;
         final String DUMMY_DESCRIPTION = "description";
+        final String DUMMY_DOCUMENT_PATH = "documentPath";
         final Date DUMMY_DATE = new Date(2021, 11, 10, 1, 10);
         final double DUMMY_DURATION = 10.4;
         final Sport DUMMY_SPORT = Sport.Running;
@@ -249,6 +259,7 @@ public class DistanceCalculatorTest {
                 DUMMY_LONGITUDE + 30,
                 DUMMY_LATITUDE + 30,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,
@@ -264,6 +275,7 @@ public class DistanceCalculatorTest {
                 DUMMY_LONGITUDE + 0,
                 DUMMY_LATITUDE + 0,
                 DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
                 DUMMY_DATE,
                 DUMMY_DURATION,
                 DUMMY_SPORT,

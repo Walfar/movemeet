@@ -47,6 +47,7 @@ public class ActivityNotNullDescriptionTest {
     private final static double DUMMY_LONGITUDE = 2.45;
     private final static double DUMMY_LATITUDE = 3.697;
     private final static String DUMMY_DESCRIPTION = "description";
+    private final static String DUMMY_DOCUMENT_PATH = "documentPath";
     private final static Date DUMMY_DATE = new Date(2021, 11, 10, 1, 10);
     private final static double DUMMY_DURATION = 10.4;
     private final static Sport DUMMY_SPORT = Sport.Running;
@@ -62,6 +63,7 @@ public class ActivityNotNullDescriptionTest {
             DUMMY_LONGITUDE,
             DUMMY_LATITUDE,
             DUMMY_DESCRIPTION,
+            DUMMY_DOCUMENT_PATH,
             DUMMY_DATE,
             DUMMY_DURATION,
             DUMMY_SPORT,

@@ -224,7 +224,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
                             android:fontFamily="@font/armata"
-                            android:onClick="onClick"
+                            android:onClick="registerToActivity"
                             android:padding="15dp"
                             android:text="Register" />
 

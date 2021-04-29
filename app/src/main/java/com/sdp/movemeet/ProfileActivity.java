@@ -90,18 +90,18 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    public void createDrawer(){
-        drawerLayout=findViewById(R.id.drawer_layout);
-        navigationView=findViewById(R.id.nav_view);
-        textView=findViewById(R.id.textView);
-        toolbar=findViewById(R.id.toolbar);
+    public void createDrawer() {
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        textView = findViewById(R.id.textView);
+        toolbar = findViewById(R.id.toolbar);
 
         navigationView.bringToFront();
-        ActionBarDrawerToggle toggle=new
-                ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new
+                ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
 
-        View hView =  navigationView.inflateHeaderView(R.layout.header);
+        View hView = navigationView.inflateHeaderView(R.layout.header);
 
         fullName = hView.findViewById(R.id.text_view_profile_name);
         phone = hView.findViewById(R.id.text_view_profile_phone);
@@ -132,10 +132,12 @@ public class ProfileActivity extends AppCompatActivity {
                 Navigation.goToChat(this.navigationView);
                 break;
         }
-        drawerLayout.closeDrawer(GravityCompat.START); return true;
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     public void handleRegisterUser() {
+        // Retrieve user data (full name, email and phone number) from Firebase Firestore
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         if (fAuth.getCurrentUser() != null) {
@@ -156,8 +158,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-
-
     private void loadRegisteredUserProfilePicture() {
         userImagePath = "users/" + userId + "/profile.jpg";
         profileRef = storageReference.child(userImagePath);
@@ -176,28 +176,63 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     public void deleteUserAccount(View view) {
+        // 1) Delete the profile picture of the user from Firebase Storage (in case it exists)
+        profileRef = storageReference.child(userImagePath);
+        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                deleteProfilePicture();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.d(TAG, "deleteUserAccount - 1) Firebase Storage user profile picture could not be fetched because it probably doesn't exist!");
+                // 2) Deleting all the user data from Firebase Firestore
+                deleteFirestoreDataAndAuthentication();
+            }
+        });
 
-        // Deleting the profile picture of the user from Firebase Storage (in case it exists)
-        deleteProfilePicture();
+    }
 
-        // Deleting all the user data from Firebase Firestore
+
+    public void deleteProfilePicture() {
+        profileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "deleteUserAccount - 1) Firebase Storage user profile picture successfully deleted!");
+                // 2) Deleting all the user data from Firebase Firestore
+                deleteFirestoreDataAndAuthentication();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.d(TAG, "deleteUserAccount - 1) Firebase Storage user profile picture could not be deleted! User account won't be deleted!");
+            }
+        });
+    }
+
+
+    public void deleteFirestoreDataAndAuthentication() {
+        // Delete all user data from Firebase Firestore
         fStore.collection("users").document(userId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-
-                // Finally, deleting the user from Firebase Authentication
+                Log.d(TAG, "deleteUserAccount - 2) Firebase Firestore user data successfully deleted!");
+                // 3) Deleting the user from Firebase Authentication
                 deleteUserFromFirebaseAuthentication();
 
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "Firebase Firestore user document could not be fetched!");
+                Log.d(TAG, "deleteUserAccount - 2) Firebase Firestore user document could not be fetched! User account won't be deleted!");
             }
         });
     }
 
+
     private void deleteUserFromFirebaseAuthentication() {
+        // Delete user from Firebase Authentication
         FirebaseUser user = fAuth.getCurrentUser();
         if (user != null) {
             user.delete()
@@ -205,35 +240,17 @@ public class ProfileActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
+                                Log.d(TAG, "deleteUserAccount - 3) Firebase Authentication for current user successfully deleted!");
                                 Toast.makeText(ProfileActivity.this, "Account deleted!", Toast.LENGTH_SHORT).show();
                                 // Sending the user to the login screen
                                 startActivity(new Intent(ProfileActivity.this, HomeScreenActivity.class));
                                 finish();
+                            } else {
+                                Log.d(TAG, "deleteUserAccount - 3) Firebase Authentication for current user could not be deleted!");
                             }
                         }
                     });
         }
     }
 
-    private void deleteProfilePicture() {
-        profileRef = storageReference.child(userImagePath);
-        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-
-                profileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Firebase Storage user profile picture successfully deleted!");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Log.d(TAG, "Firebase Storage user profile picture could not be fetched!");
-                    }
-                });
-
-            }
-        });
-    }
 }

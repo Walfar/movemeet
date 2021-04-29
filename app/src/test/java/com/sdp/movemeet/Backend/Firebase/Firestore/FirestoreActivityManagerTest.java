@@ -374,12 +374,12 @@ public class FirestoreActivityManagerTest {
         });
     }
 
-    @Test
-    public void addReturnsCorrectTask() {
-        Task<Void> result = fam.add(fakeActivity, "doc");
-        assertEquals(fakeActivity.getDocumentPath(), "doc");
-        assertEquals(fakeAddTask, result);
-    }
+//    @Test
+//    public void addReturnsCorrectTask() {
+//        Task<Void> result = fam.add(fakeActivity, "doc");
+//        assertEquals(fakeActivity.getDocumentPath(), "doc");
+//        assertEquals(fakeAddTask, result);
+//    }
 
     @Test
     public void deleteThrowsIllegalArgumentExceptionOnNullOrEmptyPath() {

@@ -58,17 +58,17 @@ public class ChatActivity extends AppCompatActivity {
 
     private static final String LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif";
 
-    private LinearLayoutManager mLinearLayoutManager;
+    private LinearLayoutManager linearLayoutManager;
 
     // Firebase instance variables
     private FirebaseAuth fAuth;
     private FirebaseUser user;
-    private FirebaseDatabase mDatabase;
+    private FirebaseDatabase database;
     private FirebaseFirestore fStore;
     private StorageReference storageReference;
     private DatabaseReference chatRef;
     private DatabaseReference chatRoom;
-    private FirebaseRecyclerAdapter<Message, MessageViewHolder> mFirebaseAdapter;
+    private FirebaseRecyclerAdapter<Message, MessageViewHolder> firebaseAdapter;
 
     String userId;
     String fullNameString;
@@ -99,8 +99,8 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         // Initializing Firebase Realtime Database
-        mDatabase = FirebaseDatabase.getInstance();
-        chatRef = mDatabase.getReference().child(CHATS_CHILD); // "chats" node reference in Firebase Realtime Database
+        database = FirebaseDatabase.getInstance();
+        chatRef = database.getReference().child(CHATS_CHILD); // "chats" node reference in Firebase Realtime Database
 
         messageInput = findViewById(R.id.message_input_text);
         chatLoader = findViewById(R.id.chat_loader);
@@ -164,20 +164,22 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void addExistingMessagesAndListenForNewMessages() {
-        mFirebaseAdapter = new MessageAdapter(chatRoom, userId, ChatActivity.this);
+        // Use the MessageAdapter class to create the overall view of the chat room
+        firebaseAdapter = new MessageAdapter(chatRoom, userId, ChatActivity.this);
 
-        mLinearLayoutManager = new LinearLayoutManager(this);
-        mLinearLayoutManager.setStackFromEnd(true);
-        messageRecyclerView.setLayoutManager(mLinearLayoutManager);
-        messageRecyclerView.setAdapter(mFirebaseAdapter);
+        linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setStackFromEnd(true);
+        messageRecyclerView.setLayoutManager(linearLayoutManager);
+        messageRecyclerView.setAdapter(firebaseAdapter);
 
         // Scrolling down when a new message arrives from the database
-        mFirebaseAdapter.registerAdapterDataObserver(
-                new MyScrollToBottomObserver(messageRecyclerView, mFirebaseAdapter, mLinearLayoutManager)
+        firebaseAdapter.registerAdapterDataObserver(
+                new MyScrollToBottomObserver(messageRecyclerView, firebaseAdapter, linearLayoutManager)
         );
     }
 
     private void settingUpChatRoom(Intent data) {
+        // Create a new chat room for the sport activity in case it deosn't yet exist
         receivedActivityChatId = data.getStringExtra("ACTIVITY_CHAT_ID");
         receivedActivityTitle = data.getStringExtra("ACTIVITY_TITLE");
         if (receivedActivityChatId != null) {
@@ -194,7 +196,8 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void countMessagesInChatRoom() {
-        // Counting the number of messages (children) in the current chatRoom
+        // Count the number of messages (children) in the current chatRoom. In case the chat room
+        // doesn't contain any message a welcome message is displayed
         chatRoom.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -280,7 +283,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         // Stop listening for updates from Firebase Realtime Database
-        mFirebaseAdapter.stopListening();
+        firebaseAdapter.stopListening();
         super.onPause();
     }
 
@@ -288,7 +291,7 @@ public class ChatActivity extends AppCompatActivity {
     public void onResume() {
         // Start listening for updates from Firebase Realtime Database
         super.onResume();
-        mFirebaseAdapter.startListening();
+        firebaseAdapter.startListening();
     }
 
     public void sendMessage(View view) {
@@ -340,7 +343,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void putImageInStorage(StorageReference storageReference, Uri uri, final String key) {
-        // Uploading the image to Cloud Storage
+        // Upload the image to Firebase Storage
         storageReference.putFile(uri)
                 .addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -366,6 +369,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     public void handleRegisterUser() {
+        // Retrieve user data (full name, email and phone number) from Firebase Firestore
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         if (fAuth.getCurrentUser() != null) {

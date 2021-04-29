@@ -167,6 +167,7 @@ public class MainMapFragmentTest {
                 0,
                 0,
                 "desc",
+                "documentPath",
                 new Date(),
                 10,
                 Sport.Running,
@@ -231,7 +232,7 @@ public class MainMapFragmentTest {
 
     private int setSportIcon(Sport sport, @NotNull MainMapFragment mapFragment) {
         Activity activity = new Activity("activity id", "organizer id", "title", 2, new ArrayList<>(), 0, 0,
-                "description", new Date(), 1, sport,"here", new Date());
+                "description", "documentPath", new Date(), 1, sport,"here", new Date());
         return mapFragment.chooseIcon(activity);
     }
 

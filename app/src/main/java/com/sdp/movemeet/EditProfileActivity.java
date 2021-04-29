@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -24,11 +23,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
-import com.squareup.picasso.Picasso;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -112,7 +108,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
                 String imagePath = "users/" + userId + "/profile.jpg";
                 FirebaseInteraction.uploadImageToFirebase(storageReference, imagePath, imageUri, profileImage, progressBar);
-                //uploadImageToFirebase(imageUri);
             }
         }
     }

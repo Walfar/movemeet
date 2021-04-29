@@ -18,6 +18,9 @@ import com.sdp.movemeet.R;
 
 import java.text.SimpleDateFormat;
 
+/**
+ * Objects of this class embed a message in an adapted view.
+ */
 public class MessageViewHolder extends RecyclerView.ViewHolder {
 
     private static final String TAG = "MessageViewHolder";
@@ -27,6 +30,11 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     TextView messengerTextView;
     TextView messageTimeTextView;
 
+    /**
+     * Reference the message data in UI elements (TextViews and ImageView)
+     *
+     * @param v View of the message
+     */
     public MessageViewHolder(View v) {
         super(v);
         messageTextView = itemView.findViewById(R.id.message_text);
@@ -35,6 +43,12 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         messageTimeTextView = itemView.findViewById(R.id.message_time);
     }
 
+    /**
+     * Populate the different message views composing the {@link MessageViewHolder} with data got
+     * from the Message object.
+     *
+     * @param message Message object containing the message data
+     */
     public void bindMessage(Message message) {
 
         if (message.getMessageUser() != null) {
@@ -46,7 +60,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         if (message.getMessageText() != null) {
             messageTextView.setText(message.getMessageText());
             messageTextView.setVisibility(TextView.VISIBLE);
-        // Handling the image message
+            // Handling the image message
         } else if (message.getImageUrl() != null) {
             handlingImageMessage(message);
 
@@ -60,6 +74,12 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         messageTimeTextView.setVisibility(TextView.VISIBLE);
     }
 
+    /**
+     * Download image message to be displayed in the {@link MessageViewHolder} from Firebase Storage
+     *
+     * @param message Message object containing the message data (in this case the message data of
+     *                interest is the URL of the image)
+     */
     private void handlingImageMessage(Message message) {
         String imageUrl = message.getImageUrl();
         if (imageUrl.startsWith("gs://")) {
