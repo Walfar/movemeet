@@ -15,17 +15,15 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Activity.ActivityTest;
 import com.sdp.movemeet.Backend.BackendManager;
+import com.sdp.movemeet.Backend.Serialization.BackendSerializer;
 import com.sdp.movemeet.Backend.Serialization.ActivitySerializer;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 
 import java.util.concurrent.Executor;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.contains;
@@ -35,7 +33,7 @@ import static org.mockito.Mockito.when;
 public class FirestoreActivityManagerTest {
 
     private BackendManager<Activity> fam;
-    private ActivitySerializer serializer;
+    private BackendSerializer<Activity> serializer;
     private Activity fakeActivity;
 
     // Dependencies that need to be mocked
