@@ -34,7 +34,7 @@ import java.util.Map;
  * This class allows various types of interaction with Firestore services (Firestore, Storage and
  * Authentication) to both save and fetch information about the user. It also allows to store and
  * retrieve images (user profile picture and activity header picture) by interacting with Firebase
- * Storage.
+ * Storage and avoid code duplicates through diverse Activity.
  */
 public class FirebaseInteraction {
 
