@@ -16,40 +16,40 @@ import com.sdp.movemeet.chat.ChatActivity;
 public class Navigation extends AppCompatActivity {
 
     public static void startActivity(View view) {
-        Context mContext = view.getContext();
-        Intent intent = new Intent(mContext, ActivityDescriptionActivity.class);
-        mContext.startActivity(intent);
+        Context context = view.getContext();
+        Intent intent = new Intent(context, ActivityDescriptionActivity.class);
+        context.startActivity(intent);
     }
 
     public static void goToActivityUpload(View view) {
-        Context mContext = view.getContext();
-        Intent intent = new Intent(mContext, UploadActivityActivity.class);
-        mContext.startActivity(intent);
+        Context context = view.getContext();
+        Intent intent = new Intent(context, UploadActivityActivity.class);
+        context.startActivity(intent);
     }
 
     public static void goToUserProfileActivity(View view) {
-        Context mContext = view.getContext();
-        Intent intent = new Intent(mContext, ProfileActivity.class);
-        mContext.startActivity(intent);
+        Context context = view.getContext();
+        Intent intent = new Intent(context, ProfileActivity.class);
+        context.startActivity(intent);
     }
 
     public static void goToHome(View view) {
-        Context mContext = view.getContext();
-        Intent intent = new Intent(mContext, MainActivity.class);
-        mContext.startActivity(intent);
+        Context context = view.getContext();
+        Intent intent = new Intent(context, MainActivity.class);
+        context.startActivity(intent);
     }
 
     public static void goToChat(View view) {
-        Context mContext = view.getContext();
-        Intent intent = new Intent(mContext, ChatActivity.class);
+        Context context = view.getContext();
+        Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra("ACTIVITY_CHAT_ID", "general_chat");
-        mContext.startActivity(intent);
+        context.startActivity(intent);
     }
 
     public static void goToListOfActivities(View view) {
-        Context mContext = view.getContext();
-        Intent intent = new Intent(mContext, ListActivity.class);
-        mContext.startActivity(intent);
+        Context context = view.getContext();
+        Intent intent = new Intent(context, ListActivity.class);
+        context.startActivity(intent);
     }
 
 }
