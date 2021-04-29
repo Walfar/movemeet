@@ -1,12 +1,5 @@
 package com.sdp.movemeet.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +12,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -122,18 +122,18 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
 
-    public void createDrawer(){
-        drawerLayout=findViewById(R.id.drawer_layout);
-        navigationView=findViewById(R.id.nav_view);
-        textView=findViewById(R.id.textView);
-        toolbar=findViewById(R.id.toolbar);
+    public void createDrawer() {
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        textView = findViewById(R.id.textView);
+        toolbar = findViewById(R.id.toolbar);
 
         navigationView.bringToFront();
-        ActionBarDrawerToggle toggle=new
-                ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new
+                ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
 
-        View hView =  navigationView.inflateHeaderView(R.layout.header);
+        View hView = navigationView.inflateHeaderView(R.layout.header);
 
         fullName = hView.findViewById(R.id.text_view_profile_name);
         phone = hView.findViewById(R.id.text_view_profile_phone);
@@ -150,7 +150,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 Navigation.goToHome(this.navigationView);
                 break;
             case R.id.nav_edit_profile:
-                Navigation.goToUserProfileActivity(this.navigationView);
                 break;
             case R.id.nav_add_activity:
                 Navigation.goToActivityUpload(this.navigationView);
@@ -159,12 +158,17 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
                 break;
             case R.id.nav_start_activity:
+                Navigation.startActivity(this.navigationView);
                 break;
             case R.id.nav_chat:
                 Navigation.goToChat(this.navigationView);
                 break;
+            case R.id.nav_list_activities:
+                Navigation.goToListOfActivities(this.navigationView);
+                break;
         }
-        drawerLayout.closeDrawer(GravityCompat.START); return true;
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     public void handleRegisterUser() {
@@ -215,7 +219,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (act != null) activityTitle.setText(act.getTitle());
     }
 
-    private void createParticipantNumberView(){
+    private void createParticipantNumberView() {
         // number of participants from the activity
         TextView numberParticipantsView = (TextView) findViewById(R.id.activity_number_description);
         if (act != null) {
@@ -223,13 +227,13 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
-    private void createDescriptionView(){
+    private void createDescriptionView() {
         // description from the activity
         TextView descriptionView = (TextView) findViewById(R.id.activity_description_description);
         if (act != null) descriptionView.setText(act.getDescription());
     }
 
-    private void createDateView(){
+    private void createDateView() {
         // date from the activity
         TextView dateView = (TextView) findViewById(R.id.activity_date_description);
         if (act != null) {
@@ -240,28 +244,28 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
-    private void createSportView(){
+    private void createSportView() {
         TextView sportView = (TextView) findViewById(R.id.activity_sport_description);
-        if(act != null){
+        if (act != null) {
             sportView.setText(act.getSport().toString());
         }
     }
 
-    private void createDurationView(){
+    private void createDurationView() {
         TextView durationView = (TextView) findViewById(R.id.activity_duration_description);
-        if(act != null){
+        if (act != null) {
             durationView.setText(String.valueOf((int) act.getDuration()));
         }
     }
 
-    private void createOrganizerView(){
+    private void createOrganizerView() {
         organizerView = (TextView) findViewById(R.id.activity_organisator_description);
-        if(act != null){
+        if (act != null) {
             organizerView.setText(act.getOrganizerId());
         }
     }
 
-    private void createAddressView(){
+    private void createAddressView() {
         // address from the activity
         TextView addressView = (TextView) findViewById(R.id.activity_address_description);
         if (act != null) {
@@ -274,10 +278,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (fAuth.getCurrentUser() != null) {
             String userId;
             userId = fAuth.getCurrentUser().getUid();
-            try{
+            try {
                 act.addParticipantId(userId);
-                createParticipantNumberView();}
-            catch(Exception e){
+                createParticipantNumberView();
+            } catch (Exception e) {
                 Toast.makeText(ActivityDescriptionActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
@@ -332,7 +336,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         storageReference = FirebaseStorage.getInstance().getReference();
         if (act != null) {
-            imagePath = "activities/"+act.getActivityId()+"/activityImage.jpg";
+            imagePath = "activities/" + act.getActivityId() + "/activityImage.jpg";
             StorageReference imageRef = storageReference.child(imagePath);
             FirebaseInteraction.getImageFromFirebase(imageRef, activityImage, progressBar);
         }
@@ -351,7 +355,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1000) {
-            if(resultCode == android.app.Activity.RESULT_OK) {
+            if (resultCode == android.app.Activity.RESULT_OK) {
                 Uri imageUri = data.getData();
                 progressBar.setVisibility(View.VISIBLE);
                 FirebaseInteraction.uploadImageToFirebase(storageReference, imagePath, imageUri, activityImage, progressBar);

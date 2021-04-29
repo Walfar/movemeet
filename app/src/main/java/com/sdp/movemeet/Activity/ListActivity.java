@@ -16,7 +16,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
-import com.sdp.movemeet.MainActivity;
 import com.sdp.movemeet.Navigation.Navigation;
 import com.sdp.movemeet.R;
 
@@ -82,6 +81,9 @@ public class ListActivity extends AppCompatActivity {
                 break;
             case R.id.nav_chat:
                 Navigation.goToChat(this.navigationView);
+                break;
+            case R.id.nav_list_activities:
+                Navigation.goToListOfActivities(this.navigationView);
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);

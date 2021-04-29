@@ -7,12 +7,13 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.sdp.movemeet.Activity.ActivityDescriptionActivity;
+import com.sdp.movemeet.Activity.ListActivity;
 import com.sdp.movemeet.MainActivity;
 import com.sdp.movemeet.ProfileActivity;
 import com.sdp.movemeet.UploadActivityActivity;
 import com.sdp.movemeet.chat.ChatActivity;
 
-public class Navigation extends AppCompatActivity{
+public class Navigation extends AppCompatActivity {
 
     public static void startActivity(View view) {
         Context mContext = view.getContext();
@@ -42,6 +43,12 @@ public class Navigation extends AppCompatActivity{
         Context mContext = view.getContext();
         Intent intent = new Intent(mContext, ChatActivity.class);
         intent.putExtra("ACTIVITY_CHAT_ID", "general_chat");
+        mContext.startActivity(intent);
+    }
+
+    public static void goToListOfActivities(View view) {
+        Context mContext = view.getContext();
+        Intent intent = new Intent(mContext, ListActivity.class);
         mContext.startActivity(intent);
     }
 
