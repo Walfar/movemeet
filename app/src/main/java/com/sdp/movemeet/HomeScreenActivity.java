@@ -54,7 +54,6 @@ public class HomeScreenActivity extends AppCompatActivity {
      * @param v view for the no account button
      */
     public void noAccount(View v) {
-        startActivity(new Intent(this, MainUnregisterActivity.class));
         if (isUserLogged()) startActivity(new Intent(this, MainActivity.class));
         else startActivity(new Intent(this, MainUnregisterActivity.class));
     }
