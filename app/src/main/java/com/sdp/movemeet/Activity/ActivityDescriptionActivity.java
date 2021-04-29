@@ -78,6 +78,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
 
         uri = intent.getData();
+        if(uri != null){
+            loadActivityHeaderPicture();
+        }
 
         createTitleView();
         createParticipantNumberView();
@@ -87,7 +90,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         createSportView();
         createDurationView();
         createOrganizerView();
-        loadActivityHeaderPicture();
 
         createDrawer();
         handleRegisterUser();
