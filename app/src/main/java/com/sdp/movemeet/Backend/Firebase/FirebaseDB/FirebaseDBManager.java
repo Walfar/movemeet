@@ -8,7 +8,13 @@ import com.sdp.movemeet.Backend.Firebase.FirebaseObject;
 import com.sdp.movemeet.Backend.Serialization.BackendSerializer;
 
 import java.util.Map;
+import java.util.concurrent.Future;
 
+/**
+ * A class capable of interacting with the Firebase Realtime Database to handle storage
+ * operations on objects of type T
+ * @param <T> The type of object handled by this FirebaseDBManager
+ */
 abstract class FirebaseDBManager<T extends FirebaseObject> implements BackendManager<T> {
 
     private final static String PATH_SEPARATOR = "/";
@@ -16,6 +22,12 @@ abstract class FirebaseDBManager<T extends FirebaseObject> implements BackendMan
     private final BackendSerializer<T> serializer;
     private final FirebaseDatabase db;
 
+    /**
+     * Creates a new FirebaseDBManager.
+     * @param db the instance of FirebaseDatabase to interact with.
+     * @param serializer a BackendSerializer capable of de(serializing) objects of type T
+     * @param <T> the type of object handled by this FirebaseDBManager
+     */
     public <T> FirebaseDBManager(FirebaseDatabase db, BackendSerializer serializer) {
         if (db == null || serializer == null) throw new IllegalArgumentException();
 

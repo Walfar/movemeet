@@ -10,12 +10,23 @@ import com.sdp.movemeet.Backend.Serialization.BackendSerializer;
 
 import java.util.Map;
 
+/**
+ * A class capable of interacting with a FirebaseFirestore backend to perform storage operations
+ * for objects of type T
+ * @param <T> The type of object handled by this FirestoreManager
+ */
 abstract class FirestoreManager<T extends FirebaseObject> implements BackendManager<T> {
 
     private final BackendSerializer<T> serializer;
     private final FirebaseFirestore db;
     private final String collection;
 
+    /**
+     * Creates a new FirestoreManager
+     * @param db the instance of FirebaseFirestore to interact with.
+     * @param collection the Firestore collection in which to perform operations
+     * @param serializer a BackendSerializer capable of (de)serializing objects of type T
+     */
     public FirestoreManager(FirebaseFirestore db, String collection, BackendSerializer<T> serializer) {
         if (db == null || collection == null || serializer == null) throw new IllegalArgumentException();
 
@@ -24,9 +35,17 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendMana
         this.collection = collection;
     }
 
+    /**
+     * Adds an object to the FirebaseFirestore backend. Because of the structure of Firestore,
+     * the path parameter is ignored; a new path is automatically generated, or the old path is used
+     * if the instance has already been uploaded to the backend.
+     * @param object the instance of T to add.
+     * @param path the path of the instance in the backend.
+     * @return a Task<Void>, the success of which indicates the success of the operation.
+     */
     @Override
     public Task<Void> add(T object, String path) {
-        if (object == null || path == null || path.isEmpty()) throw new IllegalArgumentException();
+        if (object == null) throw new IllegalArgumentException();
 
         String documentPath = db.collection(collection).document().getPath();
         object.setDocumentPath(documentPath);

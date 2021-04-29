@@ -10,24 +10,41 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A BackendSerializer capable of (de)serializing Activities
+ */
 public class ActivitySerializer implements BackendSerializer<Activity> {
 
+    // The key used to access the activityId attribute of a serialized Activity
     public static final String ACTIVITY_KEY = "activityId";
+    // The key used to access the organizerId attribute of a serialized Activity
     public static final String ORGANIZER_KEY = "organizerId";
+    // The key used to access the title attribute of a serialized Activity
     public static final String TITLE_KEY = "title";
 
+    // The key used to access the numberParticipant attribute of a serialized Activity
     public static final String NPART_KEY = "numberParticipant";
+    // The key used to access the participantsId attribute of a serialized Activity
     public static final String PARTICIPANTS_KEY = "participantsId";
+    // The key used to access the longitude attribute of a serialized Activity
     public static final String LONGITUDE_KEY = "longitude";
+    // The key used to access the latitude attribute of a serialized Activity
     public static final String LATITUDE_KEY = "latitude";
 
+    // The key used to access the description attribute of a serialized Activity
     public static final String DESC_KEY = "description";
+    // The key used to access the date attribute of a serialized Activity
     public static final String DATE_KEY = "date";
+    // The key used to access the duration attribute of a serialized Activity
     public static final String DURATION_KEY = "duration";
+    // The key used to access the sport attribute of a serialized Activity
     public static final String SPORT_KEY = "sport";
+    // The key used to access the address attribute of a serialized Activity
     public static final String ADDRESS_KEY = "address";
+    // The key used to access the createdAt attribute of a serialized Activity
     public static final String CREATION_KEY = "createdAt";
 
+    // The key used to access the documentPath attribute of a serialized Activity
     public static final String DOCUMENT_PATH_KEY = "documentPath";
 
     public Activity deserialize(Map<String, Object> data) {
