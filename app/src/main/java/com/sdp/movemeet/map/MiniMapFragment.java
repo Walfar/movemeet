@@ -40,8 +40,7 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
 
     private LocationFetcher locationFetcher;
 
-    //Boolean to determine if the onMapReady method is called for the first time
-    private boolean first_callback;
+    private GoogleMap googleMap;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -50,22 +49,39 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(supportMapFragment.getActivity());
 
-        first_callback = true;
-
-        locationFetcher = new LocationFetcher(supportMapFragment, this);
+        LocationCallback locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                currentLocation = locationResult.getLastLocation();
+                if (googleMap != null) {
+                    locationFetcher.stopLocationUpdates();
+                    zoomOnAddressLocation();
+                }
+            }
+        };
+        locationFetcher = new LocationFetcher(supportMapFragment, locationCallback);
         locationFetcher.startLocationUpdates();
+
+        supportMapFragment.getMapAsync(this);
 
         return view;
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        if (first_callback) {
-            googleMap.setOnMapClickListener(this::onMapClick);
-            currentLocation = locationFetcher.getCurrentLocation();
-            first_callback = false;
+
+        this.googleMap = googleMap;
+        googleMap.setOnMapClickListener(this::onMapClick);
+
+        if (ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            //This is necessary, because onMapReady won't be called if the permissions are not granted, and the activities will not display
+            currentLocation = locationFetcher.getDefaultLocation();
+            zoomOnAddressLocation();
         }
-        //Zooms on location set by user, or its own position if none was found
+    }
+
+    private void zoomOnAddressLocation() {
         LatLng location = ((UploadActivityActivity) getActivity()).getAddressLocation();
         if (location == null) location = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, ZOOM_VALUE));
@@ -74,7 +90,7 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
     @Override
     public void onResume() {
         super.onResume();
-        if (!first_callback) locationFetcher.startLocationUpdates();
+        locationFetcher.startLocationUpdates();
     }
 
     @Override
@@ -86,6 +102,6 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
     @Override
     public void onMapClick(LatLng latLng) {
         ((UploadActivityActivity) getActivity()).retrieveAddress(latLng);
-        supportMapFragment.getMapAsync(this);
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_VALUE));
     }
 }

@@ -1,8 +1,10 @@
 package com.sdp.movemeet.utility;
 
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.google.android.gms.common.util.VisibleForTesting;
 import com.google.android.gms.dynamic.SupportFragmentWrapper;
@@ -153,6 +155,7 @@ public class ActivitiesUpdater {
     private void addListeners(Query q, boolean updateMap) {
         //Log.d(TAG, "cache allowed is" + cacheAllowed);
         q.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (DocumentSnapshot docSnap : queryDocumentSnapshots.getDocuments()) {
@@ -161,7 +164,7 @@ public class ActivitiesUpdater {
                 }
                 //if (cacheAllowed) cache.saveActivitiesInCache(activities);
                 if (updateMap && mapFragment.isAdded())
-                    ((SupportMapFragment) mapFragment.getChildFragmentManager().findFragmentById(R.id.google_map)).getMapAsync(mapFragment);
+                    mapFragment.displayNearbyMarkers();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

@@ -104,14 +104,16 @@ public class LocationFetcherTest {
         locationFetcher.startLocationUpdates();
         Thread.sleep(2000);
         locationFetcher.stopLocationUpdates();
-        locationFetcher.currentLocation = currentLocation;
-        assertEquals(fakeLocation, locationFetcher.getCurrentLocation());
+        assertEquals(fakeLocation, currentLocation);
     }
 
 
     @Test
-    public void currentLocationReturnsDefaultWhenNull() {
-        locationFetcher.currentLocation = null;
-        assertEquals(locationFetcher.getDefaultLocation(), locationFetcher.getCurrentLocation());
+    public void defaultLocationIsCorrect() {
+        Location defaultLocation = new Location("default location");
+        defaultLocation.setLongitude(0);
+        defaultLocation.setLatitude(0);
+        assertEquals(locationFetcher.getDefaultLocation().getLatitude(), defaultLocation.getLatitude(), 0);
+        assertEquals(locationFetcher.getDefaultLocation().getLongitude(), defaultLocation.getLongitude(), 0);
     }
 }

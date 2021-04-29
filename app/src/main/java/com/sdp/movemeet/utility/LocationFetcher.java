@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
@@ -17,8 +16,8 @@ import com.google.android.gms.location.LocationRequest;
 
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.sdp.movemeet.map.MainMapFragment;
 
 /**
  * Utility class used to fetch and update the user's location
@@ -26,10 +25,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 public class LocationFetcher {
 
     public static int REQUEST_CODE = 101;
-
-    private Location defaultLocation;
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    public Location currentLocation;
 
     //Values for location requests intervals
     private static final int LOCATION_REQUEST_INTERVAL = 10_000;
@@ -45,32 +40,6 @@ public class LocationFetcher {
     private boolean updatingLocation;
 
     /**
-     * Constructor for the Location fetcher, using a default LocationCallback, and synchronizing the map
-     * @param supportMapFragment supportMapFragment used to update the map and set the fusedLocationProviderClient used to request the updates on location
-     * @param callback map to synchronize
-     */
-    public LocationFetcher(SupportMapFragment supportMapFragment, OnMapReadyCallback callback) {
-        this.fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(supportMapFragment.getActivity());
-        this.supportMapFragment = supportMapFragment;
-        this.updatingLocation = false;
-
-        Location location = new Location("default location");
-        location.setLongitude(0);
-        location.setLatitude(0);
-        this.defaultLocation = location;
-
-        //By default, we use this callback: updating the current location, and synchronizing the map
-        this.locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(@NonNull LocationResult locationResult) {
-                //Whenever we get an update from the fusedLocationProviderClient, we update the current location
-                currentLocation = locationResult.getLastLocation();
-                supportMapFragment.getMapAsync(callback);
-            }
-        };
-    }
-
-    /**
      * Constructor for the Location fetcher, using a personalized LocationCallback
      * @param supportMapFragment supportMapFragment used to update the map set the fusedLocationProviderClient used to request the updates on location
      * @param locationCallback personalized LocationCallback
@@ -80,11 +49,6 @@ public class LocationFetcher {
         this.supportMapFragment = supportMapFragment;
         this.locationCallback = locationCallback;
         this.updatingLocation = false;
-
-        Location location = new Location("default location");
-        location.setLongitude(0);
-        location.setLatitude(0);
-        this.defaultLocation = location;
     }
 
     /**
@@ -120,19 +84,13 @@ public class LocationFetcher {
     }
 
     /**
-     * Gets the current location, fetched and updated from the fusedLocationProviderClient
-     * @return the current location
-     */
-    public Location getCurrentLocation() {
-        if (currentLocation == null) return defaultLocation;
-        else return currentLocation;
-    }
-
-    /**
-     * Gets the default location, i.e (0, 0)
+     * Getter for the default location, i.e (0, 0)
      * @return the default location
      */
     public Location getDefaultLocation() {
+        Location defaultLocation = new Location("default location");
+        defaultLocation.setLongitude(0);
+        defaultLocation.setLatitude(0);
         return defaultLocation;
     }
 

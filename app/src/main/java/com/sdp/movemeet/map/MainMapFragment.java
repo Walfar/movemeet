@@ -69,16 +69,17 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     private ActivitiesUpdater updater;
     private LocationFetcher locationFetcher;
 
-
-    //Boolean to determine if the onMapReady method is called for the first time
-    private boolean first_callback;
-
     private static final String TAG = "Maps TAG";
 
     //Zoom value to animate camera on user at launch of the map
     public static final float ZOOM_VALUE = 15.0f;
 
+    private boolean first_callback;
+
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        Log.d(TAG, "creating view");
 
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
@@ -92,14 +93,27 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
         user = fAuth.getCurrentUser();
 
-        locationFetcher = new LocationFetcher(supportMapFragment, this);
+        LocationCallback locationCallback = new LocationCallback() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                //Whenever we get an update from the fusedLocationProviderClient, we update the current location
+                Log.d(TAG, "inside callback");
+                currentLocation = locationResult.getLastLocation();
+                if (googleMap != null) {
+                    displayUserMarker();
+                    if (first_callback) {
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), ZOOM_VALUE));
+                        displayNearbyMarkers();
+                        first_callback = false;
+                    }
+                }
+            }
+        };
+        locationFetcher = new LocationFetcher(supportMapFragment, locationCallback);
         locationFetcher.startLocationUpdates();
 
-        if (ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            //This is necessary, because onMapReady won't be called if the permissions are not granted, and the activities will not display
-            supportMapFragment.getMapAsync(this);
-        }
+        supportMapFragment.getMapAsync(this);
 
         return view;
     }
@@ -107,34 +121,30 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        Log.d(TAG, "map is ready");
+        this.googleMap = googleMap;
 
-        //If no location has been found, use a default location
-        currentLocation = locationFetcher.getCurrentLocation();
+        googleMap.setOnMarkerClickListener(this);
+        googleMap.setOnInfoWindowClickListener(this);
+        googleMap.setOnMapClickListener(this::onMapClick);
+
+        if (ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            //This is necessary, because onMapReady won't be called if the permissions are not granted, and the activities will not display
+            currentLocation = locationFetcher.getDefaultLocation();
+            displayNearbyMarkers();
+        }
+    }
+
+    public void displayUserMarker() {
 
         //Set marker for the user's position on map
-        LatLng userLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions().position(userLatLng).title("I am here !");
+        MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())).title("I am here !");
 
         //We avoid duplicating the position marker when updating the user's location
         if (positionMarker != null) positionMarker.remove();
         positionMarker = googleMap.addMarker(markerOptions);
         positionMarker.setTag("my position");
-
-        //Those calculations are only needed when this method is called for the first time
-       if (first_callback) {
-
-            this.googleMap = googleMap;
-
-            googleMap.setOnMarkerClickListener(this);
-            googleMap.setOnInfoWindowClickListener(this);
-            googleMap.setOnMapClickListener(this::onMapClick);
-
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, ZOOM_VALUE));
-
-            getNearbyMarkers();
-
-            first_callback= false;
-        }
     }
 
     @Override
@@ -174,7 +184,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     public void onResume() {
         super.onResume();
         //To avoid starting the updates two times in a row, we make sure this isn't the first launch of the view
-        if (!first_callback) locationFetcher.startLocationUpdates();
+        locationFetcher.startLocationUpdates();
     }
 
     @Override
@@ -188,7 +198,9 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
      * Gets all the activity markers near the user, depending on the maximum distance set
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void getNearbyMarkers() {
+    public void displayNearbyMarkers() {
+        if (currentLocation == null) currentLocation = locationFetcher.getDefaultLocation();
+
         DistanceCalculator dc = new DistanceCalculator(currentLocation.getLatitude(), currentLocation.getLongitude());
 
         dc.setActivities(updater.getActivities());
@@ -196,7 +208,6 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         dc.sort();
         //For the moment, we get all activities as the distance calculator is not fully functional yet
         for (Activity act : dc.getTopActivities(updater.getActivities().size())) {
-            Log.d(TAG, "showing activity");
             //We display all activities on the corresponding location and with the icon associated to the sport
             LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
 
@@ -279,7 +290,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         Bundle arg = new Bundle();
         arg.putParcelable("position", marker.getPosition());
         intent.putExtra("bundle", arg);
-        //remove marker
+        //We terminate the activity when uploading, to make sure the map is always updated and the markers are only displayed once (no duplicates)
         startActivity(intent);
     }
 }
