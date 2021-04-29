@@ -13,7 +13,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.HomeScreenActivity;
-import com.sdp.movemeet.MainUnregister;
+import com.sdp.movemeet.MainUnregisterActivity;
 import com.sdp.movemeet.LoginActivity;
 import com.sdp.movemeet.MainActivity;
 import com.sdp.movemeet.R;
@@ -61,7 +61,7 @@ public class HomeScreenActivityUnloggedTest {
     @Test
     public void noAccountHasCorrectIntentWhenUnlogged() {
         onView(withId(R.id.noAccountButton)).perform(click());
-        intended(hasComponent(MainUnregister.class.getName()));
+        intended(hasComponent(MainUnregisterActivity.class.getName()));
     }
 }
 

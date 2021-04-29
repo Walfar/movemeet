@@ -29,11 +29,11 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
 import com.sdp.movemeet.LoginActivity;
 import com.sdp.movemeet.Navigation.Navigation;
 import com.sdp.movemeet.R;
-import com.sdp.movemeet.Sport;
 import com.sdp.movemeet.chat.ChatActivity;
 
 import java.text.DateFormat;
@@ -42,19 +42,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class ActivityDescriptionActivity extends AppCompatActivity {
-
-    public final static String EXTRA_ACTIVITY_ID = "12345";
-    public final static String EXTRA_ORGANISATOR_ID = "1";
-    public final static String EXTRA_TITLE = "title";
-    public final static int EXTRA_NUMBER_PARTICIPANT = 2;
-    public final static ArrayList<String> EXTRA_PARTICIPANTS_ID = new ArrayList<String>();
-    public final static double EXTRA_LONGITUDE = 2.45;
-    public final static double EXTRA_LATITUDE = 3.697;
-    public final static String EXTRA_DESCRIPTION = "description";
-    public final static Date EXTRA_DATE = new Date(2021, 11, 10, 1, 10);
-    public final static double EXTRA_DURATION = 10.4;
-    public final static Sport EXTRA_SPORT = Sport.Running;
-    public final static String EXTRA_ADDRESS = "address";
 
     FirebaseAuth fAuth;
     private Activity act;
@@ -77,6 +64,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     ImageView activityImage;
     String imagePath;
     ProgressBar progressBar;
+    Uri uri;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +78,11 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             act = (Activity) intent.getSerializableExtra("activity");
         }
 
+        uri = intent.getData();
+        if(uri != null){
+            loadActivityHeaderPicture();
+        }
+
         createTitleView();
         createParticipantNumberView();
         createDescriptionView();
@@ -97,7 +91,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         createSportView();
         createDurationView();
         createOrganizerView();
-        loadActivityHeaderPicture();
 
         createDrawer();
         handleRegisterUser();
@@ -142,27 +135,32 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
-        navigationView.setCheckedItem(R.id.nav_start_activity);
+        navigationView.setCheckedItem(R.id.nav_add_activity);
     }
 
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
                 Navigation.goToHome(this.navigationView);
+                finish();
                 break;
             case R.id.nav_edit_profile:
                 Navigation.goToUserProfileActivity(this.navigationView);
+                finish();
                 break;
             case R.id.nav_add_activity:
                 Navigation.goToActivityUpload(this.navigationView);
+                finish();
                 break;
             case R.id.nav_logout:
                 FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
+                finish();
                 break;
             case R.id.nav_start_activity:
                 break;
             case R.id.nav_chat:
                 Navigation.goToChat(this.navigationView);
+                finish();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -170,7 +168,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
     public void handleRegisterUser() {
-        // Retrieve user data (full name, email and phone number) from Firebase Firestore
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         if (fAuth.getCurrentUser() != null) {
@@ -187,6 +184,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             finish();
         }
     }
+
 
     private void createTitleView() {
         // Title of the activity
@@ -208,8 +206,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (act != null) descriptionView.setText(act.getDescription());
     }
 
-    private void createDateView() {
-        // Date of the activity
+    private void createDateView(){
+        // date from the activity
         TextView dateView = (TextView) findViewById(R.id.activity_date_description);
         if (act != null) {
             String pattern = "MM/dd/yyyy HH:mm:ss";
@@ -228,10 +226,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
     private void createDurationView() {
-        // Duration of the activity
         TextView durationView = (TextView) findViewById(R.id.activity_duration_description);
         if (act != null) {
-            durationView.setText(String.valueOf((double) Math.round(act.getDuration() * 100) / 100));
+            durationView.setText(String.valueOf((int) act.getDuration()));
         }
     }
 
@@ -347,7 +344,18 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (act != null) {
             imagePath = "activities/" + act.getActivityId() + "/activityImage.jpg";
             StorageReference imageRef = storageReference.child(imagePath);
-            FirebaseInteraction.getImageFromFirebase(imageRef, activityImage, progressBar);
+            imageRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "Get image: SUCCESS");
+                        FirebaseInteraction.getImageFromFirebase(imageRef, activityImage, progressBar);
+                    } else {
+                        Log.d(TAG, "Activity have no image");
+                        activityImage.setImageAlpha(R.drawable.run_woman);
+                    }
+                }
+            });
         }
     }
 
@@ -372,21 +380,4 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             }
         }
     }
-
-    /*public void goToHome(View view){
-        Intent i = new Intent(ActivityDescriptionActivity.this, HomeScreenActivity.class);
-        i.putExtra(EXTRA_ACTIVITY_ID, "1");
-        i.putExtra(EXTRA_ORGANISATOR_ID, "1");
-        i.putExtra(EXTRA_ADDRESS, "1");
-        i.putExtra(String.valueOf(EXTRA_DURATION), 1.0);
-        i.putExtra(EXTRA_DESCRIPTION, "1");
-        i.putExtra(EXTRA_TITLE, "1");
-        i.putExtra(String.valueOf(EXTRA_DATE), "1");
-        i.putExtra(String.valueOf(EXTRA_LATITUDE), 1.0);
-        i.putExtra(String.valueOf(EXTRA_LONGITUDE), 1.0);
-        i.putExtra(String.valueOf(EXTRA_NUMBER_PARTICIPANT), 1.0);
-        i.putExtra(String.valueOf(EXTRA_SPORT), "1.0");
-
-        startActivity(i);
-    }*/
 }

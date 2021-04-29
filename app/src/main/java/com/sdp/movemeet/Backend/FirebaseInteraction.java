@@ -126,8 +126,11 @@ public class FirebaseInteraction {
             FirebaseAuth.getInstance().signOut();
             // Launching the LoginActivity
             Intent intent = new Intent(activity, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             Context mContext = activity.getApplicationContext();
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("EXIT", true);
             mContext.startActivity(intent);
             activity.finish();
         }

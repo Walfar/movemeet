@@ -3,106 +3,165 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".Activity.ActivityDescriptionActivity"
     tools:openDrawer="start">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFFF">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/menu"/>
+            app:navigationIcon="@drawable/menu" />
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="89dp">
+            android:layout_marginTop="60dp"
+            android:background="@android:color/white"
+            android:orientation="vertical">
 
-            <HorizontalScrollView
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:isScrollContainer="true"
-                android:scrollbars="horizontal">
+                android:scrollbars="vertical">
 
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:isScrollContainer="true"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/activity_image_description"
-                        android:onClick="changeActivityPicture"
-                        android:layout_width="150dp"
-                        android:layout_height="200dp"
-                        android:layout_gravity="center_horizontal"
-                        android:padding="20dp"
-                        android:src="@drawable/run_woman" />
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/activity_title_description"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center|center_horizontal"
                             android:fontFamily="@font/armata"
                             android:paddingStart="20dp"
-                            android:paddingTop="30dp"
                             android:paddingEnd="20dp"
-                            android:paddingBottom="20dp"
                             android:text="Title"
-                            android:textSize="30dp"
+                            android:textAlignment="center"
+                            android:textSize="30dp" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:height="100dp" />
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/activity_text4_description"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/armata"
+                                android:text="By " />
+
+                            <TextView
+                                android:id="@+id/activity_organisator_description"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/armata"
+                                android:text="Organisator" />
+                        </LinearLayout>
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/activity_image_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:layout_gravity="center_horizontal"
+                            android:onClick="changeActivityPicture"
+                            android:padding="10dp"
+                            android:src="@drawable/run_woman" />
 
                     </LinearLayout>
-
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
+
+                        <TextView
+                            android:id="@+id/activity_sport_description_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/armata"
+                            android:paddingTop="20dp"
+                            android:paddingBottom="5dp"
+                            android:text="What ?"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
 
                         <TextView
                             android:id="@+id/activity_sport_description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="10dp"
                             android:text="Sport" />
 
                         <TextView
-                            android:id="@+id/activity_text1_description"
+                            android:id="@+id/activity_text5_description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="10dp"
-                            android:text="at" />
+                            android:text=" with " />
+
 
                         <TextView
-                            android:id="@+id/activity_date_description"
+                            android:id="@+id/activity_number_description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="10dp"
-                            android:text="date" />
+                            android:text="Number participant" />
+
+                        <TextView
+                            android:id="@+id/activity_text6_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/armata"
+                            android:text=" participants " />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+
+                        <TextView
+                            android:id="@+id/activity_time_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/armata"
+                            android:paddingTop="20dp"
+                            android:paddingBottom="5dp"
+                            android:text="When ?"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -111,26 +170,30 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/activity_date_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/armata"
+                            android:text="date" />
+
+                        <TextView
                             android:id="@+id/activity_text2_description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="10dp"
-                            android:text="During" />
+                            android:text=" during " />
 
                         <TextView
                             android:id="@+id/activity_duration_description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="10dp"
                             android:text="Duration" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="10dp"
                             android:text="hours" />
 
                     </LinearLayout>
@@ -140,20 +203,28 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
+
                         <TextView
-                            android:id="@+id/activity_text3_description"
+                            android:id="@+id/activity_place_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="10dp"
-                            android:text="At" />
+                            android:paddingTop="20dp"
+                            android:paddingBottom="5dp"
+                            android:text="Where ?"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/activity_address_description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="10dp"
                             android:text="Address" />
 
                     </LinearLayout>
@@ -163,39 +234,16 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
+
                         <TextView
-                            android:id="@+id/activity_text4_description"
+                            android:id="@+id/activity_description_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="10dp"
-                            android:text="By" />
-
-                        <TextView
-                            android:id="@+id/activity_organisator_description"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/armata"
-                            android:padding="10dp"
-                            android:text="Organisator" />
-
-                        <TextView
-                            android:id="@+id/activity_text5_description"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/armata"
-                            android:padding="10dp"
-                            android:text="For" />
-
-
-                        <TextView
-                            android:id="@+id/activity_number_description"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/armata"
-                            android:padding="10dp"
-                            android:text="Number participant" />
-
+                            android:paddingTop="20dp"
+                            android:paddingBottom="5dp"
+                            android:text="Description"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -208,21 +256,22 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:padding="10dp"
                             android:text="Description" />
 
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal"
+                        android:paddingTop="20dp"
+                        android:paddingBottom="5dp"
                         android:orientation="horizontal">
 
                         <Button
                             android:id="@+id/activityRegisterDescription"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
                             android:fontFamily="@font/armata"
                             android:onClick="registerToActivity"
                             android:padding="15dp"
@@ -232,8 +281,9 @@
                             android:id="@+id/activityGoDescription"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
                             android:fontFamily="@font/armata"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
                             android:padding="15dp"
                             android:text="How to go" />
 
@@ -241,7 +291,6 @@
                             android:id="@+id/activityChatDescription"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
                             android:fontFamily="@font/armata"
                             android:onClick="goToIndividualChat"
                             android:padding="15dp"
@@ -250,21 +299,22 @@
 
                     <ProgressBar
                         android:id="@+id/progress_bar_activity_description"
-                        android:paddingTop="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="#F31505"
                         android:layout_gravity="center_horizontal"
+                        android:backgroundTint="#F31505"
+                        android:paddingTop="10dp"
                         android:visibility="invisible" />
 
                 </LinearLayout>
-            </HorizontalScrollView>
-        </ScrollView>
+            </ScrollView>
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
-        android:layout_gravity="start"
-        android:layout_height="match_parent"
         android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
         app:menu="@menu/main_menu" />
 </androidx.drawerlayout.widget.DrawerLayout>

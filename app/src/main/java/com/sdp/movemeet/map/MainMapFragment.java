@@ -1,13 +1,10 @@
 package com.sdp.movemeet.map;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,13 +30,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Activity.ActivityDescriptionActivity;
+import com.sdp.movemeet.Activity.ActivityDescriptionActivityUnregister;
 import com.sdp.movemeet.DistanceCalculator;
-import com.sdp.movemeet.HomeScreenActivity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.UploadActivityActivity;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
@@ -54,7 +50,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     //current location of the user on the map
     private Location currentLocation;
 
-    private FirebaseAuth fAuth = FirebaseAuth.getInstance();
+    private final FirebaseAuth fAuth = FirebaseAuth.getInstance();
     private FirebaseUser user;
 
     //marker representing the clicked position where the user wants to create a new activity
@@ -159,10 +155,17 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         else if (!marker.getTag().equals("my position")) {
             //If user clicks on an activity marker, we bring him to the description of the given activity
             Activity act = (Activity) marker.getTag();
-            Intent intent = new Intent(supportMapFragment.getActivity(), ActivityDescriptionActivity.class);
+            Intent intent;
+            // Different activity if user unregistered
+            if (user == null) {
+                intent = new Intent(supportMapFragment.getActivity(), ActivityDescriptionActivityUnregister.class);
+            } else {
+                intent = new Intent(supportMapFragment.getActivity(), ActivityDescriptionActivity.class);
+            }
             intent.putExtra("activity", act);
             startActivity(intent);
         }
+
         return true;
     }
 
@@ -303,7 +306,6 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         Bundle arg = new Bundle();
         arg.putParcelable("position", marker.getPosition());
         intent.putExtra("bundle", arg);
-        //We terminate the activity when uploading, to make sure the map is always updated and the markers are only displayed once (no duplicates)
         startActivity(intent);
     }
 }

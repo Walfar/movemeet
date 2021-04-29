@@ -64,7 +64,14 @@
                 android:value="com.sdp.movemeet.HomeScreenActivity" />
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".MainUnregister" />
+        <activity
+            android:name=".MainUnregisterActivity"
+            android:parentActivityName=".HomeScreenActivity"
+            android:theme="@style/Theme.movemeet">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sdp.movemeet.HomeScreenActivity" />
+        </activity>
         <activity
             android:name=".LoginActivity"
             android:parentActivityName=".HomeScreenActivity"
@@ -75,6 +82,8 @@
         </activity>
         <activity android:name=".Activity.ActivityDescriptionActivity">
         </activity>
+
+        <activity android:name=".Activity.ActivityDescriptionActivityUnregister"/>
 
         <meta-data
             android:name="preloaded_fonts"

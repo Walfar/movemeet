@@ -55,7 +55,7 @@ public class HomeScreenActivity extends AppCompatActivity {
      */
     public void noAccount(View v) {
         if (isUserLogged()) startActivity(new Intent(this, MainActivity.class));
-        else startActivity(new Intent(this, MainUnregister.class));
+        else startActivity(new Intent(this, MainUnregisterActivity.class));
     }
 
     /**

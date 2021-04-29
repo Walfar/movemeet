@@ -66,16 +66,23 @@
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
             app:srcCompat="@drawable/run_woman" />
 
-        <fragment
-            android:id="@+id/fragment_container_view"
-            android:name="com.sdp.movemeet.map.MainMapFragment"
-            android:layout_width="360dp"
-            android:layout_height="446dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.7"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.881" />
+            app:layout_constraintStart_toStartOf="parent">
+            <fragment
+                android:id="@+id/fragment_container_view"
+                android:name="com.sdp.movemeet.map.MainMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.navigation.NavigationView
