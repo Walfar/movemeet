@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -24,11 +23,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
-import com.squareup.picasso.Picasso;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -63,7 +59,7 @@ public class EditProfileActivity extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         user = fAuth.getCurrentUser();
-        if (user!=null) {
+        if (user != null) {
             userId = user.getUid();
             storageReference = FirebaseStorage.getInstance().getReference();
             loadRegisteredUserProfilePicture(userId);
@@ -91,7 +87,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void loadRegisteredUserProfilePicture(String userId) {
         progressBar.setVisibility(View.VISIBLE);
-        userImagePath = "users/"+userId+"/profile.jpg";
+        userImagePath = "users/" + userId + "/profile.jpg";
         StorageReference profileRef = storageReference.child(userImagePath);
         FirebaseInteraction.getImageFromFirebase(profileRef, profileImage, progressBar);
     }
@@ -107,10 +103,10 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1000) {
-            if(resultCode == Activity.RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK) {
                 Uri imageUri = data.getData();
                 progressBar.setVisibility(View.VISIBLE);
-                String imagePath = "users/"+userId+"/profile.jpg";
+                String imagePath = "users/" + userId + "/profile.jpg";
                 FirebaseInteraction.uploadImageToFirebase(storageReference, imagePath, imageUri, profileImage, progressBar);
                 //uploadImageToFirebase(imageUri);
             }
@@ -124,7 +120,7 @@ public class EditProfileActivity extends AppCompatActivity {
             return;
         }
         final String email = profileEmail.getText().toString();
-        if (user!=null) {
+        if (user != null) {
             user.updateEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
@@ -142,7 +138,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void accessFirestoreUsersCollectionForUpdate() {
         DocumentReference docRef = fStore.collection("users").document(user.getUid());
-        Map<String,Object> edited = FirebaseInteraction.updateDataInFirebase(profileFullName, profileEmail, profilePhone, profileDescription);
+        Map<String, Object> edited = FirebaseInteraction.updateDataInFirebase(profileFullName, profileEmail, profilePhone, profileDescription);
         docRef.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

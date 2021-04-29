@@ -161,20 +161,25 @@ public class UploadActivityActivity extends AppCompatActivity {
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
                 Navigation.goToHome(this.navigationView);
+                finish();
                 break;
             case R.id.nav_edit_profile:
                 Navigation.goToUserProfileActivity(this.navigationView);
+                finish();
                 break;
             case R.id.nav_add_activity:
                 break;
             case R.id.nav_logout:
                 FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
+                finish();
                 break;
             case R.id.nav_start_activity:
                 Navigation.startActivity(this.navigationView);
+                finish();
                 break;
             case R.id.nav_chat:
                 Navigation.goToChat(this.navigationView);
+                finish();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START); return true;

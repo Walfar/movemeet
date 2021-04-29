@@ -17,5 +17,19 @@
     <style name="Theme.movemeet.noActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/amaranth_red</item>
+        <item name="colorPrimaryVariant">@color/imperial_red</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/space_cadet</item>
+        <item name="colorSecondaryVariant">@color/manatee</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <!--<item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>-->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/white</item>
+        <!-- when android:windowLightStatusBar is set to true, status bar text color will be able to be seen when the status bar color is white, and when android:windowLightStatusBar is set to false, status bar text color will be designed to be seen when the status bar color is dark. -->
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- Customize your theme here. -->
     </style>
 </resources>
