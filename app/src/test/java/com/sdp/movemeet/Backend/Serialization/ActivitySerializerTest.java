@@ -25,7 +25,7 @@ import static com.sdp.movemeet.Activity.ActivityTest.createFakeActivity;
 
 public class ActivitySerializerTest {
 
-    private ActivitySerializer serializer;
+    private BackendSerializer<Activity> serializer;
 
     @Before
     public void setup() {
