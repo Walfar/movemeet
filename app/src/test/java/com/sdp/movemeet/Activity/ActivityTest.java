@@ -1,5 +1,6 @@
 package com.sdp.movemeet.Activity;
 
+import com.google.firebase.storage.FirebaseStorage;
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Sport;
 
@@ -26,6 +27,15 @@ public class ActivityTest {
     private final static Sport DUMMY_SPORT = Sport.Running;
     private final static String DUMMY_ADDRESS = "address";
 
+    private Activity activity;
+
+//    @Before
+//    public void setUp() {
+//        // Creating a fake activity
+//        activity = ActivityTest.createFakeActivity();
+//    }
+
+
     public static Activity createFakeActivity() {
         return new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -47,21 +57,8 @@ public class ActivityTest {
 
     @Test
     public void activityConstructorCorrect(){
-        Activity activity = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+
+        activity = ActivityTest.createFakeActivity();
 
         assertEquals(activity.getActivityId(), DUMMY_ACTIVITY_ID);
         assertEquals(activity.getOrganizerId(), DUMMY_ORGANISATOR_ID);
@@ -77,6 +74,7 @@ public class ActivityTest {
         assertEquals(activity.getSport(), DUMMY_SPORT);
         assertEquals(activity.getAddress(), DUMMY_ADDRESS);
         assertEquals(activity.getCreatedAt(), DUMMY_CREATION_DATE);
+
         activity = null;
     }
 
@@ -120,97 +118,37 @@ public class ActivityTest {
 
     @Test(expected = IllegalArgumentException.class)
     public  void activityConstructorActivityTitleEmpty(){
-        Activity activity = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                null,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+
+        activity = ActivityTest.createFakeActivity();
+        activity.setTitle(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public  void activityConstructorActivityParticipantsEmpty(){
-        Activity activity = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                0,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+
+        activity = ActivityTest.createFakeActivity();
+        activity.setNumberParticipant(0);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public  void activityConstructorActivityDescriptionEmpty(){
-        Activity activity = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                null,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+
+        activity = ActivityTest.createFakeActivity();
+        activity.setDescription(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public  void activityConstructorActivityDateEmpty(){
-        Activity activity = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                null,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+
+        activity = ActivityTest.createFakeActivity();
+        activity.setDate(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public  void activityConstructorActivityDurationEmpty(){
-        Activity activity = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                0,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+
+        activity = ActivityTest.createFakeActivity();
+        activity.setDuration(0);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -234,40 +172,15 @@ public class ActivityTest {
 
     @Test(expected = IllegalArgumentException.class)
     public  void activityConstructorActivityAddressEmpty(){
-        Activity activity = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                null,
-                DUMMY_CREATION_DATE);
+
+        activity = ActivityTest.createFakeActivity();
+        activity.setAddress(null);
     }
 
     @Test
     public void activitySetCorrect() {
-        Activity activity = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+
+        activity = ActivityTest.createFakeActivity();
 
         activity.setTitle("Hello");
         activity.setNumberParticipant(3);
@@ -292,26 +205,14 @@ public class ActivityTest {
         assertEquals(activity.getDate(), newDate);
         assertEquals(activity.getDuration(), 20.4, 0.1);
         assertEquals(activity.getAddress(), "EPFL");
+
         activity = null;
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void activitySetFailIfNull() {
-        Activity activity = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+
+        activity = ActivityTest.createFakeActivity();
 
         activity.setTitle(null);
         activity.setNumberParticipant(3);
@@ -328,21 +229,8 @@ public class ActivityTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void activityAddParticipantNull(){
-        Activity activity = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+
+        activity = ActivityTest.createFakeActivity();
 
         activity.addParticipantId(null);
 
@@ -350,21 +238,8 @@ public class ActivityTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void activityAddSameParticipantNull(){
-        Activity activity = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+
+        activity = ActivityTest.createFakeActivity();
 
         String user = "Caro";
 
@@ -375,21 +250,9 @@ public class ActivityTest {
 
     @Test
     public void activityAddCorrect(){
-        Activity activity = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+
+        activity = ActivityTest.createFakeActivity();
+
         String user1 = "BOB";
         String user2 = "bob";
         activity.addParticipantId(user1);
@@ -401,21 +264,9 @@ public class ActivityTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void activityRemoveParticipantNull(){
-        Activity activity = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+
+        activity = ActivityTest.createFakeActivity();
+
         activity.removeParticipantId(null);
 
     }
@@ -452,21 +303,8 @@ public class ActivityTest {
 
     @Test
     public void activityToStringCorrect(){
-        Activity activity = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+
+        activity = ActivityTest.createFakeActivity();
 
         assertEquals(activity.toString(), "ActivityId:" + DUMMY_ACTIVITY_ID + "\nOrganizerId" + DUMMY_ORGANISATOR_ID + "\nTitle:" + DUMMY_TITLE + "\nNumberParticipant:" + DUMMY_NUMBER_PARTICIPANT +
                 "\nParticipantId:" + DUMMY_PARTICIPANTS_ID + "\nLongitude:" + DUMMY_LONGITUDE + "\nLatitude:" + DUMMY_LATITUDE + "\nDescription:" + DUMMY_DESCRIPTION + //"\nDocumentPath:" + DUMMY_DOCUMENT_PATH +
@@ -477,37 +315,10 @@ public class ActivityTest {
 
     @Test
     public void activityEqualsCorrect(){
-        Activity activity1 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
 
-        Activity activity2 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+        Activity activity1 = ActivityTest.createFakeActivity();
+
+        Activity activity2 = ActivityTest.createFakeActivity();
 
         assertEquals(true, activity1.equals(activity2));
 
@@ -518,21 +329,8 @@ public class ActivityTest {
 
     @Test
     public void activityEqualsNull(){
-        Activity activity1 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+
+        Activity activity1 = ActivityTest.createFakeActivity();
 
         assertEquals(false, activity1.equals(null));
 
@@ -542,21 +340,8 @@ public class ActivityTest {
 
     @Test
     public void activityEqualsClass(){
-        Activity activity1 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+
+        Activity activity1 = ActivityTest.createFakeActivity();
 
         assertEquals(false, activity1.equals("1"));
 
@@ -569,21 +354,8 @@ public class ActivityTest {
 
     @Test
     public void activityEqualsDifferentActivity1(){
-        Activity activity1 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+
+        Activity activity1 = ActivityTest.createFakeActivity();
 
         Activity activity2 = new Activity(
                 "1",
@@ -610,21 +382,8 @@ public class ActivityTest {
 
     @Test
     public void activityEqualsDifferentActivity2(){
-        Activity activity1 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+
+        Activity activity1 = ActivityTest.createFakeActivity();
 
         Activity activity2 = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -652,37 +411,12 @@ public class ActivityTest {
 
     @Test
     public void activityEqualsDifferentActivity3(){
-        Activity activity1 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
 
-        Activity activity2 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                "titleBis",
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+        Activity activity1 = ActivityTest.createFakeActivity();
+
+        Activity activity2 = ActivityTest.createFakeActivity();
+        activity2.setTitle("titleBis");
+
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -694,37 +428,11 @@ public class ActivityTest {
 
     @Test
     public void activityEqualsDifferentActivity4(){
-        Activity activity1 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
 
-        Activity activity2 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                1,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+        Activity activity1 = ActivityTest.createFakeActivity();
+
+        Activity activity2 = ActivityTest.createFakeActivity();
+        activity2.setNumberParticipant(1);
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -736,21 +444,8 @@ public class ActivityTest {
 
     @Test
     public void activityEqualsDifferentActivity5(){
-        Activity activity1 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+
+        Activity activity1 = ActivityTest.createFakeActivity();
 
         ArrayList<String> DUMMY_PARTICIPANTS_ID_BIS = new ArrayList<String>();
         DUMMY_PARTICIPANTS_ID_BIS.add("bobx");
@@ -781,37 +476,11 @@ public class ActivityTest {
 
     @Test
     public void activityEqualsDifferentActivity6(){
-        Activity activity1 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
 
-        Activity activity2 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE+1,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+        Activity activity1 = ActivityTest.createFakeActivity();
+
+        Activity activity2 = ActivityTest.createFakeActivity();
+        activity2.setLongitude(DUMMY_LONGITUDE+1);
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -823,37 +492,11 @@ public class ActivityTest {
 
     @Test
     public void activityEqualsDifferentActivity7(){
-        Activity activity1 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
 
-        Activity activity2 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE+1,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+        Activity activity1 = ActivityTest.createFakeActivity();
+
+        Activity activity2 = ActivityTest.createFakeActivity();
+        activity2.setLatitude(DUMMY_LATITUDE+1);
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -865,37 +508,11 @@ public class ActivityTest {
 
     @Test
     public void activityEqualsDifferentActivity8(){
-        Activity activity1 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
 
-        Activity activity2 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                "AH",
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+        Activity activity1 = ActivityTest.createFakeActivity();
+
+        Activity activity2 = ActivityTest.createFakeActivity();
+        activity2.setDescription("AH");
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -907,37 +524,11 @@ public class ActivityTest {
 
     @Test
     public void activityEqualsDifferentActivity9(){
-        Activity activity1 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
 
-        Activity activity2 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                new Date(2022,3,26),
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+        Activity activity1 = ActivityTest.createFakeActivity();
+
+        Activity activity2 = ActivityTest.createFakeActivity();
+        activity2.setDate(new Date(2022,3,26));
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -949,37 +540,11 @@ public class ActivityTest {
 
     @Test
     public void activityEqualsDifferentActivity10(){
-        Activity activity1 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
 
-        Activity activity2 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION+1,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+        Activity activity1 = ActivityTest.createFakeActivity();
+
+        Activity activity2 = ActivityTest.createFakeActivity();
+        activity2.setDuration(DUMMY_DURATION+1);
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -990,21 +555,8 @@ public class ActivityTest {
 
     @Test
     public void activityEqualsDifferentActivity11(){
-        Activity activity1 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
+
+        Activity activity1 = ActivityTest.createFakeActivity();
 
         Activity activity2 = new Activity(
                 DUMMY_ACTIVITY_ID,
@@ -1032,37 +584,11 @@ public class ActivityTest {
 
     @Test
     public void activityEqualsDifferentActivity12(){
-        Activity activity1 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                DUMMY_ADDRESS,
-                DUMMY_CREATION_DATE);
 
-        Activity activity2 = new Activity(
-                DUMMY_ACTIVITY_ID,
-                DUMMY_ORGANISATOR_ID,
-                DUMMY_TITLE,
-                DUMMY_NUMBER_PARTICIPANT,
-                DUMMY_PARTICIPANTS_ID,
-                DUMMY_LONGITUDE,
-                DUMMY_LATITUDE,
-                DUMMY_DESCRIPTION,
-                DUMMY_DOCUMENT_PATH,
-                DUMMY_DATE,
-                DUMMY_DURATION,
-                DUMMY_SPORT,
-                "addressBis",
-                DUMMY_CREATION_DATE);
+        Activity activity1 = ActivityTest.createFakeActivity();
+
+        Activity activity2 = ActivityTest.createFakeActivity();
+        activity2.setAddress("addressBis");
 
         assertEquals(false, activity1.equals(activity2));
 

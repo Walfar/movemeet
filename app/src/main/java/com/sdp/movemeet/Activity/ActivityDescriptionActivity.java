@@ -346,7 +346,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         if (act != null) {
             imagePath = "activities/" + act.getActivityId() + "/activityImage.jpg";
-            // TODO: test that imageRef exists!
             StorageReference imageRef = storageReference.child(imagePath);
             FirebaseInteraction.getImageFromFirebase(imageRef, activityImage, progressBar);
         }

@@ -43,12 +43,12 @@ public class FirebaseInteraction {
     /**
      * Retrieve user data (full name, email, phone number and profile description) from Firebase
      * Firestore and directly update corresponding TextViews.
-     *
      * @param fStore Firebase Firestore reference
      * @param userId The ID of the user
      * @param textViewArray A TextView array containing the TextViews referencing user data (full
      *                      name, email, phone number and profile description) to be updated
      * @param activity The activity from which this function is called
+     * @return An array of TextViews containing the updated user data
      */
     public static TextView[] retrieveDataFromFirebase(FirebaseFirestore fStore, String userId, TextView[] textViewArray, Activity activity) {
         DocumentReference documentReference = fStore.collection("users").document(userId);

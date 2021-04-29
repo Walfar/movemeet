@@ -181,19 +181,7 @@ public class ProfileActivity extends AppCompatActivity {
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                profileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "deleteUserAccount - 1) Firebase Storage user profile picture successfully deleted!");
-                        // 2) Deleting all the user data from Firebase Firestore
-                        deleteFirestoreDataAndAuthentication();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Log.d(TAG, "deleteUserAccount - 1) Firebase Storage user profile picture could not be deleted! User account won't be deleted!");
-                    }
-                });
+                deleteProfilePicture();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -204,6 +192,23 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+
+    public void deleteProfilePicture() {
+        profileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "deleteUserAccount - 1) Firebase Storage user profile picture successfully deleted!");
+                // 2) Deleting all the user data from Firebase Firestore
+                deleteFirestoreDataAndAuthentication();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.d(TAG, "deleteUserAccount - 1) Firebase Storage user profile picture could not be deleted! User account won't be deleted!");
+            }
+        });
     }
 
 

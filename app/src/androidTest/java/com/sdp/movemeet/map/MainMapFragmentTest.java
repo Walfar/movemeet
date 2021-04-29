@@ -223,7 +223,7 @@ public class MainMapFragmentTest {
 
     private int setSportIcon(Sport sport, MainMapFragment mapFragment) {
         Activity activity = new Activity("activity id", "organizer id", "title", 2, new ArrayList<>(), 0, 0,
-                "description", new Date(), 1, sport,"here", new Date());
+                "description", "documentPath", new Date(), 1, sport,"here", new Date());
         return mapFragment.chooseIcon(activity);
     } */
 

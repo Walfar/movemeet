@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText email, password;
+    EditText emailEditText, passwordEditText;
     Button loginBtn;
     TextView createBtn;
     ProgressBar progressBar;
@@ -31,8 +31,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        email = findViewById(R.id.edit_text_email);
-        password = findViewById(R.id.edit_text_password);
+        emailEditText = findViewById(R.id.edit_text_email);
+        passwordEditText = findViewById(R.id.edit_text_password);
         progressBar = findViewById(R.id.activity_login_progress_bar);
         fAuth = FirebaseAuth.getInstance();
         loginBtn = findViewById(R.id.button_login);
@@ -43,21 +43,21 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 // When the user clicks on the "LOGIN" button, we first validate his data
-                String email = LoginActivity.this.email.getText().toString().trim();
-                String password = LoginActivity.this.password.getText().toString().trim();
+                String email = emailEditText.getText().toString().trim();
+                String password = passwordEditText.getText().toString().trim();
 
                 if (TextUtils.isEmpty(email)) { // checking that the email address is not empty
-                    LoginActivity.this.email.setError("Email is required.");
+                    emailEditText.setError("Email is required.");
                     return;
                 }
 
                 if (TextUtils.isEmpty(password)) { // checking that the password is not empty
-                    LoginActivity.this.password.setError("Password is required.");
+                    passwordEditText.setError("Password is required.");
                     return;
                 }
 
                 if (password.length() < 6) { // checking that the password is at least 6 characters long
-                    LoginActivity.this.password.setError("Password must be >= 6 characters.");
+                    passwordEditText.setError("Password must be >= 6 characters.");
                     return;
                 }
 
