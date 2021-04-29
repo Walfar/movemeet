@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void handleRegisterUser() {
+        // Retrieve user data (full name, email and phone number) from Firebase Firestore
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         if (fAuth.getCurrentUser() != null) {

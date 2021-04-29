@@ -1,12 +1,5 @@
 package com.sdp.movemeet.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +12,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -42,7 +42,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class ActivityDescriptionActivity extends AppCompatActivity {
 
@@ -118,26 +117,25 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void getParticipantNames() {
         if (act != null) {
             ArrayList<String> participantIds = act.getParticipantId();
-            for (int i=0; i<act.getParticipantId().size(); i++) {
+            for (int i = 0; i < act.getParticipantId().size(); i++) {
                 String currentParticipantId = participantIds.get(i);
                 getCurrentParticipantName(currentParticipantId);
             }
         }
     }
 
-
-    public void createDrawer(){
-        drawerLayout=findViewById(R.id.drawer_layout);
-        navigationView=findViewById(R.id.nav_view);
-        textView=findViewById(R.id.textView);
-        toolbar=findViewById(R.id.toolbar);
+    public void createDrawer() {
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        textView = findViewById(R.id.textView);
+        toolbar = findViewById(R.id.toolbar);
 
         navigationView.bringToFront();
-        ActionBarDrawerToggle toggle=new
-                ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new
+                ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
 
-        View hView =  navigationView.inflateHeaderView(R.layout.header);
+        View hView = navigationView.inflateHeaderView(R.layout.header);
 
         fullName = hView.findViewById(R.id.text_view_profile_name);
         phone = hView.findViewById(R.id.text_view_profile_phone);
@@ -168,10 +166,12 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 Navigation.goToChat(this.navigationView);
                 break;
         }
-        drawerLayout.closeDrawer(GravityCompat.START); return true;
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     public void handleRegisterUser() {
+        // Retrieve user data (full name, email and phone number) from Firebase Firestore
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         if (fAuth.getCurrentUser() != null) {
@@ -195,13 +195,13 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (act != null) activityTitle.setText(act.getTitle());
     }
 
-    private void createParticipantNumberView(){
+    private void createParticipantNumberView() {
         // number of participants from the activity
         TextView numberParticipantsView = (TextView) findViewById(R.id.activity_number_description);
         if (act != null) {
             StringBuilder participantNamesString = new StringBuilder();
-            for (int i=0; i<participantNames.size(); i++) {
-                if (i==0) {
+            for (int i = 0; i < participantNames.size(); i++) {
+                if (i == 0) {
                     participantNamesString.append(participantNames.get(i));
                 } else {
                     participantNamesString.append(", ").append(participantNames.get(i));
@@ -211,14 +211,14 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
-    private void createDescriptionView(){
-        // description from the activity
+    private void createDescriptionView() {
+        // Description from the activity
         TextView descriptionView = (TextView) findViewById(R.id.activity_description_description);
         if (act != null) descriptionView.setText(act.getDescription());
     }
 
-    private void createDateView(){
-        // date from the activity
+    private void createDateView() {
+        // Date from the activity
         TextView dateView = (TextView) findViewById(R.id.activity_date_description);
         if (act != null) {
             String pattern = "MM/dd/yyyy HH:mm:ss";
@@ -228,29 +228,32 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
-    private void createSportView(){
+    private void createSportView() {
+        // Type of sport of the activity
         TextView sportView = (TextView) findViewById(R.id.activity_sport_description);
-        if(act != null){
+        if (act != null) {
             sportView.setText(act.getSport().toString());
         }
     }
 
-    private void createDurationView(){
+    private void createDurationView() {
+        // Duration of the activity
         TextView durationView = (TextView) findViewById(R.id.activity_duration_description);
-        if(act != null){
-            durationView.setText(String.valueOf((double) Math.round(act.getDuration()*100)/100));
+        if (act != null) {
+            durationView.setText(String.valueOf((double) Math.round(act.getDuration() * 100) / 100));
         }
     }
 
-    private void createOrganizerView(){
+    private void createOrganizerView() {
+        // Organizer of the activity
         organizerView = (TextView) findViewById(R.id.activity_organisator_description);
-        if(act != null){
+        if (act != null) {
             organizerView.setText(act.getOrganizerId());
         }
     }
 
-    private void createAddressView(){
-        // address from the activity
+    private void createAddressView() {
+        // Address of the activity
         TextView addressView = (TextView) findViewById(R.id.activity_address_description);
         if (act != null) {
             addressView.setText(act.getAddress());
@@ -258,6 +261,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
     public void registerToActivity(View v) {
+        // Syncing registered participant to Firebase Firestore (field array "participantId")
         fAuth = FirebaseAuth.getInstance();
         if (fAuth.getCurrentUser() != null) {
             String userId;
@@ -269,7 +273,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 DocumentReference actRef = fStore.collection("activities").document(act.getDocumentPath());
                 actRef.update("participantId", FieldValue.arrayUnion(userId));
                 Log.d(TAG, "Participant registered in Firebase Firestore!");
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Toast.makeText(ActivityDescriptionActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "An error occurred! Participant may be already registered in Firebase Firestore!");
             }
@@ -277,7 +281,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
     public void goToIndividualChat(View view) {
-        // Allowing the access to the chat only if the user is registered to the activity
+        // Allowing the access to the chat of the activity only if the user is registered to the activity
         if (act.getParticipantId().contains(userId)) {
             Intent intent = new Intent(ActivityDescriptionActivity.this, ChatActivity.class);
             String activityChatId = act.getActivityId() + " - chatId";
@@ -291,6 +295,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
     private void getOrganizerName() {
+        // Fetch the name of the organizer from Firebase Firestore
         if (act != null) {
             organizerId = act.getOrganizerId();
             DocumentReference docRef = fStore.collection("users").document(organizerId);
@@ -316,6 +321,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
     private void getCurrentParticipantName(String participantId) {
+        // Fetch the name of a participant from Firebase Firestore using his userId
         DocumentReference docRef = fStore.collection("users").document(participantId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -338,18 +344,20 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
     private void loadActivityHeaderPicture() {
+        // Load the dedicated picture of the activity
         activityImage = findViewById(R.id.activity_image_description);
         progressBar = findViewById(R.id.progress_bar_activity_description);
         progressBar.setVisibility(View.VISIBLE);
         storageReference = FirebaseStorage.getInstance().getReference();
         if (act != null) {
-            imagePath = "activities/"+act.getActivityId()+"/activityImage.jpg";
+            imagePath = "activities/" + act.getActivityId() + "/activityImage.jpg";
             StorageReference imageRef = storageReference.child(imagePath);
             FirebaseInteraction.getImageFromFirebase(imageRef, activityImage, progressBar);
         }
     }
 
     public void changeActivityPicture(View view) {
+        // Launch the Gallery to select a header picture for the activity
         if (userId.equals(organizerId)) {
             Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(openGalleryIntent, 1000);
@@ -362,7 +370,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1000) {
-            if(resultCode == android.app.Activity.RESULT_OK) {
+            if (resultCode == android.app.Activity.RESULT_OK) {
                 Uri imageUri = data.getData();
                 progressBar.setVisibility(View.VISIBLE);
                 FirebaseInteraction.uploadImageToFirebase(storageReference, imagePath, imageUri, activityImage, progressBar);

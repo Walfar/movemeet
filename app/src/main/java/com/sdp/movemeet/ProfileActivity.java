@@ -90,18 +90,18 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    public void createDrawer(){
-        drawerLayout=findViewById(R.id.drawer_layout);
-        navigationView=findViewById(R.id.nav_view);
-        textView=findViewById(R.id.textView);
-        toolbar=findViewById(R.id.toolbar);
+    public void createDrawer() {
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        textView = findViewById(R.id.textView);
+        toolbar = findViewById(R.id.toolbar);
 
         navigationView.bringToFront();
-        ActionBarDrawerToggle toggle=new
-                ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new
+                ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
 
-        View hView =  navigationView.inflateHeaderView(R.layout.header);
+        View hView = navigationView.inflateHeaderView(R.layout.header);
 
         fullName = hView.findViewById(R.id.text_view_profile_name);
         phone = hView.findViewById(R.id.text_view_profile_phone);
@@ -132,10 +132,12 @@ public class ProfileActivity extends AppCompatActivity {
                 Navigation.goToChat(this.navigationView);
                 break;
         }
-        drawerLayout.closeDrawer(GravityCompat.START); return true;
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     public void handleRegisterUser() {
+        // Retrieve user data (full name, email and phone number) from Firebase Firestore
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         if (fAuth.getCurrentUser() != null) {
@@ -156,8 +158,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-
-
     private void loadRegisteredUserProfilePicture() {
         userImagePath = "users/" + userId + "/profile.jpg";
         profileRef = storageReference.child(userImagePath);
@@ -176,7 +176,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     public void deleteUserAccount(View view) {
-        // 1) Deleting the profile picture of the user from Firebase Storage (in case it exists)
+        // 1) Delete the profile picture of the user from Firebase Storage (in case it exists)
         profileRef = storageReference.child(userImagePath);
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -208,7 +208,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     public void deleteFirestoreDataAndAuthentication() {
-        // Deleting all the user data from Firebase Firestore
+        // Delete all user data from Firebase Firestore
         fStore.collection("users").document(userId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -227,7 +227,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     private void deleteUserFromFirebaseAuthentication() {
-        // Deleting the user from Firebase Authentication
+        // Delete user from Firebase Authentication
         FirebaseUser user = fAuth.getCurrentUser();
         if (user != null) {
             user.delete()
