@@ -22,8 +22,8 @@ public class MainUnregisterActivity extends AppCompatActivity {
     }
 
     public void createDrawer() {
-        drawerLayout = findViewById(R.id.drawer_layout_unregister);
+        //drawerLayout = findViewById(R.id.drawer_layout_unregister);
         textView = findViewById(R.id.textViewUnregister);
-        toolbar = findViewById(R.id.toolbarUnregister);
+        //toolbar = findViewById(R.id.toolbarUnregister);
     }
 }

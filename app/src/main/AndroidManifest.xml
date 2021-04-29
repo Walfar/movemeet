@@ -64,7 +64,14 @@
                 android:value="com.sdp.movemeet.HomeScreenActivity" />
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".MainUnregisterActivity" />
+        <activity
+            android:name=".MainUnregisterActivity"
+            android:parentActivityName=".HomeScreenActivity"
+            android:theme="@style/Theme.movemeet">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sdp.movemeet.HomeScreenActivity" />
+        </activity>
         <activity
             android:name=".LoginActivity"
             android:parentActivityName=".HomeScreenActivity"
