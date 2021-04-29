@@ -51,7 +51,7 @@ public class HomeScreenActivity extends AppCompatActivity {
     }
 
     public void noAccount(View v) {
-        startActivity(new Intent(this, MainUnregister.class));
+        startActivity(new Intent(this, MainUnregisterActivity.class));
     }
 
     public void RecordRun(View v) {

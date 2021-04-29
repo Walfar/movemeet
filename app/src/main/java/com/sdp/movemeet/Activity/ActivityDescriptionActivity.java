@@ -1,12 +1,5 @@
 package com.sdp.movemeet.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +12,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -34,28 +34,12 @@ import com.sdp.movemeet.Backend.FirebaseInteraction;
 import com.sdp.movemeet.LoginActivity;
 import com.sdp.movemeet.Navigation.Navigation;
 import com.sdp.movemeet.R;
-import com.sdp.movemeet.Sport;
 import com.sdp.movemeet.chat.ChatActivity;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 
 public class ActivityDescriptionActivity extends AppCompatActivity {
-
-    public final static String EXTRA_ACTIVITY_ID = "12345";
-    public final static String EXTRA_ORGANISATOR_ID = "1";
-    public final static String EXTRA_TITLE = "title";
-    public final static int EXTRA_NUMBER_PARTICIPANT = 2;
-    public final static ArrayList<String> EXTRA_PARTICIPANTS_ID = new ArrayList<String>();
-    public final static double EXTRA_LONGITUDE = 2.45;
-    public final static double EXTRA_LATITUDE = 3.697;
-    public final static String EXTRA_DESCRIPTION = "description";
-    public final static Date EXTRA_DATE = new Date(2021, 11, 10, 1, 10);
-    public final static double EXTRA_DURATION = 10.4;
-    public final static Sport EXTRA_SPORT = Sport.Running;
-    public final static String EXTRA_ADDRESS = "address";
 
     FirebaseAuth fAuth;
     Button RegisterToActivityButton;
@@ -90,16 +74,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             act = (Activity) intent.getSerializableExtra("activity");
         }
 
-        /*fAuth = FirebaseAuth.getInstance();
-        user = fAuth.getCurrentUser();
-
-        if(user != null){
-            userId = act.getOrganizerId();
-            fStore = FirebaseFirestore.getInstance();
-            getUserName();
-        }*/
-
-
         createTitleView();
         createParticipantNumberView();
         createDescriptionView();
@@ -122,18 +96,18 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
 
-    public void createDrawer(){
-        drawerLayout=findViewById(R.id.drawer_layout);
-        navigationView=findViewById(R.id.nav_view);
-        textView=findViewById(R.id.textView);
-        toolbar=findViewById(R.id.toolbar);
+    public void createDrawer() {
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        textView = findViewById(R.id.textView);
+        toolbar = findViewById(R.id.toolbar);
 
         navigationView.bringToFront();
-        ActionBarDrawerToggle toggle=new
-                ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new
+                ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
 
-        View hView =  navigationView.inflateHeaderView(R.layout.header);
+        View hView = navigationView.inflateHeaderView(R.layout.header);
 
         fullName = hView.findViewById(R.id.text_view_profile_name);
         phone = hView.findViewById(R.id.text_view_profile_phone);
@@ -169,7 +143,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 finish();
                 break;
         }
-        drawerLayout.closeDrawer(GravityCompat.START); return true;
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     public void handleRegisterUser() {
@@ -190,29 +165,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
-/*
-    private void getUserName() {
-        DocumentReference docRef = fStore.collection("users").document(userId);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        fullNameString = (String) document.getData().get("fullName");
-                        createOrganizerView();
-                        Log.i(TAG, "fullNameString: " + fullNameString);
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
-    }*/
 
     private void createTitleView() {
         // activityTitle from the activity
@@ -220,7 +172,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (act != null) activityTitle.setText(act.getTitle());
     }
 
-    private void createParticipantNumberView(){
+    private void createParticipantNumberView() {
         // number of participants from the activity
         TextView numberParticipantsView = (TextView) findViewById(R.id.activity_number_description);
         if (act != null) {
@@ -228,13 +180,13 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
-    private void createDescriptionView(){
+    private void createDescriptionView() {
         // description from the activity
         TextView descriptionView = (TextView) findViewById(R.id.activity_description_description);
         if (act != null) descriptionView.setText(act.getDescription());
     }
 
-    private void createDateView(){
+    private void createDateView() {
         // date from the activity
         TextView dateView = (TextView) findViewById(R.id.activity_date_description);
         if (act != null) {
@@ -245,28 +197,28 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
-    private void createSportView(){
+    private void createSportView() {
         TextView sportView = (TextView) findViewById(R.id.activity_sport_description);
-        if(act != null){
+        if (act != null) {
             sportView.setText(act.getSport().toString());
         }
     }
 
-    private void createDurationView(){
+    private void createDurationView() {
         TextView durationView = (TextView) findViewById(R.id.activity_duration_description);
-        if(act != null){
+        if (act != null) {
             durationView.setText(String.valueOf((int) act.getDuration()));
         }
     }
 
-    private void createOrganizerView(){
+    private void createOrganizerView() {
         organizerView = (TextView) findViewById(R.id.activity_organisator_description);
-        if(act != null){
+        if (act != null) {
             organizerView.setText(act.getOrganizerId());
         }
     }
 
-    private void createAddressView(){
+    private void createAddressView() {
         // address from the activity
         TextView addressView = (TextView) findViewById(R.id.activity_address_description);
         if (act != null) {
@@ -279,10 +231,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (fAuth.getCurrentUser() != null) {
             String userId;
             userId = fAuth.getCurrentUser().getUid();
-            try{
+            try {
                 act.addParticipantId(userId);
-                createParticipantNumberView();}
-            catch(Exception e){
+                createParticipantNumberView();
+            } catch (Exception e) {
                 Toast.makeText(ActivityDescriptionActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
@@ -337,7 +289,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         storageReference = FirebaseStorage.getInstance().getReference();
         if (act != null) {
-            imagePath = "activities/"+act.getActivityId()+"/activityImage.jpg";
+            imagePath = "activities/" + act.getActivityId() + "/activityImage.jpg";
             StorageReference imageRef = storageReference.child(imagePath);
             FirebaseInteraction.getImageFromFirebase(imageRef, activityImage, progressBar);
         }
@@ -356,28 +308,11 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1000) {
-            if(resultCode == android.app.Activity.RESULT_OK) {
+            if (resultCode == android.app.Activity.RESULT_OK) {
                 Uri imageUri = data.getData();
                 progressBar.setVisibility(View.VISIBLE);
                 FirebaseInteraction.uploadImageToFirebase(storageReference, imagePath, imageUri, activityImage, progressBar);
             }
         }
     }
-
-    /*public void goToHome(View view){
-        Intent i = new Intent(ActivityDescriptionActivity.this, HomeScreenActivity.class);
-        i.putExtra(EXTRA_ACTIVITY_ID, "1");
-        i.putExtra(EXTRA_ORGANISATOR_ID, "1");
-        i.putExtra(EXTRA_ADDRESS, "1");
-        i.putExtra(String.valueOf(EXTRA_DURATION), 1.0);
-        i.putExtra(EXTRA_DESCRIPTION, "1");
-        i.putExtra(EXTRA_TITLE, "1");
-        i.putExtra(String.valueOf(EXTRA_DATE), "1");
-        i.putExtra(String.valueOf(EXTRA_LATITUDE), 1.0);
-        i.putExtra(String.valueOf(EXTRA_LONGITUDE), 1.0);
-        i.putExtra(String.valueOf(EXTRA_NUMBER_PARTICIPANT), 1.0);
-        i.putExtra(String.valueOf(EXTRA_SPORT), "1.0");
-
-        startActivity(i);
-    }*/
 }

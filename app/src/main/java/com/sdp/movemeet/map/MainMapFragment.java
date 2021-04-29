@@ -1,22 +1,15 @@
 package com.sdp.movemeet.map;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.RequiresApi;
-
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -29,25 +22,23 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Activity.ActivityDescriptionActivity;
+import com.sdp.movemeet.Activity.ActivityDescriptionActivityUnregister;
 import com.sdp.movemeet.DistanceCalculator;
-import com.sdp.movemeet.HomeScreenActivity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.UploadActivityActivity;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
 import com.sdp.movemeet.utility.LocationFetcher;
 
 
-
 public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     private Location currentLocation;
 
-    private FirebaseAuth fAuth = FirebaseAuth.getInstance();
+    private final FirebaseAuth fAuth = FirebaseAuth.getInstance();
     private FirebaseUser user;
 
     private Marker newActivityMarker;
@@ -111,12 +102,15 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
             Activity act = (Activity) marker.getTag();
             Intent intent;
             // Different activity if user unregistered
-            //if (user == null) intent = new Intent(MapsActivity.this, ActivityDescriptionActivityUnregistered.class);
-            //else
-            intent = new Intent(supportMapFragment.getActivity(), ActivityDescriptionActivity.class);
+            if (user == null) {
+                intent = new Intent(supportMapFragment.getActivity(), ActivityDescriptionActivityUnregister.class);
+            } else {
+                intent = new Intent(supportMapFragment.getActivity(), ActivityDescriptionActivity.class);
+            }
             intent.putExtra("activity", act);
             startActivity(intent);
         }
+
         return true;
     }
 
@@ -154,7 +148,6 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
             marker.setTag(act);
         }
     }
-
 
 
     public int chooseIcon(Activity activity) {
@@ -217,7 +210,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         Intent intent = new Intent(supportMapFragment.getActivity(), UploadActivityActivity.class);
         //use Bundle to pass latlng instance to intent
         Bundle arg = new Bundle();
-        arg.putParcelable("position",marker.getPosition());
+        arg.putParcelable("position", marker.getPosition());
         intent.putExtra("bundle", arg);
         //remove marker
         startActivity(intent);
