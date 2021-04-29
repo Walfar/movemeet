@@ -243,6 +243,11 @@ public class ChatActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.nav_chat:
+                finish();
+                break;
+            case R.id.nav_list_activities:
+                Navigation.goToListOfActivities(this.navigationView);
+                finish();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);

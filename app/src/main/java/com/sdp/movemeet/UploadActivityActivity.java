@@ -6,13 +6,10 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
-import android.location.Geocoder;;
+import android.location.Geocoder;
 import android.os.Bundle;
-
 import android.util.Log;
-
 import android.view.MenuItem;
-
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -25,13 +22,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-
-import androidx.fragment.app.FragmentManager;
-
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -41,11 +34,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Activity.Activity;
 import com.sdp.movemeet.Backend.BackendActivityManager;
-
-import com.sdp.movemeet.map.MiniMapFragment;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
 import com.sdp.movemeet.Navigation.Navigation;
-import com.sdp.movemeet.utility.ActivitiesUpdater;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -135,18 +125,18 @@ public class UploadActivityActivity extends AppCompatActivity {
 
     }
 
-    public void createDrawer(){
-        drawerLayout=findViewById(R.id.drawer_layout);
-        navigationView=findViewById(R.id.nav_view);
-        textView=findViewById(R.id.textView);
-        toolbar=findViewById(R.id.toolbar);
+    public void createDrawer() {
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        textView = findViewById(R.id.textView);
+        toolbar = findViewById(R.id.toolbar);
 
         navigationView.bringToFront();
-        ActionBarDrawerToggle toggle=new
-                ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new
+                ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
 
-        View hView =  navigationView.inflateHeaderView(R.layout.header);
+        View hView = navigationView.inflateHeaderView(R.layout.header);
 
         fullName = hView.findViewById(R.id.text_view_profile_name);
         phone = hView.findViewById(R.id.text_view_profile_phone);
@@ -168,6 +158,7 @@ public class UploadActivityActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.nav_add_activity:
+                finish();
                 break;
             case R.id.nav_logout:
                 FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
@@ -181,8 +172,13 @@ public class UploadActivityActivity extends AppCompatActivity {
                 Navigation.goToChat(this.navigationView);
                 finish();
                 break;
+            case R.id.nav_list_activities:
+                Navigation.goToListOfActivities(this.navigationView);
+                finish();
+                break;
         }
-        drawerLayout.closeDrawer(GravityCompat.START); return true;
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     public void handleRegisterUser() {
@@ -241,6 +237,7 @@ public class UploadActivityActivity extends AppCompatActivity {
         if (addressText.getText().toString().equals("")) return null;
         return new LatLng(latitude, longitude);
     }
+
     // Helper methods for start time picker
     private TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
@@ -396,7 +393,8 @@ public class UploadActivityActivity extends AppCompatActivity {
             } else {
                 throw new IOException();
             }
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
 
     }
 

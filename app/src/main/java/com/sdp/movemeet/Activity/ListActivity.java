@@ -1,6 +1,5 @@
-package com.sdp.movemeet;
+package com.sdp.movemeet.Activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,10 +17,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.Backend.FirebaseInteraction;
 import com.sdp.movemeet.Navigation.Navigation;
+import com.sdp.movemeet.R;
 
-
-public class MainActivity extends AppCompatActivity {
-    public static final String EXTRA_MESSAGE = "com.sdp.movemeet.MESSAGE";
+/***
+ *  This class create the list of activities, on witch the user is registered.
+ */
+public class ListActivity extends AppCompatActivity {
 
     TextView fullName, email, phone;
     FirebaseAuth fAuth;
@@ -36,18 +37,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_list);
 
         createDrawer();
-
         handleRegisterUser();
-
-        //The aim is to block any direct access to this page if the user is not logged
-        if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        }
-
     }
 
     public void createDrawer() {
@@ -69,13 +62,14 @@ public class MainActivity extends AppCompatActivity {
 
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
-        navigationView.setCheckedItem(R.id.nav_home);
+        navigationView.setCheckedItem(R.id.nav_list_activities);
 
     }
 
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
+                Navigation.goToHome(this.navigationView);
                 finish();
                 break;
             case R.id.nav_edit_profile:
@@ -99,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.nav_list_activities:
-                Navigation.goToListOfActivities(this.navigationView);
                 finish();
                 break;
         }
@@ -108,13 +101,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void handleRegisterUser() {
-        // Retrieve user data (full name, email and phone number) from Firebase Firestore
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         if (fAuth.getCurrentUser() != null) {
             userId = fAuth.getCurrentUser().getUid();
             TextView[] textViewArray = {fullName, email, phone};
-            FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, MainActivity.this);
+            FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ListActivity.this);
         }
     }
 }

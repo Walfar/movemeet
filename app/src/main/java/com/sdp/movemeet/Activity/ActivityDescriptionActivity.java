@@ -39,7 +39,6 @@ import com.sdp.movemeet.chat.ChatActivity;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ActivityDescriptionActivity extends AppCompatActivity {
 
@@ -52,7 +51,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     Toolbar toolbar;
     TextView textView;
 
-    TextView fullName, email, phone, organizerView, numberParticipantsView;
+    TextView fullName, email, phone, organizerView, numberParticipantsView, participantNamesView;
     FirebaseFirestore fStore;
     StorageReference storageReference;
     String userId;
@@ -157,9 +156,14 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.nav_start_activity:
+                finish();
                 break;
             case R.id.nav_chat:
                 Navigation.goToChat(this.navigationView);
+                finish();
+                break;
+            case R.id.nav_list_activities:
+                Navigation.goToListOfActivities(this.navigationView);
                 finish();
                 break;
         }
@@ -195,8 +199,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void createParticipantNumberView() {
         // Number of participants of the activity
         numberParticipantsView = (TextView) findViewById(R.id.activity_number_description);
+        participantNamesView = (TextView) findViewById(R.id.activity_participants_description);
         if (act != null) {
             numberParticipantsView.setText(act.getParticipantId().size() + "/" + act.getNumberParticipant());
+            participantNamesView.setText(" participants");
         }
     }
 
@@ -206,7 +212,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (act != null) descriptionView.setText(act.getDescription());
     }
 
-    private void createDateView(){
+    private void createDateView() {
         // date from the activity
         TextView dateView = (TextView) findViewById(R.id.activity_date_description);
         if (act != null) {
@@ -322,7 +328,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                         participantNames.add(participantName);
                         // Add participant name to the
                         participantNamesString.append(participantName).append(", ");
-                        numberParticipantsView.setText(act.getParticipantId().size() + "/" + act.getNumberParticipant() + " (" + participantNamesString + ")");
+                        //numberParticipantsView.setText(act.getParticipantId().size() + "/" + act.getNumberParticipant() + " (" + participantNamesString + ")");
+                        participantNamesView.setText(" participants" + " (" + participantNamesString + ")");
                         Log.i(TAG, "current participantName: " + participantName);
                         //createParticipantNumberView();
                     } else {

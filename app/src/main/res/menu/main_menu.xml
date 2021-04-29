@@ -2,11 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-        <item
-            android:id="@+id/nav_home"
-            android:title="Home"
-            android:icon="@drawable/home"></item>
-
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/home"
+        android:title="Home"></item>
 
 
     <item android:title="Activities">
@@ -14,12 +13,23 @@
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_add_activity"
-                    android:title="Add Activity"
-                    android:icon="@drawable/add"></item>
+                    android:icon="@drawable/add"
+                    android:title="Add Activity"></item>
                 <item
                     android:id="@+id/nav_start_activity"
-                    android:title="Start Activity"
-                    android:icon="@drawable/block"></item>
+                    android:icon="@drawable/block"
+                    android:title="Start Activity"></item>
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="ListActivities">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_list_activities"
+                    android:icon="@drawable/add"
+                    android:title="List of my activities"></item>
             </group>
         </menu>
     </item>
@@ -29,8 +39,8 @@
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_chat"
-                    android:title="Chat"
-                    android:icon="@drawable/chat"></item>
+                    android:icon="@drawable/chat"
+                    android:title="Chat"></item>
             </group>
         </menu>
     </item>
@@ -40,8 +50,8 @@
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_edit_profile"
-                    android:title="Edit Profile"
-                    android:icon="@drawable/settings"></item>
+                    android:icon="@drawable/settings"
+                    android:title="Edit Profile"></item>
             </group>
         </menu>
     </item>
@@ -51,8 +61,8 @@
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_logout"
-                    android:title="Logout"
-                    android:icon="@drawable/logout_icon"></item>
+                    android:icon="@drawable/logout_icon"
+                    android:title="Logout"></item>
             </group>
         </menu>
     </item>

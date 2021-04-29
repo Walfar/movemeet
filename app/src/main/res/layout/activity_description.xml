@@ -140,11 +140,11 @@
                             android:text="Number participant" />
 
                         <TextView
-                            android:id="@+id/activity_text6_description"
+                            android:id="@+id/activity_participants_description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:text=" participants " />
+                            android:text="participants" />
                     </LinearLayout>
 
                     <LinearLayout
