@@ -79,8 +79,6 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        Log.d(TAG, "creating view");
-
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
@@ -126,9 +124,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         googleMap.setOnInfoWindowClickListener(this);
         googleMap.setOnMapClickListener(this::onMapClick);
 
-        if (ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            //This is necessary, because onMapReady won't be called if the permissions are not granted, and the activities will not display
+         if (!locationFetcher.isPermissionGranted()) {
             currentLocation = locationFetcher.getDefaultLocation();
             displayNearbyMarkers();
         }

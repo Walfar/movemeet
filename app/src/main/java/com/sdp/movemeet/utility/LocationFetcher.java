@@ -84,6 +84,15 @@ public class LocationFetcher {
     }
 
     /**
+     * Checks that permission for accessing GPS location is granted
+     * @return true if permission is granted, false otherwise
+     */
+    public boolean isPermissionGranted() {
+        return (ActivityCompat.checkSelfPermission(supportMapFragment.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(supportMapFragment.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED);
+    }
+
+    /**
      * Getter for the default location, i.e (0, 0)
      * @return the default location
      */
