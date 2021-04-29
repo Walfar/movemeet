@@ -62,7 +62,7 @@ public class ListActivity extends AppCompatActivity {
 
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
-        navigationView.setCheckedItem(R.id.nav_home);
+        navigationView.setCheckedItem(R.id.nav_list_activities);
 
     }
 
