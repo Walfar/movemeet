@@ -6,7 +6,7 @@
     android:clipToPadding="false"
     android:paddingTop="6dp"
     android:paddingBottom="6dp"
-    tools:context=".chat.ChatActivity">
+    tools:context=".view.chat.ChatActivity">
 
 
     <LinearLayout

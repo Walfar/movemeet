@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UploadActivityActivity">
+    tools:context=".view.activity.UploadActivityActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -69,7 +69,7 @@
 
         <fragment
             android:id="@+id/fragment_container_view"
-            android:name="com.sdp.movemeet.map.MiniMapFragment"
+            android:name="com.sdp.movemeet.view.map.MiniMapFragment"
             android:layout_width="394dp"
             android:layout_height="167dp"
             app:layout_constraintBottom_toBottomOf="parent"

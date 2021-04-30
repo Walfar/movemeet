@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".UploadActivityActivity"
+    tools:context=".view.activity.UploadActivityActivity"
     tools:openDrawer="start">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -70,7 +70,7 @@
 
         <fragment
             android:id="@+id/fragment_container_view"
-            android:name="com.sdp.movemeet.map.MiniMapFragment"
+            android:name="com.sdp.movemeet.view.map.MiniMapFragment"
             android:layout_width="384dp"
             android:layout_height="140dp"
             app:layout_constraintBottom_toBottomOf="parent"

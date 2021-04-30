@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:onClick="toggleRecording"
-    tools:context="com.sdp.movemeet.map.GPSRecordingActivity">
+    tools:context="com.sdp.movemeet.view.map.GPSRecordingActivity">
 
     <fragment
         android:id="@+id/gmap_recording"

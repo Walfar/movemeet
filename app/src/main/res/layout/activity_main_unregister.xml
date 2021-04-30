@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainUnregisterActivity">
+    tools:context=".view.main.MainUnregisterActivity">
 
 
     <TextView
@@ -68,7 +68,7 @@
         app:layout_constraintStart_toStartOf="parent">
         <fragment
             android:id="@+id/fragment_container_view"
-            android:name="com.sdp.movemeet.map.MainMapFragment"
+            android:name="com.sdp.movemeet.view.map.MainMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>

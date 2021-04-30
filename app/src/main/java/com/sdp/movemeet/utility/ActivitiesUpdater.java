@@ -6,31 +6,23 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-import com.google.android.gms.common.util.VisibleForTesting;
-import com.google.android.gms.dynamic.SupportFragmentWrapper;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.sdp.movemeet.Activity.Activity;
-import com.sdp.movemeet.Backend.BackendActivityManager;
-import com.sdp.movemeet.R;
-import com.sdp.movemeet.Sport;
-import com.sdp.movemeet.map.MainMapFragment;
+import com.sdp.movemeet.models.Activity;
+import com.sdp.movemeet.backend.BackendActivityManager;
+import com.sdp.movemeet.models.Sport;
+import com.sdp.movemeet.view.map.MainMapFragment;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
-import static com.sdp.movemeet.Backend.BackendActivityManager.ACTIVITIES_COLLECTION;
-import static com.sdp.movemeet.Sport.Running;
+import static com.sdp.movemeet.backend.BackendActivityManager.ACTIVITIES_COLLECTION;
+import static com.sdp.movemeet.models.Sport.Running;
 
 public class ActivitiesUpdater {
 

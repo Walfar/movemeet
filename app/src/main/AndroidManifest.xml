@@ -17,13 +17,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.movemeet.noActionBar">
-        <activity android:name=".Activity.ListActivity"></activity>
-        <activity android:name=".map.GPSRecordingActivity" />
+        <activity android:name=".view.activity.ActivityListActivity"></activity>
+        <activity android:name=".view.map.GPSRecordingActivity" />
         <activity
-            android:name=".EditProfileActivity"
+            android:name=".view.profile.EditProfileActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".UploadActivityActivity" />
+        <activity android:name=".view.profile.ProfileActivity" />
+        <activity android:name=".view.activity.UploadActivityActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -37,10 +37,10 @@
             android:value="@string/map_key" />
 
         <activity
-            android:name=".chat.ChatActivity"
+            android:name=".view.chat.ChatActivity"
             android:label="@string/title_activity_chat" />
         <activity
-            android:name=".HomeScreenActivity"
+            android:name=".view.home.HomeScreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/Theme.movemeet.noActionBar">
             <intent-filter>
@@ -50,33 +50,33 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegisterActivity"
-            android:parentActivityName=".HomeScreenActivity"
+            android:name=".view.home.RegisterActivity"
+            android:parentActivityName=".view.home.HomeScreenActivity"
             android:theme="@style/Theme.movemeet">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sdp.movemeet.HomeScreenActivity" />
+                android:value="com.sdp.movemeet.view.home.HomeScreenActivity" />
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".view.main.MainActivity" />
         <activity
-            android:name=".MainUnregisterActivity"
-            android:parentActivityName=".HomeScreenActivity"
+            android:name=".view.main.MainUnregisterActivity"
+            android:parentActivityName=".view.home.HomeScreenActivity"
             android:theme="@style/Theme.movemeet">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sdp.movemeet.HomeScreenActivity" />
+                android:value="com.sdp.movemeet.view.home.HomeScreenActivity" />
         </activity>
         <activity
-            android:name=".LoginActivity"
-            android:parentActivityName=".HomeScreenActivity"
+            android:name=".view.home.LoginActivity"
+            android:parentActivityName=".view.home.HomeScreenActivity"
             android:theme="@style/Theme.movemeet">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sdp.movemeet.HomeScreenActivity" />
+                android:value="com.sdp.movemeet.view.home.HomeScreenActivity" />
         </activity>
-        <activity android:name=".Activity.ActivityDescriptionActivity"></activity>
+        <activity android:name=".view.activity.ActivityDescriptionActivity"></activity>
 
-        <activity android:name=".Activity.ActivityDescriptionActivityUnregister"/>
+        <activity android:name=".view.activity.ActivityDescriptionActivityUnregister"/>
 
         <meta-data
             android:name="preloaded_fonts"
