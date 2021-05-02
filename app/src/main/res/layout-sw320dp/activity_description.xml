@@ -34,12 +34,13 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="vertical">
+                android:scrollbars="vertical"
+                tools:ignore="UselessParent">
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:isScrollContainer="true"
                     android:orientation="vertical"
                     android:padding="10dp">
@@ -58,9 +59,9 @@
                             android:fontFamily="@font/armata"
                             android:paddingStart="20dp"
                             android:paddingEnd="20dp"
-                            android:text="Title"
+                            android:text="@string/activity_description_title"
                             android:textAlignment="center"
-                            android:textSize="30dp" />
+                            android:textSize="30sp" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -73,14 +74,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/armata"
-                                android:text="By " />
+                                android:text="@string/activity_description_by" />
 
                             <TextView
                                 android:id="@+id/activity_organisator_description"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/armata"
-                                android:text="Organisator" />
+                                android:text="@string/activity_description_Organisator" />
                         </LinearLayout>
 
                         <de.hdodenhof.circleimageview.CircleImageView
@@ -107,7 +108,7 @@
                             android:fontFamily="@font/armata"
                             android:paddingTop="20dp"
                             android:paddingBottom="5dp"
-                            android:text="What ?"
+                            android:text="@string/activity_description_what"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -122,14 +123,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:text="Sport" />
+                            android:text="@string/activity_description_sport" />
 
                         <TextView
                             android:id="@+id/activity_text5_description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:text=" with " />
+                            android:text="@string/activity_description_with" />
 
 
                         <TextView
@@ -137,14 +138,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:text="Number participant" />
+                            android:text="@string/activity_description_number_participant" />
 
                         <TextView
                             android:id="@+id/activity_participants_description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:text="participants" />
+                            android:text="@string/activity_description_participants" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -160,7 +161,7 @@
                             android:fontFamily="@font/armata"
                             android:paddingTop="20dp"
                             android:paddingBottom="5dp"
-                            android:text="When ?"
+                            android:text="@string/activity_description_when"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -174,27 +175,27 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:text="date" />
+                            android:text="@string/activity_description_date" />
 
                         <TextView
                             android:id="@+id/activity_text2_description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:text=" during " />
+                            android:text="@string/activity_description_during" />
 
                         <TextView
                             android:id="@+id/activity_duration_description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:text="Duration" />
+                            android:text="@string/activity_description_duration" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:text="hours" />
+                            android:text="@string/activity_description_hours" />
 
                     </LinearLayout>
 
@@ -211,7 +212,7 @@
                             android:fontFamily="@font/armata"
                             android:paddingTop="20dp"
                             android:paddingBottom="5dp"
-                            android:text="Where ?"
+                            android:text="@string/activity_description_where"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -225,7 +226,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:text="Address" />
+                            android:text="@string/activity_description_address" />
 
                     </LinearLayout>
 
@@ -242,7 +243,7 @@
                             android:fontFamily="@font/armata"
                             android:paddingTop="20dp"
                             android:paddingBottom="5dp"
-                            android:text="Description"
+                            android:text="@string/activity_description_description"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -256,7 +257,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
-                            android:text="Description" />
+                            android:text="@string/activity_description_description" />
 
                     </LinearLayout>
 
@@ -274,7 +275,8 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
                             android:onClick="registerToActivity"
-                            android:text="Register" />
+                            android:text="@string/activity_description_register_button"
+                            tools:ignore="ButtonStyle" />
 
                         <Button
                             android:id="@+id/activityGoDescription"
@@ -283,7 +285,8 @@
                             android:fontFamily="@font/armata"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
-                            android:text="How to go" />
+                            android:text="@string/activity_description_how_to_go_button"
+                            tools:ignore="ButtonStyle" />
 
                         <Button
                             android:id="@+id/activityChatDescription"
@@ -291,7 +294,8 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
                             android:onClick="goToIndividualChat"
-                            android:text="Chat" />
+                            android:text="@string/activity_description_chat_button"
+                            tools:ignore="ButtonStyle" />
                     </LinearLayout>
 
                     <ProgressBar
