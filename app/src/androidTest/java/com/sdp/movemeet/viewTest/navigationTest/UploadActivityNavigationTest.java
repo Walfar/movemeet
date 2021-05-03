@@ -32,7 +32,7 @@ public class UploadActivityNavigationTest {
         onView(withId(R.id.edit_text_password)).perform(replaceText("234567"), closeSoftKeyboard());
         onView(withId(R.id.button_login)).perform(click());
         try {
-            Thread.sleep(500);
+            Thread.sleep(2500);
         } catch (InterruptedException e) {
             assert (false);
         }
@@ -51,7 +51,7 @@ public class UploadActivityNavigationTest {
         // Open Drawer to click on navigation.
         onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
         try{
-            Thread.sleep(500);
+            Thread.sleep(2500);
         }catch(Exception e){}
     }
 
