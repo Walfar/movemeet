@@ -37,7 +37,7 @@ public class MainActivityNavigationTest {
         onView(withId(R.id.edit_text_password)).perform(replaceText("234567"), closeSoftKeyboard());
         onView(withId(R.id.button_login)).perform(click());
         try {
-            Thread.sleep(1500);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             assert (false);
         }

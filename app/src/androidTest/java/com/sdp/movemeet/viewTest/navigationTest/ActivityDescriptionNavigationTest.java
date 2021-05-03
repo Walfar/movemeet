@@ -32,7 +32,7 @@ public class ActivityDescriptionNavigationTest {
         onView(withId(R.id.edit_text_password)).perform(replaceText("234567"), closeSoftKeyboard());
         onView(withId(R.id.button_login)).perform(click());
         try {
-            Thread.sleep(1500);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             assert (false);
         }
@@ -108,5 +108,9 @@ public class ActivityDescriptionNavigationTest {
         }catch(Exception e){}
 
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
+
+        try{
+            Thread.sleep(500);
+        }catch(Exception e){}
     }
 }
