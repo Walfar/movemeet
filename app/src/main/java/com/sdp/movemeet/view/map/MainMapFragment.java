@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sdp.movemeet.models.Activity;
@@ -35,6 +36,8 @@ import com.sdp.movemeet.R;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
 import com.sdp.movemeet.utility.LocationFetcher;
+
+import java.util.ArrayList;
 
 
 /**
@@ -69,6 +72,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     private boolean first_callback;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_map, container, false);
@@ -80,7 +84,13 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
         //Update the local list of activities from the database
         this.updater = ActivitiesUpdater.getInstance();
-        updater.updateListActivities(this);
+        OnSuccessListener listener = new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                displayNearbyMarkers();
+            }
+        };
+        updater.updateListActivities(listener);
 
         user = fAuth.getCurrentUser();
 
@@ -98,7 +108,8 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
                     if (first_callback) {
                         //This must be done only once, to avoid constant animations, and duplicating the activity markers
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), ZOOM_VALUE));
-                        displayNearbyMarkers();
+                        //TODO: display markers or not ? Might be already done when fetchhing
+                        //displayNearbyMarkers();
                         first_callback = false;
                     }
                 }
@@ -112,6 +123,8 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
         return view;
     }
+
+    //getActivities callback displayingMarkers !
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override

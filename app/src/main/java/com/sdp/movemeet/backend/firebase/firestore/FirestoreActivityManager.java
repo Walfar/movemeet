@@ -1,7 +1,9 @@
 package com.sdp.movemeet.backend.firebase.firestore;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
@@ -25,5 +27,24 @@ public class FirestoreActivityManager extends FirestoreManager<Activity> {
         // TODO: return 50 closest activities and execute query on those
         return super.search(field, value);
     }
+
+    /**
+     * Returns a list of recently added activities, with the specified size
+     * @param size number of recently added activities we want to get
+     * @return a querySnapshot for size number of recently added activities
+     */
+    public Task<QuerySnapshot> getRecentlyAddedActivities(int size) {
+        return db.collection(collection).orderBy("createdAt", Query.Direction.DESCENDING).limit(size).get();
+    }
+
+
+    /**
+     * Gets all documents in the corresponding collection
+     * @return a querySnapshot for all documents in the collection
+     */
+    public Task<QuerySnapshot> getAll() {
+        return db.collection(collection).get();
+    }
+
 
 }

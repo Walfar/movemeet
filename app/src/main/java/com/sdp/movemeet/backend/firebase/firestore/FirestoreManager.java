@@ -1,14 +1,22 @@
 package com.sdp.movemeet.backend.firebase.firestore;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sdp.movemeet.backend.BackendStorage;
+import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.FirebaseObject;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
 
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 abstract class FirestoreManager<T extends FirebaseObject> implements BackendStorage<T> {
 
@@ -57,4 +65,5 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendStor
 
         return db.collection(collection).document(path).get();
     }
+
 }
