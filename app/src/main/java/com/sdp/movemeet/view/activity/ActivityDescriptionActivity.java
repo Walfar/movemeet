@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -30,22 +31,28 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.sdp.movemeet.backend.FirebaseInteraction;
-import com.sdp.movemeet.view.home.LoginActivity;
-import com.sdp.movemeet.models.Activity;
-import com.sdp.movemeet.view.navigation.Navigation;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.FirebaseInteraction;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
+import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.view.chat.ChatActivity;
+import com.sdp.movemeet.view.home.LoginActivity;
+import com.sdp.movemeet.view.navigation.Navigation;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+/***
+ * Activity for show the description of an activity
+ */
 public class ActivityDescriptionActivity extends AppCompatActivity {
 
+    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     FirebaseAuth fAuth;
     private Activity act;
     private static final String TAG = "ActDescActivity";
+    FirestoreActivityManager firestoreManager;
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -79,9 +86,14 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
 
         uri = intent.getData();
-        if(uri != null){
+        if (uri != null) {
             loadActivityHeaderPicture();
         }
+
+        fAuth = FirebaseAuth.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference();
+        fStore = FirebaseFirestore.getInstance();
+        userId = fAuth.getCurrentUser().getUid();
 
         createTitleView();
         createParticipantNumberView();
@@ -96,12 +108,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         handleRegisterUser();
         getOrganizerName();
         getParticipantNames();
-
-        //The aim is to block any direct access to this page if the user is not logged
-        if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        }
     }
 
     private void getParticipantNames() {
@@ -173,32 +179,33 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
     public void handleRegisterUser() {
-        fAuth = FirebaseAuth.getInstance();
-        fStore = FirebaseFirestore.getInstance();
-        if (fAuth.getCurrentUser() != null) {
-            userId = fAuth.getCurrentUser().getUid();
+        if (userId != null) {
             TextView[] textViewArray = {fullName, email, phone};
             FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ActivityDescriptionActivity.this);
         }
     }
 
     public void logout(View view) {
-        if (fAuth.getCurrentUser() != null) {
-            FirebaseAuth.getInstance().signOut(); // this will do the logout of the user from Firebase
+        if (userId != null) {
+            fAuth.signOut(); // this will do the logout of the user from Firebase
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
         }
     }
 
 
+    /**
+     * title of the activity
+     */
     private void createTitleView() {
-        // Title of the activity
         TextView activityTitle = (TextView) findViewById(R.id.activity_title_description);
         if (act != null) activityTitle.setText(act.getTitle());
     }
 
+    /**
+     * number of participants of the activity
+     */
     private void createParticipantNumberView() {
-        // Number of participants of the activity
         numberParticipantsView = (TextView) findViewById(R.id.activity_number_description);
         participantNamesView = (TextView) findViewById(R.id.activity_participants_description);
         if (act != null) {
@@ -207,14 +214,18 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * description of the activity
+     */
     private void createDescriptionView() {
-        // Description of the activity
         TextView descriptionView = (TextView) findViewById(R.id.activity_description_description);
         if (act != null) descriptionView.setText(act.getDescription());
     }
 
+    /**
+     * date fof the activity
+     */
     private void createDateView() {
-        // date from the activity
         TextView dateView = (TextView) findViewById(R.id.activity_date_description);
         if (act != null) {
             String pattern = "MM/dd/yyyy HH:mm:ss";
@@ -224,14 +235,19 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Sport of the activity
+     */
     private void createSportView() {
-        // Type of sport of the activity
         TextView sportView = (TextView) findViewById(R.id.activity_sport_description);
         if (act != null) {
             sportView.setText(act.getSport().toString());
         }
     }
 
+    /**
+     * duration of the activity
+     */
     private void createDurationView() {
         TextView durationView = (TextView) findViewById(R.id.activity_duration_description);
         if (act != null) {
@@ -239,32 +255,36 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * organizer of the activity
+     */
     private void createOrganizerView() {
-        // Organizer of the activity
         organizerView = (TextView) findViewById(R.id.activity_organisator_description);
         if (act != null) {
             organizerView.setText(act.getOrganizerId());
         }
     }
 
+    /**
+     * address of the activity
+     */
     private void createAddressView() {
-        // Address of the activity
         TextView addressView = (TextView) findViewById(R.id.activity_address_description);
         if (act != null) {
             addressView.setText(act.getAddress());
         }
     }
 
+    /**
+     *
+     * Syncing registered participant to Firebase Firestore (field array "participantId")
+     */
     public void registerToActivity(View v) {
-        // Syncing registered participant to Firebase Firestore (field array "participantId")
-        fAuth = FirebaseAuth.getInstance();
-        if (fAuth.getCurrentUser() != null) {
-            String userId;
-            userId = fAuth.getCurrentUser().getUid();
+        if (userId != null) {
             try {
                 act.addParticipantId(userId);
                 createParticipantNumberView();
-                fStore = FirebaseFirestore.getInstance();
+                //Task<DocumentSnapshot> actRef = firestoreManager.get(act.getDocumentPath());
                 DocumentReference actRef = fStore.collection("activities").document(act.getDocumentPath());
                 actRef.update("participantId", FieldValue.arrayUnion(userId));
                 Log.d(TAG, "Participant registered in Firebase Firestore!");
@@ -276,8 +296,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Allowing the access to the chat of the activity only if the user is registered to the activity
+     */
     public void goToIndividualChat(View view) {
-        // Allowing the access to the chat of the activity only if the user is registered to the activity
         if (act.getParticipantId().contains(userId)) {
             Intent intent = new Intent(ActivityDescriptionActivity.this, ChatActivity.class);
             String activityChatId = act.getActivityId() + " - chatId";
@@ -290,8 +312,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Fetch the name of the organizer from Firebase Firestore
+     */
     private void getOrganizerName() {
-        // Fetch the name of the organizer from Firebase Firestore
         if (act != null) {
             organizerId = act.getOrganizerId();
             DocumentReference docRef = fStore.collection("users").document(organizerId);
@@ -316,8 +340,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Fetch the name of a participant from Firebase Firestore using his userId
+     */
     private void getCurrentParticipantName(String participantId) {
-        // Fetch the name of a participant from Firebase Firestore using his userId
         DocumentReference docRef = fStore.collection("users").document(participantId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -343,12 +369,14 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Load the dedicated picture of the activity
+     */
     private void loadActivityHeaderPicture() {
-        // Load the dedicated picture of the activity
         activityImage = findViewById(R.id.activity_image_description);
         progressBar = findViewById(R.id.progress_bar_activity_description);
         progressBar.setVisibility(View.VISIBLE);
-        storageReference = FirebaseStorage.getInstance().getReference();
+
         if (act != null) {
             imagePath = "activities/" + act.getActivityId() + "/activityImage.jpg";
             StorageReference imageRef = storageReference.child(imagePath);
@@ -367,8 +395,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Launch the Gallery to select a header picture for the activity
+     */
     public void changeActivityPicture(View view) {
-        // Launch the Gallery to select a header picture for the activity
         if (userId.equals(organizerId)) {
             Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(openGalleryIntent, 1000);
