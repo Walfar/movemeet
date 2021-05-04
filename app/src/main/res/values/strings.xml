@@ -52,15 +52,15 @@
     <string name="header_email">Email</string>
 
     <!-- activity upload -->
-    <string name="activity_upload_uploadActivityTitle">New Activity</string>
-    <string name="activity_upload_editTextTitle_hint">Title</string>
-    <string name="activity_upload_editTextNParticipants_hint">Number of participants</string>
-    <string name="activity_upload_buttonConfirmUpload">Create</string>
-    <string name="activity_upload_editTextLocation_hint">Location</string>
-    <string name="activity_upload_editTextDescription_hint">A short description…</string>
-    <string name="activity_upload_editTextDate_hint">Date</string>
-    <string name="activity_upload_editTextStartTime_hint">Time</string>
-    <string name="activity_upload_editTextTime_hint">Duration</string>
+    <string name="activity_upload_upload_activity_title">New Activity</string>
+    <string name="activity_upload_edit_text_title_hint">Title</string>
+    <string name="activity_upload_edit_text_nparticipants_hint">Number of participants</string>
+    <string name="activity_upload_button_confirm_upload">Create</string>
+    <string name="activity_upload_edit_text_location_hint">Location</string>
+    <string name="activity_upload_edit_text_description_hint">A short description…</string>
+    <string name="activity_upload_edit_text_date_hint">Date</string>
+    <string name="activity_upload_edit_text_start_time_hint">Time</string>
+    <string name="activity_upload_edit_text_time_hint">Duration</string>
 
     <!-- activity register -->
     <string name="register_create_account">Create new account</string>
@@ -123,7 +123,7 @@
     <string name="activity_description_with"> with </string>
     <string name="activity_description_during"> during </string>
     <string name="activity_description_hours"> hours </string>
-    <string name="activity_description_Organisator">Organisator</string>
+    <string name="activity_description_organizer">Organizer</string>
     <string name="activity_description_what">What ?</string>
     <string name="activity_description_when">When ?</string>
     <string name="activity_description_where">Where ?</string>

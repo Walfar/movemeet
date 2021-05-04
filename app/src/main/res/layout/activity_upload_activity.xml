@@ -25,7 +25,7 @@
             android:id="@+id/uploadActivityTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/activity_upload_uploadActivityTitle"
+            android:text="@string/activity_upload_upload_activity_title"
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -41,25 +41,25 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:ems="10"
-        android:hint="@string/activity_upload_editTextTitle_hint"
+        android:hint="@string/activity_upload_edit_text_title_hint"
         android:inputType="textPersonName"
         android:maxLength="32"
         app:layout_constraintStart_toStartOf="@+id/uploadActivityTitle"
         app:layout_constraintTop_toBottomOf="@+id/uploadActivityTitle"
-        android:autofillHints="@string/activity_upload_editTextTitle_hint" />
+        android:autofillHints="@string/activity_upload_edit_text_title_hint" />
 
     <EditText
         android:id="@+id/editTextNParticipants"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/activity_upload_editTextNParticipants_hint"
+        android:hint="@string/activity_upload_edit_text_nparticipants_hint"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.384"
         app:layout_constraintStart_toEndOf="@+id/spinnerSportType"
         app:layout_constraintTop_toTopOf="@+id/spinnerSportType"
-        android:autofillHints="@string/activity_upload_editTextNParticipants_hint" />
+        android:autofillHints="@string/activity_upload_edit_text_nparticipants_hint" />
 
     <Spinner
         android:id="@+id/spinnerSportType"
@@ -86,7 +86,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="confirmActivityUpload"
-        android:text="@string/activity_upload_buttonConfirmUpload"
+        android:text="@string/activity_upload_button_confirm_upload"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -101,12 +101,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="@string/activity_upload_editTextLocation_hint"
+        android:hint="@string/activity_upload_edit_text_location_hint"
         android:inputType="textPostalAddress"
         app:layout_constraintEnd_toEndOf="@+id/editTextNParticipants"
         app:layout_constraintStart_toStartOf="@+id/spinnerSportType"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-        android:autofillHints="@string/activity_upload_editTextLocation_hint" />
+        android:autofillHints="@string/activity_upload_edit_text_location_hint" />
 
     <EditText
         android:id="@+id/editTextDescription"
@@ -114,13 +114,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="@string/activity_upload_editTextDescription_hint"
+        android:hint="@string/activity_upload_edit_text_description_hint"
         android:inputType="textPersonName"
         android:textAlignment="textStart"
         app:layout_constraintEnd_toEndOf="@+id/editTextLocation"
         app:layout_constraintStart_toStartOf="@+id/editTextLocation"
         app:layout_constraintTop_toBottomOf="@+id/editTextLocation"
-        android:autofillHints="@string/activity_upload_editTextDescription_hint" />
+        android:autofillHints="@string/activity_upload_edit_text_description_hint" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -140,13 +140,13 @@
             android:layout_marginEnd="8dp"
             android:ems="10"
             android:focusable="true"
-            android:hint="@string/activity_upload_editTextDate_hint"
+            android:hint="@string/activity_upload_edit_text_date_hint"
             android:onClick="setDate"
             app:layout_constraintBottom_toBottomOf="@+id/editTextStartTime"
             app:layout_constraintEnd_toStartOf="@+id/editTextStartTime"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/editTextStartTime"
-            android:autofillHints="@string/activity_upload_editTextDate_hint"
+            android:autofillHints="@string/activity_upload_edit_text_date_hint"
             android:inputType="date" />
 
         <EditText
@@ -155,14 +155,14 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:focusable="true"
-            android:hint="@string/activity_upload_editTextStartTime_hint"
+            android:hint="@string/activity_upload_edit_text_start_time_hint"
             android:onClick="setStartTime"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.6"
-            android:autofillHints="@string/activity_upload_editTextStartTime_hint"
+            android:autofillHints="@string/activity_upload_edit_text_start_time_hint"
             android:inputType="time" />
 
         <EditText
@@ -172,14 +172,14 @@
             android:layout_marginStart="8dp"
             android:ems="10"
             android:focusable="true"
-            android:hint="@string/activity_upload_editTextTime_hint"
+            android:hint="@string/activity_upload_edit_text_time_hint"
             android:onClick="setDuration"
             app:layout_constraintBottom_toBottomOf="@+id/editTextStartTime"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/editTextStartTime"
             app:layout_constraintTop_toTopOf="@+id/editTextDate"
             app:layout_constraintVertical_bias="0.6"
-            android:autofillHints="@string/activity_upload_editTextTime_hint"
+            android:autofillHints="@string/activity_upload_edit_text_time_hint"
             android:inputType="time" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
