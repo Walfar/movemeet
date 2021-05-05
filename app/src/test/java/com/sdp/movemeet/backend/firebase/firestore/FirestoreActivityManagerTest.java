@@ -1,5 +1,10 @@
 package com.sdp.movemeet.backend.firebase.firestore;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -13,10 +18,14 @@ import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.modelsTest.ActivityTest;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.internal.runners.JUnit4ClassRunner;
 import org.junit.runner.RunWith;
+
+import java.util.Map;
+import java.util.concurrent.Executor;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
@@ -34,12 +43,13 @@ public class FirestoreActivityManagerTest {
 
     DocumentReference docRef = mock(DocumentReference.class);
     CollectionReference colRef = mock(CollectionReference.class);
+    DocumentSnapshot docSnap = mock(DocumentSnapshot.class);
     Query query = mock(Query.class);
 
     Task<Void> addTask = mock(Task.class);
     Task<Void> deleteTask = mock(Task.class);
     Task<QuerySnapshot> searchTask = mock(Task.class);
-    Task<DocumentSnapshot> getTask = mock(Task.class);
+    Task<DocumentSnapshot> getTask;
 
     @Before
     public void setup() {
@@ -60,6 +70,85 @@ public class FirestoreActivityManagerTest {
         when(docRef.delete()).thenReturn(deleteTask);
 
         // Get
+        Map<String, Object> data = serializer.serialize(activity);
+        when(docSnap.getData()).thenReturn(data);
+
+        getTask = new Task<DocumentSnapshot>() {
+            @Override
+            public boolean isComplete() {
+                return true;
+            }
+
+            @Override
+            public boolean isSuccessful() {
+                return true;
+            }
+
+            @Override
+            public boolean isCanceled() {
+                return false;
+            }
+
+            @Override
+            public DocumentSnapshot getResult() {
+                return docSnap;
+            }
+
+            @Override
+            public <X extends Throwable> DocumentSnapshot getResult(@NonNull @NotNull Class<X> aClass) throws X {
+                return null;
+            }
+
+            @Nullable
+            @org.jetbrains.annotations.Nullable
+            @Override
+            public Exception getException() {
+                return null;
+            }
+
+            @NonNull
+            @NotNull
+            @Override
+            public Task<DocumentSnapshot> addOnSuccessListener(@NonNull @NotNull OnSuccessListener<? super DocumentSnapshot> onSuccessListener) {
+                return null;
+            }
+
+            @NonNull
+            @NotNull
+            @Override
+            public Task<DocumentSnapshot> addOnSuccessListener(@NonNull @NotNull Executor executor, @NonNull @NotNull OnSuccessListener<? super DocumentSnapshot> onSuccessListener) {
+                return null;
+            }
+
+            @NonNull
+            @NotNull
+            @Override
+            public Task<DocumentSnapshot> addOnSuccessListener(@NonNull @NotNull android.app.Activity activity, @NonNull @NotNull OnSuccessListener<? super DocumentSnapshot> onSuccessListener) {
+                return null;
+            }
+
+            @NonNull
+            @NotNull
+            @Override
+            public Task<DocumentSnapshot> addOnFailureListener(@NonNull @NotNull OnFailureListener onFailureListener) {
+                return null;
+            }
+
+            @NonNull
+            @NotNull
+            @Override
+            public Task<DocumentSnapshot> addOnFailureListener(@NonNull @NotNull Executor executor, @NonNull @NotNull OnFailureListener onFailureListener) {
+                return null;
+            }
+
+            @NonNull
+            @NotNull
+            @Override
+            public Task<DocumentSnapshot> addOnFailureListener(@NonNull @NotNull android.app.Activity activity, @NonNull @NotNull OnFailureListener onFailureListener) {
+                return null;
+            }
+        };
+
         when(docRef.get()).thenReturn(getTask);
 
         // Add
@@ -143,5 +232,13 @@ public class FirestoreActivityManagerTest {
     @Test
     public void getReturnsCorrectTask() {
         assertEquals(getTask, activityManager.get("path"));
+    }
+
+    @Test
+    public void resultOfGetCanBeDeserialized() {
+        DocumentSnapshot retrieved = (DocumentSnapshot) activityManager.get("path").getResult();
+
+        assertEquals(activity,
+                serializer.deserialize(retrieved.getData()));
     }
 }
