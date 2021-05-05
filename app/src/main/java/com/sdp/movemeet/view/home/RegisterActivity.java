@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.view.main.MainActivity;
 
 import java.util.HashMap;
@@ -38,7 +39,8 @@ public class RegisterActivity extends AppCompatActivity {
     TextView loginBtn;
     FirebaseAuth fAuth;
     ProgressBar progressBar;
-    FirebaseFirestore fStore;
+    //FirebaseFirestore fStore;
+    FirestoreActivityManager FirestoreManager;
     String userIDString, emailString, passwordString, fullNameString, phoneString;
 
     @Override
@@ -54,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.text_view_login_here);
 
         fAuth = FirebaseAuth.getInstance(); // getting the current instance of the database (to perform actions on the database)
-        fStore = FirebaseFirestore.getInstance(); // instantiating the Firebase Firestore variable
+        //fStore = FirebaseFirestore.getInstance(); // instantiating the Firebase Firestore variable
         progressBar = findViewById(R.id.progressBar);
 
         if (fAuth.getCurrentUser() != null) { // if the user is already logged in (i.e. the current user object is present), we directly send him to the "MainActivity"
@@ -98,7 +100,8 @@ public class RegisterActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) { // if the account has been correctly been created, we store his data and launch the "MainActivity"
                     userIDString = fAuth.getCurrentUser().getUid(); // retrieving the user id of the currently logged in (registered) user
-                    DocumentReference documentReference = fStore.collection("users").document(userIDString); // if we first don't have this "users" collection in our database, it will automatically create it in Cloud Firestore
+                    //DocumentReference documentReference = fStore.collection("users").document(userIDString); // if we first don't have this "users" collection in our database, it will automatically create it in Cloud Firestore
+                    DocumentReference documentReference = FirestoreManager.get("users").getResult().getDocumentReference(userIDString);
                     Map<String, Object> user = registeringData();
                     documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
