@@ -22,7 +22,7 @@ public abstract class ActivitiesUpdater {
 
     private static BackendSerializer<Activity> serializer =new ActivitySerializer();
     private static ArrayList<Activity> activities = new ArrayList<>();
-    private static FirestoreActivityManager firestoreManager = new FirestoreActivityManager(FirebaseFirestore.getInstance(), ACTIVITIES_COLLECTION, serializer);
+    private static FirestoreActivityManager firestoreActivityManager = new FirestoreActivityManager(FirebaseFirestore.getInstance(), ACTIVITIES_COLLECTION, serializer);
 
     private static final String TAG = "Activities updater TAG";
 
@@ -46,7 +46,7 @@ public abstract class ActivitiesUpdater {
             Log.d(TAG, "listener is null");
             return;
         }
-        Task<QuerySnapshot> allDocTask = firestoreManager.getAll();
+        Task<QuerySnapshot> allDocTask = firestoreActivityManager.getAll();
         //Count the number of elements in the collection
         allDocTask.addOnSuccessListener(queryDocumentSnapshots -> {
             // Calculate the number of newly added activities in the collection
@@ -62,7 +62,7 @@ public abstract class ActivitiesUpdater {
             }
             //Either way, when updating the list, we update the map as well
             else if (size == 0) allDocTask.addOnCompleteListener(listener);
-            else addActivitiesOnSuccess(firestoreManager.getRecentlyAddedActivities(size)).addOnCompleteListener(listener);;
+            else addActivitiesOnSuccess(firestoreActivityManager.getRecentlyAddedActivities(size)).addOnCompleteListener(listener);;
         });
     }
 
