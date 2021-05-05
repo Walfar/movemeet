@@ -20,13 +20,24 @@ public class DistanceCalculator {
     private ArrayList<Pair> activityDistanceMap;
     private boolean sorted;
 
+    /**
+     * Called in MainMapFragment to display the closest activities to the user.
+     * @param userLatitude the latitude of the current location of the user
+     * @param userLongitude the longitude of the current location of the user
+     */
     public DistanceCalculator(Double userLatitude, Double userLongitude) {
         this.userLatitude = userLatitude;
         this.userLongitude = userLongitude;
         activityDistanceMap = new ArrayList<Pair>();
     }
 
+    /**
+     * Called in MainMapFragment to update the list of the closest activities.
+     * @param activities the list of all activities available to the user
+     */
     public void setActivities(ArrayList<Activity> activities) {
+        activityDistanceMap = new ArrayList<Pair>();
+
         for (Activity activity : activities) {
             activityDistanceMap.add(new Pair(activity, 0.0));
         }
@@ -34,6 +45,9 @@ public class DistanceCalculator {
         sorted = false;
     }
 
+    /**
+     * Called in MainMapFragment to return all activities.
+     */
     public ArrayList<Activity> getAllActivities() {
         if (sorted) {
             ArrayList<Activity> activities = new ArrayList<Activity>();
@@ -47,7 +61,10 @@ public class DistanceCalculator {
         }
     }
 
-
+    /**
+     * Called in MainMapFragment to return the list of N closest activities.
+     * @param n the number of activities to return
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public ArrayList<Activity> getTopActivities(Integer n) {
         if (sorted) {
@@ -59,6 +76,10 @@ public class DistanceCalculator {
         }
     }
 
+    /**
+     * Called in MainMapFragment to return the list of activities that fall in a given radius.
+     * @param radius the radius (in km) around the current location of the user
+     */
     public ArrayList<Activity> getActivitiesInRadius(Double radius) {
         if (sorted) {
             ArrayList<Activity> topActivities = new ArrayList<Activity>();
@@ -75,7 +96,9 @@ public class DistanceCalculator {
         }
     }
 
-
+    /**
+     * Called in MainMapFragment to compute the distances between the user and the activities.
+     */
     public void calculateDistances() {
         for (Pair pair : activityDistanceMap) {
             pair.setValue(calculateDistance(
@@ -85,6 +108,9 @@ public class DistanceCalculator {
         }
     }
 
+    /**
+     * Called in MainMapFragment to sort the list of provided activities by distance to the user.
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void sort() {
         activityDistanceMap.sort(new Comparator<Pair>() {
@@ -97,12 +123,21 @@ public class DistanceCalculator {
         sorted = true;
     }
 
+    /**
+     * Called locally to verify that the list of activities is sorted by distance to the user.
+     */
     public boolean isSorted() {
         return sorted;
     }
 
+    /**
+     * Called locally to compute the distance between two geographical points.
+     * @param lat1 the latitude of the first point (the user)
+     * @param lng1 the longitude of the first point (the user)
+     * @param lat2 the latitude of the second point (the activity)
+     * @param lng2 the longitude of the second point (the activity)
+     */
     public Double calculateDistance(Double lat1, Double lng1, Double lat2, Double lng2) {
-        // Double p = 0.017453292519943295;
         Double p = Math.PI / 180;
 
         //Double a =  Math.pow(Math.sin((lat2 - lat1)/2),2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin((lng2 - lng1)/2),2);
@@ -113,6 +148,10 @@ public class DistanceCalculator {
         return 2 * EARTH_RADIUS * Math.asin(Math.sqrt(a));
     }
 
+    /**
+     * Represents a mapping of activities (keys) to their distances (values).
+     * Allows for sorting of activities by their distances relative to the user.
+     */
     public class Pair {
         private Activity key;
         private Double value;
