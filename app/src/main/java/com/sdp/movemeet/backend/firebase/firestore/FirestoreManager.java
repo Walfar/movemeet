@@ -39,8 +39,7 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendStor
     public Task<Void> delete(String path) {
         if (path == null || path.isEmpty()) throw new IllegalArgumentException();
 
-        return db.collection(collection)
-                .document(path)
+        return db.document(path)
                 .delete();
     }
 
@@ -55,6 +54,6 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendStor
     public Task<DocumentSnapshot> get(String path) {
         if (path == null || path.isEmpty()) throw new IllegalArgumentException();
 
-        return db.collection(collection).document(path).get();
+        return db.document(path).get();
     }
 }

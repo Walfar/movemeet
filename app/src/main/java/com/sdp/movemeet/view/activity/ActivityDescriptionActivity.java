@@ -284,9 +284,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             try {
                 act.addParticipantId(userId);
                 createParticipantNumberView();
-                //Task<DocumentSnapshot> actRef = firestoreManager.get(act.getDocumentPath());
-                DocumentReference actRef = fStore.collection("activities").document(act.getDocumentPath());
-                actRef.update("participantId", FieldValue.arrayUnion(userId));
+                firestoreManager.add(act, act.getDocumentPath());
                 Log.d(TAG, "Participant registered in Firebase Firestore!");
                 getParticipantNames();
             } catch (Exception e) {
@@ -318,7 +316,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void getOrganizerName() {
         if (act != null) {
             organizerId = act.getOrganizerId();
-            DocumentReference docRef = fStore.collection("users").document(organizerId);
+            DocumentReference docRef = firestoreManager.get("users").getResult().getDocumentReference(organizerId);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -344,7 +342,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Fetch the name of a participant from Firebase Firestore using his userId
      */
     private void getCurrentParticipantName(String participantId) {
-        DocumentReference docRef = fStore.collection("users").document(participantId);
+        DocumentReference docRef = firestoreManager.get("users").getResult().getDocumentReference(participantId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -355,7 +353,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                         participantNames.add(participantName);
                         // Add participant name to the
                         participantNamesString.append(participantName).append(", ");
-                        //numberParticipantsView.setText(act.getParticipantId().size() + "/" + act.getNumberParticipant() + " (" + participantNamesString + ")");
                         participantNamesView.setText(" participants" + " (" + participantNamesString + ")");
                         Log.i(TAG, "current participantName: " + participantName);
                         //createParticipantNumberView();
