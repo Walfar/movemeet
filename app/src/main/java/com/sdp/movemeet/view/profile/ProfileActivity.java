@@ -28,9 +28,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.view.navigation.Navigation;
 
@@ -50,7 +52,8 @@ public class ProfileActivity extends AppCompatActivity {
     String userId, userImagePath;
 
     FirebaseAuth fAuth;
-    FirebaseFirestore fStore;
+    //FirebaseFirestore fStore;
+    FirestoreActivityManager FirestoreManager;
     StorageReference storageReference;
     StorageReference profileRef;
 
@@ -82,7 +85,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         createDrawer();
 
-        handleRegisterUser();
+        //handleRegisterUser();
 
         //The aim is to block any direct access to this page if the user is not logged
         //Smth must be wrong since it prevents automatic connection during certain tests
@@ -149,21 +152,23 @@ public class ProfileActivity extends AppCompatActivity {
         return true;
     }
 
-    public void handleRegisterUser() {
-        // Retrieve user data (full name, email and phone number) from Firebase Firestore
-        fAuth = FirebaseAuth.getInstance();
-        fStore = FirebaseFirestore.getInstance();
-        if (fAuth.getCurrentUser() != null) {
-            userId = fAuth.getCurrentUser().getUid();
-            TextView[] textViewArray = {fullName, email, phone};
-            FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ProfileActivity.this);
-        }
-    }
+//    public void handleRegisterUser() {
+//        // Retrieve user data (full name, email and phone number) from Firebase Firestore
+//        fAuth = FirebaseAuth.getInstance();
+//        //fStore = FirebaseFirestore.getInstance();
+//        if (fAuth.getCurrentUser() != null) {
+//            userId = fAuth.getCurrentUser().getUid();
+//            TextView[] textViewArray = {fullName, email, phone};
+//            //FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ProfileActivity.this);
+//            FirebaseInteraction.retrieveDataFromFirebase(FirestoreManager, userId, textViewArray, ProfileActivity.this);
+//        }
+//    }
+
 
     public void displayRegisteredUserData() {
-        fStore = FirebaseFirestore.getInstance();
+        //fStore = FirebaseFirestore.getInstance();
         TextView[] textViewArray = {fullName, email, phone, description};
-        textViewArray = FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ProfileActivity.this);
+        textViewArray = FirebaseInteraction.retrieveDataFromFirebase(userId, textViewArray, ProfileActivity.this);
         fullName = textViewArray[0];
         email = textViewArray[1];
         phone = textViewArray[2];
@@ -227,7 +232,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void deleteFirestoreDataAndAuthentication() {
         // Delete all user data from Firebase Firestore
-        fStore.collection("users").document(userId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        //fStore.collection("users").document(userId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        FirestoreManager.get("users").getResult().getDocumentReference(userId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d(TAG, "deleteUserAccount - 2) Firebase Firestore user data successfully deleted!");

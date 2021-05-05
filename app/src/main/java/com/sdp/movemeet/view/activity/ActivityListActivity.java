@@ -106,7 +106,8 @@ public class ActivityListActivity extends AppCompatActivity {
         if (fAuth.getCurrentUser() != null) {
             userId = fAuth.getCurrentUser().getUid();
             TextView[] textViewArray = {fullName, email, phone};
-            FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ActivityListActivity.this);
+            //FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ActivityListActivity.this);
+            FirebaseInteraction.retrieveDataFromFirebase(userId, textViewArray, ActivityListActivity.this);
         }
     }
 }
