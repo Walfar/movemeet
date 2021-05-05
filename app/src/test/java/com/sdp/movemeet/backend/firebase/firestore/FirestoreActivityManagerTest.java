@@ -106,43 +106,35 @@ public class FirestoreActivityManagerTest {
                 return null;
             }
 
-            @NonNull
-            @NotNull
             @Override
             public Task<DocumentSnapshot> addOnSuccessListener(@NonNull @NotNull OnSuccessListener<? super DocumentSnapshot> onSuccessListener) {
                 return null;
             }
 
-            @NonNull
-            @NotNull
+
             @Override
             public Task<DocumentSnapshot> addOnSuccessListener(@NonNull @NotNull Executor executor, @NonNull @NotNull OnSuccessListener<? super DocumentSnapshot> onSuccessListener) {
                 return null;
             }
 
-            @NonNull
-            @NotNull
             @Override
             public Task<DocumentSnapshot> addOnSuccessListener(@NonNull @NotNull android.app.Activity activity, @NonNull @NotNull OnSuccessListener<? super DocumentSnapshot> onSuccessListener) {
                 return null;
             }
 
-            @NonNull
-            @NotNull
+
             @Override
             public Task<DocumentSnapshot> addOnFailureListener(@NonNull @NotNull OnFailureListener onFailureListener) {
                 return null;
             }
 
-            @NonNull
-            @NotNull
+
             @Override
             public Task<DocumentSnapshot> addOnFailureListener(@NonNull @NotNull Executor executor, @NonNull @NotNull OnFailureListener onFailureListener) {
                 return null;
             }
 
-            @NonNull
-            @NotNull
+
             @Override
             public Task<DocumentSnapshot> addOnFailureListener(@NonNull @NotNull android.app.Activity activity, @NonNull @NotNull OnFailureListener onFailureListener) {
                 return null;
