@@ -123,7 +123,7 @@ public class RegisterActivity extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
                 } else {
-                    // TODO: check why this part is not access
+                    // TODO: check why this part is NOT accessed! (No toast is displayed when the user account to create already exists)
                     Toast.makeText(RegisterActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                 }

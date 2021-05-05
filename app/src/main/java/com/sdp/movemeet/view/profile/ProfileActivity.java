@@ -25,10 +25,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
+import com.sdp.movemeet.backend.serialization.UserSerializer;
+import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.R;
@@ -50,10 +55,12 @@ public class ProfileActivity extends AppCompatActivity {
     ProgressBar progressBar;
 
     String userId, userImagePath;
+    User user;
 
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
-    FirestoreActivityManager FirestoreManager;
+    BackendManager<User> userManager;
+    //FirestoreActivityManager FirestoreManager;
     StorageReference storageReference;
     StorageReference profileRef;
 
@@ -73,6 +80,9 @@ public class ProfileActivity extends AppCompatActivity {
         phone = findViewById(R.id.text_view_activity_profile_phone);
         description = findViewById(R.id.text_view_activity_profile_description);
         progressBar = findViewById(R.id.progress_bar_profile);
+
+        fStore = FirebaseFirestore.getInstance();
+        userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
 
         fAuth = FirebaseAuth.getInstance();
         if (fAuth.getCurrentUser() != null) {
@@ -166,13 +176,41 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     public void displayRegisteredUserData() {
-        fStore = FirebaseFirestore.getInstance();
+        // TODO: to get values: userManager.get(userId)
+        //fStore = FirebaseFirestore.getInstance();
+        Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + userId);
+        document.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        // TODO: retrieve data here
+                        UserSerializer userSerializer = new UserSerializer();
+                        user = userSerializer.deserialize(document.getData());
+//                        fullNameString = (String) document.getData().get("fullName");
+//                        organizerView.setText(fullNameString);
+                        Log.i(TAG, "fullName: " + user.getFullName());
+                    } else {
+                        Log.d(TAG, "No such document!");
+                    }
+                } else {
+                    Log.d(TAG, "Get failed with: ", task.getException());
+                }
+            }
+        });
+
+
+
+        /*
         TextView[] textViewArray = {fullName, email, phone, description};
         textViewArray = FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ProfileActivity.this);
         fullName = textViewArray[0];
         email = textViewArray[1];
         phone = textViewArray[2];
         description = textViewArray[3];
+        */
     }
 
 
@@ -232,8 +270,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void deleteFirestoreDataAndAuthentication() {
         // Delete all user data from Firebase Firestore
-        //fStore.collection("users").document(userId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-        FirestoreManager.get("users").getResult().getDocumentReference(userId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        fStore.collection("users").document(userId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        //FirestoreManager.get("users").getResult().getDocumentReference(userId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d(TAG, "deleteUserAccount - 2) Firebase Firestore user data successfully deleted!");
