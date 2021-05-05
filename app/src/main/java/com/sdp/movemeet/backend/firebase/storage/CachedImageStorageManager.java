@@ -36,6 +36,7 @@ public class CachedImageStorageManager extends ImageStorageManager {
 
     @Override
     public StorageTask add(Image image, String path) {
+        //Add to local cache
         if (isStorageWritePermissionGranted()) {
             Log.d(TAG, "saving image to cache");
             Bitmap bitmap = getBitmapFromView(image.getImageView());
@@ -63,28 +64,30 @@ public class CachedImageStorageManager extends ImageStorageManager {
                 e.printStackTrace();
             }
         }
-        super.add(image, path);
-        return null;
+        //Add to storage
+        return super.add(image, path);
     }
 
     @Override
     public Task<Uri> get(String path) {
         Log.d(TAG, "Loading image from cache");
-        String imagePath = Environment.getExternalStorageDirectory().toString() + "/saved_images/" + path + "/activityImage.jpg";
-        try {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
-            if (bitmap == null) {
-                Log.d(TAG, "image could not be decoded");
-                return null;
+        if (isStorageReadPermissionGranted()) {
+            String imagePath = Environment.getExternalStorageDirectory().toString() + "/saved_images/" + path + "/activityImage.jpg";
+            try {
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
+                if (bitmap == null) {
+                    Log.d(TAG, "image could not be decoded");
+                    return null;
+                }
+                //imageView.setImageBitmap(bitmap);
+                Log.d(TAG, "image has been set");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            //imageView.setImageBitmap(bitmap);
-            Log.d(TAG, "image has been set");
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return null;
+        return super.get(path);
     }
 
     public static Bitmap getBitmapFromView(View view) {
