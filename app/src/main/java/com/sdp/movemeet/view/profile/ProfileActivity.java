@@ -52,7 +52,7 @@ public class ProfileActivity extends AppCompatActivity {
     String userId, userImagePath;
 
     FirebaseAuth fAuth;
-    //FirebaseFirestore fStore;
+    FirebaseFirestore fStore;
     FirestoreActivityManager FirestoreManager;
     StorageReference storageReference;
     StorageReference profileRef;
@@ -166,9 +166,9 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     public void displayRegisteredUserData() {
-        //fStore = FirebaseFirestore.getInstance();
+        fStore = FirebaseFirestore.getInstance();
         TextView[] textViewArray = {fullName, email, phone, description};
-        textViewArray = FirebaseInteraction.retrieveDataFromFirebase(userId, textViewArray, ProfileActivity.this);
+        textViewArray = FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ProfileActivity.this);
         fullName = textViewArray[0];
         email = textViewArray[1];
         phone = textViewArray[2];

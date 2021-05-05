@@ -387,7 +387,7 @@ public class ChatActivity extends AppCompatActivity {
             userId = fAuth.getCurrentUser().getUid();
             TextView[] textViewArray = {fullName, email, phone};
             //FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ChatActivity.this);
-            FirebaseInteraction.retrieveDataFromFirebase(userId, textViewArray, ChatActivity.this);
+            FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ChatActivity.this);
         }
     }
 

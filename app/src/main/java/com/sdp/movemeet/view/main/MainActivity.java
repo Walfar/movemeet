@@ -112,12 +112,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void handleRegisterUser() {
         // Retrieve user data (full name, email and phone number) from Firebase Firestore
-        //fStore = FirebaseFirestore.getInstance();
+        fStore = FirebaseFirestore.getInstance();
         if (fAuth.getCurrentUser() != null) {
             userId = fAuth.getCurrentUser().getUid();
             TextView[] textViewArray = {fullName, email, phone};
-            //FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, MainActivity.this);
-            FirebaseInteraction.retrieveDataFromFirebase(userId, textViewArray, MainActivity.this);
+            FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, MainActivity.this);
         }
     }
 }

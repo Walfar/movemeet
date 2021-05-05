@@ -44,7 +44,7 @@ public class FirebaseInteraction {
 
     private static final String TAG = "FirebaseInteraction";
 
-    private static FirestoreActivityManager FirestoreManager;
+    public static FirestoreActivityManager FirestoreManager;
 
     /**
      * Retrieve user data (full name, email, phone number and profile description) from Firebase
@@ -56,8 +56,70 @@ public class FirebaseInteraction {
      * @param activity The activity from which this function is called
      * @return An array of TextViews containing the updated user data
      */
-//    public static TextView[] retrieveDataFromFirebase(FirebaseFirestore fStore, String userId, TextView[] textViewArray, Activity activity) {
-//        DocumentReference documentReference = fStore.collection("users").document(userId);
+    public static TextView[] retrieveDataFromFirebase(FirebaseFirestore fStore, String userId, TextView[] textViewArray, Activity activity) {
+        DocumentReference documentReference = fStore.collection("users").document(userId);
+        documentReference.addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot == null) {
+                    //nothing
+                } else if (textViewArray.length == 4) {
+                    textViewArray[0].setText(documentSnapshot.getString("fullName"));
+                    textViewArray[1].setText(documentSnapshot.getString("email"));
+                    textViewArray[2].setText(documentSnapshot.getString("phone"));
+                    textViewArray[3].setText(documentSnapshot.getString("description"));
+                } else {
+                    textViewArray[0].setText(documentSnapshot.getString("fullName"));
+                    textViewArray[1].setText(documentSnapshot.getString("email"));
+                    textViewArray[2].setText(documentSnapshot.getString("phone"));
+                }
+            }
+        });
+
+        return textViewArray;
+    }
+
+
+//    public static TextView[] retrieveDataFromFirebase(String userId, TextView[] textViewArray, Activity activity) {
+//        //DocumentReference documentReference = fStore.collection("users").document(userId);
+//        Log.d(TAG, "userId" + userId);
+//        //FirestoreManager = new FirestoreActivityManager();
+//        DocumentReference documentReference = FirestoreManager.get("users").getResult().getDocumentReference(userId);
+//        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//
+//                    if (document == null) {
+//                        //nothing
+//                    } else if (textViewArray.length == 4) {
+//                        textViewArray[0].setText(document.getString("fullName"));
+//                        textViewArray[1].setText(document.getString("email"));
+//                        textViewArray[2].setText(document.getString("phone"));
+//                        textViewArray[3].setText(document.getString("description"));
+//                    } else {
+//                        textViewArray[0].setText(document.getString("fullName"));
+//                        textViewArray[1].setText(document.getString("email"));
+//                        textViewArray[2].setText(document.getString("phone"));
+//                    }
+//
+////                    if (document.exists()) {
+////                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+////                        fullNameString = (String) document.getData().get("fullName");
+////                        organizerView.setText(fullNameString);
+////                        Log.i(TAG, "fullNameString: " + fullNameString);
+////                    } else {
+////                        Log.d(TAG, "No such document!");
+////                    }
+//                } else {
+//                    Log.d(TAG, "Get failed with: ", task.getException());
+//                }
+//            }
+//        });
+
+
+
 //        documentReference.addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
 //            @Override
 //            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
@@ -78,66 +140,6 @@ public class FirebaseInteraction {
 //
 //        return textViewArray;
 //    }
-
-    public static TextView[] retrieveDataFromFirebase(String userId, TextView[] textViewArray, Activity activity) {
-        //DocumentReference documentReference = fStore.collection("users").document(userId);
-        Log.d(TAG, "userId" + userId);
-        DocumentReference documentReference = FirestoreManager.get("users").getResult().getDocumentReference(userId);
-        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-
-                    if (document == null) {
-                        //nothing
-                    } else if (textViewArray.length == 4) {
-                        textViewArray[0].setText(document.getString("fullName"));
-                        textViewArray[1].setText(document.getString("email"));
-                        textViewArray[2].setText(document.getString("phone"));
-                        textViewArray[3].setText(document.getString("description"));
-                    } else {
-                        textViewArray[0].setText(document.getString("fullName"));
-                        textViewArray[1].setText(document.getString("email"));
-                        textViewArray[2].setText(document.getString("phone"));
-                    }
-
-//                    if (document.exists()) {
-//                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-//                        fullNameString = (String) document.getData().get("fullName");
-//                        organizerView.setText(fullNameString);
-//                        Log.i(TAG, "fullNameString: " + fullNameString);
-//                    } else {
-//                        Log.d(TAG, "No such document!");
-//                    }
-                } else {
-                    Log.d(TAG, "Get failed with: ", task.getException());
-                }
-            }
-        });
-
-
-
-//        documentReference.addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-//                if (documentSnapshot == null) {
-//                    //nothing
-//                } else if (textViewArray.length == 4) {
-//                    textViewArray[0].setText(documentSnapshot.getString("fullName"));
-//                    textViewArray[1].setText(documentSnapshot.getString("email"));
-//                    textViewArray[2].setText(documentSnapshot.getString("phone"));
-//                    textViewArray[3].setText(documentSnapshot.getString("description"));
-//                } else {
-//                    textViewArray[0].setText(documentSnapshot.getString("fullName"));
-//                    textViewArray[1].setText(documentSnapshot.getString("email"));
-//                    textViewArray[2].setText(documentSnapshot.getString("phone"));
-//                }
-//            }
-//        });
-
-        return textViewArray;
-    }
 
 
     /**

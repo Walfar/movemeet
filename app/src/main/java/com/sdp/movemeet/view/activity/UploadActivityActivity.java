@@ -193,7 +193,7 @@ public class UploadActivityActivity extends AppCompatActivity {
             userId = fAuth.getCurrentUser().getUid();
             TextView[] textViewArray = {fullName, email, phone};
             //FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, UploadActivityActivity.this);
-            FirebaseInteraction.retrieveDataFromFirebase(userId, textViewArray, UploadActivityActivity.this);
+            FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, UploadActivityActivity.this);
         }
     }
 
