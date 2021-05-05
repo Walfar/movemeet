@@ -8,20 +8,23 @@ import com.google.firebase.storage.FirebaseStorage;
 
 public class BackendInstanceProvider {
 
-    private static final BackendInstanceProvider instance = new BackendInstanceProvider();
+    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    public static final BackendInstanceProvider instance = new BackendInstanceProvider();
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
-    private FirebaseFirestore firestore;
+    public FirebaseFirestore firestore;
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
-    private FirebaseStorage storage;
+    public FirebaseStorage storage;
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
-    private FirebaseDatabase database;
+    public FirebaseDatabase database;
 
     private BackendInstanceProvider() {
         firestore = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
         database = FirebaseDatabase.getInstance();
     }
+
+
 
     public static FirebaseFirestore getFirestoreInstance() {
         return instance.firestore;
