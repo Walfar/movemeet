@@ -76,7 +76,7 @@ public class LocationFetcherTest {
                 currentLocation = locationResult.getLastLocation();
             }
         };
-        locationFetcher = new LocationFetcher(fragmentTestRule.getFragment().getSupportMapFragment(), locationCallback);
+        locationFetcher = new LocationFetcher(fragmentTestRule.getFragment().supportMapFragment, locationCallback);
 
         when(fusedLocationProviderClient.getLastLocation()).thenReturn(mockLocationTask);
         when(fusedLocationProviderClient

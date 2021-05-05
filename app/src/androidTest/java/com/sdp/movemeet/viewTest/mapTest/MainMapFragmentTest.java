@@ -110,65 +110,6 @@ public class MainMapFragmentTest {
     }
 
 
-   /* @Test
-    public void activitiesUpdatesOnAdd() throws InterruptedException {
-        waitFor(2000);
-        MainMapFragment mapFragment = fragmentTestRule.getFragment();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
-        BackendActivityManager bam = new BackendActivityManager(db, "activities");
-
-        updater.fetchListActivities();
-        updater.updateListActivities(mapFragment);
-
-        Activity act = new Activity("activity",
-                "me",
-                "title",
-                10,
-                new ArrayList<String>(),
-                0,
-                0,
-                "desc",
-                "documentPath",
-                new Date(),
-                10,
-                Sport.Running,
-                "address",
-                new Date());
-
-        bam.uploadActivity(act,
-                new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        updater.updateListActivities(mapFragment);
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        List<Activity> activities = updater.getActivities();
-                        Activity act_in_collection = activities.get(activities.size()-1);
-                        assertEquals(act.getActivityId(), act_in_collection.getActivityId());
-                        assertEquals(act.getAddress(), act_in_collection.getAddress());
-                        assertEquals(act.getDescription(), act_in_collection.getDescription());
-                        assertEquals(act.getLatitude(), act_in_collection.getLatitude(),0);
-                        assertEquals(act.getLongitude(), act_in_collection.getLongitude(), 0);
-                        assertEquals(act.getNumberParticipant(), act_in_collection.getNumberParticipant());
-                        assertEquals(act.getParticipantId(), act_in_collection.getParticipantId());
-                        assertEquals(act.getTitle(), act_in_collection.getTitle());
-                        assertEquals(act.getOrganizerId(), act_in_collection.getOrganizerId());
-                        assertEquals(act.getSport(), act_in_collection.getSport());
-                    }
-                },
-                new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                    }
-                });
-
-    } */
-
-
     @Test
     public void testChooseIcons() throws InterruptedException {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
