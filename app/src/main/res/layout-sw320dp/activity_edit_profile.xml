@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditProfileActivity">
+    tools:context=".view.profile.EditProfileActivity">
 
     <TextView
         android:id="@+id/textViewUserSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="25dp"
-        android:text="User Settings"
+        android:text="@string/edit_profile_title"
         android:fontFamily="@font/armata"
         android:textSize="22sp"
         android:textStyle="bold"
@@ -22,14 +22,15 @@
     <ImageView
         android:id="@+id/image_view_edit_profile_image"
         android:onClick="changeProfilePicture"
-        android:layout_width="131dp"
-        android:layout_height="143dp"
+        android:layout_width="130dp"
+        android:layout_height="145dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.19"
-        app:srcCompat="@drawable/ic_person_black_24dp" />
+        app:srcCompat="@drawable/ic_person_black_24dp"
+        android:contentDescription="@string/edit_profile_picture" />
 
     <EditText
         android:id="@+id/edit_text_edit_profile_full_name"
@@ -39,11 +40,12 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:ems="10"
-        android:hint="Your Name"
+        android:hint="@string/edit_profile_full_name"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_view_edit_profile_image" />
+        app:layout_constraintTop_toBottomOf="@+id/image_view_edit_profile_image"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/edit_text_edit_profile_email"
@@ -53,11 +55,12 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:ems="10"
-        android:hint="Your Email Address"
+        android:hint="@string/edit_profile_email"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_edit_profile_full_name" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_edit_profile_full_name"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/edit_text_edit_profile_phone"
@@ -68,17 +71,18 @@
         android:layout_marginEnd="24dp"
         android:ems="10"
         android:inputType="phone"
-        android:hint="Phone"
+        android:hint="@string/edit_profile_phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_edit_profile_email" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_edit_profile_email"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/edit_text_edit_profile_description"
-        android:hint="Description"
+        android:hint="@string/edit_profile_description"
         android:inputType="textMultiLine"
         android:imeOptions="flagNoExtractUi"
-        android:gravity="top|left"
+        android:gravity="top|start"
         android:lines="8"
         android:minLines="6"
         android:maxLines="10"
@@ -90,7 +94,8 @@
         android:ems="10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_edit_profile_phone" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_edit_profile_phone"
+        android:autofillHints="" />
 
     <ProgressBar
         android:id="@+id/progress_bar_edit_profile"
@@ -113,6 +118,7 @@
         app:layout_constraintHorizontal_bias="0.94"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/baseline_save_black_18dp" />
+        app:srcCompat="@drawable/baseline_save_black_18dp"
+        android:contentDescription="@string/edit_profile_save_profile_data" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
