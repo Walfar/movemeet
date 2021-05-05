@@ -33,7 +33,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(JUnit4ClassRunner.class)
 public class FirestoreActivityManagerTest {
 
     FirebaseFirestore db;
@@ -228,13 +227,5 @@ public class FirestoreActivityManagerTest {
     @Test
     public void getReturnsCorrectTask() {
         assertEquals(getTask, activityManager.get("path"));
-    }
-
-    @Test
-    public void resultOfGetCanBeDeserialized() {
-        DocumentSnapshot retrieved = (DocumentSnapshot) activityManager.get("path").getResult();
-
-        assertEquals(activity,
-                serializer.deserialize(retrieved.getData()));
     }
 }
