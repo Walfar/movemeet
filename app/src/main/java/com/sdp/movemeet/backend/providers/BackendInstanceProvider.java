@@ -12,11 +12,11 @@ public class BackendInstanceProvider {
     public static final BackendInstanceProvider instance = new BackendInstanceProvider();
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
-    public FirebaseFirestore firestore;
+    public static FirebaseFirestore firestore;
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
-    public FirebaseStorage storage;
+    public static FirebaseStorage storage;
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
-    public FirebaseDatabase database;
+    public static FirebaseDatabase database;
 
     private BackendInstanceProvider() {
         firestore = FirebaseFirestore.getInstance();

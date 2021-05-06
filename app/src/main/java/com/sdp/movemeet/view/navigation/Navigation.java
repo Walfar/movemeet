@@ -130,14 +130,4 @@ public class Navigation extends AppCompatActivity {
         return fields;
     }
 
-    /*public void handleRegisterUser() {
-        // Retrieve user data (full name, email and phone number) from Firebase Firestore
-        if (fAuth.getCurrentUser() != null) {
-            userId = fAuth.getCurrentUser().getUid();
-            TextView[] textViewArray = {fullName, email, phone};
-            //FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, UploadActivityActivity.this);
-            FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, UploadActivityActivity.this);
-        }
-    }*/
-
 }

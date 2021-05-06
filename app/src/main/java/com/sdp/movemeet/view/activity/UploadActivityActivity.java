@@ -134,7 +134,8 @@ public class UploadActivityActivity extends AppCompatActivity {
 
         createDrawer();
 
-        handleRegisterUser();
+        Navigation.fillNavigationProfileFields(new TextView[] {fullName, email, phone});
+        //handleRegisterUser();
 
         //The aim is to block any direct access to this page if the user is not logged
         if (fAuth.getCurrentUser() == null) {
@@ -199,7 +200,7 @@ public class UploadActivityActivity extends AppCompatActivity {
         return true;
     }
 
-    public void handleRegisterUser() {
+    /*public void handleRegisterUser() {
         // Retrieve user data (full name, email and phone number) from Firebase Firestore
         if (fAuth.getCurrentUser() != null) {
             userId = fAuth.getCurrentUser().getUid();
@@ -207,7 +208,7 @@ public class UploadActivityActivity extends AppCompatActivity {
             //FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, UploadActivityActivity.this);
             FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, UploadActivityActivity.this);
         }
-    }
+    }*/
 
     private void setupSportSpinner(Context context) {
         spinner = (Spinner) findViewById(R.id.spinnerSportType);
