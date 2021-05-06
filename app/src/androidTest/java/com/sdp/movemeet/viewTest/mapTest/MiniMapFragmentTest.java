@@ -84,7 +84,7 @@ public class MiniMapFragmentTest {
         onView(withId(R.id.fragment_map)).check(matches((isDisplayed())));
     }
 
-    @Test
+   /* @Test
     public void noAddressSetIfNoClick() {
         testRule.getScenario().onActivity(activity -> {
             LatLng address = ((UploadActivityActivity) activity).getAddressLocation();
@@ -101,7 +101,7 @@ public class MiniMapFragmentTest {
             LatLng address = ((UploadActivityActivity) activity).getAddressLocation();
             assertNotNull(address);
         });
-    }
+    } */
 
     @After
     public void logOut() {
