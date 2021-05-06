@@ -115,7 +115,7 @@ public class UploadActivityActivityTest {
         scenario.onActivity(activity -> {
             UploadActivityActivity spyActivity = spy((UploadActivityActivity) activity);
 
-            
+
         });
     }
 

@@ -48,7 +48,7 @@ import static org.hamcrest.Matchers.allOf;
 @RunWith(AndroidJUnit4.class)
 public class ChatActivityTest {
 
-    private FirebaseDatabase mDatabase;
+    private FirebaseDatabase firebaseDatabase;
     private FirebaseAuth fAuth;
 
     /*@Rule
@@ -89,10 +89,9 @@ public class ChatActivityTest {
             assert (false);
         }
 
+        firebaseDatabase = FirebaseDatabase.getInstance();
 
-        mDatabase = FirebaseDatabase.getInstance();
-
-        DatabaseReference rootRef = mDatabase.getReference();
+        DatabaseReference rootRef = firebaseDatabase.getReference();
 
         rootRef.addValueEventListener(new ValueEventListener() {
             @Override

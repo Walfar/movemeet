@@ -146,4 +146,10 @@
     <string name="activity_send_image_button">Send Image</string>
 
 
+
+    <!-- RegisterActivity - warning messages -->
+    <string name="register_email_required_message">Email is required.</string>
+    <string name="register_password_required_message">Password is required.</string>
+    <string name="register_short_password_message">Password must be >= 6 characters.</string>
+    <string name="register_toast_account_already_exists">This email address is already being used!</string>
 </resources>
