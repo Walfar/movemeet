@@ -181,6 +181,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     public void handleRegisterUser() {
         if (userId != null) {
             TextView[] textViewArray = {fullName, email, phone};
+            //FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ActivityDescriptionActivity.this);
             FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ActivityDescriptionActivity.this);
         }
     }

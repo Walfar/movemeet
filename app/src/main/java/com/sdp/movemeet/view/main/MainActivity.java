@@ -42,12 +42,13 @@ public class MainActivity extends AppCompatActivity {
 
         createDrawer();
 
-        handleRegisterUser();
-
         //The aim is to block any direct access to this page if the user is not logged
+        fAuth = FirebaseAuth.getInstance();
         if (fAuth.getCurrentUser() == null) {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
+        } else {
+            handleRegisterUser();
         }
 
     }
@@ -111,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void handleRegisterUser() {
         // Retrieve user data (full name, email and phone number) from Firebase Firestore
-        fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         if (fAuth.getCurrentUser() != null) {
             userId = fAuth.getCurrentUser().getUid();

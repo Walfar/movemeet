@@ -23,6 +23,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.BackendManager;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
+import com.sdp.movemeet.backend.serialization.UserSerializer;
+import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.main.MainActivity;
 
 import java.util.HashMap;
@@ -39,6 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     ProgressBar progressBar;
     FirebaseFirestore fStore;
+    BackendManager<User> userManager;
     String userIDString, emailString, passwordString, fullNameString, phoneString;
 
     @Override
@@ -55,6 +60,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         fAuth = FirebaseAuth.getInstance(); // getting the current instance of the database (to perform actions on the database)
         fStore = FirebaseFirestore.getInstance(); // instantiating the Firebase Firestore variable
+        // FirebaseFirestore db, String collection, BackendSerializer<User> serializer
+        userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
         progressBar = findViewById(R.id.progressBar);
 
         if (fAuth.getCurrentUser() != null) { // if the user is already logged in (i.e. the current user object is present), we directly send him to the "MainActivity"
@@ -88,21 +95,23 @@ public class RegisterActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        registeringUserToFirebase();
+        User user = new User(fullNameString, emailString, phoneString, "");
+
+        registeringUserToFirebase(user);
 
     }
 
-    public void registeringUserToFirebase() { // Registering the user to the Firebase database
+    public void registeringUserToFirebase(User user) { // Registering the user to the Firebase database
         fAuth.createUserWithEmailAndPassword(emailString, passwordString).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) { // if the account has been correctly been created, we store his data and launch the "MainActivity"
-                    userIDString = fAuth.getCurrentUser().getUid(); // retrieving the user id of the currently logged in (registered) user
-                    DocumentReference documentReference = fStore.collection("users").document(userIDString); // if we first don't have this "users" collection in our database, it will automatically create it in Cloud Firestore
-                    Map<String, Object> user = registeringData();
-                    documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                if (task.isSuccessful()) {
+                    userIDString = fAuth.getCurrentUser().getUid();
+                    String path = FirebaseFirestore.getInstance().collection(FirestoreUserManager.USERS_COLLECTION).document(userIDString).getPath();
+                    user.setDocumentPath(path);
+                    userManager.add(user, null).addOnSuccessListener(new OnSuccessListener() {
                         @Override
-                        public void onSuccess(Void aVoid) {
+                        public void onSuccess(Object o) {
                             Log.d(TAG, "onSuccess: user profile is created for " + userIDString);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -114,25 +123,56 @@ public class RegisterActivity extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
                 } else {
-                    // An error could for instance happen in case a user tries to register with an
-                    // email already registered in the database ("Error! The email address is
-                    // already in use by another account.")
+                    // TODO: check why this part is NOT accessed! (No toast is displayed when the user account to create already exists)
+                    // --> It seems that we go here all the same but the toast is not visible!
                     Toast.makeText(RegisterActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                 }
             }
+
+
+//            @Override
+//            public void onComplete(@NonNull Task<AuthResult> task) {
+//                if (task.isSuccessful()) { // if the account has been correctly been created, we store his data and launch the "MainActivity"
+//                    userIDString = fAuth.getCurrentUser().getUid(); // retrieving the user id of the currently logged in (registered) user
+//                    //DocumentReference documentReference = fStore.collection("users").document(userIDString); // if we first don't have this "users" collection in our database, it will automatically create it in Cloud Firestore
+//
+//                    DocumentReference documentReference = userManager.get("users").getResult().getDocumentReference(userIDString);
+//                    Map<String, Object> user = registeringData();
+//                    documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                        @Override
+//                        public void onSuccess(Void aVoid) {
+//                            Log.d(TAG, "onSuccess: user profile is created for " + userIDString);
+//                        }
+//                    }).addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Log.d(TAG, "onFailure: " + e.toString());
+//                        }
+//                    });
+//                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+//
+//                } else {
+//                    // An error could for instance happen in case a user tries to register with an
+//                    // email already registered in the database ("Error! The email address is
+//                    // already in use by another account.")
+//                    Toast.makeText(RegisterActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                    progressBar.setVisibility(View.GONE);
+//                }
+//            }
+
         });
     }
 
-    public Map<String, Object> registeringData() {
-        // Map with "String" as keys (that will act as attributes in our document) and "objects" as the data
-        Map<String, Object> user = new HashMap<>();
-        user.put("fullName", fullNameString);
-        user.put("email", emailString);
-        user.put("phone", phoneString);
-
-        return user;
-    }
+//    public Map<String, Object> registeringData() {
+//        // Map with "String" as keys (that will act as attributes in our document) and "objects" as the data
+//        Map<String, Object> user = new HashMap<>();
+//        user.put("fullName", fullNameString);
+//        user.put("email", emailString);
+//        user.put("phone", phoneString);
+//
+//        return user;
+//    }
 
     public void loginOnClick(View view) {
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
