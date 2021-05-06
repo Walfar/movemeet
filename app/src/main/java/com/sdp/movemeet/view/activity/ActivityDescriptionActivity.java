@@ -69,7 +69,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     StorageReference storageReference;
     String userId;
     String organizerId;
-    String fullNameString;
     ArrayList<String> participantNames = new ArrayList<>();
     StringBuilder participantNamesString = new StringBuilder();
 
