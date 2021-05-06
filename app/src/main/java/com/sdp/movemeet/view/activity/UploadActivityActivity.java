@@ -162,7 +162,6 @@ public class UploadActivityActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.nav_add_activity:
-                finish();
                 break;
             case R.id.nav_logout:
                 FirebaseInteraction.logoutIfUserNonNull(fAuth, this);

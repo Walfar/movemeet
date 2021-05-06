@@ -104,7 +104,7 @@ public class MainMapFragmentTest {
 
     @Test
     public void mainMapFragment_MarkerOnMapForUser() throws UiObjectNotFoundException, InterruptedException {
-        waitFor(3000);
+        waitFor(5000);
         UiObject marker = uiDevice.findObject(new UiSelector().descriptionContains("I am here !"));
         assertNotNull(marker);
     }
@@ -141,7 +141,7 @@ public class MainMapFragmentTest {
 
     @Test
     public void mainMapFragment_userClickingOnMapAddsNewActivity() throws UiObjectNotFoundException, InterruptedException {
-        waitFor(3000);
+        waitFor(5000);
         //User must be logged to add new activity
         assertNotNull(user);
 
