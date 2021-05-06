@@ -16,7 +16,6 @@
         android:text="@string/app_name"
         android:textSize="20sp"
         app:fontFamily="@font/aclonica"
-        app:layout_constraintEnd_toStartOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,7 +24,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
             android:text="@string/subtitle"
             app:layout_constraintEnd_toStartOf="@+id/imageView_unregister"
             app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +39,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textViewUnregister"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/run_man" />
+        app:srcCompat="@drawable/run_man"
+        android:contentDescription="@string/run_man" />
 
     <ImageView
         android:id="@+id/imageView2_unregister"
@@ -53,7 +52,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textViewUnregister"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/run_woman" />
+        app:srcCompat="@drawable/run_woman"
+        android:contentDescription="@string/run_woman" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -66,7 +66,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
-            <fragment
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/fragment_container_view"
                 android:name="com.sdp.movemeet.view.map.MainMapFragment"
                 android:layout_width="match_parent"

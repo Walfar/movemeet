@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
-                finish();
                 break;
             case R.id.nav_edit_profile:
                 Navigation.goToUserProfileActivity(this.navigationView);
