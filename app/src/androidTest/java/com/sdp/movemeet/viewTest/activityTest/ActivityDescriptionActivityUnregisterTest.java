@@ -2,20 +2,15 @@ package com.sdp.movemeet.viewTest.activityTest;
 
 import android.content.Intent;
 
-import androidx.annotation.NonNull;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.Sport;
-import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
+import com.sdp.movemeet.view.activity.ActivityDescriptionActivityUnregister;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,10 +21,8 @@ import java.util.concurrent.CountDownLatch;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
-;
-
 @RunWith(AndroidJUnit4.class)
-public class ActivityNotNullDescriptionTest {
+public class ActivityDescriptionActivityUnregisterTest {
 
     private final static String DUMMY_ACTIVITY_ID = "12345";
     private final static String DUMMY_ORGANISATOR_ID = "1";
@@ -68,25 +61,7 @@ public class ActivityNotNullDescriptionTest {
         CountDownLatch latch = new CountDownLatch(1);
 
         mAuth = FirebaseAuth.getInstance();
-
-        mAuth.signInWithEmailAndPassword("movemeet@gmail.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    latch.countDown();
-                } else {
-                    assert (false);
-                }
-            }
-        });
-
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            assert (false);
-        }
-
-        ActivityScenarioRule<ActivityDescriptionActivity> testRule = new ActivityScenarioRule<>(new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra("activity", activity));
+        ActivityScenarioRule<ActivityDescriptionActivityUnregister> testRule = new ActivityScenarioRule<>(new Intent(getApplicationContext(), ActivityDescriptionActivityUnregister.class).putExtra("activity", activity));
     }
 
     @Test
@@ -95,18 +70,4 @@ public class ActivityNotNullDescriptionTest {
         Intents.release();
     }
 
-    @After
-    public void deleteAndSignOut() {
-        mAuth.signOut();
-    }
-
-    public boolean sleep(int millis) {
-        try {
-            Thread.sleep(millis);
-            return true;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 }
