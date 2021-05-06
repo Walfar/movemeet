@@ -25,9 +25,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.sdp.movemeet.backend.BackendManager;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
+import com.sdp.movemeet.backend.serialization.UserSerializer;
+import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.R;
@@ -48,9 +53,11 @@ public class ProfileActivity extends AppCompatActivity {
     ProgressBar progressBar;
 
     String userId, userImagePath;
+    User user;
 
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
+    BackendManager<User> userManager;
     StorageReference storageReference;
     StorageReference profileRef;
 
@@ -65,11 +72,10 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         profileImage = findViewById(R.id.image_view_profile_image);
-        fullName = findViewById(R.id.text_view_activity_profile_name);
-        email = findViewById(R.id.text_view_activity_profile_email);
-        phone = findViewById(R.id.text_view_activity_profile_phone);
-        description = findViewById(R.id.text_view_activity_profile_description);
         progressBar = findViewById(R.id.progress_bar_profile);
+
+        fStore = FirebaseFirestore.getInstance();
+        userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
 
         fAuth = FirebaseAuth.getInstance();
         if (fAuth.getCurrentUser() != null) {
@@ -82,12 +88,10 @@ public class ProfileActivity extends AppCompatActivity {
 
         createDrawer();
 
-        handleRegisterUser();
-
         //The aim is to block any direct access to this page if the user is not logged
         //Smth must be wrong since it prevents automatic connection during certain tests
         if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             finish();
         }
 
@@ -148,25 +152,33 @@ public class ProfileActivity extends AppCompatActivity {
         return true;
     }
 
-    public void handleRegisterUser() {
-        // Retrieve user data (full name, email and phone number) from Firebase Firestore
-        fAuth = FirebaseAuth.getInstance();
-        fStore = FirebaseFirestore.getInstance();
-        if (fAuth.getCurrentUser() != null) {
-            userId = fAuth.getCurrentUser().getUid();
-            TextView[] textViewArray = {fullName, email, phone};
-            FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ProfileActivity.this);
-        }
-    }
-
-    public void displayRegisteredUserData() {
-        fStore = FirebaseFirestore.getInstance();
-        TextView[] textViewArray = {fullName, email, phone, description};
-        textViewArray = FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ProfileActivity.this);
-        fullName = textViewArray[0];
-        email = textViewArray[1];
-        phone = textViewArray[2];
-        description = textViewArray[3];
+    public User displayRegisteredUserData() {
+        Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + userId);
+        document.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        UserSerializer userSerializer = new UserSerializer();
+                        user = userSerializer.deserialize(document.getData());
+                        fullName = findViewById(R.id.text_view_activity_profile_name);
+                        email = findViewById(R.id.text_view_activity_profile_email);
+                        phone = findViewById(R.id.text_view_activity_profile_phone);
+                        description = findViewById(R.id.text_view_activity_profile_description);
+                        fullName.setText(user.getFullName());
+                        email.setText(user.getEmail());
+                        phone.setText(user.getPhoneNumber());
+                        description.setText(user.getDescription());
+                    } else {
+                        Log.d(TAG, "No such document!");
+                    }
+                } else {
+                    Log.d(TAG, "Get failed with: ", task.getException());
+                }
+            }
+        });
+        return user;
     }
 
 
@@ -211,14 +223,14 @@ public class ProfileActivity extends AppCompatActivity {
         profileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d(TAG, "deleteUserAccount - 1) Firebase Storage user profile picture successfully deleted!");
+                Log.d(TAG, "deleteUserAccount - 1) ✅ Firebase Storage user profile picture successfully deleted!");
                 // 2) Deleting all the user data from Firebase Firestore
                 deleteFirestoreDataAndAuthentication();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Log.d(TAG, "deleteUserAccount - 1) Firebase Storage user profile picture could not be deleted! User account won't be deleted!");
+                Log.d(TAG, "deleteUserAccount - 1) ❌ Firebase Storage user profile picture could not be deleted! User account won't be deleted!");
             }
         });
     }
@@ -226,10 +238,13 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void deleteFirestoreDataAndAuthentication() {
         // Delete all user data from Firebase Firestore
-        fStore.collection("users").document(userId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+
+
+        ////======================= ✅
+        userManager.delete(FirestoreUserManager.USERS_COLLECTION + "/" + userId).addOnSuccessListener(new OnSuccessListener() {
             @Override
-            public void onSuccess(Void aVoid) {
-                Log.d(TAG, "deleteUserAccount - 2) Firebase Firestore user data successfully deleted!");
+            public void onSuccess(Object o) {
+                Log.d(TAG, "deleteUserAccount - 2) ✅ Firebase Firestore user data successfully deleted!");
                 // 3) Deleting the user from Firebase Authentication
                 deleteUserFromFirebaseAuthentication();
 
@@ -237,9 +252,28 @@ public class ProfileActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "deleteUserAccount - 2) Firebase Firestore user document could not be fetched! User account won't be deleted!");
+                Log.d(TAG, "deleteUserAccount - 2) ❌ Firebase Firestore user document could not be fetched! User account won't be deleted!");
             }
         });
+        ////=======================
+
+
+        ////=======================
+//        fStore.collection("users").document(userId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                Log.d(TAG, "deleteUserAccount - 2) Firebase Firestore user data successfully deleted!");
+//                // 3) Deleting the user from Firebase Authentication
+//                deleteUserFromFirebaseAuthentication();
+//
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Log.d(TAG, "deleteUserAccount - 2) Firebase Firestore user document could not be fetched! User account won't be deleted!");
+//            }
+//        });
+        ////=======================
     }
 
 
@@ -247,18 +281,19 @@ public class ProfileActivity extends AppCompatActivity {
         // Delete user from Firebase Authentication
         FirebaseUser user = fAuth.getCurrentUser();
         if (user != null) {
+            // TODO: Bug to fix --> check why this function sometimes doesn't delete the Firebase "user authentication"
             user.delete()
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Log.d(TAG, "deleteUserAccount - 3) Firebase Authentication for current user successfully deleted!");
+                                Log.d(TAG, "deleteUserAccount - 3) ✅ Firebase Authentication for current user successfully deleted!");
                                 Toast.makeText(ProfileActivity.this, "Account deleted!", Toast.LENGTH_SHORT).show();
                                 // Sending the user to the login screen
                                 startActivity(new Intent(ProfileActivity.this, HomeScreenActivity.class));
                                 finish();
                             } else {
-                                Log.d(TAG, "deleteUserAccount - 3) Firebase Authentication for current user could not be deleted!");
+                                Log.d(TAG, "deleteUserAccount - 3) ❌ Firebase Authentication for current user could not be deleted!");
                             }
                         }
                     });

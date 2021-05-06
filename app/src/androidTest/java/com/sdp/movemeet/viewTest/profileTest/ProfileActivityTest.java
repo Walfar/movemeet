@@ -3,12 +3,19 @@ package com.sdp.movemeet.viewTest.profileTest;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.sdp.movemeet.view.profile.ProfileActivity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.view.home.RegisterActivity;
@@ -18,6 +25,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.concurrent.CountDownLatch;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -38,8 +47,12 @@ public class ProfileActivityTest {
     public static final String TEST_PASSWORD = "123456";
     public static final String TEST_PHONE = "0798841817";
     public static final String TEST_DESCRIPTION = "My yolo description";
+
+    private FirebaseAuth fAuth;
+    private FirebaseUser user;
   
     @Rule
+    // TODO: why is this ActivityScenarioRule not launching RegisterActivity, but MainActivity?
     public ActivityScenarioRule<RegisterActivity> testRule = new ActivityScenarioRule<>(RegisterActivity.class);
 
     @Before
@@ -60,14 +73,40 @@ public class ProfileActivityTest {
     @Test
     public void deleteAccount() {
 
-        // Trying to directly launch ProfileActivity (even if the "rule" is set to RegisterActivity)
+        // Logging in
+        CountDownLatch latch = new CountDownLatch(1);
+        fAuth = FirebaseAuth.getInstance();
+        fAuth.signInWithEmailAndPassword("movemeet@gmail.com", "password").addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                latch.countDown();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                assert(false);
+            }
+        });
+
+        // Launching directly ProfileActivity (even if the "rule" is set to RegisterActivity)
         try (ActivityScenario<ProfileActivity> scenario = ActivityScenario.launch(ProfileActivity.class)) {
+
             clickDeleteAccountButton();
+
         }
         catch (Exception e) {
             Log.d("TAG", "deleteAccount Exception: " + e);
             e.printStackTrace();
         }
+
+        try {
+            Thread.sleep(2500);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+
+        // Checking if the userId still exists or not
+        user = fAuth.getCurrentUser();
     }
 
 
@@ -102,134 +141,6 @@ public class ProfileActivityTest {
             }
         };
     }
-
-
-    /*@Test
-    public void profileActivityToEditProfileActivity() {
-        ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.edit_text_email),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
-        appCompatEditText.perform(replaceText("antho2@gmail.com"), closeSoftKeyboard());
-
-        ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.edit_text_password),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        appCompatEditText2.perform(replaceText("234567"), closeSoftKeyboard());
-
-        ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.edit_text_password), withText("234567"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        appCompatEditText3.perform(pressImeActionButton());
-
-        ViewInteraction materialButton2 = onView(
-                allOf(withId(R.id.button_login), withText("Login"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                4),
-                        isDisplayed()));
-        materialButton2.perform(click());
-
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
-
-        // Open Drawer to click on navigation.
-        onView(withId(R.id.drawer_layout))
-                .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-                .perform(DrawerActions.open()); // Open Drawer
-
-        onView(withId(R.id.nav_edit_profile)).perform(click());
-
-        try{
-            Thread.sleep(500);
-        }catch(Exception e){}
-
-        onView(withId(R.id.button_update_profile)).perform(click());
-
-        try{
-            Thread.sleep(500);
-        }catch(Exception e){}
-
-        onView(withId(R.id.button_edit_profile_save_profile_data)).perform(click());
-
-        logout();
-    }
-
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
-
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
-    }
-
-    public void logout() {
-
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
-
-        // Open Drawer to click on navigation.
-        onView(withId(R.id.drawer_layout))
-                .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-                .perform(DrawerActions.open()); // Open Drawer
-
-        try{
-            Thread.sleep(500);
-        }catch(Exception e){}
-
-        onView(withId(R.id.nav_logout)).perform(forceClick());
-    }
-
-    public static ViewAction forceClick() {
-        return new ViewAction() {
-            @Override public Matcher<View> getConstraints() {
-                return allOf(isClickable(), isEnabled(), isDisplayed());
-            }
-
-            @Override public String getDescription() {
-                return "force click";
-            }
-
-            @Override public void perform(UiController uiController, View view) {
-                view.performClick(); // perform click without checking view coordinates.
-                uiController.loopMainThreadUntilIdle();
-            }
-        };
-    } */
-
 
 }
 
