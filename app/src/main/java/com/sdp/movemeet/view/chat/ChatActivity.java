@@ -323,8 +323,8 @@ public class ChatActivity extends AppCompatActivity {
         Message message = new Message(userName, messageText, userId, null /* no image */);
         if (messageText.length() > 0) {
             // The path to provide is of the form "chats/general_chat"
-            messageManager.add(message, chatRoom.toString().split("/",4)[3]);
-            //chatRoom.push().setValue(message);
+            //messageManager.add(message, chatRoom.toString().split("/",4)[3]);
+            chatRoom.push().setValue(message);
             messageInput.setText("");
         } else {
             Toast.makeText(getApplicationContext(), "Empty message.", Toast.LENGTH_SHORT).show();
