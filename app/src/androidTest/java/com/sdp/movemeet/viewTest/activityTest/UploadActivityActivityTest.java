@@ -1,5 +1,6 @@
 package com.sdp.movemeet.viewTest.activityTest;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
@@ -13,6 +14,7 @@ import androidx.test.filters.LargeTest;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,10 +23,13 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.BackendActivityManager;
+import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
+import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Activity;
@@ -39,6 +44,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
+import org.mockito.cglib.proxy.Callback;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -56,9 +69,12 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -107,53 +123,58 @@ public class UploadActivityActivityTest {
     }
 
     @Test
-    public void confirmActivityUploadClosesActivityOnSuccess() {
-        ActivityScenario scenario = ActivityScenario.launch(UploadActivityActivity.class);
-
-        Activity mockActivity = mock(Activity.class);
-
-        scenario.onActivity(activity -> {
-            UploadActivityActivity spyActivity = spy((UploadActivityActivity) activity);
-
-
-        });
-    }
-
-
-
-    /*@Test
-    public void confirmActivityUploadClosesActivityOnSuccess() {
-
-        ArgumentCaptor<OnSuccessListener> successCaptor = ArgumentCaptor.forClass(OnSuccessListener.class);
-
-        //ArgumentCaptor<OnCompleteListener> completeCaptor = ArgumentCaptor.forClass(OnCompleteListener.class);
+    public void confirmActivityUploadSilentlyFailsOnNullActivity() {
 
         UploadActivityActivity.enableNav = false;
 
         ActivityScenario scenario = ActivityScenario.launch(UploadActivityActivity.class);
 
-        //verify(getUserTask).addOnCompleteListener(completeCaptor.capture());
-        //completeCaptor.getValue().onComplete(getUserTask);
+        scenario.onActivity(activity -> {
+            UploadActivityActivity spyActivity = spy((UploadActivityActivity) activity);
+            doReturn(null).when(spyActivity).validateActivity();
+            spyActivity.confirmActivityUpload(null);
+        });
+    }
 
-        Activity act = mock(Activity.class);
+    @Test
+    public void confirmActivityUploadReturnsToMainOnSuccessfulUpload() {
+
+        UploadActivityActivity.enableNav = false;
+
+        Activity mockActivity = mock(Activity.class);
+
         Task addTask = mock(Task.class);
 
+        BackendManager<Activity> activityBackendManager = new FirestoreActivityManager(
+                BackendInstanceProvider.getFirestoreInstance(),
+                FirestoreActivityManager.ACTIVITIES_COLLECTION,
+                new ActivitySerializer()
+        );
+        BackendManager<Activity> spyActivityManager = spy(activityBackendManager);
+        doReturn(addTask).when(spyActivityManager).add(any(Activity.class), anyString());
+
+        ArgumentCaptor<OnSuccessListener> successCaptor = ArgumentCaptor.forClass(OnSuccessListener.class);
+        ArgumentCaptor<OnFailureListener> failureCaptor = ArgumentCaptor.forClass(OnFailureListener.class);
+
+        when(addTask.addOnSuccessListener(successCaptor.capture())).thenReturn(addTask);
+        when(addTask.addOnFailureListener(failureCaptor.capture())).thenReturn(addTask);
+
+        ActivityScenario scenario = ActivityScenario.launch(UploadActivityActivity.class);
+
         scenario.onActivity(activity -> {
-            //when(((UploadActivityActivity) activity).validateActivity()).thenReturn(act);
-            //((UploadActivityActivity) activity)::validateActivity = this::getFakeActivity;
-            doReturn(act).when(((UploadActivityActivity) activity))
-            when(((UploadActivityActivity) activity).activityBackendManager.add(any(), any()))
-                    .thenReturn(addTask);
+            UploadActivityActivity spyActivity = spy((UploadActivityActivity) activity);
+            doReturn(mockActivity).when(spyActivity).validateActivity();
+            spyActivity.activityBackendManager = spyActivityManager;
 
-            ((UploadActivityActivity) activity).confirmActivityUpload(null);
-
-            verify(addTask).addOnSuccessListener(successCaptor.capture());
-
-            successCaptor.getValue().onSuccess(null);
-
-            intended(hasComponent(MainActivity.class.getName()));
+            spyActivity.runOnUiThread(new Runnable() {
+                public void run() {
+                    spyActivity.confirmActivityUpload(activity.getCurrentFocus());
+                    successCaptor.getValue().onSuccess(null);
+                }
+            });
         });
-    }*/
+        intended(hasComponent(MainActivity.class.getName()));
+    }
 
     @After
     public void tearDown() {

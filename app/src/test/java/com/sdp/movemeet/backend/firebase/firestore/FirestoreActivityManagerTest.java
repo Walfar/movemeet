@@ -12,6 +12,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.sdp.movemeet.backend.BackendManager;
+import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.modelsTest.ActivityTest;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
@@ -32,8 +34,8 @@ import static org.mockito.Mockito.when;
 
 public class FirestoreActivityManagerTest {
 
-    private FirestoreActivityManager fam;
-    private ActivitySerializer serializer;
+    private BackendManager<Activity> fam;
+    private BackendSerializer<Activity> serializer;
     private Activity fakeActivity;
 
     // Dependencies that need to be mocked
@@ -45,7 +47,7 @@ public class FirestoreActivityManagerTest {
     private Query query;
     private QuerySnapshot querySnap;
 
-    private Task<Void> fakeDeleteTask = new Task<Void>() {
+    /*private Task<Void> fakeDeleteTask = new Task<Void>() {
         @Override
         public boolean isComplete() {
             return true;
@@ -321,10 +323,11 @@ public class FirestoreActivityManagerTest {
             return null;
         }
     };
+    */
 
     @Before
     public void setup() {
-        fakeActivity = ActivityTest.createFakeActivity();
+        /*fakeActivity = ActivityTest.createFakeActivity();
         serializer = new ActivitySerializer();
 
         db = mock(FirebaseFirestore.class);
@@ -352,7 +355,7 @@ public class FirestoreActivityManagerTest {
         when(colRef.whereEqualTo(contains("field"), any())).thenReturn(query);
         when(query.get()).thenReturn(fakeSearchTask);
 
-        fam = new FirestoreActivityManager(db, FirestoreActivityManager.ACTIVITIES_COLLECTION, serializer);
+        fam = new FirestoreActivityManager(db, FirestoreActivityManager.ACTIVITIES_COLLECTION, serializer);*/
     }
 
     @Test
