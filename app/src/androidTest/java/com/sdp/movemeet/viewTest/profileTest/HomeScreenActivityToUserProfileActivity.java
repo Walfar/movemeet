@@ -64,9 +64,9 @@ public class HomeScreenActivityToUserProfileActivity {
 
         onView(withId(R.id.text_view_activity_profile_email)).check(matches(withText("antho2@gmail.com")));
 
-        onView(withId(R.id.text_view_activity_profile_phone)).check(matches(withText("00412356788")));
+        onView(withId(R.id.text_view_activity_profile_phone)).check(matches(withText("000000000000")));
 
-        onView(withId(R.id.text_view_activity_profile_description)).check(matches(withText("Hi there! I love Judo!")));
+        onView(withId(R.id.text_view_activity_profile_description)).check(matches(withText("")));
         logout();
 
     }
