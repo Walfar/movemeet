@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -22,9 +23,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.FirebaseInteraction;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
+import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
@@ -35,6 +38,8 @@ import com.sdp.movemeet.view.activity.UploadActivityActivity;
 import com.sdp.movemeet.view.chat.ChatActivity;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
 
 public class Navigation extends AppCompatActivity {
 
@@ -135,7 +140,6 @@ public class Navigation extends AppCompatActivity {
                     new FirestoreUserManager(BackendInstanceProvider.getFirestoreInstance(),
                             FirestoreUserManager.USERS_COLLECTION,
                             serializer);
-
             backendUserManager.getUserFromUid(userId).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull @NotNull Task<DocumentSnapshot> task) {
@@ -217,8 +221,8 @@ public class Navigation extends AppCompatActivity {
                     finish();
                     break;
             }
-            drawerLayout.closeDrawer(GravityCompat.START);
         }
+        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
