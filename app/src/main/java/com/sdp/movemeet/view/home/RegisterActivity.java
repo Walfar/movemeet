@@ -79,17 +79,17 @@ public class RegisterActivity extends AppCompatActivity {
         phoneString = phoneEditText.getText().toString();
 
         if (TextUtils.isEmpty(emailString)) { // checking that the email address is not empty
-            emailEditText.setError("Email is required.");
+            emailEditText.setError(getString(R.string.register_email_required_message));
             return;
         }
 
         if (TextUtils.isEmpty(passwordString)) { // checking that the password is not empty
-            passwordEditText.setError("Password is required.");
+            passwordEditText.setError(getString(R.string.register_password_required_message));
             return;
         }
 
         if (passwordString.length() < 6) { // checking that the password is at least 6 characters long
-            passwordEditText.setError("Password must be >= 6 characters.");
+            passwordEditText.setError(getString(R.string.register_short_password_message));
             return;
         }
 
@@ -123,56 +123,14 @@ public class RegisterActivity extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
                 } else {
-                    // TODO: check why this part is NOT accessed! (No toast is displayed when the user account to create already exists)
-                    // --> It seems that we go here all the same but the toast is not visible!
-                    Toast.makeText(RegisterActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(RegisterActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, getString(R.string.register_toast_account_already_exists), Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                 }
             }
 
-
-//            @Override
-//            public void onComplete(@NonNull Task<AuthResult> task) {
-//                if (task.isSuccessful()) { // if the account has been correctly been created, we store his data and launch the "MainActivity"
-//                    userIDString = fAuth.getCurrentUser().getUid(); // retrieving the user id of the currently logged in (registered) user
-//                    //DocumentReference documentReference = fStore.collection("users").document(userIDString); // if we first don't have this "users" collection in our database, it will automatically create it in Cloud Firestore
-//
-//                    DocumentReference documentReference = userManager.get("users").getResult().getDocumentReference(userIDString);
-//                    Map<String, Object> user = registeringData();
-//                    documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-//                        @Override
-//                        public void onSuccess(Void aVoid) {
-//                            Log.d(TAG, "onSuccess: user profile is created for " + userIDString);
-//                        }
-//                    }).addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            Log.d(TAG, "onFailure: " + e.toString());
-//                        }
-//                    });
-//                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-//
-//                } else {
-//                    // An error could for instance happen in case a user tries to register with an
-//                    // email already registered in the database ("Error! The email address is
-//                    // already in use by another account.")
-//                    Toast.makeText(RegisterActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                    progressBar.setVisibility(View.GONE);
-//                }
-//            }
-
         });
     }
-
-//    public Map<String, Object> registeringData() {
-//        // Map with "String" as keys (that will act as attributes in our document) and "objects" as the data
-//        Map<String, Object> user = new HashMap<>();
-//        user.put("fullName", fullNameString);
-//        user.put("email", emailString);
-//        user.put("phone", phoneString);
-//
-//        return user;
-//    }
 
     public void loginOnClick(View view) {
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));

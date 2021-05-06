@@ -30,14 +30,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.backend.BackendManager;
-import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.R;
-import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.view.navigation.Navigation;
 
@@ -155,7 +153,7 @@ public class ProfileActivity extends AppCompatActivity {
         return true;
     }
 
-    public void displayRegisteredUserData() {
+    public User displayRegisteredUserData() {
         Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + userId);
         document.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -181,6 +179,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
         });
+        return user;
     }
 
 
