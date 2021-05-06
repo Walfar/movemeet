@@ -45,7 +45,7 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendMana
      */
     @Override
     public Task<Void> add(T object, String path) {
-        if (object == null || path == null || path.isEmpty()) throw new IllegalArgumentException();
+        if (object == null) throw new IllegalArgumentException();
 
         String documentPath = db.collection(collection).document().getPath();
         object.setDocumentPath(documentPath);
