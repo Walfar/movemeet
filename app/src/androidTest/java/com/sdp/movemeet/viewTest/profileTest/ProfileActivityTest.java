@@ -9,6 +9,7 @@ import androidx.test.espresso.ViewAction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.view.profile.ProfileActivity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.view.home.RegisterActivity;
