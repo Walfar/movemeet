@@ -391,10 +391,10 @@ public class FirestoreActivityManagerTest {
         });
     }
 
-    @Test
+    /*@Test
     public void deleteReturnsCorrectTask() {
         assertEquals(fakeDeleteTask, fam.delete("doc"));
-    }
+    }*/
 
     @Test
     public void getThrowsIllegalArgumentExceptionOnNullOrEmptyPath() {
@@ -407,10 +407,10 @@ public class FirestoreActivityManagerTest {
         });
     }
 
-    @Test
+    /*@Test
     public void getReturnsCorrectResult() {
         assertEquals(snap, fam.get("doc").getResult());
-    }
+    }*/
 
     @Test
     public void searchThrowsIllegalArgumentExceptionOnNullParameter() {
