@@ -1,7 +1,6 @@
 package com.sdp.movemeet.backend.firebase.firestore;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -98,8 +97,6 @@ public class FirestoreActivityManagerTest {
                 return null;
             }
 
-            @Nullable
-            @org.jetbrains.annotations.Nullable
             @Override
             public Exception getException() {
                 return null;
