@@ -6,6 +6,7 @@ import android.view.Gravity;
 
 import androidx.annotation.NonNull;
 import androidx.test.espresso.contrib.DrawerActions;
+import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
@@ -52,13 +53,31 @@ public class MiniMapFragmentTest {
 
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
-
     @Before
-    public void setUp() throws InterruptedException {
-        //The map is tested when the user is logged in
-        firebaseAuth.signInWithEmailAndPassword("test@test.com", "password");
-        Thread.sleep(2000);
+    public void signIn() {
+        if (firebaseAuth.getCurrentUser() == null) {
+            onView(withId(R.id.edit_text_email)).perform(replaceText("antho2@gmail.com"), closeSoftKeyboard());
+            onView(withId(R.id.edit_text_password)).perform(replaceText("234567"), closeSoftKeyboard());
+            onView(withId(R.id.button_login)).perform(click());
+            try {
+                Thread.sleep(2500);
+            } catch (InterruptedException e) {
+                assert (false);
+            }
+            // Open Drawer to click on navigation.
+            onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
+            try{
+                Thread.sleep(500);
+            }catch(Exception e){}
+
+            onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_add_activity));
+
+            try{
+                Thread.sleep(500);
+            }catch(Exception e){}
+        }
     }
+
 
     @Test
     public void miniMapFragment_isDisplayed() throws InterruptedException {
@@ -84,4 +103,8 @@ public class MiniMapFragmentTest {
         });
     }
 
+    @After
+    public void logOut() {
+        firebaseAuth.signOut();
+    }
 }

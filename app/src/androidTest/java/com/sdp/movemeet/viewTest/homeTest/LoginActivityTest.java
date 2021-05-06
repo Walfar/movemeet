@@ -57,7 +57,7 @@ public class LoginActivityTest {
         onView(withId(R.id.button_login)).perform(click());
     }
 
-    @Test public void Login_ShortPassword() {
+    @Test public void Login_ShortPassword() throws InterruptedException {
         onView(withId(R.id.edit_text_email))
                 .perform(typeText(mEmail), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password))

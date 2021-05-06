@@ -19,6 +19,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.utility.LocationFetcher;
 import com.sdp.movemeet.view.map.GPSRecordingActivity;

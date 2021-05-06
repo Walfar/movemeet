@@ -3,6 +3,7 @@ package com.sdp.movemeet.viewTest.homeTest;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.view.home.RegisterActivity;
 
@@ -75,5 +76,10 @@ public class RegisterActivityTest {
         onView(withId(R.id.edit_text_password))
                 .perform(typeText(mPassword), closeSoftKeyboard());
         onView(withId(R.id.button_register)).perform(click());
+    }
+
+    @Test
+    public void logOut() {
+        FirebaseAuth.getInstance().signOut();
     }
 }

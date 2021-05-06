@@ -2,10 +2,14 @@ package com.sdp.movemeet.viewTest.mapTest;
 
 import android.Manifest;
 import android.location.Location;
+import android.view.Gravity;
 
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 
 import androidx.annotation.NonNull;
+import androidx.test.espresso.contrib.DrawerActions;
+import androidx.test.espresso.contrib.NavigationViewActions;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.UiObject;
@@ -21,9 +25,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.models.Sport;
+import com.sdp.movemeet.view.activity.UploadActivityActivity;
+import com.sdp.movemeet.view.main.MainActivity;
 import com.sdp.movemeet.view.map.MainMapFragment;
 
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -71,8 +80,7 @@ import static org.mockito.Mockito.mock;
 public class MainMapFragmentTest {
 
     private UiDevice uiDevice;
-    private FirebaseAuth fAuth;
-    private FirebaseUser user;
+    private FirebaseAuth fAuth = FirebaseAuth.getInstance();
 
     @Rule
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -84,12 +92,9 @@ public class MainMapFragmentTest {
 
     @Before
     public void setUp() {
-        //The map is tested when the user is logged in
         fAuth = FirebaseAuth.getInstance();
-        fAuth.signInWithEmailAndPassword("test@test.com", "password").addOnCompleteListener(task -> {
-            user = fAuth.getCurrentUser();
-            uiDevice = UiDevice.getInstance(getInstrumentation());
-        });
+        fAuth.signInWithEmailAndPassword("test@test.com", "password");
+        uiDevice = UiDevice.getInstance(getInstrumentation());
     }
 
     @Test
@@ -138,7 +143,7 @@ public class MainMapFragmentTest {
     public void mainMapFragment_userClickingOnMapAddsNewActivity() throws UiObjectNotFoundException, InterruptedException {
         waitFor(5000);
         //User must be logged to add new activity
-        assertNotNull(user);
+        assertNotNull(fAuth.getCurrentUser());
 
         //fragmentTestRule.launchFragment(new MainMapFragment());
 
@@ -152,11 +157,6 @@ public class MainMapFragmentTest {
         assertNotNull(marker);
 
         uiDevice.click(200, 400);
-    }
-
-    @After
-    public void after() {
-        fAuth.signOut();
     }
 
 

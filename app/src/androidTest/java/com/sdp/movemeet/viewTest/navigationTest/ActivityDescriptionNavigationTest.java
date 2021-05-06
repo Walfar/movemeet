@@ -31,8 +31,6 @@ public class ActivityDescriptionNavigationTest {
 
     @Before
     public void signIn(){
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        if (firebaseAuth.getCurrentUser() != null) firebaseAuth.signOut();
         onView(withId(R.id.signInButton)).perform(click());
         onView(withId(R.id.edit_text_email)).perform(replaceText("antho2@gmail.com"), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password)).perform(replaceText("234567"), closeSoftKeyboard());
