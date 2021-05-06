@@ -6,10 +6,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
 
+
 /**
  * A class capable of handling Activity storage operations with a FirebaseFirestore backend
  */
-public class FirestoreActivityManager extends com.sdp.movemeet.backend.firebase.firestore.FirestoreManager<Activity> {
+public class FirestoreActivityManager extends FirestoreManager<Activity> {
 
     // The name of the Firestore collection containing Activities
     public final static String ACTIVITIES_COLLECTION = "activities";

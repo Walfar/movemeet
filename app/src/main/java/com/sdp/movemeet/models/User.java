@@ -1,5 +1,7 @@
 package com.sdp.movemeet.models;
 
+import java.io.Serializable;
+
 /**
  *
  * This class represents a user.
@@ -7,78 +9,73 @@ package com.sdp.movemeet.models;
  *
  * */
 
-public class  User {
+public class  User implements Serializable, FirebaseObject {
 
-    private final String firstName;
-    private final String lastName;
+    private final String fullName;
     private final String email;
-    private String idUser;
-    private String phoneNumber;
-    private String imageId;
+    private String phone;
     private String description;
+    private String idUser;
+    private String imageId;
+    private String documentPath;
+
 
     /**
      * Construct a new user
-     * @param firstName : name of the user
-     * @param lastName : last name of the user
+     * @param fullName : full name of the user
      * @param email : google email of the user
+     * @param phone : phone number of the user
+     * @param description : description of the user
+
      *
      *              All this parameters cannot be null
      */
-
-
-    public User(String firstName, String lastName, String email, String idUser){
-        if(firstName == null || lastName == null || email == null || idUser == null){
+    public User (String fullName, String email, String phone, String description) {
+        if(fullName == null || email == null || phone == null){
             throw new IllegalArgumentException();
         }
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.fullName = fullName;
         this.email = email;
-        this.idUser = idUser;
+        this.phone = phone;
+        this.description = description;
     }
+
+
 
     /**
      * Other construction of a new user instance.
-     * @param firstName
-     * @param lastName
+     * @param fullName
      * @param email
      * @param imageId
      * @param description
+     * @param documentPath of the activity in Firebase Firestore
      */
 
-    public User(String firstName, String lastName, String email, String idUser, String phoneNumber, String imageId, String description){
-        if(firstName == null || lastName == null || email == null || idUser == null || phoneNumber == null || imageId == null || description == null){
+    public User (String fullName, String email, String phone, String description, String idUser, String imageId, String documentPath) {
+        if(fullName == null || email == null || idUser == null || phone == null) {
             throw new IllegalArgumentException();
         }
 
-        if(phoneNumber.length() != 12){
+        if(phone.length() != 12){
             throw new IllegalArgumentException();
         }
 
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.fullName = fullName;
         this.email = email;
-        this.idUser = idUser;
-        this.phoneNumber = phoneNumber;
-        this.imageId = imageId;
+        this.phone = phone;
         this.description = description;
+        this.idUser = idUser;
+        this.imageId = imageId;
+        this.documentPath = documentPath;
 
     }
 
     /**
      *
-     * @return the user's first name
+     * @return the user's full name name
      */
-    public String getFirstName() {
-        return firstName;
-    }
-
-    /**
-     *
-     * @return the user's last name
-     */
-    public String getLastName() {
-        return lastName;
+    public String getFullName() {
+        return fullName;
     }
 
     /**
@@ -100,7 +97,7 @@ public class  User {
      * @return the user's phone number
      */
     public String getPhoneNumber() {
-        return phoneNumber;
+        return phone;
     }
 
     /**
@@ -132,13 +129,13 @@ public class  User {
 
     /**
      *
-     * @param phoneNumber change user's phone number
+     * @param phone change user's phone number
      */
-    public void setPhoneNumber(String phoneNumber) {
-        if(phoneNumber == null){
+    public void setPhoneNumber(String phone) {
+        if(phone == null){
             throw new IllegalArgumentException();
         }
-        this.phoneNumber = phoneNumber;
+        this.phone = phone;
     }
 
     /**
@@ -163,10 +160,19 @@ public class  User {
         this.imageId = imageId;
     }
 
+    public String getDocumentPath() {
+        return this.documentPath;
+    }
+
+    public String setDocumentPath(String path) {
+        if (documentPath == null) documentPath = path;
+        return documentPath;
+    }
+
     @Override
     public String toString(){
-        return "FistName:" + firstName + "\nLastName:" + lastName + "\nEmail:" + email + "\nId:" + idUser +
-                "\nPhoneNumber:" + phoneNumber + "\nImageId:" + imageId + "\nDescription:" + description;
+        return "FullName:" + fullName + "\nEmail:" + email + "\nId:" + idUser +
+                "\nPhone:" + phone + "\nImageId:" + imageId + "\nDescription:" + description;
     }
 
     @Override
@@ -183,7 +189,7 @@ public class  User {
         }
         User obj = (User) o;
 
-        return firstName.equals(obj.firstName) && lastName.equals(obj.lastName) && email.equals(obj.email) &&
-                idUser.equals(obj.idUser) && phoneNumber.equals(obj.phoneNumber) && imageId.equals(obj.imageId) && description.equals(obj.description);
+        return fullName.equals(obj.fullName) && email.equals(obj.email) &&
+                idUser.equals(obj.idUser) && phone.equals(obj.phone) && imageId.equals(obj.imageId) && description.equals(obj.description);
     }
 }
