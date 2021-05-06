@@ -1,17 +1,25 @@
 package com.sdp.movemeet.view.navigation;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
@@ -29,6 +37,23 @@ import com.sdp.movemeet.view.chat.ChatActivity;
 import org.jetbrains.annotations.NotNull;
 
 public class Navigation extends AppCompatActivity {
+
+    private Activity activity;
+    private int activityId;
+
+    private NavigationView navigationView;
+    private DrawerLayout drawerLayout;
+
+    /**
+     * A Navigation object capable of creating a Navigation drawer for a
+     * specified Android Activity
+     * @param activity the Android activity to work with
+     * @param activityId the R.id integer referring to this activity
+     */
+    public Navigation(Activity activity, int activityId) {
+        this.activity = activity;
+        this.activityId = activityId;
+    }
 
     /**
      * Starts the default ActivityDescription activity
@@ -97,9 +122,9 @@ public class Navigation extends AppCompatActivity {
      * 0 = fullName
      * 1 = email
      * 2 = phone number
-     * 3 = description
-     * @param fields
-     * @return
+     * 3 = description (optional)
+     * @param fields the fields to fill in, following the above order
+     * @return the array of updated TextViews
      */
     public static TextView[] fillNavigationProfileFields(TextView[] fields) {
         FirebaseUser firebaseUser = AuthenticationInstanceProvider.getAuthenticationInstance().getCurrentUser();
@@ -128,6 +153,73 @@ public class Navigation extends AppCompatActivity {
         }
 
         return fields;
+    }
+
+    /**
+     * Initializes a Navigation drawer, filling in all fields and setting up associated functions,
+     * inside the activity passed to this object's constructor.
+     */
+    public void createDrawer() {
+        drawerLayout = activity.findViewById(R.id.drawer_layout);
+        navigationView = activity.findViewById(R.id.nav_view);
+        TextView textView = activity.findViewById(R.id.textView);
+        Toolbar toolbar = activity.findViewById(R.id.toolbar);
+
+        navigationView.bringToFront();
+        ActionBarDrawerToggle toggle = new
+                ActionBarDrawerToggle(activity, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+
+        View hView = navigationView.inflateHeaderView(R.layout.header);
+
+        TextView fullName = hView.findViewById(R.id.text_view_profile_name);
+        TextView phone = hView.findViewById(R.id.text_view_profile_phone);
+        TextView email = hView.findViewById(R.id.text_view_profile_email);
+
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
+        navigationView.setCheckedItem(this.activityId);
+
+        fillNavigationProfileFields(new TextView[] {fullName, email, phone});
+    }
+
+    private boolean onNavigationItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() != this.activityId) {
+            switch (menuItem.getItemId()) {
+                case R.id.nav_home:
+                    Navigation.goToHome(navigationView);
+                    finish();
+                    break;
+                case R.id.nav_edit_profile:
+                    Navigation.goToUserProfileActivity(navigationView);
+                    finish();
+                    break;
+                case R.id.nav_add_activity:
+                    Navigation.goToActivityUpload(navigationView);
+                    finish();
+                    break;
+                case R.id.nav_logout:
+                    FirebaseInteraction.logoutIfUserNonNull(
+                            AuthenticationInstanceProvider.getAuthenticationInstance(),
+                            this.activity);
+                    finish();
+                    break;
+                case R.id.nav_start_activity:
+                    Navigation.startActivity(this.navigationView);
+                    finish();
+                    break;
+                case R.id.nav_chat:
+                    Navigation.goToChat(this.navigationView);
+                    finish();
+                    break;
+                case R.id.nav_list_activities:
+                    Navigation.goToListOfActivities(this.navigationView);
+                    finish();
+                    break;
+            }
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+        return true;
     }
 
 }

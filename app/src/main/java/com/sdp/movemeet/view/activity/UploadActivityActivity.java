@@ -89,7 +89,7 @@ public class UploadActivityActivity extends AppCompatActivity {
     TextView textView;
 
     // Navigation tab fields
-    TextView fullName, email, phone;
+    //TextView fullName, email, phone;
     String userId;
 
     @Override
@@ -132,9 +132,12 @@ public class UploadActivityActivity extends AppCompatActivity {
             }
         }
 
-        createDrawer();
+        Navigation nav = new Navigation(this, R.id.nav_add_activity);
+        nav.createDrawer();
 
-        Navigation.fillNavigationProfileFields(new TextView[] {fullName, email, phone});
+        /*createDrawer();
+
+        Navigation.fillNavigationProfileFields(new TextView[] {fullName, email, phone});*/
         //handleRegisterUser();
 
         //The aim is to block any direct access to this page if the user is not logged
@@ -145,7 +148,7 @@ public class UploadActivityActivity extends AppCompatActivity {
 
     }
 
-    public void createDrawer() {
+    /*public void createDrawer() {
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         textView = findViewById(R.id.textView);
@@ -165,9 +168,9 @@ public class UploadActivityActivity extends AppCompatActivity {
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
         navigationView.setCheckedItem(R.id.nav_add_activity);
-    }
+    }*/
 
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+    /*public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
                 Navigation.goToHome(this.navigationView);
@@ -198,7 +201,7 @@ public class UploadActivityActivity extends AppCompatActivity {
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
-    }
+    }*/
 
     /*public void handleRegisterUser() {
         // Retrieve user data (full name, email and phone number) from Firebase Firestore
