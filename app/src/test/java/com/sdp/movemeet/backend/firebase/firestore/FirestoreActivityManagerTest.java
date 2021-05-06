@@ -12,225 +12,426 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.sdp.movemeet.backend.BackendManager;
-import com.sdp.movemeet.backend.serialization.ActivitySerializer;
-import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.modelsTest.ActivityTest;
+import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 
-import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.internal.runners.JUnit4ClassRunner;
-import org.junit.runner.RunWith;
 
-import java.util.Map;
 import java.util.concurrent.Executor;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.contains;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(JUnit4ClassRunner.class)
 public class FirestoreActivityManagerTest {
 
-    FirebaseFirestore db;
-    Activity activity;
-    BackendSerializer<Activity> serializer;
-    BackendManager<Activity> activityManager;
+    private FirestoreActivityManager fam;
+    private ActivitySerializer serializer;
+    private Activity fakeActivity;
 
-    DocumentReference docRef = mock(DocumentReference.class);
-    CollectionReference colRef = mock(CollectionReference.class);
-    DocumentSnapshot docSnap = mock(DocumentSnapshot.class);
-    Query query = mock(Query.class);
+    // Dependencies that need to be mocked
+    private FirebaseFirestore db;
+    private CollectionReference colRef;
+    private DocumentReference docRef;
 
-    Task<Void> addTask = mock(Task.class);
-    Task<Void> deleteTask = mock(Task.class);
-    Task<QuerySnapshot> searchTask = mock(Task.class);
-    Task<DocumentSnapshot> getTask;
+    private DocumentSnapshot snap;
+    private Query query;
+    private QuerySnapshot querySnap;
+
+    private Task<Void> fakeDeleteTask = new Task<Void>() {
+        @Override
+        public boolean isComplete() {
+            return true;
+        }
+
+        @Override
+        public boolean isSuccessful() {
+            return true;
+        }
+
+        @Override
+        public boolean isCanceled() {
+            return false;
+        }
+
+        @Override
+        public Void getResult() {
+            return null;
+        }
+
+        @Override
+        public <X extends Throwable> Void getResult(@NonNull Class<X> aClass) throws X {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public Exception getException() {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<Void> addOnSuccessListener(@NonNull OnSuccessListener<? super Void> onSuccessListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<Void> addOnSuccessListener(@NonNull Executor executor, @NonNull OnSuccessListener<? super Void> onSuccessListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<Void> addOnSuccessListener(@NonNull android.app.Activity activity, @NonNull OnSuccessListener<? super Void> onSuccessListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<Void> addOnFailureListener(@NonNull OnFailureListener onFailureListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<Void> addOnFailureListener(@NonNull Executor executor, @NonNull OnFailureListener onFailureListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<Void> addOnFailureListener(@NonNull android.app.Activity activity, @NonNull OnFailureListener onFailureListener) {
+            return null;
+        }
+    };
+
+    private Task<Void> fakeAddTask = new Task<Void>() {
+        @Override
+        public boolean isComplete() {
+            return false;
+        }
+
+        @Override
+        public boolean isSuccessful() {
+            return false;
+        }
+
+        @Override
+        public boolean isCanceled() {
+            return false;
+        }
+
+        @Override
+        public Void getResult() {
+            return null;
+        }
+
+        @Override
+        public <X extends Throwable> Void getResult(@NonNull Class<X> aClass) throws X {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public Exception getException() {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<Void> addOnSuccessListener(@NonNull OnSuccessListener<? super Void> onSuccessListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<Void> addOnSuccessListener(@NonNull Executor executor, @NonNull OnSuccessListener<? super Void> onSuccessListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<Void> addOnSuccessListener(@NonNull android.app.Activity activity, @NonNull OnSuccessListener<? super Void> onSuccessListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<Void> addOnFailureListener(@NonNull OnFailureListener onFailureListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<Void> addOnFailureListener(@NonNull Executor executor, @NonNull OnFailureListener onFailureListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<Void> addOnFailureListener(@NonNull android.app.Activity activity, @NonNull OnFailureListener onFailureListener) {
+            return null;
+        }
+    };
+
+    private Task<DocumentSnapshot> fakeGetTask = new Task<DocumentSnapshot>() {
+        @Override
+        public boolean isComplete() {
+            return true;
+        }
+
+        @Override
+        public boolean isSuccessful() {
+            return false;
+        }
+
+        @Override
+        public boolean isCanceled() {
+            return false;
+        }
+
+        @Override
+        public DocumentSnapshot getResult() {
+            return snap;
+        }
+
+        @Override
+        public <X extends Throwable> DocumentSnapshot getResult(@NonNull Class<X> aClass) throws X {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public Exception getException() {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<DocumentSnapshot> addOnSuccessListener(@NonNull OnSuccessListener<? super DocumentSnapshot> onSuccessListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<DocumentSnapshot> addOnSuccessListener(@NonNull Executor executor, @NonNull OnSuccessListener<? super DocumentSnapshot> onSuccessListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<DocumentSnapshot> addOnSuccessListener(@NonNull android.app.Activity activity, @NonNull OnSuccessListener<? super DocumentSnapshot> onSuccessListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<DocumentSnapshot> addOnFailureListener(@NonNull OnFailureListener onFailureListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<DocumentSnapshot> addOnFailureListener(@NonNull Executor executor, @NonNull OnFailureListener onFailureListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<DocumentSnapshot> addOnFailureListener(@NonNull android.app.Activity activity, @NonNull OnFailureListener onFailureListener) {
+            return null;
+        }
+    };
+
+    private Task<QuerySnapshot> fakeSearchTask = new Task<QuerySnapshot>() {
+
+        @Override
+        public boolean isComplete() {
+            return false;
+        }
+
+        @Override
+        public boolean isSuccessful() {
+            return false;
+        }
+
+        @Override
+        public boolean isCanceled() {
+            return false;
+        }
+
+        @Override
+        public QuerySnapshot getResult() {
+            return querySnap;
+        }
+
+        @Override
+        public <X extends Throwable> QuerySnapshot getResult(@NonNull Class<X> aClass) throws X {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public Exception getException() {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<QuerySnapshot> addOnSuccessListener(@NonNull OnSuccessListener<? super QuerySnapshot> onSuccessListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<QuerySnapshot> addOnSuccessListener(@NonNull Executor executor, @NonNull OnSuccessListener<? super QuerySnapshot> onSuccessListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<QuerySnapshot> addOnSuccessListener(@NonNull android.app.Activity activity, @NonNull OnSuccessListener<? super QuerySnapshot> onSuccessListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<QuerySnapshot> addOnFailureListener(@NonNull OnFailureListener onFailureListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<QuerySnapshot> addOnFailureListener(@NonNull Executor executor, @NonNull OnFailureListener onFailureListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Task<QuerySnapshot> addOnFailureListener(@NonNull android.app.Activity activity, @NonNull OnFailureListener onFailureListener) {
+            return null;
+        }
+    };
 
     @Before
     public void setup() {
-        activity = ActivityTest.createFakeActivity();
+        fakeActivity = ActivityTest.createFakeActivity();
         serializer = new ActivitySerializer();
 
         db = mock(FirebaseFirestore.class);
+        colRef = mock(CollectionReference.class);
+        docRef = mock(DocumentReference.class);
+        snap = mock(DocumentSnapshot.class);
+        query = mock(Query.class);
+        querySnap = mock(QuerySnapshot.class);
 
-        when(db.document(any())).thenReturn(docRef);
         when(db.collection(any())).thenReturn(colRef);
-
-        // Search
+        when(colRef.document(any())).thenReturn(docRef);
         when(colRef.document()).thenReturn(docRef);
-        when(colRef.whereEqualTo((String) any(), any())).thenReturn(query);
-        when(query.get()).thenReturn(searchTask);
 
-        // Delete
-        when(docRef.delete()).thenReturn(deleteTask);
+        // delete
+        when(docRef.delete()).thenReturn(fakeDeleteTask);
 
-        // Get
-        Map<String, Object> data = serializer.serialize(activity);
-        when(docSnap.getData()).thenReturn(data);
+        // add
+        when(docRef.getPath()).thenReturn("doc");
+        when(docRef.set(any())).thenReturn(fakeAddTask);
 
-        getTask = new Task<DocumentSnapshot>() {
-            @Override
-            public boolean isComplete() {
-                return true;
-            }
+        // get
+        when(docRef.get()).thenReturn(fakeGetTask);
 
-            @Override
-            public boolean isSuccessful() {
-                return true;
-            }
+        // search
+        when(colRef.whereEqualTo(contains("field"), any())).thenReturn(query);
+        when(query.get()).thenReturn(fakeSearchTask);
 
-            @Override
-            public boolean isCanceled() {
-                return false;
-            }
-
-            @Override
-            public DocumentSnapshot getResult() {
-                return docSnap;
-            }
-
-            @Override
-            public <X extends Throwable> DocumentSnapshot getResult(@NonNull @NotNull Class<X> aClass) throws X {
-                return null;
-            }
-
-            @Nullable
-            @org.jetbrains.annotations.Nullable
-            @Override
-            public Exception getException() {
-                return null;
-            }
-
-            @Override
-            public Task<DocumentSnapshot> addOnSuccessListener(@NonNull @NotNull OnSuccessListener<? super DocumentSnapshot> onSuccessListener) {
-                return null;
-            }
-
-
-            @Override
-            public Task<DocumentSnapshot> addOnSuccessListener(@NonNull @NotNull Executor executor, @NonNull @NotNull OnSuccessListener<? super DocumentSnapshot> onSuccessListener) {
-                return null;
-            }
-
-            @Override
-            public Task<DocumentSnapshot> addOnSuccessListener(@NonNull @NotNull android.app.Activity activity, @NonNull @NotNull OnSuccessListener<? super DocumentSnapshot> onSuccessListener) {
-                return null;
-            }
-
-
-            @Override
-            public Task<DocumentSnapshot> addOnFailureListener(@NonNull @NotNull OnFailureListener onFailureListener) {
-                return null;
-            }
-
-
-            @Override
-            public Task<DocumentSnapshot> addOnFailureListener(@NonNull @NotNull Executor executor, @NonNull @NotNull OnFailureListener onFailureListener) {
-                return null;
-            }
-
-
-            @Override
-            public Task<DocumentSnapshot> addOnFailureListener(@NonNull @NotNull android.app.Activity activity, @NonNull @NotNull OnFailureListener onFailureListener) {
-                return null;
-            }
-        };
-
-        when(docRef.get()).thenReturn(getTask);
-
-        // Add
-        when(docRef.set(any())).thenReturn(addTask);
-
-        activityManager = new FirestoreActivityManager(db,
-                FirestoreActivityManager.ACTIVITIES_COLLECTION,
-                serializer);
+        fam = new FirestoreActivityManager(db, FirestoreActivityManager.ACTIVITIES_COLLECTION, serializer);
     }
 
     @Test
-    public void constructorThrowsIllegalArgumentExceptionOnNullParameter() {
+    public void addThrowsIllegalArgumentExceptionOnNullParameter() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new FirestoreActivityManager(null, FirestoreActivityManager.ACTIVITIES_COLLECTION, serializer);
+            fam.add(null, "path");
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            new FirestoreActivityManager(db, null, serializer);
-        });
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            new FirestoreActivityManager(db, FirestoreActivityManager.ACTIVITIES_COLLECTION, null);
+            fam.add(fakeActivity, null);
         });
     }
 
     @Test
-    public void addThrowsIllegalArgumentExceptionOnNullObject() {
+    public void addThrowsIllegalArgumentExceptionOnEmptyPath() {
         assertThrows(IllegalArgumentException.class, () -> {
-            activityManager.add(null, "");
+            fam.add(fakeActivity, "");
         });
     }
 
-    @Test
-    public void addReturnsCorrectTask() {
-        assertEquals(addTask, activityManager.add(activity, null));
-    }
+//    @Test
+//    public void addReturnsCorrectTask() {
+//        Task<Void> result = fam.add(fakeActivity, "doc");
+//        assertEquals(fakeActivity.getDocumentPath(), "doc");
+//        assertEquals(fakeAddTask, result);
+//    }
 
     @Test
     public void deleteThrowsIllegalArgumentExceptionOnNullOrEmptyPath() {
         assertThrows(IllegalArgumentException.class, () -> {
-            activityManager.delete(null);
+            fam.delete(null);
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            activityManager.delete("");
+            fam.delete("");
         });
     }
 
     @Test
     public void deleteReturnsCorrectTask() {
-        assertEquals(deleteTask, activityManager.delete("path"));
-    }
-
-    @Test
-    public void searchThrowsIllegalArgumentExceptionOnNullParameter() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            activityManager.search(null, 6);
-        });
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            activityManager.search("field", null);
-        });
-    }
-
-    @Test
-    public void searchReturnsCorrectTask() {
-        assertEquals(searchTask, activityManager.search("field", 6));
+        assertEquals(fakeDeleteTask, fam.delete("doc"));
     }
 
     @Test
     public void getThrowsIllegalArgumentExceptionOnNullOrEmptyPath() {
         assertThrows(IllegalArgumentException.class, () -> {
-            activityManager.get(null);
+            fam.get(null);
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            activityManager.get("");
+            fam.get("");
         });
     }
 
     @Test
-    public void getReturnsCorrectTask() {
-        assertEquals(getTask, activityManager.get("path"));
+    public void getReturnsCorrectResult() {
+        assertEquals(snap, fam.get("doc").getResult());
     }
 
     @Test
-    public void resultOfGetCanBeDeserialized() {
-        DocumentSnapshot retrieved = (DocumentSnapshot) activityManager.get("path").getResult();
+    public void searchThrowsIllegalArgumentExceptionOnNullParameter() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            fam.search("field", null);
+        });
 
-        assertEquals(activity,
-                serializer.deserialize(retrieved.getData()));
+        assertThrows(IllegalArgumentException.class, () -> {
+            fam.search(null, new Integer(1));
+        });
+    }
+
+    @Test
+    public void searchThrowsIllegalArgumentExceptionOnEmptyField() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            fam.search("", new Integer(1));
+        });
+    }
+
+    @Test
+    public void searchReturnsCorrectResult() {
+        assertEquals(querySnap, fam.search("field", fakeActivity).getResult());
     }
 }
