@@ -68,9 +68,12 @@ public class DistanceCalculator {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public ArrayList<Activity> getTopActivities(Integer n) {
         if (sorted) {
-            Stream<Activity> topActivitiesStream = activityDistanceMap.subList(0, n).stream().map(Pair::getKey);
-            return topActivitiesStream.collect(Collectors.toCollection(ArrayList::new));
-
+            if (n >= activityDistanceMap.size()) {
+                return getAllActivities();
+            } else {
+                Stream<Activity> topActivitiesStream = activityDistanceMap.subList(0, n).stream().map(Pair::getKey);
+                return topActivitiesStream.collect(Collectors.toCollection(ArrayList::new));
+            }
         } else {
             return null;
         }
@@ -150,7 +153,7 @@ public class DistanceCalculator {
 
     /**
      * Represents a mapping of activities (keys) to their distances (values).
-     * Allows for sorting of activities by their distances relative to the user.
+     * Allows for sorting activities by their distances relative to the user.
      */
     public class Pair {
         private Activity key;
