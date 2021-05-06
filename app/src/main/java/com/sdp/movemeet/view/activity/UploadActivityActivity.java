@@ -29,10 +29,17 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.BackendManager;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
+import com.sdp.movemeet.backend.serialization.ActivitySerializer;
+import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.backend.BackendActivityManager;
 import com.sdp.movemeet.backend.FirebaseInteraction;
@@ -52,7 +59,9 @@ public class UploadActivityActivity extends AppCompatActivity {
 
     private Spinner spinner;
 
-    FirebaseAuth fAuth;
+    private FirebaseAuth fAuth;
+    private FirebaseFirestore fStore;
+    private BackendManager<Activity> backendActivityManager;
 
     private Calendar calendar;
     private EditText startTimeText;
@@ -79,8 +88,8 @@ public class UploadActivityActivity extends AppCompatActivity {
     Toolbar toolbar;
     TextView textView;
 
-    TextView fullName, email, phone;
-    FirebaseFirestore fStore;
+    // Navigation tab fields
+    //TextView fullName, email, phone;
     String userId;
 
     @Override
@@ -88,9 +97,15 @@ public class UploadActivityActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_activity);
 
-        setupSportSpinner(this);
+        // Setup Firebase services
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+        fStore = BackendInstanceProvider.getFirestoreInstance();
+        backendActivityManager = new FirestoreActivityManager(fStore,
+                FirestoreActivityManager.ACTIVITIES_COLLECTION,
+                new ActivitySerializer());
 
-        fAuth = FirebaseAuth.getInstance();
+        // Setup activity creation form inputs
+        setupSportSpinner(this);
 
         titleEditText = findViewById(R.id.editTextTitle);
         descriptionEditText = findViewById(R.id.editTextDescription);
@@ -117,9 +132,13 @@ public class UploadActivityActivity extends AppCompatActivity {
             }
         }
 
-        createDrawer();
+        Navigation nav = new Navigation(this, R.id.nav_add_activity);
+        nav.createDrawer();
 
-        handleRegisterUser();
+        /*createDrawer();
+
+        Navigation.fillNavigationProfileFields(new TextView[] {fullName, email, phone});*/
+        //handleRegisterUser();
 
         //The aim is to block any direct access to this page if the user is not logged
         if (fAuth.getCurrentUser() == null) {
@@ -129,7 +148,7 @@ public class UploadActivityActivity extends AppCompatActivity {
 
     }
 
-    public void createDrawer() {
+    /*public void createDrawer() {
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         textView = findViewById(R.id.textView);
@@ -149,9 +168,9 @@ public class UploadActivityActivity extends AppCompatActivity {
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
         navigationView.setCheckedItem(R.id.nav_add_activity);
-    }
+    }*/
 
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+    /*public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
                 Navigation.goToHome(this.navigationView);
@@ -182,18 +201,17 @@ public class UploadActivityActivity extends AppCompatActivity {
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
-    }
+    }*/
 
-    public void handleRegisterUser() {
+    /*public void handleRegisterUser() {
         // Retrieve user data (full name, email and phone number) from Firebase Firestore
-        fAuth = FirebaseAuth.getInstance();
-        fStore = FirebaseFirestore.getInstance();
         if (fAuth.getCurrentUser() != null) {
             userId = fAuth.getCurrentUser().getUid();
             TextView[] textViewArray = {fullName, email, phone};
+            //FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, UploadActivityActivity.this);
             FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, UploadActivityActivity.this);
         }
-    }
+    }*/
 
     private void setupSportSpinner(Context context) {
         spinner = (Spinner) findViewById(R.id.spinnerSportType);
@@ -406,25 +424,27 @@ public class UploadActivityActivity extends AppCompatActivity {
 
         if (toUpload == null) return;
 
-        BackendActivityManager bam = new BackendActivityManager(FirebaseFirestore.getInstance(),
-                BackendActivityManager.ACTIVITIES_COLLECTION);
+        BackendManager<Activity> bm = new FirestoreActivityManager(
+                fStore,
+                FirestoreActivityManager.ACTIVITIES_COLLECTION,
+                new ActivitySerializer()
+        );
 
-        bam.uploadActivity(toUpload, new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(getApplicationContext(), "Activity successfully uploaded!",
-                                Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                    }
-                },
-                new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("upload activity TAG", "failed");
-                        Toast.makeText(getApplicationContext(), "Failed to upload activity",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
+        ((Task<Void>) bm.add(toUpload, null)).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(getApplicationContext(), "Activity successfully uploaded!",
+                        Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("upload activity TAG", "failed");
+                Toast.makeText(getApplicationContext(), "Failed to upload activity",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

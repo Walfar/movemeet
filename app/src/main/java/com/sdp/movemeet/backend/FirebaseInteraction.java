@@ -13,8 +13,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -27,6 +29,7 @@ import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.profile.EditProfileActivity;
 import com.squareup.picasso.Picasso;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +43,8 @@ import java.util.Map;
 public class FirebaseInteraction {
 
     private static final String TAG = "FirebaseInteraction";
+
+    public static FirestoreActivityManager FirestoreManager;
 
     /**
      * Retrieve user data (full name, email, phone number and profile description) from Firebase
@@ -73,6 +78,69 @@ public class FirebaseInteraction {
 
         return textViewArray;
     }
+
+
+//    public static TextView[] retrieveDataFromFirebase(String userId, TextView[] textViewArray, Activity activity) {
+//        //DocumentReference documentReference = fStore.collection("users").document(userId);
+//        Log.d(TAG, "userId" + userId);
+//        //FirestoreManager = new FirestoreActivityManager();
+//        DocumentReference documentReference = FirestoreManager.get("users").getResult().getDocumentReference(userId);
+//        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//
+//                    if (document == null) {
+//                        //nothing
+//                    } else if (textViewArray.length == 4) {
+//                        textViewArray[0].setText(document.getString("fullName"));
+//                        textViewArray[1].setText(document.getString("email"));
+//                        textViewArray[2].setText(document.getString("phone"));
+//                        textViewArray[3].setText(document.getString("description"));
+//                    } else {
+//                        textViewArray[0].setText(document.getString("fullName"));
+//                        textViewArray[1].setText(document.getString("email"));
+//                        textViewArray[2].setText(document.getString("phone"));
+//                    }
+//
+////                    if (document.exists()) {
+////                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+////                        fullNameString = (String) document.getData().get("fullName");
+////                        organizerView.setText(fullNameString);
+////                        Log.i(TAG, "fullNameString: " + fullNameString);
+////                    } else {
+////                        Log.d(TAG, "No such document!");
+////                    }
+//                } else {
+//                    Log.d(TAG, "Get failed with: ", task.getException());
+//                }
+//            }
+//        });
+
+
+
+//        documentReference.addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+//                if (documentSnapshot == null) {
+//                    //nothing
+//                } else if (textViewArray.length == 4) {
+//                    textViewArray[0].setText(documentSnapshot.getString("fullName"));
+//                    textViewArray[1].setText(documentSnapshot.getString("email"));
+//                    textViewArray[2].setText(documentSnapshot.getString("phone"));
+//                    textViewArray[3].setText(documentSnapshot.getString("description"));
+//                } else {
+//                    textViewArray[0].setText(documentSnapshot.getString("fullName"));
+//                    textViewArray[1].setText(documentSnapshot.getString("email"));
+//                    textViewArray[2].setText(documentSnapshot.getString("phone"));
+//                }
+//            }
+//        });
+//
+//        return textViewArray;
+//    }
+
 
     /**
      * Create a HashMap containing the user data to be updated in Firebase Firestore. This function

@@ -56,16 +56,12 @@ public class UserTest {
     }
 
     @Test
-    public void userGetFirstName(){
+    public void userGetFullName(){
         User user = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID);
-        assertEquals(DUMMY_FIRST_NAME, user.getFirstName());
+        assertEquals(DUMMY_FIRST_NAME, user.getFullName());
     }
 
-    @Test
-    public void userGetLastName(){
-        User user = new User(DUMMY_FIRST_NAME, DUMMY_LAST_NAME, DUMMY_EMAIL, DUMMY_USER_ID);
-        assertEquals(DUMMY_LAST_NAME, user.getLastName());
-    }
+
 
     @Test
     public void userGetEmail(){

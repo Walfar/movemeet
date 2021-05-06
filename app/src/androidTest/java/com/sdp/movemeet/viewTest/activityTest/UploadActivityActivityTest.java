@@ -13,8 +13,6 @@ import androidx.test.filters.LargeTest;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,6 +21,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sdp.movemeet.backend.BackendActivityManager;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
+import com.sdp.movemeet.backend.serialization.ActivitySerializer;
+import com.sdp.movemeet.backend.serialization.BackendSerializer;
+import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
 
 import org.hamcrest.Matcher;
@@ -46,11 +48,16 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class UploadActivityActivityTest {
 
     public FirebaseAuth mAuth;
+    public FirebaseFirestore db;
+    public BackendSerializer<Activity> activitySerializer;
+    public FirestoreActivityManager backendActivityManager;
 
     public static ViewAction forceDoubleClick() {
         return new ViewAction() {
@@ -72,7 +79,7 @@ public class UploadActivityActivityTest {
 
 
     @Before
-    public void signIn() {
+    public void setup() {
         CountDownLatch latch = new CountDownLatch(1);
 
         mAuth = FirebaseAuth.getInstance();
@@ -94,6 +101,13 @@ public class UploadActivityActivityTest {
         } catch (InterruptedException e) {
             assert (false);
         }
+
+        activitySerializer = new ActivitySerializer();
+        backendActivityManager = new FirestoreActivityManager(
+                FirebaseFirestore.getInstance(),
+                FirestoreActivityManager.ACTIVITIES_COLLECTION,
+                activitySerializer
+        );
     }
 
     // This test has to take extra time or the Views won't update fast enough and it'll fail on CI
@@ -102,9 +116,7 @@ public class UploadActivityActivityTest {
     public void endToEnd() {
         ActivityScenario scenario = ActivityScenario.launch(UploadActivityActivity.class);
 
-        try{
-            Thread.sleep(1000);
-        }catch(Exception e){}
+        sleep(1000);
 
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
 
@@ -143,7 +155,7 @@ public class UploadActivityActivityTest {
                 .perform(typeText("Dubai, UAE"), closeSoftKeyboard());
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
 
-        assert(sleep(1000));
+        sleep(1000);
 
         scenario.onActivity(activity -> {
             assert (((UploadActivityActivity) activity).validLocation == true);
@@ -152,11 +164,51 @@ public class UploadActivityActivityTest {
 
         onView(withId(R.id.editTextStartTime)).perform(forceDoubleClick());
 
-        assert(sleep(1000));
+        sleep(1000);
 
         onView(withClassName(equalTo(TimePicker.class.getName()))).perform(
                 PickerActions.setTime(
                         9, 15
+                )
+        );
+
+        sleep(1000);
+
+        onView(withText("OK")).perform(click());
+        onView(withId(R.id.buttonConfirmUpload)).perform(click());
+
+        sleep(1000);
+
+        scenario.onActivity(activity -> {
+            assert (((UploadActivityActivity) activity).validStartTime == true);
+            assert (((UploadActivityActivity) activity).validDate == false);
+        });
+
+        onView(withId(R.id.editTextTime)).perform(forceDoubleClick());
+
+        sleep(1000);
+
+        onView(withClassName(equalTo(TimePicker.class.getName()))).perform(
+                PickerActions.setTime(
+                        2, 30
+                )
+        );
+
+        onView(withText("OK")).perform(click());
+        sleep(1000);
+
+        onView(withId(R.id.buttonConfirmUpload)).perform(click());
+
+        scenario.onActivity(activity -> {
+            assert (((UploadActivityActivity) activity).validDate == true);
+        });
+
+
+        /*onView(withId(R.id.editTextDate)).perform(forceDoubleClick());
+
+        onView(withClassName(equalTo(DatePicker.class.getName()))).perform(
+                PickerActions.setDate(
+                        2025, 0, 20
                 )
         );
 
@@ -168,24 +220,8 @@ public class UploadActivityActivityTest {
         assert(sleep(1000));
 
         scenario.onActivity(activity -> {
-            assert (((UploadActivityActivity) activity).validStartTime == true);
-            assert (((UploadActivityActivity) activity).validDate == false);
-        });
-
-        onView(withId(R.id.editTextTime)).perform(forceDoubleClick());
-
-        assert(sleep(1000));
-
-        onView(withClassName(equalTo(TimePicker.class.getName()))).perform(
-                PickerActions.setTime(
-                        2, 30
-                )
-        );
-
-        assert(sleep(1000));
-
-        onView(withText("OK")).perform(click());
-        onView(withId(R.id.buttonConfirmUpload)).perform(click());
+            assert (((UploadActivityActivity) activity).validDate == true);
+        }); */
 
         //mAuth.signOut();
         scenario.close();
@@ -197,7 +233,21 @@ public class UploadActivityActivityTest {
         CountDownLatch latch = new CountDownLatch(1);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        BackendActivityManager bam = new BackendActivityManager(db, BackendActivityManager.ACTIVITIES_COLLECTION);
+
+
+        backendActivityManager.search(ActivitySerializer.ORGANIZER_KEY, mAuth.getCurrentUser().getUid())
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot snap: task.getResult().getDocuments()) {
+                                backendActivityManager.delete(snap.getReference().getPath());
+                            }
+                        }
+                    }
+                });
+
+        /*BackendActivityManager bam = new BackendActivityManager(db, BackendActivityManager.ACTIVITIES_COLLECTION);
 
         bam.getActivitiesCollectionReference()
                 .whereEqualTo("organizerId", mAuth.getCurrentUser().getUid())
@@ -222,13 +272,9 @@ public class UploadActivityActivityTest {
             public void onFailure(@NonNull Exception e) {
                 assert(false);
             }
-        });
+        });*/
 
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            assert(false);
-        }
+
 
         mAuth.signOut();
     }
