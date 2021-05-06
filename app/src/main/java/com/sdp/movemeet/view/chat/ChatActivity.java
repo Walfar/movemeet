@@ -42,6 +42,7 @@ import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.backend.firebase.firebaseDB.FirebaseDBActivityManager;
+import com.sdp.movemeet.backend.firebase.firebaseDB.FirebaseDBMessageManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.backend.serialization.MessageSerializer;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
@@ -117,7 +118,7 @@ public class ChatActivity extends AppCompatActivity {
         initialChatWelcomeMessage = findViewById(R.id.initial_chat_welcome_message);
 
         // TODO: implement abstraction for Firebase Realtime Database
-        //messageManager = new FirebaseDBActivityManager(database, new MessageSerializer());
+        messageManager = new FirebaseDBMessageManager(database, new MessageSerializer());
 
         fAuth = FirebaseAuth.getInstance();
         if (fAuth.getCurrentUser() != null) {
@@ -321,7 +322,9 @@ public class ChatActivity extends AppCompatActivity {
         String messageText = messageInput.getText().toString();
         Message message = new Message(userName, messageText, userId, null /* no image */);
         if (messageText.length() > 0) {
-            chatRoom.push().setValue(message);
+            // The path to provide is of the form "chats/general_chat"
+            messageManager.add(message, chatRoom.toString().split("/",4)[3]);
+            //chatRoom.push().setValue(message);
             messageInput.setText("");
         } else {
             Toast.makeText(getApplicationContext(), "Empty message.", Toast.LENGTH_SHORT).show();
@@ -377,6 +380,9 @@ public class ChatActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         Message imageMessage = new Message(fullNameString, null, userId, uri.toString());
+
+                                        // The path to provide is of the form "chats/general_chat/-M_2IT_2qo6PzCQj27N_"
+                                        //messageManager.add(imageMessage, chatRoom.toString().split("/",4)[3] + "/" + key);
                                         chatRoom.child(key).setValue(imageMessage);
                                     }
                                 });

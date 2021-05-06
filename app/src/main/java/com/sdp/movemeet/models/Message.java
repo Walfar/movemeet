@@ -3,13 +3,15 @@ package com.sdp.movemeet.models;
 import java.io.Serializable;
 import java.util.Date;
 
+// TODO: document public methods
+
 public class Message implements Serializable, FirebaseObject {
     private String messageUser;
     private String messageText;
     private String messageUserId;
     private long messageTime;
     private String imageUrl;
-    private String dc
+    private String documentPath;
 
 
     public Message() {
@@ -26,6 +28,7 @@ public class Message implements Serializable, FirebaseObject {
         this.messageUserId = messageUserId;
         this.messageTime = new Date().getTime();
         this.imageUrl = imageUrl;
+
     }
 
     public String getMessageUser() {
