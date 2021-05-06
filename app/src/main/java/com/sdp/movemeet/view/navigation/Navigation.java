@@ -34,8 +34,6 @@ import com.sdp.movemeet.view.profile.ProfileActivity;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
 import com.sdp.movemeet.view.chat.ChatActivity;
 
-import org.jetbrains.annotations.NotNull;
-
 public class Navigation extends AppCompatActivity {
 
     private Activity activity;
@@ -138,7 +136,7 @@ public class Navigation extends AppCompatActivity {
 
             backendUserManager.getUserFromUid(userId).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
-                public void onComplete(@NonNull @NotNull Task<DocumentSnapshot> task) {
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
                         User user = serializer.deserialize(task.getResult().getData());
 
