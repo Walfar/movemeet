@@ -41,6 +41,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.backend.FirebaseInteraction;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.models.Message;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.navigation.Navigation;
@@ -109,7 +110,7 @@ public class ChatActivity extends AppCompatActivity {
         btnSend = findViewById(R.id.button_send_message);
         initialChatWelcomeMessage = findViewById(R.id.initial_chat_welcome_message);
 
-        fAuth = FirebaseAuth.getInstance();
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         user = fAuth.getCurrentUser();
         if (user != null) {
             userId = user.getUid();
@@ -130,9 +131,9 @@ public class ChatActivity extends AppCompatActivity {
 
         addExistingMessagesAndListenForNewMessages();
 
-        createDrawer();
 
-        handleRegisterUser();
+        Navigation nav = new Navigation(this, R.id.nav_chat);
+        nav.createDrawer();
 
         //The aim is to block any direct access to this page if the user is not logged
         if (fAuth.getCurrentUser() == null) {
@@ -142,27 +143,6 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-    public void createDrawer() {
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-        textView = findViewById(R.id.textView);
-        toolbar = findViewById(R.id.toolbar);
-
-        navigationView.bringToFront();
-        ActionBarDrawerToggle toggle = new
-                ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-
-        View hView = navigationView.inflateHeaderView(R.layout.header);
-
-        fullName = hView.findViewById(R.id.text_view_profile_name);
-        phone = hView.findViewById(R.id.text_view_profile_phone);
-        email = hView.findViewById(R.id.text_view_profile_email);
-
-        toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
-        navigationView.setCheckedItem(R.id.nav_chat);
-    }
 
     private void addExistingMessagesAndListenForNewMessages() {
         // Use the MessageAdapter class to create the overall view of the chat room
@@ -219,39 +199,6 @@ public class ChatActivity extends AppCompatActivity {
                 Log.v(TAG, "databaseError: " + databaseError);
             }
         });
-    }
-
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.nav_home:
-                Navigation.goToHome(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_edit_profile:
-                Navigation.goToUserProfileActivity(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_add_activity:
-                Navigation.goToActivityUpload(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_logout:
-                FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
-                finish();
-                break;
-            case R.id.nav_start_activity:
-                Navigation.startActivity(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_chat:
-                break;
-            case R.id.nav_list_activities:
-                Navigation.goToListOfActivities(this.navigationView);
-                finish();
-                break;
-        }
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     public void logout(View view) {
@@ -378,16 +325,5 @@ public class ChatActivity extends AppCompatActivity {
                 });
     }
 
-    public void handleRegisterUser() {
-        // Retrieve user data (full name, email and phone number) from Firebase Firestore
-        fAuth = FirebaseAuth.getInstance();
-        fStore = FirebaseFirestore.getInstance();
-        if (fAuth.getCurrentUser() != null) {
-            userId = fAuth.getCurrentUser().getUid();
-            TextView[] textViewArray = {fullName, email, phone};
-            //FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ChatActivity.this);
-            FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ChatActivity.this);
-        }
-    }
 
 }

@@ -31,6 +31,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.backend.FirebaseInteraction;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.view.navigation.Navigation;
@@ -72,6 +73,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
 
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+
         Intent intent = getIntent();
 
         if (intent != null) {
@@ -92,8 +95,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         createDurationView();
         createOrganizerView();
 
-        createDrawer();
-        handleRegisterUser();
+        Navigation nav = new Navigation(this, R.id.nav_start_activity);
+        nav.createDrawer();
+
         getOrganizerName();
         getParticipantNames();
 
@@ -113,72 +117,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 String currentParticipantId = participantIds.get(i);
                 getCurrentParticipantName(currentParticipantId);
             }
-        }
-    }
-
-    public void createDrawer() {
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-        textView = findViewById(R.id.textView);
-        toolbar = findViewById(R.id.toolbar);
-
-        navigationView.bringToFront();
-        ActionBarDrawerToggle toggle = new
-                ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-
-        View hView = navigationView.inflateHeaderView(R.layout.header);
-
-        fullName = hView.findViewById(R.id.text_view_profile_name);
-        phone = hView.findViewById(R.id.text_view_profile_phone);
-        email = hView.findViewById(R.id.text_view_profile_email);
-
-        toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
-        navigationView.setCheckedItem(R.id.nav_add_activity);
-    }
-
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.nav_home:
-                Navigation.goToHome(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_edit_profile:
-                Navigation.goToUserProfileActivity(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_add_activity:
-                Navigation.goToActivityUpload(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_logout:
-                FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
-                finish();
-                break;
-            case R.id.nav_start_activity:
-                break;
-            case R.id.nav_chat:
-                Navigation.goToChat(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_list_activities:
-                Navigation.goToListOfActivities(this.navigationView);
-                finish();
-                break;
-        }
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    public void handleRegisterUser() {
-        fAuth = FirebaseAuth.getInstance();
-        fStore = FirebaseFirestore.getInstance();
-        if (fAuth.getCurrentUser() != null) {
-            userId = fAuth.getCurrentUser().getUid();
-            TextView[] textViewArray = {fullName, email, phone};
-            //FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ActivityDescriptionActivity.this);
-            FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ActivityDescriptionActivity.this);
         }
     }
 

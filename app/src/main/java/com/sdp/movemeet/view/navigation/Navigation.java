@@ -217,6 +217,8 @@ public class Navigation extends AppCompatActivity {
                     finish();
                     break;
             }
+        }
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         }
         return true;

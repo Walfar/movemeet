@@ -1,7 +1,10 @@
 package com.sdp.movemeet.viewTest.homeTest;
 
 import android.Manifest;
+import android.view.View;
 
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -16,6 +19,7 @@ import com.sdp.movemeet.view.main.MainActivity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.view.map.GPSRecordingActivity;
 
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -26,7 +30,11 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.Matchers.allOf;
 
 @RunWith(AndroidJUnit4.class)
 public class HomeScreenActivityLoggedTest {
@@ -61,7 +69,7 @@ public class HomeScreenActivityLoggedTest {
     @Test
     public void signInHasCorrectIntentWhenLogged() throws InterruptedException {
         while (user == null) Thread.sleep(2000);
-        onView(withId(R.id.signInButton)).perform(click());
+        onView(withId(R.id.signInButton)).perform(forceDoubleClick());
         intended(hasComponent(MainActivity.class.getName()));
     }
 
@@ -69,13 +77,32 @@ public class HomeScreenActivityLoggedTest {
     @Test
     public void noAccountHasCorrectIntentWhenLogged() throws InterruptedException {
         while (user == null) Thread.sleep(2000);
-        onView(withId(R.id.noAccountButton)).perform(click());
+        onView(withId(R.id.noAccountButton)).perform(forceDoubleClick());
         intended(hasComponent(MainActivity.class.getName()));
     }
 
     @Test
     public void recordButtonHasCorrectIntent() {
-        onView(withId(R.id.recordRunButton)).perform(click());
+        onView(withId(R.id.recordRunButton)).perform(forceDoubleClick());
         intended(hasComponent(GPSRecordingActivity.class.getName()));
     }
+
+    public static ViewAction forceDoubleClick() {
+        return new ViewAction() {
+            @Override public Matcher<View> getConstraints() {
+                return allOf(isClickable(), isEnabled(), isDisplayed());
+            }
+
+            @Override public String getDescription() {
+                return "force click";
+            }
+
+            @Override public void perform(UiController uiController, View view) {
+                view.performClick(); // perform click without checking view coordinates.
+                view.performClick();
+                uiController.loopMainThreadUntilIdle();
+            }
+        };
+    }
+
 }

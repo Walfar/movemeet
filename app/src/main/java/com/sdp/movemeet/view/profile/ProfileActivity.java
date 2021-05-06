@@ -32,6 +32,7 @@ import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.home.HomeScreenActivity;
@@ -84,7 +85,7 @@ public class ProfileActivity extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
 
-        fAuth = FirebaseAuth.getInstance();
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         if (fAuth.getCurrentUser() != null) {
             userId = fAuth.getCurrentUser().getUid();
             displayRegisteredUserData();
@@ -93,9 +94,8 @@ public class ProfileActivity extends AppCompatActivity {
             loadRegisteredUserProfilePicture();
         }
 
-        createDrawer();
-
-        //handleRegisterUser();
+        Navigation nav = new Navigation(this, R.id.nav_edit_profile);
+        nav.createDrawer();
 
         //The aim is to block any direct access to this page if the user is not logged
         //Smth must be wrong since it prevents automatic connection during certain tests
@@ -105,73 +105,6 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
     }
-
-    public void createDrawer() {
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-        textView = findViewById(R.id.textView);
-        toolbar = findViewById(R.id.toolbar);
-
-        navigationView.bringToFront();
-        ActionBarDrawerToggle toggle = new
-                ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-
-        View hView = navigationView.inflateHeaderView(R.layout.header);
-
-        fullName = hView.findViewById(R.id.text_view_profile_name);
-        phone = hView.findViewById(R.id.text_view_profile_phone);
-        email = hView.findViewById(R.id.text_view_profile_email);
-
-        toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
-        navigationView.setCheckedItem(R.id.nav_chat);
-    }
-
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.nav_home:
-                Navigation.goToHome(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_edit_profile:
-                break;
-            case R.id.nav_add_activity:
-                Navigation.goToActivityUpload(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_logout:
-                FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
-                finish();
-                break;
-            case R.id.nav_start_activity:
-                Navigation.startActivity(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_chat:
-                Navigation.goToChat(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_list_activities:
-                Navigation.goToListOfActivities(this.navigationView);
-                finish();
-                break;
-        }
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-//    public void handleRegisterUser() {
-//        // Retrieve user data (full name, email and phone number) from Firebase Firestore
-//        fAuth = FirebaseAuth.getInstance();
-//        //fStore = FirebaseFirestore.getInstance();
-//        if (fAuth.getCurrentUser() != null) {
-//            userId = fAuth.getCurrentUser().getUid();
-//            TextView[] textViewArray = {fullName, email, phone};
-//            //FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ProfileActivity.this);
-//            FirebaseInteraction.retrieveDataFromFirebase(FirestoreManager, userId, textViewArray, ProfileActivity.this);
-//        }
-//    }
 
 
     public void displayRegisteredUserData() {
