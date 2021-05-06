@@ -1,4 +1,4 @@
-package com.sdp.movemeet.viewTest.navigationTest;
+/* package com.sdp.movemeet.viewTest.navigationTest;
 
 import android.view.Gravity;
 
@@ -113,4 +113,4 @@ public class MainActivityNavigationTest {
 
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
     }
-}
+} */
