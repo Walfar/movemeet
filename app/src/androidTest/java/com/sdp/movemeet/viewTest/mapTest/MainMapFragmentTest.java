@@ -73,8 +73,6 @@ public class MainMapFragmentTest {
     private UiDevice uiDevice;
     private FirebaseAuth fAuth;
     private FirebaseUser user;
-    private Location fakeLocation;
-    private Task<Location> mockLocationTask;
 
     @Rule
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -85,15 +83,12 @@ public class MainMapFragmentTest {
 
 
     @Before
-    public void setUp() throws InterruptedException {
+    public void setUp() {
         //The map is tested when the user is logged in
         fAuth = FirebaseAuth.getInstance();
-        fAuth.signInWithEmailAndPassword("test@test.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                user = fAuth.getCurrentUser();
-                uiDevice = UiDevice.getInstance(getInstrumentation());
-            }
+        fAuth.signInWithEmailAndPassword("test@test.com", "password").addOnCompleteListener(task -> {
+            user = fAuth.getCurrentUser();
+            uiDevice = UiDevice.getInstance(getInstrumentation());
         });
     }
 
