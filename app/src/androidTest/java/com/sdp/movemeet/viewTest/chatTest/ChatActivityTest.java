@@ -81,7 +81,7 @@ public class ChatActivityTest {
 
         onView(withId(R.id.message_input_text)).perform(replaceText("my message"), closeSoftKeyboard());
 
-        onView(withId(R.id.button_send_message)).perform(click());
+        onView(withId(R.id.button_send_message)).perform(click()); //.perform(forceDoubleClick());
 
         try {
             Thread.sleep(1500);

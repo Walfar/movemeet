@@ -26,9 +26,7 @@ public class  User implements Serializable, FirebaseObject {
      * @param email : google email of the user
      * @param phone : phone number of the user
      * @param description : description of the user
-
      *
-     *              All this parameters cannot be null
      */
     public User (String fullName, String email, String phone, String description) {
         if(fullName == null || email == null || phone == null){
@@ -43,11 +41,9 @@ public class  User implements Serializable, FirebaseObject {
 
 
     /**
-     * Other construction of a new user instance.
-     * @param fullName
-     * @param email
-     * @param imageId
-     * @param description
+     * Additional construction of a new user instance.
+     * @param idUser : the ID of the user
+     * @param imageId : the ID of the profile picture of the user
      * @param documentPath of the activity in Firebase Firestore
      */
 
