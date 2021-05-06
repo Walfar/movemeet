@@ -124,6 +124,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 } else {
                     // TODO: check why this part is NOT accessed! (No toast is displayed when the user account to create already exists)
+                    // --> It seems that we go here all the same but the toast is not visible!
                     Toast.makeText(RegisterActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                 }
