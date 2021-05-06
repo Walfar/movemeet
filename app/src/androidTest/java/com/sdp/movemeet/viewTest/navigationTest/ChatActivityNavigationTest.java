@@ -19,7 +19,10 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 
 public class ChatActivityNavigationTest {
     @Rule
@@ -58,36 +61,43 @@ public class ChatActivityNavigationTest {
     @Test
     public void ChatActivityToProfileActivity() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_edit_profile));
+        onView(withId(R.id.button_update_profile)).check(matches(isDisplayed()));
         logout();
     }
 
     @Test
     public void ChatActivityToActivityUpload() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_add_activity));
+        onView(withId(R.id.buttonConfirmUpload)).check(matches(isDisplayed()));
         logout();
     }
 
     @Test
     public void ChatActivityToStartActivity() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_start_activity));
+        onView(withId(R.id.activityChatDescription)).check(matches(isDisplayed()));
         logout();
     }
 
     @Test
     public void ChatActivityGotoHome() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_home));
+        onView(withId(R.id.textView)).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.textView), withText("MOVEMEƎT")));
         logout();
     }
 
     @Test
     public void ChatActivityGotoChat() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_chat));
+        onView(withId(R.id.addMessageImageView)).check(matches(isDisplayed()));
         logout();
     }
 
     @Test
     public void ChatActivity_logout() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
+        onView(withId(R.id.button_login)).check(matches(isDisplayed()));
     }
 
     public void logout() {
