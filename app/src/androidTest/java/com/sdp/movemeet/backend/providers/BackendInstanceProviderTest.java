@@ -1,6 +1,5 @@
 package com.sdp.movemeet.backend.providers;
 
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -8,7 +7,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.sdp.movemeet.view.home.HomeScreenActivity;
-import com.sdp.movemeet.view.main.MainActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
