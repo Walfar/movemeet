@@ -26,7 +26,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -114,7 +113,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
 
         createDrawer();
-        if(activity != null){
+        if (activity != null) {
             displayDescriptionActivityData();
         }
 
@@ -330,7 +329,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      */
     private void getOrganizerName() {
         organizerId = activity.getOrganizerId();
-        Task <DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + organizerId);
+        Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + organizerId);
         document.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -338,9 +337,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        fullNameString = (String) document.getData().get("fullName");
-                        organizerView.setText(fullNameString);
-                        Log.i(TAG, "fullNameString: " + fullNameString);
+                        String organiserFullName = (String) document.getData().get("fullName");
+                        organizerView.setText(organiserFullName);
+                        Log.i(TAG, "organiser name: " + organiserFullName);
                     } else {
                         Log.d(TAG, "No such document!");
                     }
@@ -355,7 +354,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Fetch the name of a participant from Firebase Firestore using his userId
      */
     private void getCurrentParticipantName(String participantId) {
-        Task <DocumentSnapshot>  document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + participantId);
+        Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + participantId);
         document.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {

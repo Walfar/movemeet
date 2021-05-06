@@ -31,7 +31,7 @@ import com.sdp.movemeet.view.home.LoginActivity;
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
 
-    private Activity act;
+    Activity activity;
     private static final String TAG = "ActDescActivity";
     StorageReference storageReference;
     ImageView activityImage;
@@ -47,7 +47,7 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
         Intent intent = getIntent();
 
         if (intent != null) {
-            act = (Activity) intent.getSerializableExtra("activity");
+            activity = (Activity) intent.getSerializableExtra("activity");
         }
 
         uri = intent.getData();
@@ -57,6 +57,12 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
 
         storageReference = FirebaseStorage.getInstance().getReference();
 
+        if (activity != null) {
+            displayDescriptionActivityData();
+        }
+    }
+
+    public void displayDescriptionActivityData() {
         createTitleView();
         createParticipantNumberView();
         createDescriptionView();
@@ -71,73 +77,62 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
     }
 
     /**
-     * title from the activity
+     * Title from the activity
      */
     private void createTitleView() {
         TextView activityTitle = (TextView) findViewById(R.id.activity_title_description);
-        if (act != null) activityTitle.setText(act.getTitle());
+        activityTitle.setText(activity.getTitle());
     }
 
     /**
-     * number of participants from the activity
+     * Number of participants from the activity
      */
     private void createParticipantNumberView() {
         TextView numberParticipantsView = (TextView) findViewById(R.id.activity_number_description);
-        if (act != null) {
-            numberParticipantsView.setText(act.getParticipantId().size() + "/" + act.getNumberParticipant());
-        }
+        numberParticipantsView.setText(activity.getParticipantId().size() + "/" + activity.getNumberParticipant());
     }
 
     /**
-     * description from the activity
+     * Description from the activity
      */
     private void createDescriptionView() {
         TextView descriptionView = (TextView) findViewById(R.id.activity_description_description);
-        if (act != null) {
-            descriptionView.setText(act.getDescription());
-        }
+        descriptionView.setText(activity.getDescription());
     }
 
     /**
-     * sport of the activity
+     * Sport of the activity
      */
     private void createSportView() {
         TextView sportView = (TextView) findViewById(R.id.activity_sport_description);
-        if (act != null) {
-            sportView.setText(act.getSport().toString());
-        }
+        sportView.setText(activity.getSport().toString());
     }
 
     /**
-     * duration of the activity
+     * Duration of the activity
      */
     private void createDurationView() {
         TextView durationView = (TextView) findViewById(R.id.activity_duration_description);
-        if (act != null) {
-            durationView.setText(String.valueOf((int) act.getDuration()));
-        }
+        durationView.setText(String.valueOf((int) activity.getDuration()));
     }
 
     /**
-     * address of the activity
+     * Address of the activity
      */
     private void createAddressView() {
-        // address from the activity
         TextView addressView = (TextView) findViewById(R.id.activity_address_description);
-        if (act != null) {
-            addressView.setText(act.getAddress());
-        }
+        addressView.setText(activity.getAddress());
     }
 
     /**
-     * image of the activity
+     * Image of the activity
      */
     private void loadActivityHeaderPicture() {
         activityImage = findViewById(R.id.activity_image_description);
         progressBar = findViewById(R.id.progress_bar_activity_description);
         progressBar.setVisibility(View.VISIBLE);
-        if (act != null) {
-            imagePath = "activities/" + act.getActivityId() + "/activityImage.jpg";
+        if (activity != null) {
+            imagePath = "activities/" + activity.getActivityId() + "/activityImage.jpg";
             StorageReference imageRef = storageReference.child(imagePath);
             imageRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
