@@ -99,7 +99,6 @@ public class FirestoreActivityManagerTest {
             }
 
             @Nullable
-            @org.jetbrains.annotations.Nullable
             @Override
             public Exception getException() {
                 return null;
