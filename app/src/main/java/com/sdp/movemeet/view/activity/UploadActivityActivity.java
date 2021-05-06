@@ -36,6 +36,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.Activity;
@@ -57,7 +59,9 @@ public class UploadActivityActivity extends AppCompatActivity {
 
     private Spinner spinner;
 
-    FirebaseAuth fAuth;
+    private FirebaseAuth fAuth;
+    private FirebaseFirestore fStore;
+    private BackendManager<Activity> backendActivityManager;
 
     private Calendar calendar;
     private EditText startTimeText;
@@ -84,8 +88,8 @@ public class UploadActivityActivity extends AppCompatActivity {
     Toolbar toolbar;
     TextView textView;
 
+    // Navigation tab fields
     TextView fullName, email, phone;
-    FirebaseFirestore fStore;
     String userId;
 
     @Override
@@ -93,9 +97,15 @@ public class UploadActivityActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_activity);
 
-        setupSportSpinner(this);
+        // Setup Firebase services
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+        fStore = BackendInstanceProvider.getFirestoreInstance();
+        backendActivityManager = new FirestoreActivityManager(fStore,
+                FirestoreActivityManager.ACTIVITIES_COLLECTION,
+                new ActivitySerializer());
 
-        fAuth = FirebaseAuth.getInstance();
+        // Setup activity creation form inputs
+        setupSportSpinner(this);
 
         titleEditText = findViewById(R.id.editTextTitle);
         descriptionEditText = findViewById(R.id.editTextDescription);
@@ -191,8 +201,6 @@ public class UploadActivityActivity extends AppCompatActivity {
 
     public void handleRegisterUser() {
         // Retrieve user data (full name, email and phone number) from Firebase Firestore
-        fAuth = FirebaseAuth.getInstance();
-        fStore = FirebaseFirestore.getInstance();
         if (fAuth.getCurrentUser() != null) {
             userId = fAuth.getCurrentUser().getUid();
             TextView[] textViewArray = {fullName, email, phone};
@@ -411,34 +419,13 @@ public class UploadActivityActivity extends AppCompatActivity {
 
         if (toUpload == null) return;
 
-        /*BackendActivityManager bam = new BackendActivityManager(FirebaseFirestore.getInstance(),
-                BackendActivityManager.ACTIVITIES_COLLECTION);
-
-        bam.uploadActivity(toUpload, new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(getApplicationContext(), "Activity successfully uploaded!",
-                                Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                    }
-                },
-                new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("upload activity TAG", "failed");
-                        Toast.makeText(getApplicationContext(), "Failed to upload activity",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });*/
-
-        BackendSerializer<Activity> serializer = new ActivitySerializer();
         BackendManager<Activity> bm = new FirestoreActivityManager(
-                FirebaseFirestore.getInstance(),
+                fStore,
                 FirestoreActivityManager.ACTIVITIES_COLLECTION,
-                serializer
+                new ActivitySerializer()
         );
 
-        ((Task<Void>) bm.add(toUpload, "")).addOnSuccessListener(new OnSuccessListener<Void>() {
+        ((Task<Void>) bm.add(toUpload, null)).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(getApplicationContext(), "Activity successfully uploaded!",

@@ -52,4 +52,8 @@ public class Navigation extends AppCompatActivity {
         context.startActivity(intent);
     }
 
+    public static void fillNavigationProfileFields() {
+
+    }
+
 }
