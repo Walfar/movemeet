@@ -7,9 +7,8 @@ import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.view.home.LoginActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -32,11 +31,10 @@ import static org.hamcrest.Matchers.allOf;
 public class MainActivityNavigationTest {
 
     @Rule
-    public ActivityScenarioRule<HomeScreenActivity> testRule = new ActivityScenarioRule<>(HomeScreenActivity.class);
+    public ActivityScenarioRule<LoginActivity> testRule = new ActivityScenarioRule<>(LoginActivity.class);
 
     @Before
     public void signIn() {
-        onView(withId(R.id.signInButton)).perform(click());
         onView(withId(R.id.edit_text_email)).perform(replaceText("antho2@gmail.com"), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password)).perform(replaceText("234567"), closeSoftKeyboard());
         onView(withId(R.id.button_login)).perform(click());
