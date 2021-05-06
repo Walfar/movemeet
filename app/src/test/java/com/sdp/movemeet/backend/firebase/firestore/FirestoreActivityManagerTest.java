@@ -18,7 +18,6 @@ import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.modelsTest.ActivityTest;
 
-import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.internal.runners.JUnit4ClassRunner;
@@ -95,7 +94,7 @@ public class FirestoreActivityManagerTest {
             }
 
             @Override
-            public <X extends Throwable> DocumentSnapshot getResult(@NonNull @NotNull Class<X> aClass) throws X {
+            public <X extends Throwable> DocumentSnapshot getResult(@NonNull   Class<X> aClass) throws X {
                 return null;
             }
 
@@ -107,36 +106,36 @@ public class FirestoreActivityManagerTest {
             }
 
             @Override
-            public Task<DocumentSnapshot> addOnSuccessListener(@NonNull @NotNull OnSuccessListener<? super DocumentSnapshot> onSuccessListener) {
+            public Task<DocumentSnapshot> addOnSuccessListener(@NonNull   OnSuccessListener<? super DocumentSnapshot> onSuccessListener) {
                 return null;
             }
 
 
             @Override
-            public Task<DocumentSnapshot> addOnSuccessListener(@NonNull @NotNull Executor executor, @NonNull @NotNull OnSuccessListener<? super DocumentSnapshot> onSuccessListener) {
+            public Task<DocumentSnapshot> addOnSuccessListener(@NonNull   Executor executor, @NonNull   OnSuccessListener<? super DocumentSnapshot> onSuccessListener) {
                 return null;
             }
 
             @Override
-            public Task<DocumentSnapshot> addOnSuccessListener(@NonNull @NotNull android.app.Activity activity, @NonNull @NotNull OnSuccessListener<? super DocumentSnapshot> onSuccessListener) {
-                return null;
-            }
-
-
-            @Override
-            public Task<DocumentSnapshot> addOnFailureListener(@NonNull @NotNull OnFailureListener onFailureListener) {
+            public Task<DocumentSnapshot> addOnSuccessListener(@NonNull   android.app.Activity activity, @NonNull   OnSuccessListener<? super DocumentSnapshot> onSuccessListener) {
                 return null;
             }
 
 
             @Override
-            public Task<DocumentSnapshot> addOnFailureListener(@NonNull @NotNull Executor executor, @NonNull @NotNull OnFailureListener onFailureListener) {
+            public Task<DocumentSnapshot> addOnFailureListener(@NonNull   OnFailureListener onFailureListener) {
                 return null;
             }
 
 
             @Override
-            public Task<DocumentSnapshot> addOnFailureListener(@NonNull @NotNull android.app.Activity activity, @NonNull @NotNull OnFailureListener onFailureListener) {
+            public Task<DocumentSnapshot> addOnFailureListener(@NonNull   Executor executor, @NonNull   OnFailureListener onFailureListener) {
+                return null;
+            }
+
+
+            @Override
+            public Task<DocumentSnapshot> addOnFailureListener(@NonNull   android.app.Activity activity, @NonNull   OnFailureListener onFailureListener) {
                 return null;
             }
         };
