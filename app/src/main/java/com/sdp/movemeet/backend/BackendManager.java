@@ -2,8 +2,6 @@ package com.sdp.movemeet.backend;
 
 import com.google.android.gms.tasks.Task;
 
-import java.util.concurrent.Future;
-
 /**
  * A generic interface to perform basic storage management
  * operations with a backend

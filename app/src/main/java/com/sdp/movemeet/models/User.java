@@ -6,7 +6,6 @@ import java.io.Serializable;
  *
  * This class represents a user.
  *
- *
  * */
 
 public class  User implements Serializable, FirebaseObject {
@@ -26,7 +25,6 @@ public class  User implements Serializable, FirebaseObject {
      * @param email : google email of the user
      * @param phone : phone number of the user
      * @param description : description of the user
-     *
      */
     public User (String fullName, String email, String phone, String description) {
         if(fullName == null || email == null || phone == null){
@@ -44,7 +42,7 @@ public class  User implements Serializable, FirebaseObject {
      * Additional construction of a new user instance.
      * @param idUser : the ID of the user
      * @param imageId : the ID of the profile picture of the user
-     * @param documentPath of the activity in Firebase Firestore
+     * @param documentPath : the document path of the activity in Firebase Firestore
      */
 
     public User (String fullName, String email, String phone, String description, String idUser, String imageId, String documentPath) {
@@ -68,7 +66,7 @@ public class  User implements Serializable, FirebaseObject {
 
     /**
      *
-     * @return the user's full name name
+     * @return the user's full name
      */
     public String getFullName() {
         return fullName;

@@ -1,6 +1,5 @@
 package com.sdp.movemeet.viewTest.profileTest;
 
-
 import android.view.Gravity;
 
 import androidx.test.espresso.contrib.DrawerActions;
@@ -9,8 +8,8 @@ import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
-import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.view.home.HomeScreenActivity;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,7 +23,6 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)

@@ -6,7 +6,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
 
-
 /**
  * A class capable of handling Activity storage operations with a FirebaseFirestore backend
  */
