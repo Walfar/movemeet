@@ -1,4 +1,4 @@
-package com.sdp.movemeet.viewTest.navigationTest;
+/*package com.sdp.movemeet.viewTest.navigationTest;
 
 import android.view.Gravity;
 
@@ -114,3 +114,4 @@ public class ActivityDescriptionNavigationTest {
         }catch(Exception e){}
     }
 }
+*/
