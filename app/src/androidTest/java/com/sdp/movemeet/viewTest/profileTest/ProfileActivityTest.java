@@ -52,7 +52,7 @@ public class ProfileActivityTest {
     private FirebaseUser user;
   
     @Rule
-    // TODO: why is this ActivityScenarioRule not launching RegisterActivity, but MainActivity?
+    // TODO: why is this ActivityScenarioRule not launching RegisterActivity, but MainActivity sometimes?
     public ActivityScenarioRule<RegisterActivity> testRule = new ActivityScenarioRule<>(RegisterActivity.class);
 
     @Before
@@ -76,7 +76,7 @@ public class ProfileActivityTest {
         // Logging in
         CountDownLatch latch = new CountDownLatch(1);
         fAuth = FirebaseAuth.getInstance();
-        fAuth.signInWithEmailAndPassword("movemeet@gmail.com", "password").addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+        fAuth.signInWithEmailAndPassword(TEST_EMAIL, TEST_PASSWORD).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
                 latch.countDown();
