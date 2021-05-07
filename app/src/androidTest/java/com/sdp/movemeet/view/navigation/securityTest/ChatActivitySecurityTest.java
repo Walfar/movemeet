@@ -15,12 +15,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 public class ChatActivitySecurityTest {
 
-    @Before
-    public void checkUserNotLogged() {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        if (firebaseAuth.getCurrentUser() != null) firebaseAuth.signOut();
-    }
-
     @Rule
     public ActivityScenarioRule<ChatActivity> testRule = new ActivityScenarioRule<>(ChatActivity.class);
 
