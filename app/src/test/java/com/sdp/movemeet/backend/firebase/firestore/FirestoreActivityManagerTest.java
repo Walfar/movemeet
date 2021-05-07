@@ -172,10 +172,10 @@ public class FirestoreActivityManagerTest {
         });
     }
 
-    @Test
+    /*@Test
     public void addReturnsCorrectTask() {
         assertEquals(addTask, activityManager.add(activity, ""));
-    }
+    } */
 
     @Test
     public void deleteThrowsIllegalArgumentExceptionOnNullOrEmptyPath() {
