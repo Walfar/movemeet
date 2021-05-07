@@ -1,4 +1,4 @@
-/*package com.sdp.movemeet.utilityTest;
+package com.sdp.movemeet.utilityTest;
 
 
 import android.util.Log;
@@ -43,4 +43,4 @@ public class ActivitiesUpdaterTest {
         });
         Thread.sleep(3000);
     }
-} */
+} 
