@@ -9,11 +9,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!--
-         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
-         Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the "MyLocation" functionality.
-    -->
 
     <application
         android:allowBackup="true"
@@ -22,13 +17,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.movemeet.noActionBar">
-
-        <activity android:name=".map.GPSRecordingActivity"></activity>
+        <activity android:name=".view.activity.ActivityListActivity"></activity>
+        <activity android:name=".view.map.GPSRecordingActivity" />
         <activity
-            android:name=".EditProfileActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".UploadActivityActivity" />
+            android:name=".view.profile.EditProfileActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".view.profile.ProfileActivity" />
+        <activity android:name=".view.activity.UploadActivityActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -42,38 +37,52 @@
             android:value="@string/map_key" />
 
         <activity
-            android:name=".chat.ChatActivity"
+            android:name=".view.chat.ChatActivity"
             android:label="@string/title_activity_chat" />
-
         <activity
-            android:name=".HomeScreenActivity"
+            android:name=".view.home.HomeScreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/Theme.movemeet.noActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".view.home.RegisterActivity"
+            android:parentActivityName=".view.home.HomeScreenActivity"
+            android:theme="@style/Theme.movemeet">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sdp.movemeet.view.home.HomeScreenActivity" />
+        </activity>
+        <activity android:name=".view.main.MainActivity" />
+        <activity
+            android:name=".view.main.MainUnregisterActivity"
+            android:parentActivityName=".view.home.HomeScreenActivity"
+            android:theme="@style/Theme.movemeet">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sdp.movemeet.view.home.HomeScreenActivity" />
+        </activity>
+        <activity
+            android:name=".view.home.LoginActivity"
+            android:parentActivityName=".view.home.HomeScreenActivity"
+            android:theme="@style/Theme.movemeet">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sdp.movemeet.view.home.HomeScreenActivity" />
+        </activity>
+        <activity android:name=".view.activity.ActivityDescriptionActivity"></activity>
 
         <activity
-            android:name=".RegisterActivity"
-            android:parentActivityName=".HomeScreenActivity"
+            android:name=".view.activity.ActivityDescriptionActivityUnregister"
+            android:parentActivityName=".view.main.MainUnregisterActivity"
             android:theme="@style/Theme.movemeet">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sdp.movemeet.HomeScreenActivity" />
-        </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".MainUnregister" />
-        <activity
-            android:name=".LoginActivity"
-            android:parentActivityName=".HomeScreenActivity"
-            android:theme="@style/Theme.movemeet">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sdp.movemeet.HomeScreenActivity" />
-        </activity>
-        <activity android:name=".Activity.ActivityDescriptionActivity">
+                android:value="com.sdp.movemeet.view.main.MainUnregisterActivity" />
         </activity>
 
         <meta-data

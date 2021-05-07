@@ -4,26 +4,18 @@ import android.Manifest;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
-import androidx.test.uiautomator.By;
-import androidx.test.uiautomator.UiDevice;
-import androidx.test.uiautomator.Until;
 
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.tasks.Task;
-import com.sdp.movemeet.R;
-import com.sdp.movemeet.map.GPSRecordingActivity;
-import com.sdp.movemeet.map.MainMapFragment;
+import com.sdp.movemeet.view.map.MainMapFragment;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -34,10 +26,9 @@ import org.mockito.stubbing.Answer;
 import java.util.Arrays;
 import java.util.Calendar;
 
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static com.sdp.movemeet.map.GPSRecordingActivityTest.FAKE_ACCURACY;
-import static com.sdp.movemeet.map.GPSRecordingActivityTest.FAKE_LATITUDE;
-import static com.sdp.movemeet.map.GPSRecordingActivityTest.FAKE_LONGITUDE;
+import static com.sdp.movemeet.view.map.GPSRecordingActivityTest.FAKE_ACCURACY;
+import static com.sdp.movemeet.view.map.GPSRecordingActivityTest.FAKE_LATITUDE;
+import static com.sdp.movemeet.view.map.GPSRecordingActivityTest.FAKE_LONGITUDE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;

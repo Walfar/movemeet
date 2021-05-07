@@ -2,57 +2,69 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-        <item
-            android:id="@+id/nav_home"
-            android:title="Home"
-            android:icon="@drawable/home"></item>
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/home"
+        android:title="@string/drawer_home">
+    </item>
 
 
-
-    <item android:title="Activities">
+    <item android:title="@string/drawer_activities_group">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_add_activity"
-                    android:title="Add Activity"
-                    android:icon="@drawable/add"></item>
+                    android:icon="@drawable/add"
+                    android:title="@string/drawer_add_activity">
+                </item>
                 <item
                     android:id="@+id/nav_start_activity"
-                    android:title="Start Activity"
-                    android:icon="@drawable/block"></item>
+                    android:icon="@drawable/block"
+                    android:title="@string/drawer_start_activity">
+                </item>
+                <item
+                    android:id="@+id/nav_list_activities"
+                    android:icon="@drawable/add"
+                    android:title="@string/drawer_list_activities">
+                </item>
             </group>
         </menu>
     </item>
 
-    <item android:title="Chat">
+    <item android:title="@string/drawer_chat_group">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_chat"
-                    android:title="Chat"
-                    android:icon="@drawable/chat"></item>
+                    android:icon="@drawable/chat"
+                    android:title="@string/drawer_chat">
+
+                </item>
             </group>
         </menu>
     </item>
 
-    <item android:title="Settings">
+    <item android:title="@string/drawer_settings_group">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_edit_profile"
-                    android:title="Edit Profile"
-                    android:icon="@drawable/settings"></item>
+                    android:icon="@drawable/settings"
+                    android:title="@string/drawer_edit_profile">
+
+                </item>
             </group>
         </menu>
     </item>
 
-    <item android:title="Logout">
+    <item android:title="@string/drawer_logout_group">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_logout"
-                    android:title="Logout"
-                    android:icon="@drawable/logout_icon"></item>
+                    android:icon="@drawable/logout_icon"
+                    android:title="@string/drawer_logout">
+                </item>
             </group>
         </menu>
     </item>
