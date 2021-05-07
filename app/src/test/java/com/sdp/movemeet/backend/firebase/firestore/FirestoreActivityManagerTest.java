@@ -174,7 +174,7 @@ public class FirestoreActivityManagerTest {
 
     @Test
     public void addReturnsCorrectTask() {
-        assertEquals(addTask, activityManager.add(activity, null));
+        assertEquals(addTask, activityManager.add(activity, ""));
     }
 
     @Test
