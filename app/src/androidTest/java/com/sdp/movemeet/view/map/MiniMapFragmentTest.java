@@ -1,72 +1,72 @@
-package com.sdp.movemeet.view.map;
+/*package com.sdp.movemeet.view.map;
 
 import android.Manifest;
-import android.view.Gravity;
+import android.location.Location;
+import android.util.Log;
 
-import androidx.test.espresso.contrib.DrawerActions;
-import androidx.test.espresso.contrib.NavigationViewActions;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject;
+import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.UiSelector;
 
+import com.android21buttons.fragmenttestrule.FragmentTestRule;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import static androidx.test.espresso.action.ViewActions.click;
-
+import com.google.firebase.auth.FirebaseUser;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 
 @RunWith(AndroidJUnit4.class)
 public class MiniMapFragmentTest {
+    private UiDevice uiDevice;
+    private FirebaseAuth fAuth;
+    private FirebaseUser user;
+
 
     @Rule
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Rule
-    public ActivityScenarioRule<UploadActivityActivity> testRule = new ActivityScenarioRule<>(UploadActivityActivity.class);
-
-    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    public FragmentTestRule<?, MiniMapFragment> fragmentTestRule =
+            FragmentTestRule.create(MiniMapFragment.class);
 
     @Before
-    public void signIn() {
-        if (firebaseAuth.getCurrentUser() == null) {
-            onView(withId(R.id.edit_text_email)).perform(replaceText("antho2@gmail.com"), closeSoftKeyboard());
-            onView(withId(R.id.edit_text_password)).perform(replaceText("234567"), closeSoftKeyboard());
-            onView(withId(R.id.button_login)).perform(click());
-            try {
-                Thread.sleep(2500);
-            } catch (InterruptedException e) {
-                assert (false);
+    public void setUp() throws InterruptedException {
+        fAuth = FirebaseAuth.getInstance();
+        fAuth.signInWithEmailAndPassword("test@test.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                user = fAuth.getCurrentUser();
+                uiDevice = UiDevice.getInstance(getInstrumentation());
             }
-            // Open Drawer to click on navigation.
-            onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
-            try{
-                Thread.sleep(500);
-            }catch(Exception e){}
-
-            onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_add_activity));
-
-            try{
-                Thread.sleep(500);
-            }catch(Exception e){}
-        }
+        });
+        sleep(2000);
     }
-
 
     @Test
     public void miniMapFragment_isDisplayed() throws InterruptedException {
@@ -74,26 +74,24 @@ public class MiniMapFragmentTest {
     }
 
    /* @Test
-    public void noAddressSetIfNoClick() {
-        testRule.getScenario().onActivity(activity -> {
-            LatLng address = ((UploadActivityActivity) activity).getAddressLocation();
-            assertNull(address);
-        });
+    public void miniMapFragment_onClickSetsLocation() {
+        //What could be the right coords of the mini map ?
+        sleep(3000);
+        uiDevice.click(uiDevice.getDisplaySizeDp().x/2, uiDevice.getDisplaySizeDp().y/2);
+        sleep(2000);
+        //Casting not possible. Attach fragment to upload activity ?
+        /*UploadActivityActivity act = new UploadActivityActivity();
+        LatLng address = act.getAddressLocation();
+        assertNotNull(address);
     }
 
-    @Test
-    public void onClickSetsLocation() throws InterruptedException {
-        Thread.sleep(3000);
-        onView(withId(R.id.fragment_map)).perform(click());
-        Thread.sleep(1000);
-        testRule.getScenario().onActivity(activity -> {
-            LatLng address = ((UploadActivityActivity) activity).getAddressLocation();
-            assertNotNull(address);
-        });
-    } */
-
-    @After
-    public void logOut() {
-        firebaseAuth.signOut();
+    public boolean sleep(long millis) {
+        try {
+            Thread.sleep(millis);
+            return true;
+        } catch (InterruptedException e) {
+            return false;
+        }
     }
-}
+
+} */

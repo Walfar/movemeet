@@ -1,32 +1,15 @@
-package com.sdp.movemeet.utilityTest;
-
-
+package com.sdp.movemeet.utility;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.sdp.movemeet.backend.BackendActivityManager;
 import com.sdp.movemeet.models.Activity;
-import com.sdp.movemeet.utility.ActivitiesUpdater;
-
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import java.util.ArrayList;
-
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class ActivitiesUpdaterTest {
-
     //NB: this test works only if the DB is not empty
     @Test
     public void updatingListActivitiesUpdatesCorrectly() throws InterruptedException {
@@ -43,4 +26,4 @@ public class ActivitiesUpdaterTest {
         });
         Thread.sleep(3000);
     }
-} 
+}

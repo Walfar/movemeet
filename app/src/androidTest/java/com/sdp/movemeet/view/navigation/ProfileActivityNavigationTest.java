@@ -1,9 +1,7 @@
-/*package com.sdp.movemeet.viewTest.navigationTest;
 
-import android.view.Gravity;
+/*
+package com.sdp.movemeet.view.navigation;
 
-import androidx.test.espresso.contrib.DrawerActions;
-import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -11,17 +9,11 @@ import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.view.home.LoginActivity;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
@@ -30,7 +22,9 @@ public class ProfileActivityNavigationTest {
     @Rule
     public ActivityScenarioRule<LoginActivity> testRule = new ActivityScenarioRule<>(LoginActivity.class);
 
-    @Before
+    @Test
+    public void emptyTest(){}
+    /*@Before
     public void signIn(){
         onView(withId(R.id.edit_text_email)).perform(replaceText("antho2@gmail.com"), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password)).perform(replaceText("234567"), closeSoftKeyboard());
@@ -121,3 +115,4 @@ public class ProfileActivityNavigationTest {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
     }
 } */
+
