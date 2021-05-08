@@ -132,7 +132,6 @@ public class ProfileActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.nav_edit_profile:
-                finish();
                 break;
             case R.id.nav_add_activity:
                 Navigation.goToActivityUpload(this.navigationView);

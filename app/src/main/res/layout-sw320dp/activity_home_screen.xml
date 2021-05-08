@@ -83,7 +83,7 @@
         android:layout_marginTop="20dp"
         android:backgroundTint="@color/red"
         android:onClick="RecordRun"
-        android:text="Record Run"
+        android:text="@string/home_record_run"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"

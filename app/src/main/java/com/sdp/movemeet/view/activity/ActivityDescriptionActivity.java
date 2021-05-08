@@ -157,7 +157,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.nav_start_activity:
-                finish();
                 break;
             case R.id.nav_chat:
                 Navigation.goToChat(this.navigationView);

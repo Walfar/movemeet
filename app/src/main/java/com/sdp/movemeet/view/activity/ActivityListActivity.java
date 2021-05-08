@@ -93,7 +93,6 @@ public class ActivityListActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.nav_list_activities:
-                finish();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
