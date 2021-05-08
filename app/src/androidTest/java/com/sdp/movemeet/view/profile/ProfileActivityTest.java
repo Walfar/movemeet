@@ -105,7 +105,7 @@ public class ProfileActivityTest {
             assert (false);
         }
 
-        // Checking if the userId still exists or not
+        // TODO: check if the userId still exists or not (to have some kind of assertion here!)
         user = fAuth.getCurrentUser();
     }
 

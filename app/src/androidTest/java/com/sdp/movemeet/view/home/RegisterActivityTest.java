@@ -6,7 +6,9 @@ import android.widget.EditText;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.view.home.RegisterActivity;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -151,4 +153,9 @@ public class RegisterActivityTest {
         };
     }
 
+
+    @Test
+    public void logOut() {
+        FirebaseAuth.getInstance().signOut();
+    }
 }

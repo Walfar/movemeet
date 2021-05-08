@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.view.chat.ChatActivity;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

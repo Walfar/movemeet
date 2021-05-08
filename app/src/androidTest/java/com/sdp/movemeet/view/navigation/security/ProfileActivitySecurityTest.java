@@ -1,10 +1,11 @@
-package com.sdp.movemeet.view.navigation.securityTest;
+
+package com.sdp.movemeet.view.navigation.security;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
+import com.sdp.movemeet.view.profile.ProfileActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -15,7 +16,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 @RunWith(AndroidJUnit4.class)
 
-public class ActivityDescriptionSecurityTest {
+public class ProfileActivitySecurityTest {
 
     @Before
     public void checkUserNotLogged() {
@@ -24,7 +25,7 @@ public class ActivityDescriptionSecurityTest {
     }
 
     @Rule
-    public ActivityScenarioRule<ActivityDescriptionActivity> testRule = new ActivityScenarioRule<>(ActivityDescriptionActivity.class);
+    public ActivityScenarioRule<ProfileActivity> testRule = new ActivityScenarioRule<>(ProfileActivity.class);
 
     @Test
     public void redirectionTest() {

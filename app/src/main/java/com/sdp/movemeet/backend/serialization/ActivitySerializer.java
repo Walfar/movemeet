@@ -1,5 +1,8 @@
 package com.sdp.movemeet.backend.serialization;
 
+import android.util.Log;
+
+import com.google.firebase.Timestamp;
 import com.sdp.movemeet.models.Sport;
 import com.sdp.movemeet.models.Activity;
 
@@ -49,7 +52,7 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
                 (String) data.get(ORGANIZER_KEY),
                 (String) data.get(TITLE_KEY),
 
-                (int) data.get(NPART_KEY),
+                ((Long) data.get(NPART_KEY)).intValue(),
                 (ArrayList<String>) data.get(PARTICIPANTS_KEY),
 
                 (double) data.get(LONGITUDE_KEY),
@@ -57,15 +60,12 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
 
                 (String) data.get(DESC_KEY),
                 (String) data.get(DOCUMENT_PATH_KEY),
-                (Date) data.get(DATE_KEY),
+                ((Timestamp) data.get(DATE_KEY)).toDate(),
                 (double) data.get(DURATION_KEY),
-                (Sport) data.get(SPORT_KEY),
+                Sport.valueOf((String) data.get(SPORT_KEY)),
                 (String) data.get(ADDRESS_KEY),
-                (Date) data.get(CREATION_KEY)
+                ((Timestamp) data.get(CREATION_KEY)).toDate()
         );
-
-//        String path = (String) data.get(DOCUMENT_PATH_KEY);
-//        if (path != null) act.setDocumentPath(path);
 
         return act;
     }
