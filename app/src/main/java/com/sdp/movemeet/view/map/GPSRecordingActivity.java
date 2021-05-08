@@ -87,7 +87,7 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap_recording);
         supportMapFragment.getView().setContentDescription(MAP_NOT_READY_DESC);
 
-        path = new ArrayList<LatLng>();
+        path = new ArrayList<>();
 
         locationFetcher = new LocationFetcher(supportMapFragment, locationCallback);
         locationFetcher.startLocationUpdates();

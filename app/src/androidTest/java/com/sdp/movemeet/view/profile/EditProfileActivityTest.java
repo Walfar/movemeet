@@ -28,8 +28,8 @@ public class EditProfileActivityTest {
 
     public static final String TEST_FULL_NAME = "Anthony Guinchard";
     public static final String TEST_EMAIL = "antho2@gmail.com";
-    public static final String TEST_PHONE = "00412356788";
-    public static final String TEST_DESCRIPTION = "Hi there! I love Judo!";
+    public static final String TEST_PHONE = "000000000000";
+    public static final String TEST_DESCRIPTION = "";
 
     public static final String USER_ID = "cyYedhxTkGV6uihozBJpO5YDyGs1"; // antho2@gmail.com
     public static final String URI = "https://firebasestorage.googleapis.com/v0/b/movemeet-4cbf5.appspot.com/o/users%2FcyYedhxTkGV6uihozBJpO5YDyGs1%2Fprofile.jpg?alt=media&token=70637297-7622-4f99-90ac-7d6a12340066";
