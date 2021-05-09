@@ -182,7 +182,7 @@ public class UploadActivityActivity extends AppCompatActivity {
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             calendar.set(Calendar.MINUTE, minute);
-            startTimeText.setText(hours + ":" + ((minutes < 10) ? "0" + minutes : minutes));
+            startTimeText.setText(hourOfDay + ":" + ((minute < 10) ? "0" + minute : minute));
         }
     };
 

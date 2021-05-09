@@ -1,6 +1,5 @@
 package com.sdp.movemeet.viewTest.activityTest;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
@@ -13,29 +12,22 @@ import androidx.test.espresso.intent.Intents;
 import androidx.test.filters.LargeTest;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.R;
-import com.sdp.movemeet.backend.BackendActivityManager;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
-import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
-import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Activity;
-import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
-import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.view.main.MainActivity;
 
 import org.hamcrest.Matcher;
@@ -44,14 +36,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
-import org.mockito.cglib.proxy.Callback;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.CountDownLatch;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -65,19 +53,17 @@ import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertNotNull;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
@@ -87,45 +73,34 @@ public class UploadActivityActivityTest {
 
     private BackendSerializer<Activity> activitySerializer;
     private FirestoreActivityManager backendActivityManager;
+    private FirestoreActivityManager spyActivityManager;
 
-
-    public static ViewAction forceDoubleClick() {
-        return new ViewAction() {
-            @Override public Matcher<View> getConstraints() {
-                return allOf(isClickable(), isEnabled(), isDisplayed());
-            }
-
-            @Override public String getDescription() {
-                return "force click";
-            }
-
-            @Override public void perform(UiController uiController, View view) {
-                view.performClick(); // perform click without checking view coordinates.
-                view.performClick();
-                uiController.loopMainThreadUntilIdle();
-            }
-        };
-    }
+    private Task addTask;
+    private Activity mockActivity;
+    private ArgumentCaptor<OnSuccessListener> successCaptor;
+    private ArgumentCaptor<OnFailureListener> failureCaptor;
 
 
     @Before
     public void setup() {
+        // Disable navigation for tests
+        UploadActivityActivity.enableNav = false;
+
+        // Set up mocks and their behaviors
+        // Set up fake database
         BackendInstanceProvider.firestore = mock(FirebaseFirestore.class);
+
+        // Set up fake authentication
         AuthenticationInstanceProvider.fAuth = mock(FirebaseAuth.class);
-
         FirebaseUser user = mock(FirebaseUser.class);
-        String uid = "uid";
-
         when(AuthenticationInstanceProvider.fAuth.getCurrentUser()).thenReturn(user);
-        when(user.getUid()).thenReturn(uid);
+        when(user.getUid()).thenReturn("uid");
 
         Intents.init();
     }
 
     @Test
     public void confirmActivityUploadSilentlyFailsOnNullActivity() {
-
-        UploadActivityActivity.enableNav = false;
 
         ActivityScenario scenario = ActivityScenario.launch(UploadActivityActivity.class);
 
@@ -134,15 +109,15 @@ public class UploadActivityActivityTest {
             doReturn(null).when(spyActivity).validateActivity();
             spyActivity.confirmActivityUpload(null);
         });
+
+        scenario.close();
     }
 
     @Test
     public void confirmActivityUploadReturnsToMainOnSuccessfulUpload() {
 
-        UploadActivityActivity.enableNav = false;
-
+        // Set up fake activity upload
         Activity mockActivity = mock(Activity.class);
-
         Task addTask = mock(Task.class);
 
         BackendManager<Activity> activityBackendManager = new FirestoreActivityManager(
@@ -153,6 +128,7 @@ public class UploadActivityActivityTest {
         BackendManager<Activity> spyActivityManager = spy(activityBackendManager);
         doReturn(addTask).when(spyActivityManager).add(any(Activity.class), anyString());
 
+        // Capture OnSuccess and OnFailure callbacks to call them manually
         ArgumentCaptor<OnSuccessListener> successCaptor = ArgumentCaptor.forClass(OnSuccessListener.class);
         ArgumentCaptor<OnFailureListener> failureCaptor = ArgumentCaptor.forClass(OnFailureListener.class);
 
@@ -168,71 +144,112 @@ public class UploadActivityActivityTest {
 
             spyActivity.runOnUiThread(new Runnable() {
                 public void run() {
-                    spyActivity.confirmActivityUpload(activity.getCurrentFocus());
+                    spyActivity.confirmActivityUpload(spyActivity.getCurrentFocus());
                     successCaptor.getValue().onSuccess(null);
                 }
             });
         });
         intended(hasComponent(MainActivity.class.getName()));
+
+        scenario.close();
     }
 
-    @After
-    public void tearDown() {
-        Intents.release();
+    @Test
+    public void confirmActivityUploadStaysOnPageOnFailure() {
+
+        // Set up fake activity upload
+        Activity mockActivity = mock(Activity.class);
+        Task addTask = mock(Task.class);
+
+        BackendManager<Activity> activityBackendManager = new FirestoreActivityManager(
+                BackendInstanceProvider.getFirestoreInstance(),
+                FirestoreActivityManager.ACTIVITIES_COLLECTION,
+                new ActivitySerializer()
+        );
+        BackendManager<Activity> spyActivityManager = spy(activityBackendManager);
+        doReturn(addTask).when(spyActivityManager).add(any(Activity.class), anyString());
+
+        // Capture OnSuccess and OnFailure callbacks to call them manually
+        ArgumentCaptor<OnSuccessListener> successCaptor = ArgumentCaptor.forClass(OnSuccessListener.class);
+        ArgumentCaptor<OnFailureListener> failureCaptor = ArgumentCaptor.forClass(OnFailureListener.class);
+
+        when(addTask.addOnSuccessListener(successCaptor.capture())).thenReturn(addTask);
+        when(addTask.addOnFailureListener(failureCaptor.capture())).thenReturn(addTask);
+
+        ActivityScenario scenario = ActivityScenario.launch(UploadActivityActivity.class);
+
+        scenario.onActivity(activity -> {
+            UploadActivityActivity spyActivity = spy((UploadActivityActivity) activity);
+            doReturn(mockActivity).when(spyActivity).validateActivity();
+            spyActivity.activityBackendManager = spyActivityManager;
+
+            spyActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    spyActivity.confirmActivityUpload(spyActivity.getCurrentFocus());
+                    failureCaptor.getValue().onFailure(new Exception());
+                }
+            });
+        });
+
+        // Only 1 Intent was captured: The one created by ActivityScenario.launch()
+        assertThat(Intents.getIntents().size(), is(1));
+
+        scenario.close();
     }
 
 
     // This test has to take extra time or the Views won't update fast enough and it'll fail on CI
-    //@Test
-    //@LargeTest
-    /*public void endToEnd() {
+    @Test
+    @LargeTest
+    public void uploadFormWorksAsExpected() {
         ActivityScenario scenario = ActivityScenario.launch(UploadActivityActivity.class);
+        ResultCaptor<Activity> resultCaptor = new ResultCaptor();
 
-        sleep(1000);
+        CountDownLatch latch = new CountDownLatch(1);
 
+        sleep(1000); // Give time for Activity to launch
+
+        // Fails when no information is put in
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
+        assertValidationFails(scenario, resultCaptor, latch);
+        assertThat(Intents.getIntents().size(), is(1));
 
-        scenario.onActivity(activity -> {
-            assert (((UploadActivityActivity) activity).validParticipants == false);
-        });
-
+        // Fails when only date is put int
+        latch = new CountDownLatch(1);
         onView(withId(R.id.editTextDate)).perform(forceDoubleClick());
-
         onView(withClassName(equalTo(DatePicker.class.getName()))).perform(
                 PickerActions.setDate(
                         2025, 0, 20
                 )
         );
-
-        assert(sleep(1000));
+        assert (sleep(1000));
 
         onView(withText("OK")).perform(click());
-        onView(withId(R.id.buttonConfirmUpload)).perform(click());
+        //onView(withId(R.id.buttonConfirmUpload)).perform(click());
 
-        assert(sleep(1000));
+        assertValidationFails(scenario, resultCaptor, latch);
 
+        // Fail when only date + number of participants are put in
+        latch = new CountDownLatch(1);
         onView(withId(R.id.editTextNParticipants))
                 .perform(typeText("5"), closeSoftKeyboard());
 
         onView(withId(R.id.buttonConfirmUpload)).perform(click());
 
-        scenario.onActivity(activity -> {
-            assert (((UploadActivityActivity) activity).validParticipants == true);
-            assert (((UploadActivityActivity) activity).validLocation == false);
-        });
+        assertValidationFails(scenario, resultCaptor, latch);
 
-        assert(sleep(1000));
+        // Fails when only date, nParticipants, and location are put in
+        latch = new CountDownLatch(1);
 
         onView(withId(R.id.editTextLocation))
                 .perform(typeText("Dubai, UAE"), closeSoftKeyboard());
-        onView(withId(R.id.buttonConfirmUpload)).perform(click());
 
-        sleep(1000);
+        assertValidationFails(scenario, resultCaptor, latch);
 
-        scenario.onActivity(activity -> {
-            assert (((UploadActivityActivity) activity).validLocation == true);
-            //assert (((UploadActivityActivity) activity).validStartTime == false);
-        });
+        // Fails when only date, nParticipants, location and start time are put in
+        latch = new CountDownLatch(1);
+
 
         onView(withId(R.id.editTextStartTime)).perform(forceDoubleClick());
 
@@ -247,14 +264,13 @@ public class UploadActivityActivityTest {
         sleep(1000);
 
         onView(withText("OK")).perform(click());
-        onView(withId(R.id.buttonConfirmUpload)).perform(click());
 
         sleep(1000);
 
-        scenario.onActivity(activity -> {
-            assert (((UploadActivityActivity) activity).validStartTime == true);
-            assert (((UploadActivityActivity) activity).validDate == false);
-        });
+        assertValidationFails(scenario, resultCaptor, latch);
+
+        // Fails when only date, nParticipants, location, start time and end time are put in
+        latch = new CountDownLatch(1);
 
         onView(withId(R.id.editTextTime)).perform(forceDoubleClick());
 
@@ -265,41 +281,108 @@ public class UploadActivityActivityTest {
                         2, 30
                 )
         );
-
-        onView(withText("OK")).perform(click());
         sleep(1000);
 
-        onView(withId(R.id.buttonConfirmUpload)).perform(click());
-
-        scenario.onActivity(activity -> {
-            assert (((UploadActivityActivity) activity).validDate == true);
-        });
-
-
-        onView(withId(R.id.editTextDate)).perform(forceDoubleClick());
-
-        onView(withClassName(equalTo(DatePicker.class.getName()))).perform(
-                PickerActions.setDate(
-                        2025, 0, 20
-                )
-        );
-
-        assert(sleep(1000));
-
         onView(withText("OK")).perform(click());
-        onView(withId(R.id.buttonConfirmUpload)).perform(click());
 
-        assert(sleep(1000));
+        sleep(1000);
+
+        // Verify that it now uploads correctly
+        Task addTask = mock(Task.class);
+
+        BackendManager<Activity> activityBackendManager = new FirestoreActivityManager(
+                BackendInstanceProvider.getFirestoreInstance(),
+                FirestoreActivityManager.ACTIVITIES_COLLECTION,
+                new ActivitySerializer()
+        );
+        BackendManager<Activity> spyActivityManager = spy(activityBackendManager);
+        doReturn(addTask).when(spyActivityManager).add(any(Activity.class), anyString());
+
+        // Setup OnSuccess callback capture
+        ArgumentCaptor<OnSuccessListener> successCaptor = ArgumentCaptor.forClass(OnSuccessListener.class);
+        when(addTask.addOnSuccessListener(successCaptor.capture())).thenReturn(addTask);
 
         scenario.onActivity(activity -> {
-            assert (((UploadActivityActivity) activity).validDate == true);
+            UploadActivityActivity spyActivity = spy((UploadActivityActivity) activity);
+            spyActivity.activityBackendManager = spyActivityManager;
+
+            spyActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    spyActivity.confirmActivityUpload(spyActivity.getCurrentFocus());
+                    successCaptor.getValue().onSuccess(null);
+                }
+            });
         });
+
+        assert (Intents.getIntents().size() == 2);
 
         scenario.close();
 
-    }*/
+    }
 
-    /*public boolean sleep(int millis) {
+    @After
+    public void tearDown() {
+        Intents.release();
+    }
+
+    public static ViewAction forceDoubleClick() {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return allOf(isClickable(), isEnabled(), isDisplayed());
+            }
+
+            @Override
+            public String getDescription() {
+                return "force click";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                view.performClick(); // perform click without checking view coordinates.
+                view.performClick();
+                uiController.loopMainThreadUntilIdle();
+            }
+        };
+    }
+
+    private void assertValidationFails(ActivityScenario scenario, ResultCaptor<Activity> resultCaptor, CountDownLatch latch) {
+
+        scenario.onActivity(activity -> {
+            UploadActivityActivity spyActivity = spy((UploadActivityActivity) activity);
+            spyActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    spyActivity.confirmActivityUpload(activity.getCurrentFocus());
+                    doAnswer(resultCaptor).when(spyActivity).validateActivity();
+                    assertNull(resultCaptor.getResult());
+                    latch.countDown();
+                }
+            });
+        });
+
+        assert (wait(latch));
+    }
+
+
+    // Taken from https://stackoverflow.com/questions/18906983/how-to-validate-the-return-value-when-calling-a-mocked-objects-method
+    // -> Use to capture a spied function's result
+    private class ResultCaptor<T> implements Answer {
+        private T result = null;
+
+        public T getResult() {
+            return result;
+        }
+
+        @Override
+        public T answer(InvocationOnMock invocationOnMock) throws Throwable {
+            result = (T) invocationOnMock.callRealMethod();
+            return result;
+        }
+    }
+
+    public boolean sleep(int millis) {
         try {
             Thread.sleep(millis);
             return true;
@@ -307,6 +390,16 @@ public class UploadActivityActivityTest {
             e.printStackTrace();
             return false;
         }
-    }*/
+    }
+
+    public boolean wait(CountDownLatch latch) {
+        try {
+            latch.await();
+            return true;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 }
