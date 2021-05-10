@@ -30,14 +30,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.backend.BackendManager;
-import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.R;
-import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.view.navigation.Navigation;
 
@@ -52,6 +50,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     ImageView profileImage;
     TextView fullName, email, phone, description;
+    TextView fullNameDrawer, emailDrawer, phoneDrawer;
     ProgressBar progressBar;
 
     String userId, userImagePath;
@@ -75,6 +74,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         profileImage = findViewById(R.id.image_view_profile_image);
         progressBar = findViewById(R.id.progress_bar_profile);
+
+        fullName = findViewById(R.id.text_view_activity_profile_name);
+        email = findViewById(R.id.text_view_activity_profile_email);
+        phone = findViewById(R.id.text_view_activity_profile_phone);
+        description = findViewById(R.id.text_view_activity_profile_description);
 
         fStore = FirebaseFirestore.getInstance();
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
@@ -112,9 +116,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         View hView = navigationView.inflateHeaderView(R.layout.header);
 
-        fullName = hView.findViewById(R.id.text_view_profile_name);
-        phone = hView.findViewById(R.id.text_view_profile_phone);
-        email = hView.findViewById(R.id.text_view_profile_email);
+        fullNameDrawer = hView.findViewById(R.id.text_view_profile_name);
+        phoneDrawer = hView.findViewById(R.id.text_view_profile_phone);
+        emailDrawer = hView.findViewById(R.id.text_view_profile_email);
 
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
@@ -164,14 +168,13 @@ public class ProfileActivity extends AppCompatActivity {
                     if (document.exists()) {
                         UserSerializer userSerializer = new UserSerializer();
                         user = userSerializer.deserialize(document.getData());
-                        fullName = findViewById(R.id.text_view_activity_profile_name);
-                        email = findViewById(R.id.text_view_activity_profile_email);
-                        phone = findViewById(R.id.text_view_activity_profile_phone);
-                        description = findViewById(R.id.text_view_activity_profile_description);
                         fullName.setText(user.getFullName());
                         email.setText(user.getEmail());
                         phone.setText(user.getPhoneNumber());
                         description.setText(user.getDescription());
+                        fullNameDrawer.setText(user.getFullName());
+                        emailDrawer.setText(user.getEmail());
+                        phoneDrawer.setText(user.getPhoneNumber());
                     } else {
                         Log.d(TAG, "No such document!");
                     }
@@ -239,9 +242,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void deleteFirestoreDataAndAuthentication() {
         // Delete all user data from Firebase Firestore
-
-
-        ////======================= ✅
         userManager.delete(FirestoreUserManager.USERS_COLLECTION + "/" + userId).addOnSuccessListener(new OnSuccessListener() {
             @Override
             public void onSuccess(Object o) {
@@ -256,25 +256,6 @@ public class ProfileActivity extends AppCompatActivity {
                 Log.d(TAG, "deleteUserAccount - 2) ❌ Firebase Firestore user document could not be fetched! User account won't be deleted!");
             }
         });
-        ////=======================
-
-
-        ////=======================
-//        fStore.collection("users").document(userId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-//            @Override
-//            public void onSuccess(Void aVoid) {
-//                Log.d(TAG, "deleteUserAccount - 2) Firebase Firestore user data successfully deleted!");
-//                // 3) Deleting the user from Firebase Authentication
-//                deleteUserFromFirebaseAuthentication();
-//
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                Log.d(TAG, "deleteUserAccount - 2) Firebase Firestore user document could not be fetched! User account won't be deleted!");
-//            }
-//        });
-        ////=======================
     }
 
 
@@ -282,7 +263,7 @@ public class ProfileActivity extends AppCompatActivity {
         // Delete user from Firebase Authentication
         FirebaseUser user = fAuth.getCurrentUser();
         if (user != null) {
-            // TODO: Bug to fix --> check why this function sometimes doesn't delete the Firebase "user authentication"
+            // TODO: Bug to fix --> check why this function sometimes doesn't delete the Firebase "user authentication" (i.e. the user account)
             user.delete()
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override

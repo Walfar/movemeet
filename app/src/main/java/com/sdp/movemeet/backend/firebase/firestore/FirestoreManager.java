@@ -5,15 +5,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sdp.movemeet.backend.BackendManager;
-import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.FirebaseObject;
+import com.sdp.movemeet.backend.serialization.BackendSerializer;
 
 import java.util.Map;
 
 /**
  * A class capable of interacting with a FirebaseFirestore backend to perform storage operations
  * for objects of type T
- *
  * @param <T> The type of object handled by this FirestoreManager
  */
 abstract class FirestoreManager<T extends FirebaseObject> implements BackendManager<T> {
@@ -61,9 +60,7 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendMana
     @Override
     public Task<Void> delete(String path) {
         if (path == null || path.isEmpty()) throw new IllegalArgumentException();
-
         return db.document(path).delete();
-
     }
 
     @Override

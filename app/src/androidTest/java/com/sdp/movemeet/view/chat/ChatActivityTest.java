@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.view.chat.ChatActivity;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -47,7 +48,7 @@ import static org.hamcrest.Matchers.allOf;
 @RunWith(AndroidJUnit4.class)
 public class ChatActivityTest {
 
-    private FirebaseDatabase mDatabase;
+    private FirebaseDatabase firebaseDatabase;
     private FirebaseAuth fAuth;
 
     /*@Rule
@@ -80,7 +81,7 @@ public class ChatActivityTest {
 
         onView(withId(R.id.message_input_text)).perform(replaceText("my message"), closeSoftKeyboard());
 
-        onView(withId(R.id.button_send_message)).perform(forceDoubleClick());
+        onView(withId(R.id.button_send_message)).perform(click()); //.perform(forceDoubleClick());
 
         try {
             Thread.sleep(1500);
@@ -88,10 +89,9 @@ public class ChatActivityTest {
             assert (false);
         }
 
+        firebaseDatabase = FirebaseDatabase.getInstance();
 
-        mDatabase = FirebaseDatabase.getInstance();
-
-        DatabaseReference rootRef = mDatabase.getReference();
+        DatabaseReference rootRef = firebaseDatabase.getReference();
 
         rootRef.addValueEventListener(new ValueEventListener() {
             @Override

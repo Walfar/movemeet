@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sdp.movemeet.models.Activity;
@@ -35,6 +36,10 @@ import com.sdp.movemeet.R;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
 import com.sdp.movemeet.utility.LocationFetcher;
+
+import java.util.ArrayList;
+
+import static com.sdp.movemeet.utility.ActivitiesUpdater.updateListActivities;
 
 
 /**
@@ -53,9 +58,11 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     //marker representing the position of the user on the map
     private Marker positionMarker;
 
-    private SupportMapFragment supportMapFragment;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public SupportMapFragment supportMapFragment;
 
-    private GoogleMap googleMap;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public GoogleMap googleMap;
 
     private ActivitiesUpdater updater;
     private LocationFetcher locationFetcher;
@@ -65,10 +72,11 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     //Zoom value to animate camera on user at launch of the map
     public static final float ZOOM_VALUE = 15.0f;
 
-    //Boolean used to check if the callback is called for the first time
+    //Boolean used to check if the callback is called for the first time. Useful, to avoid repeating certain actions (e.g zooming on user's location)
     private boolean first_callback;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_map, container, false);
@@ -78,42 +86,29 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         //At creation, we haven't called the locationCallback yet
         first_callback = true;
 
-        //Update the local list of activities from the database
-        this.updater = ActivitiesUpdater.getInstance();
-        updater.updateListActivities(this);
+        //Update the local list of activities from the database. On success, we update the map by dispalying the activities markers
+        updateListActivities(o -> supportMapFragment.getMapAsync(googleMap -> displayNearbyMarkers()));
 
         user = fAuth.getCurrentUser();
 
         //When the location is updated, we change the current location value
         LocationCallback locationCallback = new LocationCallback() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {
                 currentLocation = locationResult.getLastLocation();
-                //This check is important because the callback might happen before the map is initialized
-                if (googleMap != null) {
-                    //Once we have the updated user's location, we can display/update its position on the map
-                    displayUserMarker();
-                    //In the case where this is the first time we set the user's marker, we also zoom on it and display nearby markers
-                    if (first_callback) {
-                        //This must be done only once, to avoid constant animations, and duplicating the activity markers
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), ZOOM_VALUE));
-                        displayNearbyMarkers();
-                        first_callback = false;
-                    }
-                }
+                displayMarkerOnMapReadyAndZoomInFirstCallback();
             }
         };
         //Start fetching and updating the user's location in real time
         locationFetcher = new LocationFetcher(supportMapFragment, locationCallback);
         locationFetcher.startLocationUpdates();
 
+        //We also define the main OnMapReady callback for setting the map listeners
         supportMapFragment.getMapAsync(this);
 
         return view;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "map is ready");
@@ -123,12 +118,26 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         googleMap.setOnInfoWindowClickListener(this);
         googleMap.setOnMapClickListener(this::onMapClick);
 
-        //In the case where the user didn't grant permission, we set a default location (and call displayNearbyMarkers, because the locationCallback won't be doing it)
-         if (!locationFetcher.isPermissionGranted()) {
+        //In the case where the user didn't grant permission, we set a default location
+        if (!locationFetcher.isPermissionGranted()) {
             currentLocation = locationFetcher.getDefaultLocation();
-            displayNearbyMarkers();
         }
     }
+
+    /**
+     * Displays the user marker on the map, when it is ready. In case this is the first callback (i.e first update), we zoom
+     * on the marker
+     */
+    private void displayMarkerOnMapReadyAndZoomInFirstCallback() {
+        supportMapFragment.getMapAsync(googleMap -> {
+            displayUserMarker();
+            if (first_callback) {
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), ZOOM_VALUE));
+                first_callback = false;
+            }
+        });
+    }
+
 
     /**
      * Method used to display the markers of the activities on the map
@@ -202,6 +211,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void displayNearbyMarkers() {
+        Log.d(TAG, "displaying act markers");
         if (currentLocation == null) currentLocation = locationFetcher.getDefaultLocation();
 
         DistanceCalculator dc = new DistanceCalculator(currentLocation.getLatitude(), currentLocation.getLongitude());
@@ -272,23 +282,6 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
             default:
                 return -1;
         }
-    }
-
-    /**
-     * Getter for the map associated to this fragment
-     * @return google map associated
-     */
-    public GoogleMap getGoogleMap() {
-        return googleMap;
-    }
-
-    /**
-     * Getter for the supportMapFragment of the map, used in the Location Fetcher if needed
-     *
-     * @return supportMapFragment
-     */
-    public SupportMapFragment getSupportMapFragment() {
-        return supportMapFragment;
     }
 
 

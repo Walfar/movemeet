@@ -1,11 +1,9 @@
 package com.sdp.movemeet.view.map;
 
 import android.Manifest;
-import android.location.Location;
 
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 
-import androidx.annotation.NonNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.UiObject;
@@ -13,16 +11,13 @@ import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.models.Sport;
 
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -49,7 +44,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 
 import org.jetbrains.annotations.NotNull;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -70,10 +64,7 @@ import static org.mockito.Mockito.mock;
 public class MainMapFragmentTest {
 
     private UiDevice uiDevice;
-    private FirebaseAuth fAuth;
-    private FirebaseUser user;
-    private Location fakeLocation;
-    private Task<Location> mockLocationTask;
+    private FirebaseAuth fAuth = FirebaseAuth.getInstance();
 
     @Rule
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -84,16 +75,10 @@ public class MainMapFragmentTest {
 
 
     @Before
-    public void setUp() throws InterruptedException {
-        //The map is tested when the user is logged in
+    public void setUp() {
         fAuth = FirebaseAuth.getInstance();
-        fAuth.signInWithEmailAndPassword("test@test.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                user = fAuth.getCurrentUser();
-                uiDevice = UiDevice.getInstance(getInstrumentation());
-            }
-        });
+        fAuth.signInWithEmailAndPassword("test@test.com", "password");
+        uiDevice = UiDevice.getInstance(getInstrumentation());
     }
 
     @Test
@@ -107,65 +92,6 @@ public class MainMapFragmentTest {
         UiObject marker = uiDevice.findObject(new UiSelector().descriptionContains("I am here !"));
         assertNotNull(marker);
     }
-
-
-   /* @Test
-    public void activitiesUpdatesOnAdd() throws InterruptedException {
-        waitFor(2000);
-        MainMapFragment mapFragment = fragmentTestRule.getFragment();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
-        BackendActivityManager bam = new BackendActivityManager(db, "activities");
-
-        updater.fetchListActivities();
-        updater.updateListActivities(mapFragment);
-
-        Activity act = new Activity("activity",
-                "me",
-                "title",
-                10,
-                new ArrayList<String>(),
-                0,
-                0,
-                "desc",
-                "documentPath",
-                new Date(),
-                10,
-                Sport.Running,
-                "address",
-                new Date());
-
-        bam.uploadActivity(act,
-                new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        updater.updateListActivities(mapFragment);
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        List<Activity> activities = updater.getActivities();
-                        Activity act_in_collection = activities.get(activities.size()-1);
-                        assertEquals(act.getActivityId(), act_in_collection.getActivityId());
-                        assertEquals(act.getAddress(), act_in_collection.getAddress());
-                        assertEquals(act.getDescription(), act_in_collection.getDescription());
-                        assertEquals(act.getLatitude(), act_in_collection.getLatitude(),0);
-                        assertEquals(act.getLongitude(), act_in_collection.getLongitude(), 0);
-                        assertEquals(act.getNumberParticipant(), act_in_collection.getNumberParticipant());
-                        assertEquals(act.getParticipantId(), act_in_collection.getParticipantId());
-                        assertEquals(act.getTitle(), act_in_collection.getTitle());
-                        assertEquals(act.getOrganizerId(), act_in_collection.getOrganizerId());
-                        assertEquals(act.getSport(), act_in_collection.getSport());
-                    }
-                },
-                new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                    }
-                });
-
-    } */
 
 
     @Test
@@ -201,7 +127,7 @@ public class MainMapFragmentTest {
     public void mainMapFragment_userClickingOnMapAddsNewActivity() throws UiObjectNotFoundException, InterruptedException {
         waitFor(5000);
         //User must be logged to add new activity
-        assertNotNull(user);
+        assertNotNull(fAuth.getCurrentUser());
 
         //fragmentTestRule.launchFragment(new MainMapFragment());
 
@@ -215,11 +141,6 @@ public class MainMapFragmentTest {
         assertNotNull(marker);
 
         uiDevice.click(200, 400);
-    }
-
-    @After
-    public void after() {
-        fAuth.signOut();
     }
 
 

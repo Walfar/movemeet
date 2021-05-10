@@ -1,26 +1,32 @@
-package com.sdp.movemeet.view.navigation;
+/*
+package com.sdp.movemeet.viewTest.navigationTest;
 
+import android.view.Gravity;
+
+import androidx.test.espresso.contrib.DrawerActions;
+import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.R;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
 
 public class ActivityDescriptionNavigationTest {
     @Rule
     public ActivityScenarioRule<HomeScreenActivity> testRule = new ActivityScenarioRule<>(HomeScreenActivity.class);
 
-    @Test
-    public void emptyTest(){}
-    /*@Before
+    @Before
     public void signIn(){
         onView(withId(R.id.signInButton)).perform(click());
         onView(withId(R.id.edit_text_email)).perform(replaceText("antho2@gmail.com"), closeSoftKeyboard());
@@ -53,43 +59,36 @@ public class ActivityDescriptionNavigationTest {
     @Test
     public void ActivityDescriptionToProfileActivity() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_edit_profile));
-        onView(withId(R.id.button_update_profile)).check(matches(isDisplayed()));
         logout();
     }
 
     @Test
     public void ActivityDescriptionToActivityUpload() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_add_activity));
-        onView(withId(R.id.buttonConfirmUpload)).check(matches(isDisplayed()));
         logout();
     }
 
     @Test
     public void ActivityDescriptionToStartActivity() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_start_activity));
-        onView(withId(R.id.activityChatDescription)).check(matches(isDisplayed()));
         logout();
     }
 
     @Test
     public void ActivityDescriptionGotoHome() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_home));
-        onView(withId(R.id.textView)).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.textView), withText("MOVEMEƎT")));
         logout();
     }
 
     @Test
     public void ActivityDescriptionGotoChat() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_chat));
-        onView(withId(R.id.addMessageImageView)).check(matches(isDisplayed()));
         logout();
     }
 
     @Test
     public void ActivityDescription_logout() {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
-        onView(withId(R.id.button_login)).check(matches(isDisplayed()));
     }
 
     public void logout() {
@@ -110,5 +109,7 @@ public class ActivityDescriptionNavigationTest {
         }catch(Exception e){}
 
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
-    }*/
+    }
 }
+
+ */

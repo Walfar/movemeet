@@ -1,5 +1,6 @@
 package com.sdp.movemeet.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,6 +12,8 @@ public class Message {
     private String messageUserId;
     private long messageTime;
     private String imageUrl;
+    private String documentPath;
+
 
     /**
      * Empty constructor for message
@@ -94,4 +97,15 @@ public class Message {
     public void setMessageUserId(String messageUserId) {
         this.messageUserId = messageUserId;
     }
+
+
+    public String getDocumentPath() {
+        return this.documentPath;
+    }
+
+    public String setDocumentPath(String path) {
+        if (documentPath == null) documentPath = path;
+        return documentPath;
+    }
+
 }

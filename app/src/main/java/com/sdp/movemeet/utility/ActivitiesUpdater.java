@@ -1,173 +1,89 @@
 package com.sdp.movemeet.utility;
 
-import android.os.Build;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
+import androidx.annotation.VisibleForTesting;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
+import com.sdp.movemeet.backend.serialization.ActivitySerializer;
+import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.Activity;
-import com.sdp.movemeet.backend.BackendActivityManager;
-import com.sdp.movemeet.models.Sport;
-import com.sdp.movemeet.view.map.MainMapFragment;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import static com.sdp.movemeet.backend.BackendActivityManager.ACTIVITIES_COLLECTION;
-import static com.sdp.movemeet.models.Sport.Running;
 
-public class ActivitiesUpdater {
+public abstract class ActivitiesUpdater {
 
-    private static BackendActivityManager bam;
-    private FirebaseFirestore db;
-    private ArrayList<Activity> activities;
+    private static BackendSerializer<Activity> serializer =new ActivitySerializer();
+    private static ArrayList<Activity> activities = new ArrayList<>();
+    private static FirestoreActivityManager firestoreActivityManager = new FirestoreActivityManager(FirebaseFirestore.getInstance(), ACTIVITIES_COLLECTION, serializer);
 
-    //private ActivityCache cache;
-    private MainMapFragment mapFragment;
+    private static final String TAG = "Activities updater TAG";
 
-    private final String TAG = "Activities updater TAG";
-
-    private static ActivitiesUpdater instance;
-
-    private ActivitiesUpdater() {
-        activities = new ArrayList<>();
-        db = FirebaseFirestore.getInstance();
-        bam = new BackendActivityManager(db, ACTIVITIES_COLLECTION);
-        //this.cache = new ActivityCache();
-    }
-
-    public static ActivitiesUpdater getInstance() {
-        if (instance == null) {
-            instance = new ActivitiesUpdater();
-        }
-        return instance;
-    }
-
-    /* public void setActivities(ArrayList<Activity> activities) {
-        this.activities = activities;x
-    } */
-
-    public ArrayList<Activity> getActivities() {
+    /**
+     * Method that returns the local list of activities (empty by default). We first have to update the list before getting it, to
+     * make sure that we always have all the activities from the database in the local list
+     *
+     * @return local list of activities
+     */
+    public static ArrayList<Activity> getActivities() {
         return activities;
     }
 
     /**
-     * This method is to be used when the user launches the home screen for the first time. He will fetch all activities
-     * the collection
+     * Updates the local list of activities, by retrieving only newly added activities in db collection
+     *
+     * @param listener used as a callback when updating the list, e.g to update the map markers
      */
-    public void fetchListActivities() {
-        addListeners(bam.getActivitiesCollectionReference(), false);
+    public static void updateListActivities(OnCompleteListener listener) {
+        if (listener == null) {
+            Log.d(TAG, "listener is null");
+            return;
+        }
+        Task<QuerySnapshot> allDocTask = firestoreActivityManager.getAll();
+        //Count the number of elements in the collection
+        allDocTask.addOnSuccessListener(queryDocumentSnapshots -> {
+            // Calculate the number of newly added activities in the collection
+            int size = queryDocumentSnapshots.getDocuments().size() - activities.size();
+
+            Log.d(TAG, "diff number of activities is " + size);
+            //In case there is more activities in local than db (e.g if activities were deleted from db), than we clear the list and refetch
+            //TODO: not an optimized way to do, might be interesting to rethink it
+            if (size < 0) {
+                clearLocalActivities();
+                updateListActivities(listener);
+                return;
+            }
+            //Either way, when updating the list, we update the map as well
+            else if (size == 0) allDocTask.addOnCompleteListener(listener);
+            else addActivitiesOnSuccess(firestoreActivityManager.getRecentlyAddedActivities(size)).addOnCompleteListener(listener);;
+        });
     }
 
     /**
-     * This method is to be used when the user is accessing the map.
+     * On success, add the activities from db to the local list of activities
+     *
+     * @param task task containing the requested snapshots, that would then be deserialized into activities
      */
-    public void updateListActivities(MainMapFragment mapFragment) {
-        this.mapFragment = mapFragment;
-        CollectionReference collection = bam.getActivitiesCollectionReference();
-        //Count the number of elements in the collection
-        collection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                // Calculate the number of newly added activities in the collection
-                int size = queryDocumentSnapshots.getDocuments().size() - activities.size();
-                //If somehow the list contains deprecated activites (activities that are not in the DB), we clear the list and refetch all activities
-                if (size < 0) {
-                    activities.clear();
-                    fetchListActivities();
-                    return;
-                }
-                //add to the list only those newly added activities
+    private static Task addActivitiesOnSuccess(Task<QuerySnapshot> task) {
+        return task.addOnSuccessListener(queryDocumentSnapshots -> {
+            for (DocumentSnapshot docSnap : queryDocumentSnapshots.getDocuments()) {
+                activities.add(serializer.deserialize(docSnap.getData()));
                 Log.d(TAG, "activities size is " + activities.size());
-                Log.d(TAG, "diff number of activities is " + size);
-                if (size > 0)
-                    addListeners(collection.orderBy("createdAt", Query.Direction.DESCENDING).limit(size), true);
             }
-        });
+        }).addOnFailureListener(e -> Log.d(TAG, e.toString()));
     }
 
-    private Activity convertDocSnapToActivity(DocumentSnapshot docSnap) {
-
-        String activityId = convertObjToString(docSnap.get("activityId"));
-        String organizerId = convertObjToString(docSnap.get("organizerId"));
-        String title = convertObjToString(docSnap.get("title"));
-        int numberParticipant = convertLongToInt(docSnap.getLong("numberParticipant"));
-        double longitude = convertObjToDouble(docSnap.get("longitude"));
-        double latitude = convertObjToDouble(docSnap.get("latitude"));
-        String description = convertObjToString(docSnap.get("description"));
-        String documentPath = convertObjToString(docSnap.get("documentPath"));
-        Date date = getDateObj(docSnap.getDate("date"));
-        double duration = convertObjToDouble(docSnap.get("duration"));
-        String address = convertObjToString(docSnap.get("address"));
-        Date createdAt = getDateObj(docSnap.getDate("createdAt"));
-
-        Object participantsIdobj = docSnap.get("participantId");
-        ArrayList<String> partcipantsId;
-        if (participantsIdobj == null) partcipantsId = new ArrayList<>();
-        else partcipantsId = (ArrayList<String>) participantsIdobj;
-
-        String sportobj = docSnap.getString("sport");
-        Sport sport;
-        if (sportobj == null) sport = Running;
-        else sport = Sport.valueOf(sportobj);
-        ; //enum sotred in firebase ?");
-
-        Activity act = new Activity(activityId, organizerId, title, numberParticipant, partcipantsId, longitude, latitude, description, documentPath, date, duration, sport, address, createdAt);
-        return act;
-    }
-
-    private String convertObjToString(Object obj) {
-        if (obj instanceof String && obj != null) {
-            return (String) obj;
-        } else return null;
-    }
-
-    private int convertLongToInt(Long obj) {
-        if (obj == null) return 0;
-        else return obj.intValue();
-    }
-
-    private double convertObjToDouble(Object obj) {
-        if (obj == null) return 0;
-        else return (double) obj;
-    }
-
-    private Date getDateObj(Date date) {
-        if (date == null) return new Date();
-        else return date;
-    }
-
-    private void addListeners(Query q, boolean updateMap) {
-        //Log.d(TAG, "cache allowed is" + cacheAllowed);
-        q.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (DocumentSnapshot docSnap : queryDocumentSnapshots.getDocuments()) {
-                    activities.add(convertDocSnapToActivity(docSnap));
-                    Log.d(TAG, "activities size is " + activities.size());
-                }
-                //if (cacheAllowed) cache.saveActivitiesInCache(activities);
-                if (updateMap && mapFragment.isAdded() && mapFragment.getGoogleMap() != null)
-                    mapFragment.displayNearbyMarkers();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, e.toString());
-            }
-        });
-    }
-
-    public void clearLocalActivities() {
+    /**
+     * Clear the local list of activities
+     */
+    public static void clearLocalActivities() {
         activities.clear();
     }
 }

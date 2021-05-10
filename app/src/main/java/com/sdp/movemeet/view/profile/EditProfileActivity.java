@@ -136,7 +136,6 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
-
     private void accessFirestoreUsersCollectionForUpdate() {
         DocumentReference docRef = fStore.collection("users").document(user.getUid());
         Map<String, Object> edited = FirebaseInteraction.updateDataInFirebase(profileFullName, profileEmail, profilePhone, profileDescription);
