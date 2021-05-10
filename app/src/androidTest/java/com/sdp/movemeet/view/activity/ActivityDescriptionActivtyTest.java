@@ -1,6 +1,9 @@
-package com.sdp.movemeet.view.activity;
+package com.sdp.movemeet.viewTest.activityTest;
 
 import android.content.Intent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.test.espresso.intent.Intents;
@@ -11,22 +14,36 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.sdp.movemeet.models.Sport;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.StorageReference;
+import com.sdp.movemeet.R;
 import com.sdp.movemeet.models.Activity;
+import com.sdp.movemeet.models.Sport;
+import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.configuration.IMockitoConfiguration;
 
-;import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 
+import static android.view.View.inflate;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
+;
+
 @RunWith(AndroidJUnit4.class)
-public class ActivityNotNullDescriptionTest {
+public class ActivityDescriptionActivtyTest {
 
     private final static String DUMMY_ACTIVITY_ID = "12345";
     private final static String DUMMY_ORGANISATOR_ID = "1";
@@ -41,7 +58,10 @@ public class ActivityNotNullDescriptionTest {
     private final static double DUMMY_DURATION = 10.4;
     private final static Sport DUMMY_SPORT = Sport.Running;
     private final static String DUMMY_ADDRESS = "address";
-    public FirebaseAuth mAuth;
+    public FirebaseAuth fAuth;
+
+    private FirebaseFirestore fStore;
+    private StorageReference storageReference;
 
     private Activity activity = new Activity(
             DUMMY_ACTIVITY_ID,
@@ -64,9 +84,9 @@ public class ActivityNotNullDescriptionTest {
     public void signIn() {
         CountDownLatch latch = new CountDownLatch(1);
 
-        mAuth = FirebaseAuth.getInstance();
+        fAuth = FirebaseAuth.getInstance();
 
-        mAuth.signInWithEmailAndPassword("movemeet@gmail.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        fAuth.signInWithEmailAndPassword("movemeet@gmail.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
@@ -86,15 +106,32 @@ public class ActivityNotNullDescriptionTest {
         ActivityScenarioRule<ActivityDescriptionActivity> testRule = new ActivityScenarioRule<>(new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra("activity", activity));
     }
 
+    /*@Before
+    public void setUp(){
+        fStore = mock(FirebaseFirestore.class);
+        storageReference = mock(StorageReference.class);
+        activity = mock(Activity.class);
+
+    }*/
+
     @Test
     public void create() {
         Intents.init();
         Intents.release();
     }
 
+    /*@Test
+    public void createTitleViewTest(){
+        ViewGroup view = inflate(R.layout.activity_description);
+        TextView textView = view.findViewById(R.id.activity_title_description);
+
+        assertEquals(textView.getText().toString().isEmpty(), false);
+    }*/
+
+
     @After
     public void deleteAndSignOut() {
-        mAuth.signOut();
+        fAuth.signOut();
     }
 
     public boolean sleep(int millis) {

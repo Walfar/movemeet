@@ -91,7 +91,8 @@
                             android:layout_gravity="center_horizontal"
                             android:onClick="changeActivityPicture"
                             android:padding="10dp"
-                            android:src="@drawable/run_woman" />
+                            android:src="@drawable/run_woman"
+                            tools:ignore="MissingClass" />
 
                     </LinearLayout>
 
