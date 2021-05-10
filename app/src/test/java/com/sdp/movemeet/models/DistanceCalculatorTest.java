@@ -1,7 +1,5 @@
-package com.sdp.movemeet.modelsTest;
+package com.sdp.movemeet.models;
 
-import com.sdp.movemeet.models.Activity;
-import com.sdp.movemeet.models.Sport;
 import com.sdp.movemeet.utility.DistanceCalculator;
 
 import org.junit.Test;
