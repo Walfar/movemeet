@@ -28,24 +28,27 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.FirebaseInteraction;
-import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
+import com.sdp.movemeet.backend.firebase.firebaseDB.FirebaseDBMessageManager;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
+import com.sdp.movemeet.backend.serialization.MessageSerializer;
+import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Message;
+import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.navigation.Navigation;
-import com.sdp.movemeet.R;
 
 
 public class ChatActivity extends AppCompatActivity {
@@ -63,14 +66,17 @@ public class ChatActivity extends AppCompatActivity {
     private LinearLayoutManager linearLayoutManager;
 
     // Firebase instance variables
+    BackendManager<Message> messageManager;
+    BackendManager<User> userManager;
     private FirebaseAuth fAuth;
-    private FirebaseUser user;
     private FirebaseDatabase database;
     private FirebaseFirestore fStore;
     private StorageReference storageReference;
     private DatabaseReference chatRef;
     private DatabaseReference chatRoom;
     private FirebaseRecyclerAdapter<Message, MessageViewHolder> firebaseAdapter;
+
+    User user;
 
     String userId;
     String fullNameString;
@@ -85,9 +91,6 @@ public class ChatActivity extends AppCompatActivity {
     RecyclerView messageRecyclerView;
     ImageButton btnSend;
 
-    TextView fullName;
-    TextView email;
-    TextView phone;
     TextView initialChatWelcomeMessage;
 
     DrawerLayout drawerLayout;
@@ -110,13 +113,16 @@ public class ChatActivity extends AppCompatActivity {
         btnSend = findViewById(R.id.button_send_message);
         initialChatWelcomeMessage = findViewById(R.id.initial_chat_welcome_message);
 
-        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
-        user = fAuth.getCurrentUser();
-        if (user != null) {
-            userId = user.getUid();
+        // TODO: implement abstraction for Firebase Realtime Database
+        messageManager = new FirebaseDBMessageManager(database, new MessageSerializer());
+
+        fAuth = FirebaseAuth.getInstance();
+        if (fAuth.getCurrentUser() != null) {
+            userId = fAuth.getCurrentUser().getUid();
             fStore = FirebaseFirestore.getInstance();
             storageReference = FirebaseStorage.getInstance().getReference();
-            getUserName();
+            userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
+            getRegisteredUserData();
         }
 
         // Initializing Firebase Auth and checking if the user is signed in
@@ -209,22 +215,22 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    private void getUserName() {
-        DocumentReference docRef = fStore.collection("users").document(userId);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+    public void getRegisteredUserData() {
+        Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + userId);
+        document.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        fullNameString = (String) document.getData().get("fullName");
-                        Log.i(TAG, "fullNameString: " + fullNameString);
+                        UserSerializer userSerializer = new UserSerializer();
+                        user = userSerializer.deserialize(document.getData());
+                        fullNameString = user.getFullName();
                     } else {
-                        Log.d(TAG, "No such document");
+                        Log.d(TAG, "No such document!");
                     }
                 } else {
-                    Log.d(TAG, "get failed with ", task.getException());
+                    Log.d(TAG, "Get failed with: ", task.getException());
                 }
             }
         });
@@ -256,6 +262,8 @@ public class ChatActivity extends AppCompatActivity {
         String messageText = messageInput.getText().toString();
         Message message = new Message(userName, messageText, userId, null /* no image */);
         if (messageText.length() > 0) {
+            // The path to provide is of the form "chats/general_chat"
+            //messageManager.add(message, chatRoom.toString().split("/",4)[3]);
             chatRoom.push().setValue(message);
             messageInput.setText("");
         } else {
@@ -312,6 +320,9 @@ public class ChatActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         Message imageMessage = new Message(fullNameString, null, userId, uri.toString());
+
+                                        // The path to provide is of the form "chats/general_chat/-M_2IT_2qo6PzCQj27N_"
+                                        //messageManager.add(imageMessage, chatRoom.toString().split("/",4)[3] + "/" + key);
                                         chatRoom.child(key).setValue(imageMessage);
                                     }
                                 });

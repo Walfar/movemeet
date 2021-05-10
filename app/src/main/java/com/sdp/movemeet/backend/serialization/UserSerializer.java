@@ -1,10 +1,7 @@
 package com.sdp.movemeet.backend.serialization;
 
-import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.User;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
