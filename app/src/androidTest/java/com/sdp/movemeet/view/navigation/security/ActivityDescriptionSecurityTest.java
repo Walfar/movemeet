@@ -1,4 +1,3 @@
-
 package com.sdp.movemeet.view.navigation.security;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -27,8 +26,8 @@ public class ActivityDescriptionSecurityTest {
     @Rule
     public ActivityScenarioRule<ActivityDescriptionActivity> testRule = new ActivityScenarioRule<>(ActivityDescriptionActivity.class);
 
-    /*@Test
+    @Test
     public void redirectionTest() {
         //onView(withId(R.id.button_login)).check(matches(isDisplayed()));
-    }*/
+    }
 }
