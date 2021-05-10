@@ -1,4 +1,4 @@
-package com.sdp.movemeet.viewTest.activityTest;
+package com.sdp.movemeet.view.activity;
 
 import android.content.Intent;
 import android.view.View;
@@ -43,7 +43,7 @@ import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 ;
 
 @RunWith(AndroidJUnit4.class)
-public class ActivityDescriptionActivtyTest {
+public class ActivityDescriptionActivityTest {
 
     private final static String DUMMY_ACTIVITY_ID = "12345";
     private final static String DUMMY_ORGANISATOR_ID = "1";

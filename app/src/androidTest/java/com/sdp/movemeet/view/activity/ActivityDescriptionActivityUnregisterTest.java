@@ -1,4 +1,4 @@
-package com.sdp.movemeet.viewTest.activityTest;
+package com.sdp.movemeet.view.activity;
 
 import android.content.Intent;
 
@@ -37,7 +37,7 @@ public class ActivityDescriptionActivityUnregisterTest {
     private final static double DUMMY_DURATION = 10.4;
     private final static Sport DUMMY_SPORT = Sport.Running;
     private final static String DUMMY_ADDRESS = "address";
-    public FirebaseAuth mAuth;
+    public FirebaseAuth fAuth;
 
     private Activity activity = new Activity(
             DUMMY_ACTIVITY_ID,
@@ -60,7 +60,8 @@ public class ActivityDescriptionActivityUnregisterTest {
     public void signIn() {
         CountDownLatch latch = new CountDownLatch(1);
 
-        mAuth = FirebaseAuth.getInstance();
+        fAuth = FirebaseAuth.getInstance();
+
         ActivityScenarioRule<ActivityDescriptionActivityUnregister> testRule = new ActivityScenarioRule<>(new Intent(getApplicationContext(), ActivityDescriptionActivityUnregister.class).putExtra("activity", activity));
     }
 
