@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * This class represents a message
  */
-public class Message {
+public class Message implements FirebaseObject {
     private String messageUser;
     private String messageText;
     private String messageUserId;
