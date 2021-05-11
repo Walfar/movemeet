@@ -68,7 +68,7 @@ public class HomeScreenActivityLoggedTest {
     @Test
     public void signInHasCorrectIntentWhenLogged() throws InterruptedException {
         while (user == null) Thread.sleep(2000);
-        onView(withId(R.id.signInButton)).perform(forceDoubleClick());
+        onView(withId(R.id.signInButton)).perform(click());
         intended(hasComponent(MainActivity.class.getName()));
     }
 
@@ -76,13 +76,13 @@ public class HomeScreenActivityLoggedTest {
     @Test
     public void noAccountHasCorrectIntentWhenLogged() throws InterruptedException {
         while (user == null) Thread.sleep(2000);
-        onView(withId(R.id.noAccountButton)).perform(forceDoubleClick());
+        onView(withId(R.id.noAccountButton)).perform(click());
         intended(hasComponent(MainActivity.class.getName()));
     }
 
     @Test
     public void recordButtonHasCorrectIntent() {
-        onView(withId(R.id.recordRunButton)).perform(forceDoubleClick());
+        onView(withId(R.id.recordRunButton)).perform(click());
         intended(hasComponent(GPSRecordingActivity.class.getName()));
     }
 
