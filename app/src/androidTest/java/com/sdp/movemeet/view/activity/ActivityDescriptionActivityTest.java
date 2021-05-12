@@ -107,6 +107,12 @@ public class ActivityDescriptionActivityTest {
         Intents.release();
     }
 
+    @Test
+    public void displayDescriptionActivityDataIsCorrect(){
+        ActivityDescriptionActivity activity = new ActivityDescriptionActivity();
+        activity.displayDescriptionActivityData();
+    }
+
     /*@Test
     public void createTitleViewTest(){
         ViewGroup view = inflate(R.layout.activity_description);
