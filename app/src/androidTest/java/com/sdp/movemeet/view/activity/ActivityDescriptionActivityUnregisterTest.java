@@ -57,16 +57,7 @@ public class ActivityDescriptionActivityUnregisterTest {
 
     @Before
     public void signIn() {
-        CountDownLatch latch = new CountDownLatch(1);
-
         fAuth = FirebaseAuth.getInstance();
-
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            assert (false);
-        }
-
         ActivityScenarioRule<ActivityDescriptionActivityUnregister> testRule = new ActivityScenarioRule<>(new Intent(getApplicationContext(), ActivityDescriptionActivityUnregister.class).putExtra("activity", activity));
     }
 
