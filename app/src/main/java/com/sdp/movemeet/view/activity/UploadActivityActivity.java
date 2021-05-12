@@ -9,44 +9,35 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
-import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.Activity;
-import com.sdp.movemeet.backend.BackendActivityManager;
-import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.models.Sport;
+import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.main.MainActivity;
 import com.sdp.movemeet.view.navigation.Navigation;
-import com.sdp.movemeet.view.home.LoginActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,12 +48,14 @@ import java.util.List;
 
 public class UploadActivityActivity extends AppCompatActivity {
 
-    private Spinner spinner;
-
     private FirebaseAuth fAuth;
-    private FirebaseFirestore fStore;
-    private BackendManager<Activity> backendActivityManager;
+    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    public BackendManager<Activity> activityBackendManager;
 
+    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    public static boolean enableNav = true;
+
+    private Spinner spinner;
     private Calendar calendar;
     private EditText startTimeText;
     private EditText dateText;
@@ -72,7 +65,6 @@ public class UploadActivityActivity extends AppCompatActivity {
     private EditText descriptionEditText;
     private EditText nParticipantsEditText;
 
-
     private EditText durationText;
     private int hours = 0;
     private int minutes = 0;
@@ -81,16 +73,7 @@ public class UploadActivityActivity extends AppCompatActivity {
     private double latitude = 0;
     private double longitude = 0;
 
-    public boolean validParticipants, validDate, validStartTime, validLocation;
-
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
-    TextView textView;
-
-    // Navigation tab fields
-    //TextView fullName, email, phone;
-    String userId;
+    public boolean validLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,10 +82,16 @@ public class UploadActivityActivity extends AppCompatActivity {
 
         // Setup Firebase services
         fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
-        fStore = BackendInstanceProvider.getFirestoreInstance();
-        backendActivityManager = new FirestoreActivityManager(fStore,
+        activityBackendManager = new FirestoreActivityManager(
+                BackendInstanceProvider.getFirestoreInstance(),
                 FirestoreActivityManager.ACTIVITIES_COLLECTION,
                 new ActivitySerializer());
+
+        //The aim is to block any direct access to this page if the user is not logged
+        if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            finish();
+        }
 
         // Setup activity creation form inputs
         setupSportSpinner(this);
@@ -110,13 +99,10 @@ public class UploadActivityActivity extends AppCompatActivity {
         titleEditText = findViewById(R.id.editTextTitle);
         descriptionEditText = findViewById(R.id.editTextDescription);
         nParticipantsEditText = findViewById(R.id.editTextNParticipants);
-        validParticipants = false;
 
         setupDateInput(this);
-        validDate = false;
 
         startTimeText = findViewById(R.id.editTextStartTime);
-        validStartTime = false;
 
         durationText = findViewById(R.id.editTextTime);
 
@@ -132,87 +118,16 @@ public class UploadActivityActivity extends AppCompatActivity {
             }
         }
 
-        Navigation nav = new Navigation(this, R.id.nav_add_activity);
-        nav.createDrawer();
-
-        /*createDrawer();
-
-        Navigation.fillNavigationProfileFields(new TextView[] {fullName, email, phone});*/
-        //handleRegisterUser();
-
-        //The aim is to block any direct access to this page if the user is not logged
-        if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        }
+        if (enableNav) new Navigation(this, R.id.nav_add_activity).createDrawer();
+        /*Navigation nav = new Navigation(this, R.id.nav_add_activity);
+        nav.createDrawer();*/
 
     }
 
-    /*public void createDrawer() {
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-        textView = findViewById(R.id.textView);
-        toolbar = findViewById(R.id.toolbar);
 
-        navigationView.bringToFront();
-        ActionBarDrawerToggle toggle = new
-                ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
+    // ------------ FUNCTIONS FOR UI INPUT ------------------
 
-        View hView = navigationView.inflateHeaderView(R.layout.header);
-
-        fullName = hView.findViewById(R.id.text_view_profile_name);
-        phone = hView.findViewById(R.id.text_view_profile_phone);
-        email = hView.findViewById(R.id.text_view_profile_email);
-
-        toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
-        navigationView.setCheckedItem(R.id.nav_add_activity);
-    }*/
-
-    /*public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.nav_home:
-                Navigation.goToHome(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_edit_profile:
-                Navigation.goToUserProfileActivity(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_add_activity:
-                break;
-            case R.id.nav_logout:
-                FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
-                finish();
-                break;
-            case R.id.nav_start_activity:
-                Navigation.startActivity(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_chat:
-                Navigation.goToChat(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_list_activities:
-                Navigation.goToListOfActivities(this.navigationView);
-                finish();
-                break;
-        }
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }*/
-
-    /*public void handleRegisterUser() {
-        // Retrieve user data (full name, email and phone number) from Firebase Firestore
-        if (fAuth.getCurrentUser() != null) {
-            userId = fAuth.getCurrentUser().getUid();
-            TextView[] textViewArray = {fullName, email, phone};
-            //FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, UploadActivityActivity.this);
-            FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, UploadActivityActivity.this);
-        }
-    }*/
-
+    // Sport selection
     private void setupSportSpinner(Context context) {
         spinner = (Spinner) findViewById(R.id.spinnerSportType);
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -224,7 +139,11 @@ public class UploadActivityActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
     }
 
-    // Helper methods for date picker
+    // Date selection
+    private void showDate(int year, int month, int day) {
+        dateText.setText(day + "." + month + "." + year);
+    }
+
     private void setupDateInput(Context context) {
         dateText = findViewById(R.id.editTextDate);
         calendar = Calendar.getInstance();
@@ -244,42 +163,39 @@ public class UploadActivityActivity extends AppCompatActivity {
         }
     };
 
-    private void showDate(int year, int month, int day) {
-        dateText.setText(day + "." + month + "." + year);
-    }
-
+    /**
+     * Displays the Date Picker so the user can choose a date
+     * @param view the View to display the Date Picker in
+     */
     @SuppressWarnings("deprecation")
     public void setDate(View view) {
         showDialog(999);
     }
 
-    //Returns the adress location if set by user, or null otherwise
-    public LatLng getAddressLocation() {
-        if (addressText.getText().toString().equals("")) return null;
-        return new LatLng(latitude, longitude);
-    }
 
-    // Helper methods for start time picker
+    // Start + end times selection
+
     private TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             calendar.set(Calendar.MINUTE, minute);
-            showStartTime(hourOfDay, minute);
+            startTimeText.setText(hourOfDay + ":" + ((minute < 10) ? "0" + minute : minute));
         }
     };
 
-    private void showStartTime(int hours, int minutes) {
-        startTimeText.setText(hours + ":" + ((minutes < 10) ? "0" + minutes : minutes));
-    }
-
+    /**
+     * Displays a Time Picker so the user can select the start time
+     * @param view the View to display the Time Picker in
+     */
     @SuppressWarnings("deprecation")
     public void setStartTime(View view) {
         showDialog(222);
     }
 
 
-    // Helper methods for duration picker
+    // End time picker
+    // TODO: change to end time
     private TimePickerDialog.OnTimeSetListener durationListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -295,6 +211,10 @@ public class UploadActivityActivity extends AppCompatActivity {
         durationText.setText(hours + ":" + ((minutes < 10) ? "0" + minutes : minutes));
     }
 
+    /**
+     * Displays a Time Picker so the user can select the end time
+     * @param view the View to display the Time Picker in
+     */
     @SuppressWarnings("deprecation")
     public void setDuration(View view) {
         showDialog(444);
@@ -322,6 +242,14 @@ public class UploadActivityActivity extends AppCompatActivity {
         return null;
     }
 
+    /**
+     * Returns the address location if set by user, or null otherwise
+     * @return a LatLng containing the address's coordinates, or null if none could be inferred
+     */
+    public LatLng getAddressLocation() {
+        if (addressText.getText().toString().equals("")) return null;
+        return new LatLng(latitude, longitude);
+    }
 
     // Helper methods for address geocoding
     private void tryLocatingAddress(Context context, String address) {
@@ -341,64 +269,11 @@ public class UploadActivityActivity extends AppCompatActivity {
     }
 
 
-    private Activity validateActivity() {
-        String organizerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        Sport sport = Sport.valueOf(spinner.getSelectedItem().toString());
-
-        String title = titleEditText.getText().toString();
-        if (title.isEmpty()) title = sport.name();
-
-        String nptext = nParticipantsEditText.getText().toString();
-        if (nptext.isEmpty() || Integer.parseInt(nptext) <= 0) {
-            Toast.makeText(this, "Please enter a positive number of participants", Toast.LENGTH_SHORT)
-                    .show();
-            return null;
-        }
-        int nParticipants = Integer.parseInt(nptext);
-        validParticipants = true;
-
-        // Initializing the list of participants with the organizerId
-        ArrayList<String> participantsId = new ArrayList<String>();
-        participantsId.add(organizerId);
-
-        String address = addressText.getText().toString();
-        if (address.isEmpty()) {
-            Toast.makeText(this, "Please enter a valid location", Toast.LENGTH_SHORT)
-                    .show();
-            return null;
-        }
-        if (!validLocation) tryLocatingAddress(this, address);
-        validLocation = true;
-
-        String description = descriptionEditText.getText().toString();
-
-        if (startTimeText.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Please enter a start time", Toast.LENGTH_SHORT)
-                    .show();
-            return null;
-        }
-        validStartTime = true;
-
-        if (durationText.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Please enter a duration", Toast.LENGTH_SHORT)
-                    .show();
-            return null;
-        }
-        double duration = (double) (hours) + (double) (minutes) / 60;
-        Date date = calendar.getTime();
-        validDate = true;
-
-        Activity activity = new Activity(
-                organizerId + " || " +  date, organizerId, title, nParticipants,
-                participantsId, longitude, latitude, description, null, date, duration,
-                sport, address, new Date()
-        );
-
-        return activity;
-    }
-
-    //Inverse of tryLocatingAddress, i.e retrieves the address from a LatLng
+    /**
+     * Attempts to resolve a LatLng into an Address. If successful, stores the result
+     * in this class's address EditText
+     * @param pos the LatLng to convert to an address.
+     */
     public void retrieveAddress(LatLng pos) {
 
         latitude = pos.latitude;
@@ -415,22 +290,81 @@ public class UploadActivityActivity extends AppCompatActivity {
                 throw new IOException();
             }
         } catch (IOException e) {
+
         }
 
     }
 
+
+    /**
+     * Retrieve all activity information from the forms on the screen
+     * and parse them. If a valid Activity can be created, creates it, else null
+     * @return an Activity if the information is valid, else null
+     */
+    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    public Activity validateActivity() {
+        String organizerId = fAuth.getCurrentUser().getUid();
+
+        Sport sport = Sport.valueOf(spinner.getSelectedItem().toString());
+
+        String title = titleEditText.getText().toString();
+        if (title.isEmpty()) title = sport.name();
+
+        String nptext = nParticipantsEditText.getText().toString();
+        if (nptext.isEmpty() || Integer.parseInt(nptext) <= 0) {
+            Toast.makeText(this, "Please enter a positive number of participants", Toast.LENGTH_SHORT)
+                    .show();
+            return null;
+        }
+        int nParticipants = Integer.parseInt(nptext);
+
+        // Initializing the list of participants with the organizerId
+        ArrayList<String> participantsId = new ArrayList<>();
+        participantsId.add(organizerId);
+
+        String address = addressText.getText().toString();
+        if (address.isEmpty()) {
+            Toast.makeText(this, "Please enter a valid location", Toast.LENGTH_SHORT)
+                    .show();
+            return null;
+        }
+        if (!validLocation) tryLocatingAddress(this, address);
+
+        String description = descriptionEditText.getText().toString();
+
+        if (startTimeText.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Please enter a start time", Toast.LENGTH_SHORT)
+                    .show();
+            return null;
+        }
+
+        if (durationText.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Please enter a duration", Toast.LENGTH_SHORT)
+                    .show();
+            return null;
+        }
+        double duration = (double) (hours) + (double) (minutes) / 60;
+        Date date = calendar.getTime();
+
+        Activity activity = new Activity(
+                organizerId + " || " +  date, organizerId, title, nParticipants,
+                participantsId, longitude, latitude, description, null, date, duration,
+                sport, address, new Date()
+        );
+        return activity;
+    }
+
+    /**
+     * Creates a new Activity from the information in the forms and uploads if it the Activity
+     * is valid.
+     * @param view the View whose forms to retrieve information in
+     */
     public void confirmActivityUpload(View view) {
         Activity toUpload = validateActivity();
 
         if (toUpload == null) return;
 
-        BackendManager<Activity> bm = new FirestoreActivityManager(
-                fStore,
-                FirestoreActivityManager.ACTIVITIES_COLLECTION,
-                new ActivitySerializer()
-        );
-
-        ((Task<Void>) bm.add(toUpload, null)).addOnSuccessListener(new OnSuccessListener<Void>() {
+        ((Task<Void>) activityBackendManager.add(toUpload, null)).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(getApplicationContext(), "Activity successfully uploaded!",

@@ -2,16 +2,24 @@ package com.sdp.movemeet.view.profile;
 
 import android.view.Gravity;
 
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,18 +35,35 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class HomeScreenActivityToUserProfileActivity {
+public class HomeScreenActivityToUserProfileActivityTest {
 
-    @Rule
-    public ActivityTestRule<LoginActivity> mActivityTestRule = new ActivityTestRule<>(LoginActivity.class);
+   //@Rule
+    //public ActivityTestRule<LoginActivity> ActivityTestRule = new ActivityTestRule<>(LoginActivity.class);
+
+    FirebaseAuth fAuth;
+    FirebaseUser user;
+
+
+   /* @Before
+    public void setUp() {
+        fAuth = FirebaseAuth.getInstance();
+        fAuth.signInWithEmailAndPassword("antho2@gmail.com", "234567").addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                user = fAuth.getCurrentUser();
+            }
+        });
+
+    }*/
 
     @Test
-    public void homeScreenActivityToUserProfileActivity() {
+    public void homeScreenActivityToUserProfileActivityTest() {
+        //ActivityScenario scenario = ActivityScenario.launch(ProfileActivity.class);
         /*onView(withId(R.id.edit_text_email)).perform(replaceText("antho2@gmail.com"), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password)).perform(replaceText("234567"), closeSoftKeyboard());
         onView(withId(R.id.button_login)).perform(click());
         try {
-            Thread.sleep(2000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             assert (false);
         }
@@ -54,7 +79,9 @@ public class HomeScreenActivityToUserProfileActivity {
 
         // Start the screen of your activity.
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_edit_profile));
-        try{
+         */
+
+        /*try{
             Thread.sleep(2000);
         }catch(Exception e){}
 
@@ -65,7 +92,8 @@ public class HomeScreenActivityToUserProfileActivity {
         onView(withId(R.id.text_view_activity_profile_phone)).check(matches(withText("000000000000")));
 
         onView(withId(R.id.text_view_activity_profile_description)).check(matches(withText("")));
-        logout();*/
+        logout();
+        scenario.close();*/
 
     }
 
