@@ -8,7 +8,6 @@ import com.sdp.movemeet.models.FirebaseObject;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
 
 import java.util.Map;
-import java.util.concurrent.Future;
 
 /**
  * A class capable of interacting with the Firebase Realtime Database to handle storage

@@ -1,11 +1,13 @@
 package com.sdp.movemeet.view.home;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
@@ -23,6 +25,7 @@ import static com.sdp.movemeet.utility.LocationFetcher.REQUEST_CODE;
 
 public class HomeScreenActivity extends AppCompatActivity {
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,10 +35,10 @@ public class HomeScreenActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
        }
 
-        ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
-        // Always clear activities first, to prevent duplicates if multiple intents are created
+        /*ActivitiesUpdater updater = ActivitiesUpdater.getInstance();
+         //Always clear activities first, to prevent duplicates if multiple intents are created
         updater.clearLocalActivities();
-        updater.fetchListActivities();
+        updater.fetchListActivities(); */
     }
 
 
