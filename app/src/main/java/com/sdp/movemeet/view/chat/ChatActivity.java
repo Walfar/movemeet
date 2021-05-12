@@ -116,7 +116,6 @@ public class ChatActivity extends AppCompatActivity {
         btnSend = findViewById(R.id.button_send_message);
         initialChatWelcomeMessage = findViewById(R.id.initial_chat_welcome_message);
 
-        // TODO: implement abstraction for Firebase Realtime Database
         messageManager = new FirebaseDBMessageManager(database, new MessageSerializer());
 
         fAuth = FirebaseAuth.getInstance();
@@ -318,9 +317,11 @@ public class ChatActivity extends AppCompatActivity {
     public void sendMessage(View view) {
         String userName = fullNameString;
         String messageText = messageInput.getText().toString();
-        Message message = new Message(userName, messageText, userId, null /* no image */);
+        //Message message = new Message(userName, messageText, userId, null /* no image */);
+        Message message = new Message(userName, messageText, userId, "no imageUrl" /* no image */);
         if (messageText.length() > 0) {
             // The path to provide is of the form "chats/general_chat"
+            Log.d(TAG, "message.getImageUrl(): " + message.getImageUrl());
             messageManager.add(message, chatRoom.toString().split("/",4)[3]); // ✅
             //chatRoom.push().setValue(message);
             messageInput.setText("");
@@ -343,7 +344,11 @@ public class ChatActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK && data != null) {
                 final Uri uri = data.getData();
                 Log.d(TAG, "Uri: " + uri.toString());
-                Message tempMessage = new Message(fullNameString, null, userId, LOADING_IMAGE_URL);
+                //Message tempMessage = new Message(fullNameString, null, userId, LOADING_IMAGE_URL);
+                Message tempMessage = new Message(fullNameString, "Image loading...", userId, LOADING_IMAGE_URL);
+
+                //messageManager.add(tempMessage, , chatRoom.toString().split("/",4)[3]); // ✅
+
                 chatRoom.push().setValue(tempMessage, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -377,10 +382,11 @@ public class ChatActivity extends AppCompatActivity {
                                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
-                                        Message imageMessage = new Message(fullNameString, null, userId, uri.toString());
+                                        //Message imageMessage = new Message(fullNameString, null, userId, uri.toString());
+                                        Message imageMessage = new Message(fullNameString, "no messageText", userId, uri.toString());
 
                                         // The path to provide is of the form "chats/general_chat/-M_2IT_2qo6PzCQj27N_"
-                                        messageManager.set(imageMessage, chatRoom.toString().split("/",4)[3] + "/" + key);
+                                        messageManager.set(imageMessage, chatRoom.toString().split("/",4)[3] + "/" + key); // ✅
                                         //chatRoom.child(key).setValue(imageMessage);
                                     }
                                 });
