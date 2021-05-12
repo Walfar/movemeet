@@ -122,7 +122,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
     public void displayDescriptionActivityData() {
         createTitleView();
-        createParticipantNumberView();
         createDescriptionView();
         createDateView();
         createAddressView();
@@ -130,6 +129,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         createDurationView();
         createOrganizerView();
         getOrganizerName();
+        createParticipantNumberView();
         getParticipantNames();
     }
 
@@ -137,7 +137,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         ArrayList<String> participantIds = activity.getParticipantId();
         participantNames = new ArrayList<>();
         participantNamesString = new StringBuilder();
-        for (int i = 0; i < activity.getParticipantId().size(); i++) {
+        for (int i = 0; i < participantIds.size(); i++) {
             String currentParticipantId = participantIds.get(i);
             getCurrentParticipantName(currentParticipantId);
         }
@@ -353,6 +353,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      */
     private void getCurrentParticipantName(String participantId) {
         Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + participantId);
+        System.out.println("DOCUMENT" + document);
         document.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {

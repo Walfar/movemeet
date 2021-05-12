@@ -9,7 +9,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.Sport;
-import com.sdp.movemeet.view.activity.ActivityDescriptionActivityUnregister;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -61,6 +60,12 @@ public class ActivityDescriptionActivityUnregisterTest {
         CountDownLatch latch = new CountDownLatch(1);
 
         fAuth = FirebaseAuth.getInstance();
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            assert (false);
+        }
 
         ActivityScenarioRule<ActivityDescriptionActivityUnregister> testRule = new ActivityScenarioRule<>(new Intent(getApplicationContext(), ActivityDescriptionActivityUnregister.class).putExtra("activity", activity));
     }

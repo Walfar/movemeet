@@ -342,7 +342,7 @@ public class UploadActivityActivity extends AppCompatActivity {
         validParticipants = true;
 
         // Initializing the list of participants with the organizerId
-        ArrayList<String> participantsId = new ArrayList<String>();
+        ArrayList<String> participantsId = new ArrayList<>();
         participantsId.add(organizerId);
 
         String address = addressText.getText().toString();
