@@ -353,7 +353,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      */
     private void getCurrentParticipantName(String participantId) {
         Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + participantId);
-        System.out.println("DOCUMENT" + document);
         document.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
