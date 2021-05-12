@@ -1,4 +1,4 @@
-package com.sdp.movemeet.viewTest.activityTest;
+package com.sdp.movemeet.view.activity;
 
 import android.view.View;
 import android.widget.DatePicker;
@@ -29,6 +29,7 @@ import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
 import com.sdp.movemeet.view.main.MainActivity;
+import com.sdp.movemeet.view.navigation.security.MainActivitySecurityTest;
 
 import org.hamcrest.Matcher;
 import org.junit.After;
@@ -85,6 +86,7 @@ public class UploadActivityActivityTest {
     public void setup() {
         // Disable navigation for tests
         UploadActivityActivity.enableNav = false;
+        MainActivity.enableNav = false;
 
         // Set up mocks and their behaviors
         // Set up fake database
