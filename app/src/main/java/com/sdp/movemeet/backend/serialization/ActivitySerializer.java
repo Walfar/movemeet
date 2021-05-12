@@ -26,7 +26,7 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
     // The key used to access the numberParticipant attribute of a serialized Activity
     public static final String NPART_KEY = "numberParticipant";
     // The key used to access the participantsId attribute of a serialized Activity
-    public static final String PARTICIPANTS_KEY = "participantsId";
+    public static final String PARTICIPANTS_KEY = "participantId";
     // The key used to access the longitude attribute of a serialized Activity
     public static final String LONGITUDE_KEY = "longitude";
     // The key used to access the latitude attribute of a serialized Activity

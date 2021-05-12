@@ -123,13 +123,14 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
     public void displayDescriptionActivityData() {
         createTitleView();
-        createParticipantNumberView();
         createDescriptionView();
         createDateView();
         createAddressView();
         createSportView();
         createDurationView();
-        createOrganizerView();getOrganizerName();
+        createOrganizerView();
+        getOrganizerName();
+        createParticipantNumberView();
         getParticipantNames();
     }
 
@@ -137,7 +138,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         ArrayList<String> participantIds = activity.getParticipantId();
         participantNames = new ArrayList<>();
         participantNamesString = new StringBuilder();
-        for (int i = 0; i < activity.getParticipantId().size(); i++) {
+        for (int i = 0; i < participantIds.size(); i++) {
             String currentParticipantId = participantIds.get(i);
             getCurrentParticipantName(currentParticipantId);
         }
