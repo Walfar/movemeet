@@ -312,8 +312,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     public void goToIndividualChat(View view) {
         if (activity.getParticipantId().contains(userId)) {
             Intent intent = new Intent(ActivityDescriptionActivity.this, ChatActivity.class);
-            String activityChatId = activity.getActivityId() + " - chatId";
-            intent.putExtra("ACTIVITY_CHAT_ID", activityChatId);
+            String activityDocumentPath = activity.getDocumentPath();
+            intent.putExtra("ACTIVITY_CHAT_ID", activityDocumentPath);
             String activityTitle = activity.getTitle();
             intent.putExtra("ACTIVITY_TITLE", activityTitle);
             startActivity(intent);

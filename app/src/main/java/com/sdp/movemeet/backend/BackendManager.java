@@ -17,6 +17,14 @@ public interface BackendManager<T> {
     Task<?> add(T object, String path);
 
     /**
+     * Set an instance of T to the backend
+     * @param object the instance of T to set.
+     * @param path the path of the instance in the backend.
+     * @return a Task, the success of which determines the success of the operation.
+     */
+    Task<?> set(T object, String path);
+
+    /**
      * Deletes an entry of T located at the specified path in the backend.
      * @param path the path to the instance to be deleted.
      * @return a Task, the success of which determines the success of the operation.
