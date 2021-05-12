@@ -1,12 +1,10 @@
 package com.sdp.movemeet.backend.serialization;
 
-import com.google.firebase.Timestamp;
 import com.sdp.movemeet.models.Activity;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static com.sdp.movemeet.backend.serialization.ActivitySerializer.ACTIVITY_KEY;
@@ -21,7 +19,7 @@ import static com.sdp.movemeet.backend.serialization.ActivitySerializer.ORGANIZE
 import static com.sdp.movemeet.backend.serialization.ActivitySerializer.PARTICIPANTS_KEY;
 import static com.sdp.movemeet.backend.serialization.ActivitySerializer.SPORT_KEY;
 import static com.sdp.movemeet.backend.serialization.ActivitySerializer.TITLE_KEY;
-import static com.sdp.movemeet.modelsTest.ActivityTest.createFakeActivity;
+import static com.sdp.movemeet.models.ActivityTest.createFakeActivity;
 
 public class ActivitySerializerTest {
 

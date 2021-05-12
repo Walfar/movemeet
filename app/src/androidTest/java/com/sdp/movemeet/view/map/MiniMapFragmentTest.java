@@ -55,6 +55,9 @@ public class MiniMapFragmentTest {
     public FragmentTestRule<?, MiniMapFragment> fragmentTestRule =
             FragmentTestRule.create(MiniMapFragment.class);
 
+    @Rule
+
+
     @Before
     public void setUp() throws InterruptedException {
         fAuth = FirebaseAuth.getInstance();
@@ -73,14 +76,14 @@ public class MiniMapFragmentTest {
         onView(withId(R.id.fragment_map)).check(matches((isDisplayed())));
     }
 
-   /* @Test
+    @Test
     public void miniMapFragment_onClickSetsLocation() {
         //What could be the right coords of the mini map ?
         sleep(3000);
         uiDevice.click(uiDevice.getDisplaySizeDp().x/2, uiDevice.getDisplaySizeDp().y/2);
         sleep(2000);
         //Casting not possible. Attach fragment to upload activity ?
-        /*UploadActivityActivity act = new UploadActivityActivity();
+        UploadActivityActivity act = new UploadActivityActivity();
         LatLng address = act.getAddressLocation();
         assertNotNull(address);
     }

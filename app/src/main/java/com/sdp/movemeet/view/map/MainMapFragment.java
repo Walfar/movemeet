@@ -39,6 +39,7 @@ import com.sdp.movemeet.utility.LocationFetcher;
 
 import java.util.ArrayList;
 
+import static com.sdp.movemeet.utility.ActivitiesUpdater.getActivities;
 import static com.sdp.movemeet.utility.ActivitiesUpdater.updateListActivities;
 
 
@@ -48,15 +49,19 @@ import static com.sdp.movemeet.utility.ActivitiesUpdater.updateListActivities;
 public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     //current location of the user on the map
-    private Location currentLocation;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public Location currentLocation;
 
     private final FirebaseAuth fAuth = FirebaseAuth.getInstance();
-    private FirebaseUser user;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public FirebaseUser user;
 
     //marker representing the clicked position where the user wants to create a new activity
-    private Marker newActivityMarker;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public Marker newActivityMarker;
     //marker representing the position of the user on the map
-    private Marker positionMarker;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public Marker positionMarker;
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public SupportMapFragment supportMapFragment;
@@ -64,7 +69,6 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public GoogleMap googleMap;
 
-    private ActivitiesUpdater updater;
     private LocationFetcher locationFetcher;
 
     private static final String TAG = "Maps TAG";
@@ -73,7 +77,8 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     public static final float ZOOM_VALUE = 15.0f;
 
     //Boolean used to check if the callback is called for the first time. Useful, to avoid repeating certain actions (e.g zooming on user's location)
-    private boolean first_callback;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public boolean first_callback;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -128,7 +133,8 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
      * Displays the user marker on the map, when it is ready. In case this is the first callback (i.e first update), we zoom
      * on the marker
      */
-    private void displayMarkerOnMapReadyAndZoomInFirstCallback() {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public void displayMarkerOnMapReadyAndZoomInFirstCallback() {
         supportMapFragment.getMapAsync(googleMap -> {
             displayUserMarker();
             if (first_callback) {
@@ -142,6 +148,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     /**
      * Method used to display the markers of the activities on the map
      */
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public void displayUserMarker() {
         //Set marker for the user's position on map
         MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())).title("I am here !");
@@ -216,11 +223,11 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
         DistanceCalculator dc = new DistanceCalculator(currentLocation.getLatitude(), currentLocation.getLongitude());
 
-        dc.setActivities(updater.getActivities());
+        dc.setActivities(getActivities());
         dc.calculateDistances();
         dc.sort();
         //For the moment, we get all activities as the distance calculator is not fully functional yet
-        for (Activity act : dc.getTopActivities(updater.getActivities().size())) {
+        for (Activity act : dc.getTopActivities(getActivities().size())) {
             //We display all activities on the corresponding location and with the icon associated to the sport
             LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
 
@@ -289,6 +296,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     public void onInfoWindowClick(Marker marker) {
         //When we click on the info window of the marker for the activity we want to create, we remove the marker from the map and bring to the upload activity screen
         newActivityMarker.remove();
+        newActivityMarker = null;
         Intent intent = new Intent(supportMapFragment.getActivity(), UploadActivityActivity.class);
         //use Bundle to pass latlng instance to intent
         Bundle arg = new Bundle();
