@@ -69,7 +69,7 @@ public class Activity implements Serializable, FirebaseObject {
                     String address,
                     Date createdAt){
 
-        if(activityId == null || organizerId == null || title == null || numberParticipant <= 0 )
+        if(activityId == null || organizerId == null || title == null || numberParticipant <= 0)
             throw new IllegalArgumentException();
 
         if(date == null || sport == null || address == null || duration <= 0 || description == null)
