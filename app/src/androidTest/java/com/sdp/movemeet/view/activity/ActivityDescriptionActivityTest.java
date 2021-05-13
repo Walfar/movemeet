@@ -3,6 +3,7 @@ package com.sdp.movemeet.view.activity;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -19,6 +20,7 @@ import com.sdp.movemeet.models.Sport;
 import com.sdp.movemeet.view.chat.ChatActivity;
 import com.sdp.movemeet.view.map.GPSRecordingActivity;
 
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -34,9 +36,11 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 ;
 
@@ -79,10 +83,6 @@ public class ActivityDescriptionActivityTest {
             DUMMY_DATE
     );
 
-    @Rule
-    public ActivityScenarioRule<ActivityDescriptionActivity> testRule = new ActivityScenarioRule<>(new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra("activity", activity));
-
-
     @Before
     public void signIn() {
         CountDownLatch latch = new CountDownLatch(1);
@@ -105,23 +105,33 @@ public class ActivityDescriptionActivityTest {
         } catch (InterruptedException e) {
             assert (false);
         }
-        //user = fAuth.getCurrentUser().getUid();
+
+        Intent intent = new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra("activity", activity);
 
 
-       /* onView(withId(R.id.activity_title_description)).perform(replaceText(DUMMY_TITLE), closeSoftKeyboard());
-        onView(withId(R.id.activity_description_description)).perform(replaceText(DUMMY_DESCRIPTION), closeSoftKeyboard());
-        onView(withId(R.id.activity_date_description)).perform(replaceText(String.valueOf(DUMMY_DATE)), closeSoftKeyboard());
-        onView(withId(R.id.activity_address_description)).perform(replaceText(DUMMY_ADDRESS), closeSoftKeyboard());
-        onView(withId(R.id.activity_sport_description)).perform(replaceText(String.valueOf(DUMMY_SPORT)), closeSoftKeyboard());
-        onView(withId(R.id.activity_duration_description)).perform(replaceText(String.valueOf(DUMMY_DURATION)), closeSoftKeyboard());
-        onView(withId(R.id.activity_organisator_description)).perform(replaceText(DUMMY_ORGANISATOR_ID), closeSoftKeyboard());
-        onView(withId(R.id.activity_number_description)).perform(replaceText(String.valueOf(DUMMY_NUMBER_PARTICIPANT)), closeSoftKeyboard());
-        onView(withId(R.id.activity_participants_description)).perform(replaceText(String.valueOf(DUMMY_PARTICIPANTS_ID)), closeSoftKeyboard());
+        ActivityScenario testRule  = ActivityScenario.launch(intent);
+
+        try {
+            Thread.sleep(7000);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+
+        onView(withId(R.id.activity_title_description)).check(matches(withText(DUMMY_TITLE)));
+        //onView(withId(R.id.activity_date_description)).check(matches(withText(String.valueOf(DUMMY_DATE))));
+        onView(withId(R.id.activity_address_description)).check(matches(withText(DUMMY_ADDRESS)));
+        onView(withId(R.id.activity_sport_description)).check(matches(withText(String.valueOf(DUMMY_SPORT))));
+        //onView(withId(R.id.activity_duration_description)).check(matches(withText(String.valueOf(DUMMY_DURATION))));
+
+        onView(withId(R.id.activity_organisator_description)).check(matches(withText(DUMMY_ORGANISATOR_ID)));
+        //onView(withId(R.id.activity_number_description)).check(matches(withText(String.valueOf(DUMMY_NUMBER_PARTICIPANT))));
+        //onView(withId(R.id.activity_participants_description)).check(matches(withText(String.valueOf(DUMMY_PARTICIPANTS_ID.size()))));
+
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
             assert (false);
-        }*/
+        }
 
     }
 

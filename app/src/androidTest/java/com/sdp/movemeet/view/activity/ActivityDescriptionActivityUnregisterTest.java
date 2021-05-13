@@ -14,6 +14,8 @@ import com.sdp.movemeet.R;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.Sport;
 import com.sdp.movemeet.view.chat.ChatActivity;
+import com.sdp.movemeet.view.home.HomeScreenActivity;
+import com.sdp.movemeet.view.home.LoginActivity;
 
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -28,6 +30,7 @@ import java.util.concurrent.CountDownLatch;
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
@@ -91,11 +94,11 @@ public class ActivityDescriptionActivityUnregisterTest {
     @Rule
     public ActivityScenarioRule<ActivityDescriptionActivityUnregister> testRule = new ActivityScenarioRule<>(new Intent(getApplicationContext(), ActivityDescriptionActivityUnregister.class).putExtra("activity", activity));
 
-    @Before
+    /*@Before
     public void signIn() {
         CountDownLatch latch = new CountDownLatch(1);
         fAuth = FirebaseAuth.getInstance();
-    }
+    }*/
 
     @Test
     public void create() {
@@ -105,8 +108,15 @@ public class ActivityDescriptionActivityUnregisterTest {
 
     @Test
     public void loginButtonIsCorrect(){
-        onView(withId(R.id.activityGoDescription)).perform(click());
-        intended(hasComponent(ChatActivity.class.getName()));
+        Intents.init();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+        onView(withId(R.id.activityGoDescription)).perform(scrollTo(), click());
+        intended(hasComponent(LoginActivity.class.getName()));
+        Intents.release();
     }
 
 }
