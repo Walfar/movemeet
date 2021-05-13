@@ -152,6 +152,7 @@ public class MainMapFragmentTest {
     @Test
     public void clickingOnActivityMakesCorrectIntentWhenUnlogged() {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
+        while (mapFragment.googleMap == null);
         Activity act = new Activity("activity id", "organizer id", "my title", 4, new ArrayList<>(), 0, 0,
                     "desc", null, new Date(), 1, Soccer, "Dubai UAE", new Date());
         ActivitiesUpdater.activities.add(act);
