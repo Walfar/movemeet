@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * This class represents a message
  */
-public class Message implements FirebaseObject {
+public class Message extends FirebaseObject {
     private String messageUser;
     private String messageText;
     private String messageUserId;
@@ -100,12 +100,11 @@ public class Message implements FirebaseObject {
 
 
     public String getDocumentPath() {
-        return this.documentPath;
+        return super.documentPath;
     }
 
     public String setDocumentPath(String path) {
-        if (documentPath == null) documentPath = path;
-        return documentPath;
+        return super.setDocumentPath(path);
     }
 
 }

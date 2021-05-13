@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.R;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -56,7 +57,7 @@ public class LoginActivityTest {
         onView(withId(R.id.button_login)).perform(click());
     }
 
-    @Test public void Login_ShortPassword() throws InterruptedException {
+    @Test public void Login_ShortPassword() {
         onView(withId(R.id.edit_text_email))
                 .perform(typeText(mEmail), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password))
