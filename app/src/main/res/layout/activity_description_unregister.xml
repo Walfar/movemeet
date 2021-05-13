@@ -256,6 +256,7 @@
                             android:fontFamily="@font/armata"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
+                            android:onClick="goToLogin"
                             android:text="@string/activity_description_sign_in"
                             tools:ignore="ButtonStyle" />
                     </LinearLayout>
