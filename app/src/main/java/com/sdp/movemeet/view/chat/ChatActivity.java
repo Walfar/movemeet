@@ -191,7 +191,7 @@ public class ChatActivity extends AppCompatActivity {
         receivedActivityChatId = data.getStringExtra("ACTIVITY_CHAT_ID");
         receivedActivityTitle = data.getStringExtra("ACTIVITY_TITLE");
         if (receivedActivityChatId != null) {
-            Log.d(TAG, "DocumentSnapshot data: " + receivedActivityChatId);
+            //Log.d(TAG, "DocumentSnapshot data: " + receivedActivityChatId);
             activityChatId = receivedActivityChatId;
             // Dynamically creating a new child under the branch "chats" in Firebase Realtime
             // Database with the value of "activityChatId" in case it doesn't exist yet
@@ -347,7 +347,7 @@ public class ChatActivity extends AppCompatActivity {
                 //Message tempMessage = new Message(fullNameString, null, userId, LOADING_IMAGE_URL);
                 Message tempMessage = new Message(fullNameString, "Image loading...", userId, LOADING_IMAGE_URL);
 
-                //messageManager.add(tempMessage, , chatRoom.toString().split("/",4)[3]); // ✅
+                //messageManager.addWithCompletionListener(tempMessage, , chatRoom.toString().split("/",4)[3]); // ✅
 
                 chatRoom.push().setValue(tempMessage, new DatabaseReference.CompletionListener() {
                     @Override
