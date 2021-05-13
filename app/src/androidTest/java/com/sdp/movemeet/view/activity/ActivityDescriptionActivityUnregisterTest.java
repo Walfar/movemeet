@@ -31,12 +31,14 @@ import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
 @RunWith(AndroidJUnit4.class)
@@ -74,35 +76,26 @@ public class ActivityDescriptionActivityUnregisterTest {
             DUMMY_DATE
     );
 
-    public static ViewAction forceClick() {
-        return new ViewAction() {
-            @Override public Matcher<View> getConstraints() {
-                return allOf(isClickable(), isEnabled(), isDisplayed());
-            }
-
-            @Override public String getDescription() {
-                return "force click";
-            }
-
-            @Override public void perform(UiController uiController, View view) {
-                view.performClick(); // perform click without checking view coordinates.
-                uiController.loopMainThreadUntilIdle();
-            }
-        };
-    }
-
     @Rule
     public ActivityScenarioRule<ActivityDescriptionActivityUnregister> testRule = new ActivityScenarioRule<>(new Intent(getApplicationContext(), ActivityDescriptionActivityUnregister.class).putExtra("activity", activity));
 
-    /*@Before
-    public void signIn() {
-        CountDownLatch latch = new CountDownLatch(1);
-        fAuth = FirebaseAuth.getInstance();
-    }*/
+    @Before
+    public void createDescription() {
+         onView(withId(R.id.activity_title_description)).check(matches(withText(DUMMY_TITLE)));
+        //onView(withId(R.id.activity_date_description)).check(matches(withText(String.valueOf(DUMMY_DATE))));
+        onView(withId(R.id.activity_address_description)).check(matches(withText(DUMMY_ADDRESS)));
+        onView(withId(R.id.activity_sport_description)).check(matches(withText(String.valueOf(DUMMY_SPORT))));
+        //onView(withId(R.id.activity_duration_description)).check(matches(withText(String.valueOf(DUMMY_DURATION))));
+
+        onView(withId(R.id.activity_organisator_description)).check(matches(withText(DUMMY_ORGANISATOR_ID)));
+        //onView(withId(R.id.activity_number_description)).check(matches(withText(String.valueOf(DUMMY_NUMBER_PARTICIPANT))));
+        //onView(withId(R.id.activity_participants_description)).check(matches(withText(String.valueOf(DUMMY_PARTICIPANTS_ID.size()))));
+    }
 
     @Test
     public void create() {
         Intents.init();
+
         Intents.release();
     }
 

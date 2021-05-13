@@ -5,7 +5,6 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,12 +17,9 @@ import com.sdp.movemeet.R;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.Sport;
 import com.sdp.movemeet.view.chat.ChatActivity;
-import com.sdp.movemeet.view.map.GPSRecordingActivity;
 
-import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -34,8 +30,6 @@ import java.util.concurrent.CountDownLatch;
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -109,13 +103,7 @@ public class ActivityDescriptionActivityTest {
         Intent intent = new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra("activity", activity);
 
 
-        ActivityScenario testRule  = ActivityScenario.launch(intent);
-
-        try {
-            Thread.sleep(7000);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
+        ActivityScenario testRule = ActivityScenario.launch(intent);
 
         onView(withId(R.id.activity_title_description)).check(matches(withText(DUMMY_TITLE)));
         //onView(withId(R.id.activity_date_description)).check(matches(withText(String.valueOf(DUMMY_DATE))));
@@ -159,13 +147,11 @@ public class ActivityDescriptionActivityTest {
         Intents.release();
     }
 
-    /*@Test
+    @Test
     public void chatButtonIsCorrect() {
-        //activity.addParticipantId(user);
         onView(withId(R.id.activityChatDescription)).perform(click());
         intended(hasComponent(ChatActivity.class.getName()));
-    }*/
-
+    }
 
     @After
     public void deleteAndSignOut() {
