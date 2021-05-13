@@ -16,6 +16,7 @@ import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -104,8 +105,15 @@ public class MainMapFragmentTest {
     }
 
     @Test
-    public void mainMapFragmentIsDisplayedAndGMapsNotNull() throws InterruptedException {
+    public void mainMapFragmentIsDisplayedAndMapIsReadyWhenNotNull() throws InterruptedException {
         onView(withId(R.id.fragment_map)).check(matches((isDisplayed())));
+        MainMapFragment mapFragment = fragmentTestRule.getFragment();
+        mapFragment.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mapFragment.onMapReady(mapFragment.googleMap);
+            }
+        });
     }
 
     @Test
@@ -121,20 +129,24 @@ public class MainMapFragmentTest {
         mapFragment.currentLocation = new Location("current location");
         mapFragment.currentLocation.setLatitude(0);
         mapFragment.currentLocation.setLongitude(0);
-            
-        assertNull(mapFragment.positionMarker);
-        mapFragment.displayUserMarker();
-        assertNotNull(mapFragment.positionMarker);
-        mapFragment.displayUserMarker();
-        assertNotNull(mapFragment.positionMarker);
-        assertEquals(mapFragment.onMarkerClick(mapFragment.positionMarker), true);
+
+        mapFragment.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                assertNull(mapFragment.positionMarker);
+                mapFragment.displayUserMarker();
+                assertNotNull(mapFragment.positionMarker);
+                mapFragment.displayUserMarker();
+                assertNotNull(mapFragment.positionMarker);
+                assertEquals(mapFragment.onMarkerClick(mapFragment.positionMarker), true);
+            }
+        });
     }
 
 
     @Test
     public void clickingOnActivityMakesCorrectIntentWhenLogged() {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
-        while (mapFragment.googleMap == null);
         Activity act = new Activity("activity id", "organizer id", "my title", 4, new ArrayList<>(), 0, 0,
                     "desc", null, new Date(), 1, Soccer, "Dubai UAE", new Date());
         ActivitiesUpdater.activities.add(act);
@@ -152,7 +164,6 @@ public class MainMapFragmentTest {
     @Test
     public void clickingOnActivityMakesCorrectIntentWhenUnlogged() {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
-        while (mapFragment.googleMap == null);
         mapFragment.user = null;
         Activity act = new Activity("activity id", "organizer id", "my title", 4, new ArrayList<>(), 0, 0,
                     "desc", null, new Date(), 1, Soccer, "Dubai UAE", new Date());
@@ -172,9 +183,14 @@ public class MainMapFragmentTest {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
         assertNull(mapFragment.currentLocation);
         //list of activities should be empty
-        mapFragment.displayNearbyMarkers();
-        assertEquals(mapFragment.currentLocation.getLatitude(), 0, 0);
-        assertEquals(mapFragment.currentLocation.getLongitude(), 0, 0);
+        mapFragment.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mapFragment.displayNearbyMarkers();
+                assertEquals(mapFragment.currentLocation.getLatitude(), 0, 0);
+                assertEquals(mapFragment.currentLocation.getLongitude(), 0, 0);
+            }
+        });
     }
 
     @Test
@@ -214,9 +230,6 @@ public class MainMapFragmentTest {
         //User must be logged to add new activity
         assertNotNull(fAuth.getCurrentUser());
         assertNull(mapFragment.newActivityMarker);
-
-        //Not on Main thread
-        while (mapFragment.googleMap == null);
 
         mapFragment.getActivity().runOnUiThread(new Runnable() {
             @Override
