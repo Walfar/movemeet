@@ -13,6 +13,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.StorageReference;
+import com.sdp.movemeet.R;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.Sport;
 
@@ -26,6 +27,10 @@ import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 ;
 
@@ -36,7 +41,7 @@ public class ActivityDescriptionActivityTest {
     private final static String DUMMY_ORGANISATOR_ID = "1";
     private final static String DUMMY_TITLE = "title";
     private final static int DUMMY_NUMBER_PARTICIPANT = 2;
-    private final static ArrayList<String> DUMMY_PARTICIPANTS_ID = new ArrayList<String>();
+    private final static ArrayList<String> DUMMY_PARTICIPANTS_ID = new ArrayList<>();
     private final static double DUMMY_LONGITUDE = 2.45;
     private final static double DUMMY_LATITUDE = 3.697;
     private final static String DUMMY_DESCRIPTION = "description";
@@ -93,13 +98,6 @@ public class ActivityDescriptionActivityTest {
         ActivityScenarioRule<ActivityDescriptionActivity> testRule = new ActivityScenarioRule<>(new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra("activity", activity));
     }
 
-    /*@Before
-    public void setUp(){
-        fStore = mock(FirebaseFirestore.class);
-        storageReference = mock(StorageReference.class);
-        activity = mock(Activity.class);
-
-    }*/
 
     @Test
     public void create() {
@@ -108,18 +106,22 @@ public class ActivityDescriptionActivityTest {
     }
 
     @Test
-    public void displayDescriptionActivityDataIsCorrect(){
-        ActivityDescriptionActivity activity = new ActivityDescriptionActivity();
-        activity.displayDescriptionActivityData();
+    public void createDescription() {
+        onView(withId(R.id.activity_title_description)).perform(replaceText(DUMMY_TITLE), closeSoftKeyboard());
+        onView(withId(R.id.activity_description_description)).perform(replaceText(DUMMY_DESCRIPTION), closeSoftKeyboard());
+        onView(withId(R.id.activity_date_description)).perform(replaceText(String.valueOf(DUMMY_DATE)), closeSoftKeyboard());
+        onView(withId(R.id.activity_address_description)).perform(replaceText(DUMMY_ADDRESS), closeSoftKeyboard());
+        onView(withId(R.id.activity_sport_description)).perform(replaceText(String.valueOf(DUMMY_SPORT)), closeSoftKeyboard());
+        onView(withId(R.id.activity_duration_description)).perform(replaceText(String.valueOf(DUMMY_DURATION)), closeSoftKeyboard());
+        onView(withId(R.id.activity_organisator_description)).perform(replaceText(DUMMY_ORGANISATOR_ID), closeSoftKeyboard());
+        onView(withId(R.id.activity_number_description)).perform(replaceText(String.valueOf(DUMMY_NUMBER_PARTICIPANT)), closeSoftKeyboard());
+        onView(withId(R.id.activity_participants_description)).perform(replaceText(String.valueOf(DUMMY_PARTICIPANTS_ID)), closeSoftKeyboard());
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
     }
-
-    /*@Test
-    public void createTitleViewTest(){
-        ViewGroup view = inflate(R.layout.activity_description);
-        TextView textView = view.findViewById(R.id.activity_title_description);
-
-        assertEquals(textView.getText().toString().isEmpty(), false);
-    }*/
 
 
     @After
