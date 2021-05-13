@@ -19,6 +19,7 @@ import com.sdp.movemeet.models.Sport;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -72,6 +73,10 @@ public class ActivityDescriptionActivityTest {
             DUMMY_DATE
     );
 
+    @Rule
+    ActivityScenarioRule<ActivityDescriptionActivity> testRule = new ActivityScenarioRule<>(new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra("activity", activity));
+
+
     @Before
     public void signIn() {
         CountDownLatch latch = new CountDownLatch(1);
@@ -95,14 +100,6 @@ public class ActivityDescriptionActivityTest {
             assert (false);
         }
 
-        ActivityScenarioRule<ActivityDescriptionActivity> testRule = new ActivityScenarioRule<>(new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra("activity", activity));
-    }
-
-
-    @Test
-    public void create() {
-        Intents.init();
-        Intents.release();
     }
 
     @Before
@@ -121,6 +118,12 @@ public class ActivityDescriptionActivityTest {
         } catch (InterruptedException e) {
             assert (false);
         }
+    }
+
+    @Test
+    public void create() {
+        Intents.init();
+        Intents.release();
     }
 
 
