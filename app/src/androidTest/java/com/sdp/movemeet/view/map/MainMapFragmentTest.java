@@ -153,6 +153,7 @@ public class MainMapFragmentTest {
     public void clickingOnActivityMakesCorrectIntentWhenUnlogged() {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
         while (mapFragment.googleMap == null);
+        mapFragment.user = null;
         Activity act = new Activity("activity id", "organizer id", "my title", 4, new ArrayList<>(), 0, 0,
                     "desc", null, new Date(), 1, Soccer, "Dubai UAE", new Date());
         ActivitiesUpdater.activities.add(act);
@@ -169,8 +170,8 @@ public class MainMapFragmentTest {
     @Test
     public void displayingActivitiesMarkersSetsDefaultLocationWhenNull() {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
-            
         assertNull(mapFragment.currentLocation);
+        //list of activities should be empty
         mapFragment.displayNearbyMarkers();
         assertEquals(mapFragment.currentLocation.getLatitude(), 0, 0);
         assertEquals(mapFragment.currentLocation.getLongitude(), 0, 0);
@@ -215,14 +216,20 @@ public class MainMapFragmentTest {
         assertNull(mapFragment.newActivityMarker);
 
         //Not on Main thread
-        while (mapFragment.googleMap != null);
-        mapFragment.onMapClick(new LatLng(0, 0));
+        while (mapFragment.googleMap == null);
 
-        assertNotNull(mapFragment.newActivityMarker);
+        mapFragment.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mapFragment.onMapClick(new LatLng(0, 0));
 
-        //When clicking on the info window, it removes the marker and creates an intent to the upload activity class
-        mapFragment.onInfoWindowClick(mapFragment.newActivityMarker);
-        assertNull(mapFragment.newActivityMarker);
+                assertNotNull(mapFragment.newActivityMarker);
+
+                //When clicking on the info window, it removes the marker and creates an intent to the upload activity class
+                mapFragment.onInfoWindowClick(mapFragment.newActivityMarker);
+                assertNull(mapFragment.newActivityMarker);
+            }
+        });
         intended(hasComponent(UploadActivityActivity.class.getName()));
     }
 
