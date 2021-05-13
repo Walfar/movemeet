@@ -8,7 +8,7 @@ import java.io.Serializable;
  *
  * */
 
-public class  User implements Serializable, FirebaseObject {
+public class User extends FirebaseObject implements Serializable {
 
     private final String fullName;
     private final String email;
@@ -60,7 +60,7 @@ public class  User implements Serializable, FirebaseObject {
         this.description = description;
         this.idUser = idUser;
         this.imageId = imageId;
-        this.documentPath = documentPath;
+        super.documentPath = documentPath;
 
     }
 
@@ -155,12 +155,11 @@ public class  User implements Serializable, FirebaseObject {
     }
 
     public String getDocumentPath() {
-        return this.documentPath;
+        return super.getDocumentPath();
     }
 
     public String setDocumentPath(String path) {
-        if (documentPath == null) documentPath = path;
-        return documentPath;
+        return super.setDocumentPath(path);
     }
 
     @Override
