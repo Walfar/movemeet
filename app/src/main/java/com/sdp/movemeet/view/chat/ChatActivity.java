@@ -50,6 +50,7 @@ import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.navigation.Navigation;
 
+import java.util.Date;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -127,14 +128,14 @@ public class ChatActivity extends AppCompatActivity {
             getRegisteredUserData();
         }
 
-        // Initializing Firebase Auth and checking if the user is signed in
+        // Initializing Firebase Authentication and checking if the user is signed in
         FirebaseInteraction.checkIfUserSignedIn(fAuth, ChatActivity.this);
 
         Intent data = getIntent();
         settingUpChatRoom(data);
 
         // The rest of the onCreate is dedicated to add all the existing messages and listening for
-        // new child entries under the "messages" path of the sport activity in our Firebase
+        // new child entries under the "chats" path of the sport activity in our Firebase
         // Realtime Database. A new element for each message is automatically added to the UI.
 
         addExistingMessagesAndListenForNewMessages();
@@ -172,7 +173,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void addExistingMessagesAndListenForNewMessages() {
-        // Use the MessageAdapter class to create the overall view of the chat room
+        // Using the MessageAdapter class to create the overall view of the chat room
         firebaseAdapter = new MessageAdapter(chatRoom, userId, ChatActivity.this);
 
         linearLayoutManager = new LinearLayoutManager(this);
@@ -317,13 +318,10 @@ public class ChatActivity extends AppCompatActivity {
     public void sendMessage(View view) {
         String userName = fullNameString;
         String messageText = messageInput.getText().toString();
-        //Message message = new Message(userName, messageText, userId, null /* no image */);
-        Message message = new Message(userName, messageText, userId, "no imageUrl" /* no image */);
+        Message message = new Message(userName, messageText, userId, "no imageUrl" /* no image */, Long.toString(new Date().getTime()));
         if (messageText.length() > 0) {
-            // The path to provide is of the form "chats/general_chat"
             Log.d(TAG, "message.getImageUrl(): " + message.getImageUrl());
-            messageManager.add(message, chatRoom.toString().split("/",4)[3]); // ✅
-            //chatRoom.push().setValue(message);
+            messageManager.add(message, chatRoom.toString().split("/",4)[3]);
             messageInput.setText("");
         } else {
             Toast.makeText(getApplicationContext(), "Empty message.", Toast.LENGTH_SHORT).show();
@@ -344,30 +342,26 @@ public class ChatActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK && data != null) {
                 final Uri uri = data.getData();
                 Log.d(TAG, "Uri: " + uri.toString());
-                //Message tempMessage = new Message(fullNameString, null, userId, LOADING_IMAGE_URL);
-                Message tempMessage = new Message(fullNameString, "Image loading...", userId, LOADING_IMAGE_URL);
-
-                //messageManager.addWithCompletionListener(tempMessage, , chatRoom.toString().split("/",4)[3]); // ✅
-
-                chatRoom.push().setValue(tempMessage, new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                        if (databaseError != null) {
-                            Log.w(TAG, "Unable to write message to database.", databaseError.toException());
-                            return;
-                        }
-                        // Building a StorageReference and then uploading the image file
-                        String key = databaseReference.getKey();
-                        StorageReference fileRef = storageReference
-                                .child(CHATS_CHILD)
-                                .child(CHAT_ROOM_ID)
-                                .child(key)
-                                .child(uri.getLastPathSegment());
-                        putImageInStorage(fileRef, uri, key);
-                    }
-                });
+                createTempMessage(uri);
             }
         }
+    }
+
+    private void createTempMessage(Uri uri) {
+        Message tempMessage = new Message(fullNameString, "Image loading...", userId, LOADING_IMAGE_URL, Long.toString(new Date().getTime()));
+        chatRoom.push().setValue(tempMessage, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    Log.w(TAG, "Unable to write message to database.", databaseError.toException());
+                    return;
+                }
+                // Building a StorageReference and then uploading the image file
+                String key = databaseReference.getKey();
+                StorageReference fileRef = storageReference.child(CHATS_CHILD).child(CHAT_ROOM_ID).child(key).child(uri.getLastPathSegment());
+                putImageInStorage(fileRef, uri, key);
+            }
+        });
     }
 
     private void putImageInStorage(StorageReference storageReference, Uri uri, final String key) {
@@ -382,12 +376,8 @@ public class ChatActivity extends AppCompatActivity {
                                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
-                                        //Message imageMessage = new Message(fullNameString, null, userId, uri.toString());
-                                        Message imageMessage = new Message(fullNameString, "no messageText", userId, uri.toString());
-
-                                        // The path to provide is of the form "chats/general_chat/-M_2IT_2qo6PzCQj27N_"
+                                        Message imageMessage = new Message(fullNameString, "no messageText", userId, uri.toString(), Long.toString(new Date().getTime()));
                                         messageManager.set(imageMessage, chatRoom.toString().split("/",4)[3] + "/" + key, null, null); // ✅
-                                        //chatRoom.child(key).setValue(imageMessage);
                                     }
                                 });
                     }

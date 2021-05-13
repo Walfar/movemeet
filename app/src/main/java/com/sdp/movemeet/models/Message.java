@@ -10,7 +10,7 @@ public class Message implements FirebaseObject {
     private String messageUser;
     private String messageText;
     private String messageUserId;
-    private long messageTime;
+    private String messageTime;
     private String imageUrl;
     private String documentPath;
 
@@ -28,8 +28,9 @@ public class Message implements FirebaseObject {
      * @param messageText   : content of the message
      * @param messageUserId : id of the user
      * @param imageUrl      : send image
+     * @param messageTime   : time at which the message has been sent
      */
-    public Message(String messageUser, String messageText, String messageUserId, String imageUrl) {
+    public Message(String messageUser, String messageText, String messageUserId, String imageUrl, String messageTime) {
 
         if (messageUser == null || messageUserId == null) {
             throw new IllegalArgumentException();
@@ -38,8 +39,8 @@ public class Message implements FirebaseObject {
         this.messageUser = messageUser;
         this.messageText = messageText;
         this.messageUserId = messageUserId;
-        this.messageTime = new Date().getTime();
         this.imageUrl = imageUrl;
+        this.messageTime = messageTime;
     }
 
     /**
@@ -66,7 +67,7 @@ public class Message implements FirebaseObject {
     /**
      * @return the time when the message is sent
      */
-    public long getMessageTime() {
+    public String getMessageTime() {
         return messageTime;
     }
 

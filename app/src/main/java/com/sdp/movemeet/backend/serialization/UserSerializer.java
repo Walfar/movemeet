@@ -16,6 +16,7 @@ public class UserSerializer implements BackendSerializer<User> {
     // The key used to access the description attribute of a serialized User
     public static final String DESCRIPTION_KEY = "description";
 
+    @Override
     public User deserialize(Map<String, Object> data) {
 
         User user = new User (
@@ -31,6 +32,7 @@ public class UserSerializer implements BackendSerializer<User> {
         return user;
     }
 
+    @Override
     public Map<String, Object> serialize(User user) {
         Map<String, Object> data = new HashMap<String, Object>();
 

@@ -71,7 +71,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         }
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String messageTimeString = simpleDateFormat.format(message.getMessageTime());
+        String messageTimeString = simpleDateFormat.format(Long.valueOf(message.getMessageTime()));
         messageTimeTextView.setText(messageTimeString);
         messageTimeTextView.setVisibility(TextView.VISIBLE);
     }
