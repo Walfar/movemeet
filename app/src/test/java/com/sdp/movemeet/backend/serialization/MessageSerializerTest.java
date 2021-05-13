@@ -1,4 +1,4 @@
-package com.sdp.movemeet.backend.serialization;
+/*package com.sdp.movemeet.backend.serialization;
 
 import com.sdp.movemeet.models.Message;
 
@@ -17,4 +17,4 @@ public class MessageSerializerTest {
         Map<String, Object> serialized = serializer.serialize(message);
         assertEquals(message, serializer.deserialize(serialized));
     }
-}
+} */
