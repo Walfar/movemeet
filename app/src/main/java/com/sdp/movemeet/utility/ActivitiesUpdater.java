@@ -16,14 +16,12 @@ import com.sdp.movemeet.models.Activity;
 
 import java.util.ArrayList;
 
-import static com.sdp.movemeet.backend.BackendActivityManager.ACTIVITIES_COLLECTION;
-
 public abstract class ActivitiesUpdater {
 
     private static BackendSerializer<Activity> serializer =new ActivitySerializer();
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static ArrayList<Activity> activities = new ArrayList<>();
-    private static FirestoreActivityManager firestoreActivityManager = new FirestoreActivityManager(FirebaseFirestore.getInstance(), ACTIVITIES_COLLECTION, serializer);
+    private static FirestoreActivityManager firestoreActivityManager = new FirestoreActivityManager(FirebaseFirestore.getInstance(), "activities", serializer);
 
     private static final String TAG = "Activities updater TAG";
 
