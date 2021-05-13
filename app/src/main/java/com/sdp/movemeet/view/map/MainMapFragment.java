@@ -141,7 +141,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     public void displayMarkerOnMapReadyAndZoomInFirstCallback() {
         displayUserMarker();
         if (first_callback) {
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), ZOOM_VALUE));
+            if (googleMap != null) googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), ZOOM_VALUE));
             first_callback = false;
         }
     }
