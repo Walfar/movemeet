@@ -105,7 +105,7 @@ public class ActivityDescriptionActivityTest {
         Intents.release();
     }
 
-    @Test
+    @Before
     public void createDescription() {
         onView(withId(R.id.activity_title_description)).perform(replaceText(DUMMY_TITLE), closeSoftKeyboard());
         onView(withId(R.id.activity_description_description)).perform(replaceText(DUMMY_DESCRIPTION), closeSoftKeyboard());
