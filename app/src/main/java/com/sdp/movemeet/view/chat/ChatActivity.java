@@ -386,7 +386,7 @@ public class ChatActivity extends AppCompatActivity {
                                         Message imageMessage = new Message(fullNameString, "no messageText", userId, uri.toString());
 
                                         // The path to provide is of the form "chats/general_chat/-M_2IT_2qo6PzCQj27N_"
-                                        messageManager.set(imageMessage, chatRoom.toString().split("/",4)[3] + "/" + key); // ✅
+                                        messageManager.set(imageMessage, chatRoom.toString().split("/",4)[3] + "/" + key, null, null); // ✅
                                         //chatRoom.child(key).setValue(imageMessage);
                                     }
                                 });

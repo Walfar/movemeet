@@ -5,8 +5,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sdp.movemeet.backend.BackendManager;
-import com.sdp.movemeet.models.FirebaseObject;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
+import com.sdp.movemeet.models.FirebaseObject;
 
 import java.util.Map;
 
@@ -58,9 +58,11 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendMana
     }
 
     @Override
-    public Task<Void> set(T object, String path) {
-        // TODO
-        return null;
+    public Task<Void> set(T object, String path, String field, String value) {
+        if (object == null) throw new IllegalArgumentException();
+        // TODO: check why the number of registered participants vary on Firebase Firestore
+        Map<String, Object> data = serializer.serialize(object);
+        return db.document(path).set(data);
     }
 
     @Override

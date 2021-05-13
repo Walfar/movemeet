@@ -26,7 +26,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -57,7 +59,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
     FirebaseAuth fAuth;
     private static final String TAG = "ActDescActivity";
-    FirestoreActivityManager firestoreManager;
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -69,7 +70,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     StorageReference storageReference;
     String userId;
     String organizerId;
-    ArrayList<String> participantNames = new ArrayList<>();
     StringBuilder participantNamesString = new StringBuilder();
 
     ImageView activityImage;
@@ -135,7 +135,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
     private void getParticipantNames() {
         ArrayList<String> participantIds = activity.getParticipantId();
-        participantNames = new ArrayList<>();
         participantNamesString = new StringBuilder();
         for (int i = 0; i < participantIds.size(); i++) {
             String currentParticipantId = participantIds.get(i);
@@ -288,21 +287,27 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      */
     public void registerToActivity(View v) {
         if (userId != null) {
-            activity.addParticipantId(userId);
-            createParticipantNumberView();
-            // check if this is good
-            activityManager.add(activity, activity.getDocumentPath()).addOnSuccessListener(new OnSuccessListener() {
-                @Override
-                public void onSuccess(Object o) {
-                    Log.d(TAG, "Participant registered in Firebase Firestore!");
-                    getParticipantNames();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d(TAG, "An error occurred! Participant may be already registered in Firebase Firestore!");
-                }
-            });
+            try {
+                activity.addParticipantId(userId);
+                createParticipantNumberView();
+                // TODO: check if this is good with Kepler
+                //activityManager.add(activity, FirestoreActivityManager.ACTIVITIES_COLLECTION + "/" + activity.getDocumentPath()).addOnSuccessListener(new OnSuccessListener() {
+                activityManager.set(activity, FirestoreActivityManager.ACTIVITIES_COLLECTION + "/" + activity.getDocumentPath(), "participantId", userId).addOnSuccessListener(new OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        Log.d(TAG, "Participant registered in Firebase Firestore!");
+                        getParticipantNames();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "An error occurred! Participant may be already registered in Firebase Firestore! Exception: " + e.getMessage());
+                    }
+                });
+            } catch (Exception e) {
+                Toast.makeText(ActivityDescriptionActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "An error occurred! Participant may be already registered in Firebase Firestore!");
+            }
         }
     }
 
@@ -360,7 +365,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         String participantName = (String) document.getData().get("fullName");
-                        participantNames.add(participantName);
                         participantNamesString.append(participantName).append(", ");
                         participantNamesView.setText(" participants" + " (" + participantNamesString + ")");
                         Log.i(TAG, "current participantName: " + participantName);
@@ -420,5 +424,11 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 FirebaseInteraction.uploadImageToFirebase(storageReference, imagePath, imageUri, activityImage, progressBar);
             }
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        finish();
     }
 }
