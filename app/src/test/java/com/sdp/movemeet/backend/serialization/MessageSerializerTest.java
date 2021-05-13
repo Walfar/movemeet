@@ -1,4 +1,4 @@
-/*package com.sdp.movemeet.backend.serialization;
+package com.sdp.movemeet.backend.serialization;
 
 import com.sdp.movemeet.models.Message;
 
@@ -15,6 +15,10 @@ public class MessageSerializerTest {
         Message message = new Message("user", "my message", "user id", "my url");
         MessageSerializer serializer = new MessageSerializer();
         Map<String, Object> serialized = serializer.serialize(message);
-        assertEquals(message, serializer.deserialize(serialized));
+        Message deserializedMessage = serializer.deserialize(serialized);
+        assertEquals(message.getMessageText(), deserializedMessage.getMessageText());
+        assertEquals(message.getMessageUser(), deserializedMessage.getMessageUser());
+        assertEquals(message.getMessageUserId(), deserializedMessage.getMessageUserId());
+        assertEquals(message.getImageUrl(), deserializedMessage.getImageUrl());
     }
-} */
+}
