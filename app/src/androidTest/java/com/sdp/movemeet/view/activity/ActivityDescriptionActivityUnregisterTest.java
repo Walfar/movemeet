@@ -79,7 +79,7 @@ public class ActivityDescriptionActivityUnregisterTest {
     @Rule
     public ActivityScenarioRule<ActivityDescriptionActivityUnregister> testRule = new ActivityScenarioRule<>(new Intent(getApplicationContext(), ActivityDescriptionActivityUnregister.class).putExtra("activity", activity));
 
-    @Before
+   /* @Before
     public void createDescription() {
          onView(withId(R.id.activity_title_description)).check(matches(withText(DUMMY_TITLE)));
         //onView(withId(R.id.activity_date_description)).check(matches(withText(String.valueOf(DUMMY_DATE))));
@@ -90,7 +90,7 @@ public class ActivityDescriptionActivityUnregisterTest {
         onView(withId(R.id.activity_organisator_description)).check(matches(withText(DUMMY_ORGANISATOR_ID)));
         //onView(withId(R.id.activity_number_description)).check(matches(withText(String.valueOf(DUMMY_NUMBER_PARTICIPANT))));
         //onView(withId(R.id.activity_participants_description)).check(matches(withText(String.valueOf(DUMMY_PARTICIPANTS_ID.size()))));
-    }
+    }*/
 
     @Test
     public void create() {

@@ -1,6 +1,9 @@
 package com.sdp.movemeet.view.activity;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
@@ -14,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.Sport;
 import com.sdp.movemeet.view.chat.ChatActivity;
@@ -23,6 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
@@ -30,6 +35,7 @@ import java.util.concurrent.CountDownLatch;
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -123,23 +129,6 @@ public class ActivityDescriptionActivityTest {
 
     }
 
-    /*@Before
-    public void createDescription() {
-        onView(withId(R.id.activity_title_description)).perform(replaceText(DUMMY_TITLE), closeSoftKeyboard());
-        onView(withId(R.id.activity_description_description)).perform(replaceText(DUMMY_DESCRIPTION), closeSoftKeyboard());
-        onView(withId(R.id.activity_date_description)).perform(replaceText(String.valueOf(DUMMY_DATE)), closeSoftKeyboard());
-        onView(withId(R.id.activity_address_description)).perform(replaceText(DUMMY_ADDRESS), closeSoftKeyboard());
-        onView(withId(R.id.activity_sport_description)).perform(replaceText(String.valueOf(DUMMY_SPORT)), closeSoftKeyboard());
-        onView(withId(R.id.activity_duration_description)).perform(replaceText(String.valueOf(DUMMY_DURATION)), closeSoftKeyboard());
-        onView(withId(R.id.activity_organisator_description)).perform(replaceText(DUMMY_ORGANISATOR_ID), closeSoftKeyboard());
-        onView(withId(R.id.activity_number_description)).perform(replaceText(String.valueOf(DUMMY_NUMBER_PARTICIPANT)), closeSoftKeyboard());
-        onView(withId(R.id.activity_participants_description)).perform(replaceText(String.valueOf(DUMMY_PARTICIPANTS_ID)), closeSoftKeyboard());
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
-    }*/
 
     @Test
     public void create() {
@@ -149,8 +138,20 @@ public class ActivityDescriptionActivityTest {
 
     @Test
     public void chatButtonIsCorrect() {
-        onView(withId(R.id.activityChatDescription)).perform(click());
+        Intents.init();
+        activity.addParticipantId(fAuth.getUid());
+
+        onView(withId(R.id.activityRegisterDescription)).perform(scrollTo(), click());
+
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+
+        onView(withId(R.id.activityChatDescription)).perform(scrollTo(), click());
         intended(hasComponent(ChatActivity.class.getName()));
+        Intents.release();
     }
 
     @After
