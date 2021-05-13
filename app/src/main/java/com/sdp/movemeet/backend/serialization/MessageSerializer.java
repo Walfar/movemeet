@@ -16,7 +16,7 @@ public class MessageSerializer implements BackendSerializer<Message> {
     // The key used to access the imageUrl attribute of a serialized Message
     public static final String MESSAGE_IMAGE_URL_KEY = "imageUrl";
 
-
+    @Override
     public Message deserialize(Map<String, Object> data) {
 
         Message message = new Message (
@@ -33,6 +33,7 @@ public class MessageSerializer implements BackendSerializer<Message> {
     }
 
 
+    @Override
     public Map<String, Object> serialize(Message message) {
 
         Map<String, Object> data = new HashMap<String, Object>();
