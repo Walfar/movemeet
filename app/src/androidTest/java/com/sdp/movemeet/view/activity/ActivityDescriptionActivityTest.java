@@ -16,6 +16,8 @@ import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.Sport;
+import com.sdp.movemeet.view.chat.ChatActivity;
+import com.sdp.movemeet.view.map.GPSRecordingActivity;
 
 import org.junit.After;
 import org.junit.Before;
@@ -29,8 +31,11 @@ import java.util.concurrent.CountDownLatch;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 ;
@@ -52,6 +57,7 @@ public class ActivityDescriptionActivityTest {
     private final static Sport DUMMY_SPORT = Sport.Running;
     private final static String DUMMY_ADDRESS = "address";
     public FirebaseAuth fAuth;
+    private String user;
 
     private FirebaseFirestore fStore;
     private StorageReference storageReference;
@@ -74,7 +80,7 @@ public class ActivityDescriptionActivityTest {
     );
 
     @Rule
-    ActivityScenarioRule<ActivityDescriptionActivity> testRule = new ActivityScenarioRule<>(new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra("activity", activity));
+    public ActivityScenarioRule<ActivityDescriptionActivity> testRule = new ActivityScenarioRule<>(new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra("activity", activity));
 
 
     @Before
@@ -99,10 +105,27 @@ public class ActivityDescriptionActivityTest {
         } catch (InterruptedException e) {
             assert (false);
         }
+        //user = fAuth.getCurrentUser().getUid();
+
+
+       /* onView(withId(R.id.activity_title_description)).perform(replaceText(DUMMY_TITLE), closeSoftKeyboard());
+        onView(withId(R.id.activity_description_description)).perform(replaceText(DUMMY_DESCRIPTION), closeSoftKeyboard());
+        onView(withId(R.id.activity_date_description)).perform(replaceText(String.valueOf(DUMMY_DATE)), closeSoftKeyboard());
+        onView(withId(R.id.activity_address_description)).perform(replaceText(DUMMY_ADDRESS), closeSoftKeyboard());
+        onView(withId(R.id.activity_sport_description)).perform(replaceText(String.valueOf(DUMMY_SPORT)), closeSoftKeyboard());
+        onView(withId(R.id.activity_duration_description)).perform(replaceText(String.valueOf(DUMMY_DURATION)), closeSoftKeyboard());
+        onView(withId(R.id.activity_organisator_description)).perform(replaceText(DUMMY_ORGANISATOR_ID), closeSoftKeyboard());
+        onView(withId(R.id.activity_number_description)).perform(replaceText(String.valueOf(DUMMY_NUMBER_PARTICIPANT)), closeSoftKeyboard());
+        onView(withId(R.id.activity_participants_description)).perform(replaceText(String.valueOf(DUMMY_PARTICIPANTS_ID)), closeSoftKeyboard());
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            assert (false);
+        }*/
 
     }
 
-    @Before
+    /*@Before
     public void createDescription() {
         onView(withId(R.id.activity_title_description)).perform(replaceText(DUMMY_TITLE), closeSoftKeyboard());
         onView(withId(R.id.activity_description_description)).perform(replaceText(DUMMY_DESCRIPTION), closeSoftKeyboard());
@@ -118,13 +141,20 @@ public class ActivityDescriptionActivityTest {
         } catch (InterruptedException e) {
             assert (false);
         }
-    }
+    }*/
 
     @Test
     public void create() {
         Intents.init();
         Intents.release();
     }
+
+    /*@Test
+    public void chatButtonIsCorrect() {
+        //activity.addParticipantId(user);
+        onView(withId(R.id.activityChatDescription)).perform(click());
+        intended(hasComponent(ChatActivity.class.getName()));
+    }*/
 
 
     @After

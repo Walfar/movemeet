@@ -22,8 +22,9 @@ import com.sdp.movemeet.R;
 /***
  *  This class create the list of activities, on witch the user is registered.
  */
-public class ActivityListActivity extends AppCompatActivity {
 
+public class ActivityListActivity extends AppCompatActivity {
+/*
     TextView fullName, email, phone;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
@@ -108,5 +109,5 @@ public class ActivityListActivity extends AppCompatActivity {
             //FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ActivityListActivity.this);
             FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ActivityListActivity.this);
         }
-    }
+    }*/
 }
