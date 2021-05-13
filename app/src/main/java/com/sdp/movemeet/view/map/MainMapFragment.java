@@ -71,6 +71,9 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
     private LocationFetcher locationFetcher;
 
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public ArrayList<Marker> activitiesMarkers;
+
     private static final String TAG = "Maps TAG";
 
     //Zoom value to animate camera on user at launch of the map
@@ -90,6 +93,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
         //At creation, we haven't called the locationCallback yet
         first_callback = true;
+        activitiesMarkers = new ArrayList<>();
 
         //Update the local list of activities from the database. On success, we update the map by dispalying the activities markers
         updateListActivities(o -> supportMapFragment.getMapAsync(googleMap -> displayNearbyMarkers()));
@@ -235,6 +239,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
             markerOpt.icon(BitmapDescriptorFactory.fromResource(chooseIcon(act)));
             Marker marker = googleMap.addMarker(markerOpt);
             marker.setTag(act);
+            activitiesMarkers.add(marker);
         }
     }
 

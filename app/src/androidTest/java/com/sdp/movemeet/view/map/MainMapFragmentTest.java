@@ -24,6 +24,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.models.Sport;
+import com.sdp.movemeet.utility.ActivitiesUpdater;
+import com.sdp.movemeet.utility.LocationFetcher;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivityUnregister;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
@@ -69,6 +71,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -131,17 +134,18 @@ public class MainMapFragmentTest {
     @Test
     public void clickingOnActivityMakesCorrectIntentWhenLogged() {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
+        while (mapFragment.googleMap == null);
         Activity act = new Activity("activity id", "organizer id", "my title", 4, new ArrayList<>(), 0, 0,
                     "desc", null, new Date(), 1, Soccer, "Dubai UAE", new Date());
-        LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
-            
-        MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
-        markerOpt.icon(BitmapDescriptorFactory.fromResource(mapFragment.chooseIcon(act)));
-        Marker marker = mapFragment.googleMap.addMarker(markerOpt);
-        marker.setTag(act);
-        mapFragment.onMarkerClick(marker);
+        ActivitiesUpdater.activities.add(act);
+        mapFragment.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mapFragment.displayNearbyMarkers();
+                mapFragment.onMarkerClick(mapFragment.activitiesMarkers.get(0));
+            }
+        });
         assertNotNull(fAuth.getCurrentUser());
-
         intended(hasComponent(ActivityDescriptionActivity.class.getName()));
     }
 
@@ -150,14 +154,14 @@ public class MainMapFragmentTest {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
         Activity act = new Activity("activity id", "organizer id", "my title", 4, new ArrayList<>(), 0, 0,
                     "desc", null, new Date(), 1, Soccer, "Dubai UAE", new Date());
-        LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
-            
-        MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
-        markerOpt.icon(BitmapDescriptorFactory.fromResource(mapFragment.chooseIcon(act)));
-        Marker marker = mapFragment.googleMap.addMarker(markerOpt);
-        marker.setTag(act);
-        mapFragment.user = null;
-        mapFragment.onMarkerClick(marker);;
+        ActivitiesUpdater.activities.add(act);
+        mapFragment.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mapFragment.displayNearbyMarkers();
+                mapFragment.onMarkerClick(mapFragment.activitiesMarkers.get(0));
+            }
+        });
         intended(hasComponent(ActivityDescriptionActivityUnregister.class.getName()));
     }
 
@@ -210,6 +214,7 @@ public class MainMapFragmentTest {
         assertNull(mapFragment.newActivityMarker);
 
         //Not on Main thread
+        while (mapFragment.googleMap != null);
         mapFragment.onMapClick(new LatLng(0, 0));
 
         assertNotNull(mapFragment.newActivityMarker);

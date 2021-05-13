@@ -21,7 +21,8 @@ import static com.sdp.movemeet.backend.BackendActivityManager.ACTIVITIES_COLLECT
 public abstract class ActivitiesUpdater {
 
     private static BackendSerializer<Activity> serializer =new ActivitySerializer();
-    private static ArrayList<Activity> activities = new ArrayList<>();
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public static ArrayList<Activity> activities = new ArrayList<>();
     private static FirestoreActivityManager firestoreActivityManager = new FirestoreActivityManager(FirebaseFirestore.getInstance(), ACTIVITIES_COLLECTION, serializer);
 
     private static final String TAG = "Activities updater TAG";
