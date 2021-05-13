@@ -227,9 +227,6 @@ public class ChatActivity extends AppCompatActivity {
                         UserSerializer userSerializer = new UserSerializer();
                         user = userSerializer.deserialize(document.getData());
                         fullNameString = user.getFullName();
-                        fullNameDrawer.setText(user.getFullName());
-                        emailDrawer.setText(user.getEmail());
-                        phoneDrawer.setText(user.getPhoneNumber());
                     } else {
                         Log.d(TAG, "No such document!");
                     }
