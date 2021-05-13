@@ -20,6 +20,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -69,8 +70,10 @@ public class UploadActivityActivity extends AppCompatActivity {
     private int minutes = 0;
 
     private EditText addressText;
-    private double latitude = 0;
-    private double longitude = 0;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public double latitude = 0;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public double longitude = 0;
 
     public boolean validParticipants, validDate, validStartTime, validLocation;
 

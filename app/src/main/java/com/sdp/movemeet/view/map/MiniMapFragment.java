@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -27,11 +28,13 @@ import static com.sdp.movemeet.view.map.MainMapFragment.ZOOM_VALUE;
 public class MiniMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     private SupportMapFragment supportMapFragment;
-    private Location currentLocation;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public Location currentLocation;
 
     private LocationFetcher locationFetcher;
 
-    private GoogleMap googleMap;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public GoogleMap googleMap;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -61,7 +64,7 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
     public void onMapReady(GoogleMap googleMap) {
 
         this.googleMap = googleMap;
-        googleMap.setOnMapClickListener(this::onMapClick);
+        if (googleMap != null) googleMap.setOnMapClickListener(this::onMapClick);
 
         if (!locationFetcher.isPermissionGranted()) {
             currentLocation = locationFetcher.getDefaultLocation();
@@ -69,10 +72,16 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
         }
     }
 
-    private void zoomOnAddressLocation() {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    /**
+     * Zooms on address location set by user, or his position if no location was set
+     * @return the address location
+     */
+    public LatLng zoomOnAddressLocation() {
         LatLng location = ((UploadActivityActivity) getActivity()).getAddressLocation();
         if (location == null) location = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, ZOOM_VALUE));
+        if (googleMap != null) googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, ZOOM_VALUE));
+        return location;
     }
 
     @Override
@@ -90,6 +99,6 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
     @Override
     public void onMapClick(LatLng latLng) {
         ((UploadActivityActivity) getActivity()).retrieveAddress(latLng);
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_VALUE));
+        if (googleMap != null) googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_VALUE));
     }
 }

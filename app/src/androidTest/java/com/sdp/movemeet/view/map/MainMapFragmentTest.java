@@ -106,14 +106,14 @@ public class MainMapFragmentTest {
 
     @Test
     public void mainMapFragmentIsDisplayedAndMapIsReadyWhenNotNull() throws InterruptedException {
-        onView(withId(R.id.fragment_map)).check(matches((isDisplayed())));
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
         mapFragment.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (mapFragment.googleMap != null) mapFragment.onMapReady(mapFragment.googleMap);
+                mapFragment.onMapReady(mapFragment.googleMap);
             }
         });
+        onView(withId(R.id.fragment_map)).check(matches((isDisplayed())));
     }
 
     @Test
@@ -142,6 +142,20 @@ public class MainMapFragmentTest {
             }
         });
     }
+
+    @Test
+    public void cameraZoomsOnlyOnFirstCall() {
+        MainMapFragment mapFragment = fragmentTestRule.getFragment();
+        mapFragment.currentLocation = new Location("current location");
+        mapFragment.currentLocation.setLatitude(0);
+        mapFragment.currentLocation.setLongitude(0);
+        mapFragment.getActivity().runOnUiThread(() -> {
+            mapFragment.first_callback = true;
+            mapFragment.displayMarkerOnMapReadyAndZoomInFirstCallback();
+            assertEquals(false, mapFragment.first_callback);
+        });
+    }
+
 
 
     @Test

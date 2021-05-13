@@ -105,7 +105,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {
                 currentLocation = locationResult.getLastLocation();
-                displayMarkerOnMapReadyAndZoomInFirstCallback();
+                supportMapFragment.getMapAsync(googleMap -> {displayMarkerOnMapReadyAndZoomInFirstCallback();});
             }
         };
         //Start fetching and updating the user's location in real time
@@ -123,29 +123,27 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         Log.d(TAG, "map is ready");
         this.googleMap = googleMap;
 
-        googleMap.setOnMarkerClickListener(this);
-        googleMap.setOnInfoWindowClickListener(this);
-        googleMap.setOnMapClickListener(this::onMapClick);
+        if (googleMap != null) {
+            googleMap.setOnMarkerClickListener(this);
+            googleMap.setOnInfoWindowClickListener(this);
+            googleMap.setOnMapClickListener(this::onMapClick);
+        }
 
         //In the case where the user didn't grant permission, we set a default location
-        if (!locationFetcher.isPermissionGranted()) {
-            currentLocation = locationFetcher.getDefaultLocation();
-        }
+        if (!locationFetcher.isPermissionGranted()) currentLocation = locationFetcher.getDefaultLocation();
+
     }
 
     /**
      * Displays the user marker on the map, when it is ready. In case this is the first callback (i.e first update), we zoom
      * on the marker
      */
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public void displayMarkerOnMapReadyAndZoomInFirstCallback() {
-        supportMapFragment.getMapAsync(googleMap -> {
-            displayUserMarker();
-            if (first_callback) {
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), ZOOM_VALUE));
-                first_callback = false;
-            }
-        });
+        displayUserMarker();
+        if (first_callback) {
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), ZOOM_VALUE));
+            first_callback = false;
+        }
     }
 
 

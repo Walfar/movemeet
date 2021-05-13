@@ -1,4 +1,4 @@
-/*package com.sdp.movemeet.view.map;
+package com.sdp.movemeet.view.map;
 
 import android.Manifest;
 import android.location.Location;
@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -39,53 +40,61 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 @RunWith(AndroidJUnit4.class)
 public class MiniMapFragmentTest {
-    private UiDevice uiDevice;
     private FirebaseAuth fAuth;
-    private FirebaseUser user;
 
 
     @Rule
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Rule
-    public FragmentTestRule<?, MiniMapFragment> fragmentTestRule =
-            FragmentTestRule.create(MiniMapFragment.class);
-
-    @Rule
+    public ActivityScenarioRule<UploadActivityActivity> testRule = new ActivityScenarioRule<>(UploadActivityActivity.class);
 
 
     @Before
     public void setUp() throws InterruptedException {
         fAuth = FirebaseAuth.getInstance();
-        fAuth.signInWithEmailAndPassword("test@test.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                user = fAuth.getCurrentUser();
-                uiDevice = UiDevice.getInstance(getInstrumentation());
-            }
-        });
-        sleep(2000);
+        fAuth.signInWithEmailAndPassword("test@test.com", "password");
     }
 
     @Test
-    public void miniMapFragment_isDisplayed() throws InterruptedException {
+    public void miniMapFragmentIsDisplayed() throws InterruptedException {
+        testRule.getScenario().onActivity(activity -> {
+            MiniMapFragment mapFragment = (MiniMapFragment) activity.getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
+            mapFragment.getActivity().runOnUiThread(() -> mapFragment.onMapReady(mapFragment.googleMap));
+        });
         onView(withId(R.id.fragment_map)).check(matches((isDisplayed())));
     }
 
     @Test
-    public void miniMapFragment_onClickSetsLocation() {
-        //What could be the right coords of the mini map ?
-        sleep(3000);
-        uiDevice.click(uiDevice.getDisplaySizeDp().x/2, uiDevice.getDisplaySizeDp().y/2);
-        sleep(2000);
-        //Casting not possible. Attach fragment to upload activity ?
-        UploadActivityActivity act = new UploadActivityActivity();
-        LatLng address = act.getAddressLocation();
-        assertNotNull(address);
+    public void noLocationSetsUserPosition() {
+        testRule.getScenario().onActivity(activity -> {
+            MiniMapFragment mapFragment = (MiniMapFragment) activity.getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
+            assertNull(mapFragment.currentLocation);
+            mapFragment.currentLocation = new Location("default user location");
+            mapFragment.currentLocation.setLongitude(0);
+            mapFragment.currentLocation.setLatitude(0);
+            assertNull(activity.getAddressLocation());
+            assertEquals(mapFragment.currentLocation.getLongitude(), mapFragment.zoomOnAddressLocation().longitude, 0);
+            assertEquals(mapFragment.currentLocation.getLatitude(), mapFragment.zoomOnAddressLocation().latitude, 0);
+        });
+    }
+
+    @Test
+    public void onClickSetsLocation() {
+        testRule.getScenario().onActivity(activity -> {
+            assertEquals(0, activity.latitude, 0);
+            assertEquals(0, activity.longitude, 0);
+            MiniMapFragment mapFragment = (MiniMapFragment) activity.getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
+            mapFragment.onMapClick(new LatLng(1, 1));
+            assertEquals(1, activity.latitude, 0);
+            assertEquals(1, activity.longitude, 0);
+        });
+
     }
 
     public boolean sleep(long millis) {
@@ -97,4 +106,4 @@ public class MiniMapFragmentTest {
         }
     }
 
-} */
+}
