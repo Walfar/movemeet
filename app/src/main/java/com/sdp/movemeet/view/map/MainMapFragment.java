@@ -159,8 +159,10 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
         //We avoid duplicating the position marker when updating the user's location
         if (positionMarker != null) positionMarker.remove();
-        positionMarker = googleMap.addMarker(markerOptions);
-        positionMarker.setTag("my position");
+        if (googleMap != null) {
+            positionMarker = googleMap.addMarker(markerOptions);
+            positionMarker.setTag("my position");
+        }
     }
 
     @Override
@@ -193,12 +195,14 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         if (user != null) {
             Log.d(TAG, "user is logged");
             //On map click, the user determines the location of his activity by displaying a marker on the map
-            Marker newActivity = googleMap.addMarker(
-                    new MarkerOptions().position(latLng).title("new activity").snippet("Click her to create new activity")
-            );
-            newActivityMarker = newActivity;
-            newActivityMarker.setTag("new activity position");
-            newActivity.showInfoWindow();
+            if (googleMap != null) {
+                Marker newActivity = googleMap.addMarker(
+                        new MarkerOptions().position(latLng).title("new activity").snippet("Click her to create new activity")
+                );
+                newActivityMarker = newActivity;
+                newActivityMarker.setTag("new activity position");
+                newActivity.showInfoWindow();
+            }
         }
     }
 
@@ -236,10 +240,12 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
             LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
 
             MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
-            markerOpt.icon(BitmapDescriptorFactory.fromResource(chooseIcon(act)));
-            Marker marker = googleMap.addMarker(markerOpt);
-            marker.setTag(act);
-            activitiesMarkers.add(marker);
+            if (googleMap != null) {
+                markerOpt.icon(BitmapDescriptorFactory.fromResource(chooseIcon(act)));
+                Marker marker = googleMap.addMarker(markerOpt);
+                marker.setTag(act);
+                activitiesMarkers.add(marker);
+            }
         }
     }
 

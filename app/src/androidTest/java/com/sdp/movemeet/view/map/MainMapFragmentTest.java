@@ -111,7 +111,7 @@ public class MainMapFragmentTest {
         mapFragment.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mapFragment.onMapReady(mapFragment.googleMap);
+                if (mapFragment.googleMap != null) mapFragment.onMapReady(mapFragment.googleMap);
             }
         });
     }
@@ -135,10 +135,10 @@ public class MainMapFragmentTest {
             public void run() {
                 assertNull(mapFragment.positionMarker);
                 mapFragment.displayUserMarker();
-                assertNotNull(mapFragment.positionMarker);
-                mapFragment.displayUserMarker();
-                assertNotNull(mapFragment.positionMarker);
-                assertEquals(mapFragment.onMarkerClick(mapFragment.positionMarker), true);
+                if (mapFragment.googleMap != null) {
+                    assertNotNull(mapFragment.positionMarker);
+                    assertEquals(mapFragment.onMarkerClick(mapFragment.positionMarker), true);
+                }
             }
         });
     }
@@ -154,11 +154,13 @@ public class MainMapFragmentTest {
             @Override
             public void run() {
                 mapFragment.displayNearbyMarkers();
-                mapFragment.onMarkerClick(mapFragment.activitiesMarkers.get(0));
+                if (mapFragment.googleMap != null) {
+                    mapFragment.onMarkerClick(mapFragment.activitiesMarkers.get(0));
+                }
             }
         });
         assertNotNull(fAuth.getCurrentUser());
-        intended(hasComponent(ActivityDescriptionActivity.class.getName()));
+        if (mapFragment.googleMap != null) intended(hasComponent(ActivityDescriptionActivity.class.getName()));
     }
 
     @Test
@@ -172,10 +174,12 @@ public class MainMapFragmentTest {
             @Override
             public void run() {
                 mapFragment.displayNearbyMarkers();
-                mapFragment.onMarkerClick(mapFragment.activitiesMarkers.get(0));
+                if (mapFragment.googleMap != null) {
+                    mapFragment.onMarkerClick(mapFragment.activitiesMarkers.get(0));
+                }
             }
         });
-        intended(hasComponent(ActivityDescriptionActivityUnregister.class.getName()));
+        if (mapFragment.googleMap != null) intended(hasComponent(ActivityDescriptionActivityUnregister.class.getName()));
     }
 
     @Test
@@ -236,14 +240,15 @@ public class MainMapFragmentTest {
             public void run() {
                 mapFragment.onMapClick(new LatLng(0, 0));
 
-                assertNotNull(mapFragment.newActivityMarker);
-
-                //When clicking on the info window, it removes the marker and creates an intent to the upload activity class
-                mapFragment.onInfoWindowClick(mapFragment.newActivityMarker);
-                assertNull(mapFragment.newActivityMarker);
+                if (mapFragment.googleMap != null) {
+                    assertNotNull(mapFragment.newActivityMarker);
+                    //When clicking on the info window, it removes the marker and creates an intent to the upload activity class
+                    mapFragment.onInfoWindowClick(mapFragment.newActivityMarker);
+                    assertNull(mapFragment.newActivityMarker);
+                }
             }
         });
-        intended(hasComponent(UploadActivityActivity.class.getName()));
+        if (mapFragment.googleMap != null) intended(hasComponent(UploadActivityActivity.class.getName()));
     }
 
     @After
