@@ -27,7 +27,6 @@ import static com.sdp.movemeet.view.map.MainMapFragment.ZOOM_VALUE;
 public class MiniMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     private SupportMapFragment supportMapFragment;
-    private FusedLocationProviderClient fusedLocationProviderClient;
     private Location currentLocation;
 
     private LocationFetcher locationFetcher;
@@ -39,9 +38,7 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(supportMapFragment.getActivity());
 
-        //
         LocationCallback locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {

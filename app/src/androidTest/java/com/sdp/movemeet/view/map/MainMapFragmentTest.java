@@ -90,7 +90,8 @@ public class MainMapFragmentTest {
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Rule
-    public ActivityScenarioRule<MainActivity> testRule = new ActivityScenarioRule<>(MainActivity.class);
+    public FragmentTestRule<?, MainMapFragment> fragmentTestRule =
+            FragmentTestRule.create(MainMapFragment.class);
 
     @Before
     public void setUp() {
@@ -102,11 +103,6 @@ public class MainMapFragmentTest {
     @Test
     public void mainMapFragmentIsDisplayedAndGMapsNotNull() throws InterruptedException {
         onView(withId(R.id.fragment_map)).check(matches((isDisplayed())));
-        testRule.getScenario().onActivity(activity ->  {
-            MainMapFragment mapFragment = (MainMapFragment) activity.getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
-            while (mapFragment.googleMap == null);
-            mapFragment.onMapReady(mapFragment.googleMap);
-        });
     }
 
     @Test
@@ -118,93 +114,86 @@ public class MainMapFragmentTest {
 
     @Test
     public void displayingUserMarkerSetsPositionMarker() {
-        testRule.getScenario().onActivity(activity ->  {
-            MainMapFragment mapFragment = (MainMapFragment) activity.getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
-            mapFragment.currentLocation = new Location("current location");
-            mapFragment.currentLocation.setLatitude(0);
-            mapFragment.currentLocation.setLongitude(0);
-            while (mapFragment.googleMap == null);
-            assertNull(mapFragment.positionMarker);
-            mapFragment.displayUserMarker();
-            assertNotNull(mapFragment.positionMarker);
-            mapFragment.displayUserMarker();
-            assertNotNull(mapFragment.positionMarker);
-            assertEquals(mapFragment.onMarkerClick(mapFragment.positionMarker), true);
-        });
+        MainMapFragment mapFragment = fragmentTestRule.getFragment();
+        mapFragment.currentLocation = new Location("current location");
+        mapFragment.currentLocation.setLatitude(0);
+        mapFragment.currentLocation.setLongitude(0);
+            
+        assertNull(mapFragment.positionMarker);
+        mapFragment.displayUserMarker();
+        assertNotNull(mapFragment.positionMarker);
+        mapFragment.displayUserMarker();
+        assertNotNull(mapFragment.positionMarker);
+        assertEquals(mapFragment.onMarkerClick(mapFragment.positionMarker), true);
     }
 
 
     @Test
     public void clickingOnActivityMakesCorrectIntentWhenLogged() {
-        testRule.getScenario().onActivity(activity ->  {
-            MainMapFragment mapFragment = (MainMapFragment) activity.getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
-            Activity act = new Activity("activity id", "organizer id", "my title", 4, new ArrayList<>(), 0, 0,
+        MainMapFragment mapFragment = fragmentTestRule.getFragment();
+        Activity act = new Activity("activity id", "organizer id", "my title", 4, new ArrayList<>(), 0, 0,
                     "desc", null, new Date(), 1, Soccer, "Dubai UAE", new Date());
-            LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
-            while (mapFragment.googleMap == null);
-            MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
-            markerOpt.icon(BitmapDescriptorFactory.fromResource(mapFragment.chooseIcon(act)));
-            Marker marker = mapFragment.googleMap.addMarker(markerOpt);
-            marker.setTag(act);
-            mapFragment.onMarkerClick(marker);
-            assertNotNull(fAuth.getCurrentUser());
-        });
+        LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
+            
+        MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
+        markerOpt.icon(BitmapDescriptorFactory.fromResource(mapFragment.chooseIcon(act)));
+        Marker marker = mapFragment.googleMap.addMarker(markerOpt);
+        marker.setTag(act);
+        mapFragment.onMarkerClick(marker);
+        assertNotNull(fAuth.getCurrentUser());
+
         intended(hasComponent(ActivityDescriptionActivity.class.getName()));
     }
 
     @Test
     public void clickingOnActivityMakesCorrectIntentWhenUnlogged() {
-        testRule.getScenario().onActivity(activity ->  {
-            MainMapFragment mapFragment = (MainMapFragment) activity.getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
-            Activity act = new Activity("activity id", "organizer id", "my title", 4, new ArrayList<>(), 0, 0,
+        MainMapFragment mapFragment = fragmentTestRule.getFragment();
+        Activity act = new Activity("activity id", "organizer id", "my title", 4, new ArrayList<>(), 0, 0,
                     "desc", null, new Date(), 1, Soccer, "Dubai UAE", new Date());
-            LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
-            while (mapFragment.googleMap == null);
-            MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
-            markerOpt.icon(BitmapDescriptorFactory.fromResource(mapFragment.chooseIcon(act)));
-            Marker marker = mapFragment.googleMap.addMarker(markerOpt);
-            marker.setTag(act);
-            mapFragment.user = null;
-            mapFragment.onMarkerClick(marker);
-        });
+        LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
+            
+        MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
+        markerOpt.icon(BitmapDescriptorFactory.fromResource(mapFragment.chooseIcon(act)));
+        Marker marker = mapFragment.googleMap.addMarker(markerOpt);
+        marker.setTag(act);
+        mapFragment.user = null;
+        mapFragment.onMarkerClick(marker);;
         intended(hasComponent(ActivityDescriptionActivityUnregister.class.getName()));
     }
 
     @Test
     public void displayingActivitiesMarkersSetsDefaultLocationWhenNull() {
-        testRule.getScenario().onActivity(activity -> {
-            MainMapFragment mapFragment = (MainMapFragment) activity.getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
-            assertNull(mapFragment.currentLocation);
-            mapFragment.displayNearbyMarkers();
-            assertEquals(mapFragment.currentLocation.getLatitude(), 0, 0);
-            assertEquals(mapFragment.currentLocation.getLongitude(), 0, 0);
-        });
+        MainMapFragment mapFragment = fragmentTestRule.getFragment();
+            
+        assertNull(mapFragment.currentLocation);
+        mapFragment.displayNearbyMarkers();
+        assertEquals(mapFragment.currentLocation.getLatitude(), 0, 0);
+        assertEquals(mapFragment.currentLocation.getLongitude(), 0, 0);
     }
 
     @Test
     public void testChooseIcons() throws InterruptedException {
-        testRule.getScenario().onActivity(activity -> {
-            MainMapFragment mapFragment = (MainMapFragment) activity.getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
-            assertEquals(R.drawable.icon_boxing, setSportIcon(Boxing, mapFragment), 0);
-            assertEquals(R.drawable.icon_windsurfing, setSportIcon(Windsurfing, mapFragment), 0);
-            assertEquals(R.drawable.icon_dancing, setSportIcon(Dancing, mapFragment), 0);
-            assertEquals(R.drawable.icon_yoga, setSportIcon(Yoga, mapFragment), 0);
-            assertEquals(R.drawable.icon_climbing, setSportIcon(Climbing, mapFragment), 0);
-            assertEquals(R.drawable.icon_golf, setSportIcon(Golf, mapFragment), 0);
-            assertEquals(R.drawable.icon_gym, setSportIcon(Gym, mapFragment), 0);
-            assertEquals(R.drawable.icon_soccer, setSportIcon(Soccer, mapFragment), 0);
-            assertEquals(R.drawable.icon_tennis, setSportIcon(Tennis, mapFragment), 0);
-            assertEquals(R.drawable.icon_volleyball, setSportIcon(VolleyBall, mapFragment), 0);
-            assertEquals(R.drawable.icon_hockey, setSportIcon(Hockey, mapFragment), 0);
-            assertEquals(R.drawable.icon_pingpong, setSportIcon(Pingpong, mapFragment), 0);
-            assertEquals(R.drawable.icon_trekking, setSportIcon(Trekking, mapFragment), 0);
-            assertEquals(R.drawable.icon_rugby, setSportIcon(Rugby, mapFragment), 0);
-            assertEquals(R.drawable.icon_badminton, setSportIcon(Badminton, mapFragment), 0);
-            assertEquals(R.drawable.icon_running, setSportIcon(Running, mapFragment), 0);
-            assertEquals(R.drawable.icon_swim, setSportIcon(Swimming, mapFragment), 0);
-            assertEquals(R.drawable.icon_tricking, setSportIcon(Tricking, mapFragment), 0);
-            assertEquals(R.drawable.icon_parkour, setSportIcon(Parkour, mapFragment), 0);
-        });
+        MainMapFragment mapFragment = fragmentTestRule.getFragment();
+
+        assertEquals(R.drawable.icon_boxing, setSportIcon(Boxing, mapFragment), 0);
+        assertEquals(R.drawable.icon_windsurfing, setSportIcon(Windsurfing, mapFragment), 0);
+        assertEquals(R.drawable.icon_dancing, setSportIcon(Dancing, mapFragment), 0);
+        assertEquals(R.drawable.icon_yoga, setSportIcon(Yoga, mapFragment), 0);
+        assertEquals(R.drawable.icon_climbing, setSportIcon(Climbing, mapFragment), 0);
+        assertEquals(R.drawable.icon_golf, setSportIcon(Golf, mapFragment), 0);
+        assertEquals(R.drawable.icon_gym, setSportIcon(Gym, mapFragment), 0);
+        assertEquals(R.drawable.icon_soccer, setSportIcon(Soccer, mapFragment), 0);
+        assertEquals(R.drawable.icon_tennis, setSportIcon(Tennis, mapFragment), 0);
+        assertEquals(R.drawable.icon_volleyball, setSportIcon(VolleyBall, mapFragment), 0);
+        assertEquals(R.drawable.icon_hockey, setSportIcon(Hockey, mapFragment), 0);
+        assertEquals(R.drawable.icon_pingpong, setSportIcon(Pingpong, mapFragment), 0);
+        assertEquals(R.drawable.icon_trekking, setSportIcon(Trekking, mapFragment), 0);
+        assertEquals(R.drawable.icon_rugby, setSportIcon(Rugby, mapFragment), 0);
+        assertEquals(R.drawable.icon_badminton, setSportIcon(Badminton, mapFragment), 0);
+        assertEquals(R.drawable.icon_running, setSportIcon(Running, mapFragment), 0);
+        assertEquals(R.drawable.icon_swim, setSportIcon(Swimming, mapFragment), 0);
+        assertEquals(R.drawable.icon_tricking, setSportIcon(Tricking, mapFragment), 0);
+        assertEquals(R.drawable.icon_parkour, setSportIcon(Parkour, mapFragment), 0);
     }
 
     private int setSportIcon(Sport sport, @NotNull MainMapFragment mapFragment) {
@@ -215,21 +204,19 @@ public class MainMapFragmentTest {
 
     @Test
     public void userClickingOnMapAddsNewActivity() throws UiObjectNotFoundException, InterruptedException {
-        testRule.getScenario().onActivity(activity -> {
-            MainMapFragment mapFragment = (MainMapFragment) activity.getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
-            //User must be logged to add new activity
-            assertNotNull(fAuth.getCurrentUser());
-            assertNull(mapFragment.newActivityMarker);
-            while (mapFragment.googleMap == null);
+        MainMapFragment mapFragment = fragmentTestRule.getFragment();
+        //User must be logged to add new activity
+        assertNotNull(fAuth.getCurrentUser());
+        assertNull(mapFragment.newActivityMarker);
 
-            mapFragment.onMapClick(new LatLng(0, 0));
+        //Not on Main thread
+        mapFragment.onMapClick(new LatLng(0, 0));
 
-            assertNotNull(mapFragment.newActivityMarker);
+        assertNotNull(mapFragment.newActivityMarker);
 
-            //When clicking on the info window, it removes the marker and creates an intent to the upload activity class
-            mapFragment.onInfoWindowClick(mapFragment.newActivityMarker);
-            assertNull(mapFragment.newActivityMarker);
-        });
+        //When clicking on the info window, it removes the marker and creates an intent to the upload activity class
+        mapFragment.onInfoWindowClick(mapFragment.newActivityMarker);
+        assertNull(mapFragment.newActivityMarker);
         intended(hasComponent(UploadActivityActivity.class.getName()));
     }
 
