@@ -53,12 +53,7 @@ public class NavigationTest {
     //@Rule
     //public ActivityScenarioRule<MainActivity> testRule = new ActivityScenarioRule<>(MainActivity.class)
 
-
-    @Test
-    public void truc(){
-
-}
-    /*@Before
+    @Before
     public void signIn(){
         MainActivity.enableNav = true;
         UploadActivityActivity.enableNav = true;
@@ -83,13 +78,13 @@ public class NavigationTest {
             assert(false);
         }
 
-        ActivityScenarioRule<MainActivity> testRule = new ActivityScenarioRule<>(MainActivity.class);
+        ActivityScenario scenario = ActivityScenario.launch(MainActivity.class);
     }
 
     @Test
     public void NavigationTest() {
 
-        ActivityScenario scenario = ActivityScenario.launch(MainActivity.class);
+        //ActivityScenario scenario = ActivityScenario.launch(MainActivity.class);
         // Open Drawer to click on navigation.
         onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
 
@@ -134,6 +129,6 @@ public class NavigationTest {
     @After
     public void SignOut() {
         fAuth.signOut();
-    }*/
+    }
 }
 
