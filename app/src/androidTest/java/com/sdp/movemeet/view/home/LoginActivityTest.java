@@ -38,12 +38,6 @@ public class LoginActivityTest {
     @Rule
     public ActivityScenarioRule<LoginActivity> LoginTestRule = new ActivityScenarioRule<>(LoginActivity.class);
 
-    @Before
-    public void unableNav() {
-        MainActivity.enableNav = false;
-    }
-
-
     @Test public void Login_Empty(){
         onView(withId(R.id.button_login)).perform(click());
     }
@@ -79,17 +73,18 @@ public class LoginActivityTest {
     }
 
     @Test
-    public void Login_TrueNonEmpty(){
+    public void Login_TrueNonEmpty() throws InterruptedException {
+        MainActivity.enableNav = false;
         onView(withId(R.id.edit_text_email))
                 .perform(typeText(Email), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password))
                 .perform(typeText(Password), closeSoftKeyboard());
         onView(withId(R.id.button_login)).perform(click());
+        Thread.sleep(2000);
     }
 
     @After
     public void signOut() {
-        MainActivity.enableNav = true;
         FirebaseAuth fAuth = FirebaseAuth.getInstance();
         if (fAuth.getCurrentUser() != null) {
             fAuth.signOut();
