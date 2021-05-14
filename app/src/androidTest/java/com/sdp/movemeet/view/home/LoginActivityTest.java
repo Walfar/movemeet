@@ -25,11 +25,12 @@ import static org.hamcrest.Matchers.not;
 
 public class LoginActivityTest {
 
-    public static final String email = "email";
-    public static final String password = "password";
+    public static final String mEmail = "email";
+    public static final String mPassword = "password";
     public static final String shortPassword = "pass";
 
-    public static final String emailTrue = "movemeet@gmail.com";
+    public static final String Email = "movemeet@gmail.com";
+    public static final String Password = "password";
 
     @Rule
     public ActivityScenarioRule<LoginActivity> LoginTestRule = new ActivityScenarioRule<>(LoginActivity.class);
@@ -40,9 +41,9 @@ public class LoginActivityTest {
 
     @Test public void Login_FalseNonEmpty() {
         onView(withId(R.id.edit_text_email))
-                .perform(typeText(email), closeSoftKeyboard());
+                .perform(typeText(mEmail), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password))
-                .perform(typeText(password), closeSoftKeyboard());
+                .perform(typeText(mPassword), closeSoftKeyboard());
         onView(withId(R.id.button_login)).perform(click());
     }
 
@@ -52,13 +53,13 @@ public class LoginActivityTest {
 
     @Test public void Login_EmptyPassword() {
         onView(withId(R.id.edit_text_email))
-                .perform(typeText(email), closeSoftKeyboard());
+                .perform(typeText(mEmail), closeSoftKeyboard());
         onView(withId(R.id.button_login)).perform(click());
     }
 
     @Test public void Login_ShortPassword() {
         onView(withId(R.id.edit_text_email))
-                .perform(typeText(email), closeSoftKeyboard());
+                .perform(typeText(mEmail), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password))
                 .perform(typeText(shortPassword), closeSoftKeyboard());
         onView(withId(R.id.button_login)).perform(click());
@@ -72,9 +73,9 @@ public class LoginActivityTest {
     @LargeTest
     public void Login_TrueNonEmpty(){
         onView(withId(R.id.edit_text_email))
-                .perform(typeText(emailTrue), closeSoftKeyboard());
+                .perform(typeText(Email), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password))
-                .perform(typeText(password), closeSoftKeyboard());
+                .perform(typeText(Password), closeSoftKeyboard());
         onView(withId(R.id.button_login)).perform(click());
     }
 
