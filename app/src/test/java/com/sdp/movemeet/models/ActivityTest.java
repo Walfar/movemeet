@@ -1,9 +1,6 @@
-package com.sdp.movemeet.modelsTest;
+package com.sdp.movemeet.models;
 
-import com.sdp.movemeet.models.Activity;
-import com.sdp.movemeet.models.Sport;
-
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Date;

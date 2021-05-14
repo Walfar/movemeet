@@ -4,6 +4,7 @@ package com.sdp.movemeet.models;
  * An object that can be found in the Firebase Realtime Database/Firestore backend
  */
 public interface FirebaseObject {
+
     /**
      * @return The path of the document in the backend.
      */

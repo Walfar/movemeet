@@ -56,7 +56,7 @@ public class ChatActivityTest {
 
     @Test
     public void chatActivityTest() {
-        CountDownLatch latch = new CountDownLatch(1);
+        CountDownLatch latch = new CountDownLatch(1); // 1
 
         fAuth = FirebaseAuth.getInstance();
         fAuth.signInWithEmailAndPassword("movemeet@gmail.com", "password").addOnSuccessListener(new OnSuccessListener<AuthResult>() {

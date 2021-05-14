@@ -1,9 +1,8 @@
-package com.sdp.movemeet.modelsTest;
-import com.sdp.movemeet.models.User;
+package com.sdp.movemeet.models;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class UserTest {
 

@@ -1,4 +1,4 @@
-package com.sdp.movemeet.viewTest.activityTest;
+package com.sdp.movemeet.view.activity;
 
 import android.content.Intent;
 import android.view.View;

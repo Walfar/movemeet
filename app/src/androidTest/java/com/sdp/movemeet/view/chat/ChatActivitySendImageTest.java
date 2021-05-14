@@ -1,17 +1,15 @@
-package com.sdp.movemeet.view.profile;
+package com.sdp.movemeet.view.chat;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.R;
-import com.sdp.movemeet.backend.FirebaseInteraction;
+import com.sdp.movemeet.view.profile.EditProfileActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -24,13 +22,11 @@ import java.io.IOException;
 
 import static junit.framework.Assert.assertTrue;
 
-public class EditProfileActivityImagePickerTest {
+public class ChatActivitySendImageTest {
 
     private StorageReference storageReference;
-    private String imagePath = "users/ydXLPxZQMXRRVHY4oGUTggDpZvp1/profile.jpg";
-
     @Rule
-    public IntentsTestRule<EditProfileActivity> activityRule = new IntentsTestRule<>(EditProfileActivity.class);
+    public IntentsTestRule<ChatActivity> activityRule = new IntentsTestRule<>(ChatActivity.class);
 
     @Before
     public void setUp() {
@@ -42,14 +38,16 @@ public class EditProfileActivityImagePickerTest {
     }
 
     @Test
-    public void uploadImageToFirebaseStorage() {
+    public void sendImageViaChat() {
         File dir = activityRule.getActivity().getExternalCacheDir();
         File file = new File(dir.getPath(), "pickImageResult.jpeg");
         Uri imageUri = Uri.fromFile(file);
-        ProgressBar progressBar = activityRule.getActivity().findViewById(R.id.progress_bar_edit_profile);
-        ImageView profileImage = activityRule.getActivity().findViewById(R.id.image_view_edit_profile_image);
-        FirebaseInteraction.uploadImageToFirebase(storageReference, imagePath, imageUri, profileImage, progressBar);
+        String fullNameString = "Anthony";
+        String userId = "xzkBeYkTY7ccFIYY6F9OHDuup8I2";
+        activityRule.getActivity().createTempMessage(imageUri, fullNameString, userId);
     }
+
+
 
     private void savePickedImage() {
         Bitmap bm = BitmapFactory.decodeResource(activityRule.getActivity().getResources(), R.drawable.run_man);
