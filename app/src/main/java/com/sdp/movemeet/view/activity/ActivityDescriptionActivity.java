@@ -59,6 +59,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private static final String TAG = "ActDescActivity";
     FirestoreActivityManager firestoreManager;
 
+    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    public static boolean enableNav = true;
+
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
@@ -111,12 +114,11 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             finish();
         }
 
-        createDrawer();
         if (activity != null) {
             displayDescriptionActivityData();
         }
 
-        handleRegisterUser();
+        if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
     }
 
 
@@ -140,68 +142,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         for (int i = 0; i < participantIds.size(); i++) {
             String currentParticipantId = participantIds.get(i);
             getCurrentParticipantName(currentParticipantId);
-        }
-    }
-
-    public void createDrawer() {
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-        textView = findViewById(R.id.textView);
-        toolbar = findViewById(R.id.toolbar);
-
-        navigationView.bringToFront();
-        ActionBarDrawerToggle toggle = new
-                ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-
-        View hView = navigationView.inflateHeaderView(R.layout.header);
-
-        fullName = hView.findViewById(R.id.text_view_profile_name);
-        phone = hView.findViewById(R.id.text_view_profile_phone);
-        email = hView.findViewById(R.id.text_view_profile_email);
-
-        toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
-        navigationView.setCheckedItem(R.id.nav_add_activity);
-    }
-
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.nav_home:
-                Navigation.goToHome(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_edit_profile:
-                Navigation.goToUserProfileActivity(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_add_activity:
-                Navigation.goToActivityUpload(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_logout:
-                FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
-                finish();
-                break;
-            case R.id.nav_start_activity:
-                break;
-            case R.id.nav_chat:
-                Navigation.goToChat(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_list_activities:
-                Navigation.goToListOfActivities(this.navigationView);
-                finish();
-                break;
-        }
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    public void handleRegisterUser() {
-        if (userId != null) {
-            TextView[] textViewArray = {fullName, email, phone};
-            FirebaseInteraction.retrieveDataFromFirebase(fStore, userId, textViewArray, ActivityDescriptionActivity.this);
         }
     }
 

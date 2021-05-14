@@ -19,6 +19,7 @@ import static org.junit.Assert.assertNull;
 public class DistanceCalculatorTest {
     @Test
     public void constructorIsCorrect() {
+
         DistanceCalculator dc = new DistanceCalculator(0., 0.);
     }
 
@@ -91,6 +92,7 @@ public class DistanceCalculatorTest {
     @Test
     public void distanceCalculationIsCorrect() {
         // this implementation was used: http://www.movable-type.co.uk/scripts/latlong.html
+
 
         DistanceCalculator dc = new DistanceCalculator(0., 0.);
         assertEquals(493.1, dc.calculateDistance(0., 0., 2.45, 3.697), 0.1);
