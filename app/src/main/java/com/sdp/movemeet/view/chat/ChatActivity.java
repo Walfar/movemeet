@@ -65,14 +65,13 @@ public class ChatActivity extends AppCompatActivity {
 
     private static final String LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif";
 
-    private LinearLayoutManager linearLayoutManager;
+    public static final String noMessageText = "no messageText";
+    public static final String noImageUrl = "no imageUrl";
 
     // Firebase instance variables
     BackendManager<Message> messageManager;
     BackendManager<User> userManager;
     private FirebaseAuth fAuth;
-    private FirebaseDatabase database;
-    private FirebaseFirestore fStore;
     private StorageReference storageReference;
     private DatabaseReference chatRef;
     private DatabaseReference chatRoom;
@@ -109,7 +108,7 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         // Initializing Firebase Realtime Database
-        database = FirebaseDatabase.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
         chatRef = database.getReference().child(CHATS_CHILD); // "chats" node reference in Firebase Realtime Database
 
         messageInput = findViewById(R.id.message_input_text);
@@ -123,7 +122,7 @@ public class ChatActivity extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         if (fAuth.getCurrentUser() != null) {
             userId = fAuth.getCurrentUser().getUid();
-            fStore = FirebaseFirestore.getInstance();
+            FirebaseFirestore fStore = FirebaseFirestore.getInstance();
             storageReference = FirebaseStorage.getInstance().getReference();
             userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
             getRegisteredUserData();
@@ -177,7 +176,7 @@ public class ChatActivity extends AppCompatActivity {
         // Using the MessageAdapter class to create the overall view of the chat room
         firebaseAdapter = new MessageAdapter(chatRoom, userId, ChatActivity.this);
 
-        linearLayoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
         messageRecyclerView.setLayoutManager(linearLayoutManager);
         messageRecyclerView.setAdapter(firebaseAdapter);
@@ -319,7 +318,7 @@ public class ChatActivity extends AppCompatActivity {
     public void sendMessage(View view) {
         String userName = fullNameString;
         String messageText = messageInput.getText().toString();
-        Message message = new Message(userName, messageText, userId, "no imageUrl" /* no image */, Long.toString(new Date().getTime()));
+        Message message = new Message(userName, messageText, userId, noImageUrl, Long.toString(new Date().getTime()));
         if (messageText.length() > 0) {
             Log.d(TAG, "message.getImageUrl(): " + message.getImageUrl());
             messageManager.add(message, chatRoom.toString().split("/",4)[3]);
@@ -379,7 +378,7 @@ public class ChatActivity extends AppCompatActivity {
                                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
-                                        Message imageMessage = new Message(fullNameString, "no messageText", userId, uri.toString(), Long.toString(new Date().getTime()));
+                                        Message imageMessage = new Message(fullNameString, noMessageText, userId, uri.toString(), Long.toString(new Date().getTime()));
                                         messageManager.set(imageMessage, chatRoom.toString().split("/",4)[3] + "/" + key, null, null); // ✅
                                     }
                                 });
