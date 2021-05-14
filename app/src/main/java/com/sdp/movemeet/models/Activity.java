@@ -15,10 +15,11 @@ import java.util.Locale;
  *
  * */
 
-public class Activity implements Serializable, FirebaseObject {
+public class Activity extends FirebaseObject implements Serializable {
 
     private final String activityId;
     private final String organizerId;
+    private String documentPath;
     private String title;
     private int numberParticipant;
     private ArrayList<String> participantsId;
@@ -34,7 +35,6 @@ public class Activity implements Serializable, FirebaseObject {
     private Date createdAt;
 
     private DocumentReference backendRef;
-    private String documentPath;
 
     static  private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
 
@@ -84,7 +84,7 @@ public class Activity implements Serializable, FirebaseObject {
         this.longitude = longitude;
         this.latitude = latitude;
         this.description = description;
-        this.documentPath = documentPath;
+        super.documentPath = documentPath;
         this.date = date;
         this.duration = duration;
         this.sport = sport;
@@ -334,14 +334,6 @@ public class Activity implements Serializable, FirebaseObject {
         return backendRef;
     }
 
-    public String getDocumentPath() {
-        return this.documentPath;
-    }
-
-    public String setDocumentPath(String path) {
-        if (documentPath == null) documentPath = path;
-        return documentPath;
-    }
 
     @Override
     public String toString(){

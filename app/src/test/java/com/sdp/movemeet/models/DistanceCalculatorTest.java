@@ -19,12 +19,13 @@ import static org.junit.Assert.assertNull;
 public class DistanceCalculatorTest {
     @Test
     public void constructorIsCorrect() {
-        DistanceCalculator dc = new DistanceCalculator(0.,0.);
+
+        DistanceCalculator dc = new DistanceCalculator(0., 0.);
     }
 
     @Test
     public void settingAndGettingIsCorrect() {
-        DistanceCalculator dc = new DistanceCalculator(0.,0.);
+        DistanceCalculator dc = new DistanceCalculator(0., 0.);
         ArrayList<Activity> activityArrayList = new ArrayList<Activity>();
 
         final String DUMMY_ACTIVITY_ID = "12345";
@@ -92,14 +93,15 @@ public class DistanceCalculatorTest {
     public void distanceCalculationIsCorrect() {
         // this implementation was used: http://www.movable-type.co.uk/scripts/latlong.html
 
-        DistanceCalculator dc = new DistanceCalculator(0.,0.);
+
+        DistanceCalculator dc = new DistanceCalculator(0., 0.);
         assertEquals(493.1, dc.calculateDistance(0., 0., 2.45, 3.697), 0.1);
         assertEquals(959.2, dc.calculateDistance(0., 0., 2.45 + 3, 3.697 + 3), 0.1);
     }
 
     @Test
     public void methodsReturnNullIfNotSorted() {
-        DistanceCalculator dc = new DistanceCalculator(0.,0.);
+        DistanceCalculator dc = new DistanceCalculator(0., 0.);
         ArrayList<Activity> activityArrayList = new ArrayList<Activity>();
 
         final String DUMMY_ACTIVITY_ID = "12345";
@@ -161,7 +163,7 @@ public class DistanceCalculatorTest {
 
     @Test
     public void isSortedIsCorrect() {
-        DistanceCalculator dc = new DistanceCalculator(0.,0.);
+        DistanceCalculator dc = new DistanceCalculator(0., 0.);
         ArrayList<Activity> activityArrayList = new ArrayList<Activity>();
 
         final String DUMMY_ACTIVITY_ID = "12345";
@@ -225,14 +227,14 @@ public class DistanceCalculatorTest {
 
     @Test
     public void edgeCases() {
-        DistanceCalculator dc = new DistanceCalculator(0.,0.);
+        DistanceCalculator dc = new DistanceCalculator(0., 0.);
 
         dc.sort();
     }
 
     @Test
     public void unsorted() {
-        DistanceCalculator dc = new DistanceCalculator(0.,0.);
+        DistanceCalculator dc = new DistanceCalculator(0., 0.);
         ArrayList<Activity> activityArrayList = new ArrayList<Activity>();
 
         final String DUMMY_ACTIVITY_ID = "12345";
@@ -297,7 +299,7 @@ public class DistanceCalculatorTest {
 
     @Test
     public void empty() {
-        DistanceCalculator dc = new DistanceCalculator(0.,0.);
+        DistanceCalculator dc = new DistanceCalculator(0., 0.);
         ArrayList<Activity> activityArrayList = new ArrayList<Activity>();
 
         dc.setActivities(activityArrayList);
@@ -307,4 +309,131 @@ public class DistanceCalculatorTest {
         assertEquals(false, dc.isSorted());
 
     }
+
+    @Test
+    public void moreThanAvailableIsRequested() {
+        DistanceCalculator dc = new DistanceCalculator(0., 0.);
+        ArrayList<Activity> activityArrayList = new ArrayList<Activity>();
+
+        final String DUMMY_ACTIVITY_ID = "12345";
+        final String DUMMY_ORGANISATOR_ID = "1";
+        final String DUMMY_TITLE = "title";
+        final int DUMMY_NUMBER_PARTICIPANT = 2;
+        final ArrayList<String> DUMMY_PARTICIPANTS_ID = new ArrayList<String>();
+        final double DUMMY_LONGITUDE = 2.45;
+        final double DUMMY_LATITUDE = 3.697;
+        final String DUMMY_DESCRIPTION = "description";
+        final String DUMMY_DOCUMENT_PATH = "documentPath";
+        final Date DUMMY_DATE = new Date(2021, 11, 10, 1, 10);
+        final Date DUMMY_CREATION_DATE = new Date();
+        final double DUMMY_DURATION = 10.4;
+        final Sport DUMMY_SPORT = Sport.Running;
+        final String DUMMY_ADDRESS = "address";
+
+        Activity activity = new Activity(
+                DUMMY_ACTIVITY_ID,
+                DUMMY_ORGANISATOR_ID,
+                DUMMY_TITLE,
+                DUMMY_NUMBER_PARTICIPANT,
+                DUMMY_PARTICIPANTS_ID,
+                DUMMY_LONGITUDE + 30,
+                DUMMY_LATITUDE + 30,
+                DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
+                DUMMY_DATE,
+                DUMMY_DURATION,
+                DUMMY_SPORT,
+                DUMMY_ADDRESS,
+                DUMMY_CREATION_DATE);
+
+        Activity activity2 = new Activity(
+                DUMMY_ACTIVITY_ID,
+                DUMMY_ORGANISATOR_ID,
+                DUMMY_TITLE,
+                DUMMY_NUMBER_PARTICIPANT,
+                DUMMY_PARTICIPANTS_ID,
+                DUMMY_LONGITUDE + 0,
+                DUMMY_LATITUDE + 0,
+                DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
+                DUMMY_DATE,
+                DUMMY_DURATION,
+                DUMMY_SPORT,
+                DUMMY_ADDRESS,
+                DUMMY_CREATION_DATE);
+
+        activityArrayList.add(activity);
+        activityArrayList.add(activity2);
+
+        dc.setActivities(activityArrayList);
+        dc.calculateDistances();
+        dc.sort();
+
+        assertEquals(dc.getAllActivities(), dc.getTopActivities(8));
+        assertEquals(activity2, dc.getTopActivities(1).get(0));
+    }
+
+    @Test
+    public void zeroRadiusReturnsNoActivities() {
+        DistanceCalculator dc = new DistanceCalculator(0., 0.);
+        ArrayList<Activity> activityArrayList = new ArrayList<Activity>();
+
+        final String DUMMY_ACTIVITY_ID = "12345";
+        final String DUMMY_ORGANISATOR_ID = "1";
+        final String DUMMY_TITLE = "title";
+        final int DUMMY_NUMBER_PARTICIPANT = 2;
+        final ArrayList<String> DUMMY_PARTICIPANTS_ID = new ArrayList<String>();
+        final double DUMMY_LONGITUDE = 2.45;
+        final double DUMMY_LATITUDE = 3.697;
+        final String DUMMY_DESCRIPTION = "description";
+        final String DUMMY_DOCUMENT_PATH = "documentPath";
+        final Date DUMMY_DATE = new Date(2021, 11, 10, 1, 10);
+        final Date DUMMY_CREATION_DATE = new Date();
+        final double DUMMY_DURATION = 10.4;
+        final Sport DUMMY_SPORT = Sport.Running;
+        final String DUMMY_ADDRESS = "address";
+
+        Activity activity = new Activity(
+                DUMMY_ACTIVITY_ID,
+                DUMMY_ORGANISATOR_ID,
+                DUMMY_TITLE,
+                DUMMY_NUMBER_PARTICIPANT,
+                DUMMY_PARTICIPANTS_ID,
+                DUMMY_LONGITUDE + 30,
+                DUMMY_LATITUDE + 30,
+                DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
+                DUMMY_DATE,
+                DUMMY_DURATION,
+                DUMMY_SPORT,
+                DUMMY_ADDRESS,
+                DUMMY_CREATION_DATE);
+
+        Activity activity2 = new Activity(
+                DUMMY_ACTIVITY_ID,
+                DUMMY_ORGANISATOR_ID,
+                DUMMY_TITLE,
+                DUMMY_NUMBER_PARTICIPANT,
+                DUMMY_PARTICIPANTS_ID,
+                DUMMY_LONGITUDE + 0,
+                DUMMY_LATITUDE + 0,
+                DUMMY_DESCRIPTION,
+                DUMMY_DOCUMENT_PATH,
+                DUMMY_DATE,
+                DUMMY_DURATION,
+                DUMMY_SPORT,
+                DUMMY_ADDRESS,
+                DUMMY_CREATION_DATE);
+
+        activityArrayList.add(activity);
+        activityArrayList.add(activity2);
+
+        dc.setActivities(activityArrayList);
+        dc.calculateDistances();
+        dc.sort();
+
+        assertEquals(new ArrayList<Activity>(), dc.getActivitiesInRadius(0.0));
+        assertNotEquals(new ArrayList<Activity>(), dc.getActivitiesInRadius(1000.0));
+    }
+
 }

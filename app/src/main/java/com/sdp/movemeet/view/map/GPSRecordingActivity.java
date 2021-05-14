@@ -96,6 +96,10 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
     }
 
 
+    /**
+     * Toggles the recording of the GPS path
+     * @param view the current View
+     */
     public void toggleRecording(View view) {
         recording = !recording;
         recButton.setText(BTN_TEXT_RES.get(recording));
@@ -112,7 +116,7 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
     }
 
 
-    public void updatePath(Location location) {
+    private void updatePath(Location location) {
         if (location == null) location = locationFetcher.getDefaultLocation();
         if (recording) {
             LatLng newPosition = new LatLng(location.getLatitude(), location.getLongitude());

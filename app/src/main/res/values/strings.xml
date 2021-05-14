@@ -138,7 +138,7 @@
     <string name="activity_description_date">date</string>
     <string name="activity_description_duration">Duration</string>
     <string name="activity_description_address">Address</string>
-    <string name="activity_description_description">Address</string>
+    <string name="activity_description_description">Description</string>
     <string name="activity_description_register_button">Register</string>
     <string name="activity_description_how_to_go_button">How to Go ?</string>
     <string name="activity_description_chat_button">Chat</string>

@@ -1,6 +1,6 @@
 package com.sdp.movemeet.models;
 
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.ArrayList;
 import java.util.Date;

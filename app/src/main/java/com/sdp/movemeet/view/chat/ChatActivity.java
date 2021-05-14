@@ -55,6 +55,9 @@ import java.util.Date;
 
 public class ChatActivity extends AppCompatActivity {
 
+    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    public static boolean enableNav = true;
+
     private static final String TAG = "ChatActivity";
     public static final String CHATS_CHILD = "chats";
 
@@ -140,7 +143,7 @@ public class ChatActivity extends AppCompatActivity {
 
         addExistingMessagesAndListenForNewMessages();
 
-        createDrawer();
+        if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
 
         // The aim is to block any direct access to this page if the user is not logged in
         if (fAuth.getCurrentUser() == null) {
@@ -148,28 +151,6 @@ public class ChatActivity extends AppCompatActivity {
             finish();
         }
 
-    }
-
-    public void createDrawer() {
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-        textView = findViewById(R.id.textView);
-        toolbar = findViewById(R.id.toolbar);
-
-        navigationView.bringToFront();
-        ActionBarDrawerToggle toggle = new
-                ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-
-        View hView = navigationView.inflateHeaderView(R.layout.header);
-
-        fullNameDrawer = hView.findViewById(R.id.text_view_profile_name);
-        phoneDrawer = hView.findViewById(R.id.text_view_profile_phone);
-        emailDrawer = hView.findViewById(R.id.text_view_profile_email);
-
-        toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
-        navigationView.setCheckedItem(R.id.nav_chat);
     }
 
     private void addExistingMessagesAndListenForNewMessages() {
@@ -229,39 +210,6 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.nav_home:
-                Navigation.goToHome(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_edit_profile:
-                Navigation.goToUserProfileActivity(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_add_activity:
-                Navigation.goToActivityUpload(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_logout:
-                FirebaseInteraction.logoutIfUserNonNull(fAuth, this);
-                finish();
-                break;
-            case R.id.nav_start_activity:
-                Navigation.startActivity(this.navigationView);
-                finish();
-                break;
-            case R.id.nav_chat:
-                break;
-            case R.id.nav_list_activities:
-                Navigation.goToListOfActivities(this.navigationView);
-                finish();
-                break;
-        }
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
     public void logout(View view) {
         if (fAuth.getCurrentUser() != null) {
             fAuth.getInstance().signOut(); // this will do the logout of the user from Firebase
@@ -281,9 +229,9 @@ public class ChatActivity extends AppCompatActivity {
                         UserSerializer userSerializer = new UserSerializer();
                         user = userSerializer.deserialize(document.getData());
                         fullNameString = user.getFullName();
-                        fullNameDrawer.setText(user.getFullName());
-                        emailDrawer.setText(user.getEmail());
-                        phoneDrawer.setText(user.getPhoneNumber());
+                        //fullNameDrawer.setText(user.getFullName());
+                        //emailDrawer.setText(user.getEmail());
+                        //phoneDrawer.setText(user.getPhoneNumber());
                     } else {
                         Log.d(TAG, "No such document!");
                     }

@@ -68,6 +68,7 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendMana
     @Override
     public Task<Void> delete(String path) {
         if (path == null || path.isEmpty()) throw new IllegalArgumentException();
+
         return db.document(path).delete();
     }
 
