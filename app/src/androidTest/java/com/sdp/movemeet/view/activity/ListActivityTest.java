@@ -1,4 +1,4 @@
-package com.sdp.movemeet.view.activity;
+/*package com.sdp.movemeet.view.activity;
 
 import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
@@ -17,38 +17,11 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.CountDownLatch;
 
-@LargeTest
 @RunWith(AndroidJUnit4.class)
 public class ListActivityTest {
 
     private FirebaseAuth fAuth;
     private FirebaseDatabase database;
 
-    @Test
-    public void listOfActivityTest() {
-        CountDownLatch latch = new CountDownLatch(1);
-        fAuth = FirebaseAuth.getInstance();
-        fAuth.signInWithEmailAndPassword("movemeet@gmail.com", "password").addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(AuthResult authResult) {
-                latch.countDown();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                assert (false);
-            }
-        });
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            assert(false);
-        }
 
-        ActivityScenario scenario = ActivityScenario.launch(ActivityListActivity.class);
-        FirebaseUser user = fAuth.getCurrentUser();
-        if(user != null){
-            FirebaseAuth.getInstance().signOut();
-        }
-    }
-}
+}*/

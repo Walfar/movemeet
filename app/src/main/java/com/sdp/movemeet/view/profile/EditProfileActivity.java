@@ -23,6 +23,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.sdp.movemeet.backend.BackendManager;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
+import com.sdp.movemeet.backend.serialization.UserSerializer;
+import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.FirebaseInteraction;
@@ -39,10 +43,11 @@ public class EditProfileActivity extends AppCompatActivity {
     ImageButton saveBtn;
 
     String userId, fullNameString, emailString, phoneString, descriptionString, userImagePath;
+    User user;
 
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
-    FirebaseUser user;
+    BackendManager<User> userManager;
     StorageReference storageReference;
 
     @Override
@@ -60,15 +65,19 @@ public class EditProfileActivity extends AppCompatActivity {
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
-        user = fAuth.getCurrentUser();
-        if (user != null) {
-            userId = user.getUid();
+
+        userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
+
+        if (fAuth.getCurrentUser() != null) {
+            userId = fAuth.getCurrentUser().getUid();
+
             storageReference = FirebaseStorage.getInstance().getReference();
             loadRegisteredUserProfilePicture(userId);
         } else {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
         }
+
     }
 
     private void assignViewsAndAdjustData() {
@@ -121,8 +130,11 @@ public class EditProfileActivity extends AppCompatActivity {
             return;
         }
         final String email = profileEmail.getText().toString();
-        if (user != null) {
-            user.updateEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
+
+        FirebaseUser fUser = fAuth.getCurrentUser();
+
+        if (fUser != null) {
+            fUser.updateEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     accessFirestoreUsersCollectionForUpdate();
@@ -136,8 +148,9 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
+
     private void accessFirestoreUsersCollectionForUpdate() {
-        DocumentReference docRef = fStore.collection("users").document(user.getUid());
+        DocumentReference docRef = fStore.collection("users").document(userId);
         Map<String, Object> edited = FirebaseInteraction.updateDataInFirebase(profileFullName, profileEmail, profilePhone, profileDescription);
         docRef.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
