@@ -3,6 +3,7 @@ package com.sdp.movemeet.models;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class UserTest {
 
@@ -251,6 +252,5 @@ public class UserTest {
     public void userConstructorFailsMissingPhone(){
         User user = new User(DUMMY_FULL_NAME, DUMMY_EMAIL, null, DUMMY_DESCRIPTION, DUMMY_USER_ID, DUMMY_IMAGE_ID, DUMMY_DOCUMENT_PATH);
     }
-
 
 }
