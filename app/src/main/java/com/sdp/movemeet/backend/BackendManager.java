@@ -1,6 +1,7 @@
 package com.sdp.movemeet.backend;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
 
 /**
  * A generic interface to perform basic storage management
@@ -15,6 +16,14 @@ public interface BackendManager<T> {
      * @return a Task, the success of which determines the success of the operation.
      */
     Task<?> add(T object, String path);
+
+    /**
+     * Set an instance of T to the backend
+     * @param object the instance of T to set.
+     * @param path the path of the instance in the backend.
+     * @return a Task, the success of which determines the success of the operation.
+     */
+    Task<?> set(T object, String path, String field, String value);
 
     /**
      * Deletes an entry of T located at the specified path in the backend.

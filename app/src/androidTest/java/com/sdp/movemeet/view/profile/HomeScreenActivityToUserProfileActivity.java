@@ -29,7 +29,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 public class HomeScreenActivityToUserProfileActivity {
 
     @Rule
-    public ActivityTestRule<HomeScreenActivity> mActivityTestRule = new ActivityTestRule<>(HomeScreenActivity.class);
+    public ActivityTestRule<HomeScreenActivity> ActivityTestRule = new ActivityTestRule<>(HomeScreenActivity.class);
 
     @Test
     public void homeScreenActivityToUserProfileActivity() {

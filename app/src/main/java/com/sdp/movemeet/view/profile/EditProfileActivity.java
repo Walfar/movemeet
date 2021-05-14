@@ -31,6 +31,8 @@ import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.FirebaseInteraction;
 
+import androidx.annotation.VisibleForTesting;
+
 import java.util.Map;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -70,7 +72,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         if (fAuth.getCurrentUser() != null) {
             userId = fAuth.getCurrentUser().getUid();
-
+            userImagePath = "users/" + userId + "/profile.jpg";
             storageReference = FirebaseStorage.getInstance().getReference();
             loadRegisteredUserProfilePicture(userId);
         } else {
@@ -98,7 +100,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void loadRegisteredUserProfilePicture(String userId) {
         progressBar.setVisibility(View.VISIBLE);
-        userImagePath = "users/" + userId + "/profile.jpg";
         StorageReference profileRef = storageReference.child(userImagePath);
         FirebaseInteraction.getImageFromFirebase(profileRef, profileImage, progressBar);
     }
@@ -117,8 +118,7 @@ public class EditProfileActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 Uri imageUri = data.getData();
                 progressBar.setVisibility(View.VISIBLE);
-                String imagePath = "users/" + userId + "/profile.jpg";
-                FirebaseInteraction.uploadImageToFirebase(storageReference, imagePath, imageUri, profileImage, progressBar);
+                FirebaseInteraction.uploadImageToFirebase(storageReference, userImagePath, imageUri, profileImage, progressBar);
             }
         }
     }
@@ -149,7 +149,8 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
 
-    private void accessFirestoreUsersCollectionForUpdate() {
+    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE) // making this method always public for testing and private otherwise
+    public void accessFirestoreUsersCollectionForUpdate() {
         DocumentReference docRef = fStore.collection("users").document(userId);
         Map<String, Object> edited = FirebaseInteraction.updateDataInFirebase(profileFullName, profileEmail, profilePhone, profileDescription);
         docRef.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
