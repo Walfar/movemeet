@@ -65,7 +65,7 @@ public class EditProfileActivityTest {
 
     @Test
     public void updateProfileByEnteringFieldsAndClickingSaveButton() {
-
+        ProfileActivity.enableNav = false;
         onView(withId(R.id.button_update_profile)).perform(click());
 
         try{
