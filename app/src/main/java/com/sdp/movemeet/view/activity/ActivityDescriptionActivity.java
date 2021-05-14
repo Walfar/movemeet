@@ -63,9 +63,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
 
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
-    public static boolean enableNav = true;
-
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
