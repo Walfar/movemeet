@@ -158,7 +158,7 @@ public class MainMapFragmentTest {
 
 
 
-    /*@Test
+    @Test
     public void clickingOnActivityMakesCorrectIntentWhenLogged() {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
         Activity act = new Activity("activity id", "organizer id", "my title", 4, new ArrayList<>(), 0, 0,
@@ -175,7 +175,7 @@ public class MainMapFragmentTest {
         });
         assertNotNull(fAuth.getCurrentUser());
         if (mapFragment.googleMap != null) intended(hasComponent(ActivityDescriptionActivity.class.getName()));
-    } */
+    }
 
     @Test
     public void clickingOnActivityMakesCorrectIntentWhenUnlogged() {
