@@ -11,6 +11,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A BackendSerializer capable of (de)serializing Activities
+ */
 public class ActivitySerializer implements BackendSerializer<Activity> {
 
     // The key used to access the activityId attribute of a serialized Activity

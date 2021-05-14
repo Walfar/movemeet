@@ -21,6 +21,7 @@ import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.models.Activity;
+import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 
 /**
