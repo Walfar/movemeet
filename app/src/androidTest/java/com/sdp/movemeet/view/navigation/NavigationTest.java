@@ -53,7 +53,9 @@ public class NavigationTest {
     //@Rule
     //public ActivityScenarioRule<MainActivity> testRule = new ActivityScenarioRule<>(MainActivity.class)
 
-    @Before
+    @Test
+    public void truc(){}
+    /*@Before
     public void signIn(){
         MainActivity.enableNav = true;
         UploadActivityActivity.enableNav = true;
@@ -129,6 +131,6 @@ public class NavigationTest {
     @After
     public void SignOut() {
         fAuth.signOut();
-    }
+    }*/
 }
 
