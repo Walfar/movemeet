@@ -71,6 +71,7 @@ public class NavigationTest {
     @Before
     public void signIn() throws InterruptedException {
         MainActivity.enableNav = false;
+        Intents.init();
         fAuth = FirebaseAuth.getInstance();
         onView(withId(R.id.edit_text_email)).perform(replaceText("antho2@gmail.com"), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password)).perform(replaceText("234567"), closeSoftKeyboard());
@@ -126,6 +127,11 @@ public class NavigationTest {
         onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
         onView(withId(R.id.nav_logout)).perform(click());
     } */
+
+    @After
+    public void releaseIntents() {
+        Intents.release();
+    }
 
     public void sleep() {
         try {
