@@ -229,10 +229,13 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
         DistanceCalculator dc = new DistanceCalculator(currentLocation.getLatitude(), currentLocation.getLongitude());
 
+        Log.d(TAG, "activities size before dc is " + getActivities().size());
         dc.setActivities(getActivities());
         dc.calculateDistances();
         dc.sort();
+        Log.d(TAG, "activities size after dc is " +  dc.getTopActivities(getActivities().size()).size());
         //For the moment, we get all activities as the distance calculator is not fully functional yet
+        int i = 0;
         for (Activity act : dc.getTopActivities(getActivities().size())) {
             //We display all activities on the corresponding location and with the icon associated to the sport
             LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
@@ -242,7 +245,9 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
                 markerOpt.icon(BitmapDescriptorFactory.fromResource(chooseIcon(act)));
                 Marker marker = googleMap.addMarker(markerOpt);
                 marker.setTag(act);
-                activitiesMarkers.add(marker);
+                //activitiesMarkers.add(marker);
+                Log.d(TAG, "i is " + i);
+                i++;
             }
         }
     }

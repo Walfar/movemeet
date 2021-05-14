@@ -11,6 +11,8 @@ import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.rule.ActivityTestRule;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -23,10 +25,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
+import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
+import com.sdp.movemeet.view.activity.ActivityListActivity;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
 import com.sdp.movemeet.view.chat.ChatActivity;
+import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.main.MainActivity;
+import com.sdp.movemeet.view.main.MainUnregisterActivity;
+import com.sdp.movemeet.view.profile.EditProfileActivity;
 import com.sdp.movemeet.view.profile.ProfileActivity;
 
 import org.junit.After;
@@ -43,6 +50,8 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
@@ -73,30 +82,42 @@ public class NavigationTest {
     public void NavigationToHomeTest() {
         onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
         onView(withId(R.id.nav_home)).perform(click());
+        intended(hasComponent(MainActivity.class.getName()));
     }
 
     @Test
     public void NavigationToAddActivityTest() {
         onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
         onView(withId(R.id.nav_add_activity)).perform(click());
+        intended(hasComponent(UploadActivityActivity.class.getName()));
     }
 
     @Test
     public void NavigationToEditProfileTest() {
         onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
         onView(withId(R.id.nav_edit_profile)).perform(click());
+        intended(hasComponent(EditProfileActivity.class.getName()));
+    }
+
+    @Test
+    public void NavigationToLogoutTest() {
+        onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
+        onView(withId(R.id.nav_logout)).perform(click());
+        intended(hasComponent(LoginActivity.class.getName()));
     }
 
     @Test
     public void NavigationToListActivitiesTest() {
         onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
         onView(withId(R.id.nav_list_activities)).perform(click());
+        intended(hasComponent(ActivityListActivity.class.getName()));
     }
 
     @Test
     public void NavigationToStartActivityTest() {
         onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
         onView(withId(R.id.nav_start_activity)).perform(click());
+        intended(hasComponent(ActivityDescriptionActivity.class.getName()));
     }
 
     //Needs a scrolldown to work !
@@ -105,11 +126,6 @@ public class NavigationTest {
         onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
         onView(withId(R.id.nav_logout)).perform(click());
     } */
-
-    @After
-    public void SignOut() {
-        fAuth.signOut();
-    }
 
     public void sleep() {
         try {

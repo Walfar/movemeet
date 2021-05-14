@@ -54,6 +54,9 @@ import com.sdp.movemeet.view.navigation.Navigation;
 
 public class ChatActivity extends AppCompatActivity {
 
+    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    public static boolean enableNav = true;
+
     private static final String TAG = "ChatActivity";
     public static final String CHATS_CHILD = "chats";
 
@@ -96,9 +99,6 @@ public class ChatActivity extends AppCompatActivity {
     TextView emailDrawer;
     TextView phoneDrawer;
     TextView initialChatWelcomeMessage;
-
-    @VisibleForTesting(otherwise= VisibleForTesting.PRIVATE)
-    public static boolean enableNav = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +148,6 @@ public class ChatActivity extends AppCompatActivity {
         }
 
     }
-
 
     private void addExistingMessagesAndListenForNewMessages() {
         // Use the MessageAdapter class to create the overall view of the chat room
@@ -207,14 +206,6 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-
-    public void logout(View view) {
-        if (fAuth.getCurrentUser() != null) {
-            fAuth.getInstance().signOut(); // this will do the logout of the user from Firebase
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        }
-    }
 
     public void getRegisteredUserData() {
         Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + userId);

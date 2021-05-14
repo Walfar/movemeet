@@ -4,6 +4,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.view.main.MainActivity;
 
 import org.junit.Before;
@@ -19,12 +20,13 @@ public class MainActivitySecurityTest {
 
     @Before
     public void checkUserNotLogged() {
+        MainActivity.enableNav = false;
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         if (firebaseAuth.getCurrentUser() != null) firebaseAuth.signOut();
     }
 
-    @Rule
-    public ActivityScenarioRule<MainActivity> testRule = new ActivityScenarioRule<>(MainActivity.class);
+    //@Rule
+    //public ActivityScenarioRule<MainActivity> testRule = new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
     public void redirectionTest() {

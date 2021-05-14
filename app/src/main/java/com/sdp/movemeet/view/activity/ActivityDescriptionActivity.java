@@ -59,6 +59,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private static final String TAG = "ActDescActivity";
     FirestoreActivityManager firestoreManager;
 
+    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    public static boolean enableNav = true;
+
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
@@ -80,9 +83,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     BackendManager<Activity> activityManager;
     BackendManager<User> userManager;
     Activity activity;
-
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
-    public static boolean enableNav = true;
 
 
     @Override
@@ -142,15 +142,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         for (int i = 0; i < participantIds.size(); i++) {
             String currentParticipantId = participantIds.get(i);
             getCurrentParticipantName(currentParticipantId);
-        }
-    }
-
-
-    public void logout(View view) {
-        if (userId != null) {
-            fAuth.signOut(); // this will do the logout of the user from Firebase
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
         }
     }
 
