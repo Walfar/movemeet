@@ -6,6 +6,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
+/**
+ * Singleton class which provides a single backend storage service instance for use inside
+ * other classes. The currently available instances are FirebaseFirestore, FirebaseDatabase,
+ * and FirebaseStorage.
+ */
 public class BackendInstanceProvider {
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
@@ -24,16 +29,23 @@ public class BackendInstanceProvider {
         database = FirebaseDatabase.getInstance();
     }
 
-
-
+    /**
+     * @return a singleton FirebaseFirestore instance
+     */
     public static FirebaseFirestore getFirestoreInstance() {
         return instance.firestore;
     }
 
+    /**
+     * @return a singleton FirebaseStorage instance
+     */
     public static FirebaseStorage getStorageInstance() {
         return instance.storage;
     }
 
+    /**
+     * @return a singleton FirebaseDatabase instance
+     */
     public static FirebaseDatabase getDatabaseInstance() {
         return instance.database;
     }
