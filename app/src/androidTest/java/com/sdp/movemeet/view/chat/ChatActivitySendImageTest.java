@@ -42,10 +42,9 @@ public class ChatActivitySendImageTest {
         File dir = activityRule.getActivity().getExternalCacheDir();
         File file = new File(dir.getPath(), "pickImageResult.jpeg");
         Uri imageUri = Uri.fromFile(file);
-
-        // TODO: send image via chat here!
-
-
+        String fullNameString = "Anthony";
+        String userId = "xzkBeYkTY7ccFIYY6F9OHDuup8I2";
+        activityRule.getActivity().createTempMessage(imageUri, fullNameString, userId);
     }
 
 

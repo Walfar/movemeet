@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -57,7 +58,7 @@ public class ChatActivity extends AppCompatActivity {
     private static final String TAG = "ChatActivity";
     public static final String CHATS_CHILD = "chats";
 
-    public static String GENERAL_CHAT_CHILD = "general_chat";
+    public static String GENERAL_CHAT_CHILD = "general_chat_new_format"; //"general_chat";
     public static String CHAT_ROOM_ID;
 
     private static final int REQUEST_IMAGE = 2;
@@ -342,12 +343,13 @@ public class ChatActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK && data != null) {
                 final Uri uri = data.getData();
                 Log.d(TAG, "Uri: " + uri.toString());
-                createTempMessage(uri);
+                createTempMessage(uri, fullNameString, userId);
             }
         }
     }
 
-    private void createTempMessage(Uri uri) {
+    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE) // making this method always public for testing and private otherwise
+    public void createTempMessage(Uri uri, String fullNameString, String userId) {
         Message tempMessage = new Message(fullNameString, "Image loading...", userId, LOADING_IMAGE_URL, Long.toString(new Date().getTime()));
         chatRoom.push().setValue(tempMessage, new DatabaseReference.CompletionListener() {
             @Override
@@ -363,6 +365,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void putImageInStorage(StorageReference storageReference, Uri uri, final String key) {
         // Upload the image to Firebase Storage

@@ -1,5 +1,7 @@
 package com.sdp.movemeet.view.profile;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -60,7 +62,7 @@ public class EditProfileActivityTest {
             assert(false);
         }
 
-        ActivityScenario scenario = ActivityScenario.launch(ProfileActivity.class);
+        //ActivityScenario scenario = ActivityScenario.launch(ProfileActivity.class);
     }
 
     @Test
@@ -68,9 +70,9 @@ public class EditProfileActivityTest {
 
         onView(withId(R.id.button_update_profile)).perform(click());
 
-        try{
+        try {
             Thread.sleep(500);
-        }catch(Exception e){}
+        } catch(Exception e) {}
 
         onView(ViewMatchers.withId(R.id.edit_text_edit_profile_full_name))
                 .perform(replaceText(TEST_FULL_NAME), closeSoftKeyboard()); // To solve the "Android :java.lang.SecurityException: Injecting to another application requires INJECT_EVENTS permission" issue --> cf.: "I solved using replaceText instead of TypeText action" (https://stackoverflow.com/questions/22163424/android-java-lang-securityexception-injecting-to-another-application-requires)
@@ -85,6 +87,23 @@ public class EditProfileActivityTest {
                 .perform(replaceText(TEST_DESCRIPTION), closeSoftKeyboard());
 
         onView(withId(R.id.button_edit_profile_save_profile_data)).perform(click());
+
+    }
+
+    @Test
+    public void testAccessFirestoreUsersCollectionForUpdate() {
+
+        try (ActivityScenario<EditProfileActivity> scenario = ActivityScenario.launch(EditProfileActivity.class)) {
+
+            scenario.onActivity(activity -> {
+                activity.accessFirestoreUsersCollectionForUpdate();
+            });
+
+        }
+        catch (Exception e) {
+            Log.d("TAG", "deleteAccount Exception: " + e);
+            e.printStackTrace();
+        }
 
     }
 
