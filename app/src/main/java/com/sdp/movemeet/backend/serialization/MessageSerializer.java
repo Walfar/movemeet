@@ -15,8 +15,10 @@ public class MessageSerializer implements BackendSerializer<Message> {
     public static final String MESSAGE_USER_ID_KEY = "messageUserId";
     // The key used to access the imageUrl attribute of a serialized Message
     public static final String MESSAGE_IMAGE_URL_KEY = "imageUrl";
+    // The key used to access the messageTime attribute of a serialized Message
+    public static final String MESSAGE_TIME_KEY = "messageTime";
 
-
+    @Override
     public Message deserialize(Map<String, Object> data) {
 
         Message message = new Message (
@@ -26,13 +28,15 @@ public class MessageSerializer implements BackendSerializer<Message> {
 
                 (String) data.get(MESSAGE_USER_ID_KEY),
 
-                (String) data.get(MESSAGE_IMAGE_URL_KEY)
+                (String) data.get(MESSAGE_IMAGE_URL_KEY),
+
+                (String) data.get(MESSAGE_TIME_KEY)
         );
 
         return message;
     }
 
-
+    @Override
     public Map<String, Object> serialize(Message message) {
 
         Map<String, Object> data = new HashMap<String, Object>();
@@ -44,6 +48,8 @@ public class MessageSerializer implements BackendSerializer<Message> {
         data.put(MESSAGE_USER_ID_KEY, message.getMessageUserId());
 
         data.put(MESSAGE_IMAGE_URL_KEY, message.getImageUrl());
+
+        data.put(MESSAGE_TIME_KEY, message.getMessageTime());
 
         return data;
     }

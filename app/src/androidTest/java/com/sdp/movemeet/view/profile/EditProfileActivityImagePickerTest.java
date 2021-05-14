@@ -10,8 +10,8 @@ import androidx.test.espresso.intent.rule.IntentsTestRule;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.FirebaseInteraction;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -39,7 +39,6 @@ public class EditProfileActivityImagePickerTest {
 
         // Saving the mocked picked image
         savePickedImage();
-        //intending(hasAction(Intent.ACTION_CHOOSER)).respondWith(getCroppedImageResult());
     }
 
     @Test
