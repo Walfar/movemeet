@@ -70,8 +70,10 @@ public class UploadActivityActivity extends AppCompatActivity {
     private int minutes = 0;
 
     private EditText addressText;
-    private double latitude = 0;
-    private double longitude = 0;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public double latitude = 0;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public double longitude = 0;
 
     public boolean validLocation;
 

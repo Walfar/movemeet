@@ -17,7 +17,7 @@ import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.Activity;
-import com.sdp.movemeet.modelsTest.ActivityTest;
+import com.sdp.movemeet.models.ActivityTest;
 
 import org.junit.Before;
 import org.junit.Test;

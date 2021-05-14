@@ -1,4 +1,4 @@
-package com.sdp.movemeet.modelsTest;
+package com.sdp.movemeet.models;
 
 import com.sdp.movemeet.utility.UserDatabase;
 

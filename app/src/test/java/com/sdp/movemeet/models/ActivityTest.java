@@ -1,7 +1,4 @@
-package com.sdp.movemeet.modelsTest;
-
-import com.sdp.movemeet.models.Activity;
-import com.sdp.movemeet.models.Sport;
+package com.sdp.movemeet.models;
 
 import org.junit.*;
 

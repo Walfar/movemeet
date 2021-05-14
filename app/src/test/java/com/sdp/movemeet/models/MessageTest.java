@@ -1,6 +1,4 @@
-package com.sdp.movemeet.modelsTest;
-
-import com.sdp.movemeet.models.Message;
+package com.sdp.movemeet.models;
 
 import org.junit.Test;
 
