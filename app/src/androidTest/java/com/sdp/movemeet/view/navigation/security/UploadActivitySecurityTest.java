@@ -1,4 +1,4 @@
-package com.sdp.movemeet.view.navigation.security;;
+/* package com.sdp.movemeet.view.navigation.security;;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -34,4 +34,4 @@ public class UploadActivitySecurityTest {
     public void redirectionTest() {
         onView(withId(R.id.button_login)).check(matches(isDisplayed()));
     }
-}
+} */

@@ -41,6 +41,7 @@ public class HomeScreenActivityLoggedTest {
 
     @Before
     public void setUp() {
+        MainActivity.enableNav = false;
         Intents.init();
         fAuth = FirebaseAuth.getInstance();
         fAuth.signInWithEmailAndPassword("test@test.com", "password").addOnSuccessListener(new OnSuccessListener<AuthResult>() {
@@ -53,6 +54,7 @@ public class HomeScreenActivityLoggedTest {
 
     @After
     public void tearDown() {
+        MainActivity.enableNav = true;
         Intents.release();
         fAuth.signOut();
     }

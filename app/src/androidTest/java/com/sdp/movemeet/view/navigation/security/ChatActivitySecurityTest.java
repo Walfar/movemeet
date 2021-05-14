@@ -1,4 +1,4 @@
-package com.sdp.movemeet.view.navigation.security;
+/*package com.sdp.movemeet.view.navigation.security;
 
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -33,4 +33,4 @@ public class ChatActivitySecurityTest {
     public void redirectionTest() {
         //onView(withId(R.id.button_login)).check(matches(isDisplayed()));
     }
-}
+} */

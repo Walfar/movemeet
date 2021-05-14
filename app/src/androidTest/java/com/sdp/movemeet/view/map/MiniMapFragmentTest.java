@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -27,7 +28,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
+import com.sdp.movemeet.view.chat.ChatActivity;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -51,20 +54,20 @@ public class MiniMapFragmentTest {
     @Rule
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
 
-    @Rule
-    public ActivityScenarioRule<UploadActivityActivity> testRule = new ActivityScenarioRule<>(UploadActivityActivity.class);
-
 
     @Before
     public void setUp() throws InterruptedException {
+        UploadActivityActivity.enableNav = false;
         fAuth = FirebaseAuth.getInstance();
         fAuth.signInWithEmailAndPassword("test@test.com", "password");
     }
 
     @Test
     public void miniMapFragmentIsDisplayed() throws InterruptedException {
-        testRule.getScenario().onActivity(activity -> {
-            MiniMapFragment mapFragment = (MiniMapFragment) activity.getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
+        ActivityScenario scenario = ActivityScenario.launch(UploadActivityActivity.class);
+        scenario.onActivity(activity -> {
+            UploadActivityActivity uploadActivity = ((UploadActivityActivity) activity);
+            MiniMapFragment mapFragment = (MiniMapFragment) uploadActivity.getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
             mapFragment.getActivity().runOnUiThread(() -> mapFragment.onMapReady(mapFragment.googleMap));
         });
         onView(withId(R.id.fragment_map)).check(matches((isDisplayed())));
@@ -72,13 +75,14 @@ public class MiniMapFragmentTest {
 
     @Test
     public void noLocationSetsUserPosition() {
-        testRule.getScenario().onActivity(activity -> {
-            MiniMapFragment mapFragment = (MiniMapFragment) activity.getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
-            assertNull(mapFragment.currentLocation);
+        ActivityScenario scenario = ActivityScenario.launch(UploadActivityActivity.class);
+        scenario.onActivity(activity -> {
+            UploadActivityActivity uploadActivity = ((UploadActivityActivity) activity);
+            MiniMapFragment mapFragment = (MiniMapFragment) uploadActivity.getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
             mapFragment.currentLocation = new Location("default user location");
             mapFragment.currentLocation.setLongitude(0);
             mapFragment.currentLocation.setLatitude(0);
-            assertNull(activity.getAddressLocation());
+            assertNull(uploadActivity.getAddressLocation());
             assertEquals(mapFragment.currentLocation.getLongitude(), mapFragment.zoomOnAddressLocation().longitude, 0);
             assertEquals(mapFragment.currentLocation.getLatitude(), mapFragment.zoomOnAddressLocation().latitude, 0);
         });
@@ -86,15 +90,21 @@ public class MiniMapFragmentTest {
 
     @Test
     public void onClickSetsLocation() {
-        testRule.getScenario().onActivity(activity -> {
-            assertEquals(0, activity.latitude, 0);
-            assertEquals(0, activity.longitude, 0);
-            MiniMapFragment mapFragment = (MiniMapFragment) activity.getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
+        ActivityScenario scenario = ActivityScenario.launch(UploadActivityActivity.class);
+        scenario.onActivity(activity -> {
+            UploadActivityActivity uploadActivity = ((UploadActivityActivity) activity);
+            assertEquals(0, uploadActivity.latitude, 0);
+            assertEquals(0, uploadActivity.longitude, 0);
+            MiniMapFragment mapFragment = (MiniMapFragment) uploadActivity.getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
             mapFragment.onMapClick(new LatLng(1, 1));
-            assertEquals(1, activity.latitude, 0);
-            assertEquals(1, activity.longitude, 0);
+            assertEquals(1, uploadActivity.latitude, 0);
+            assertEquals(1, uploadActivity.longitude, 0);
         });
+    }
 
+    @After
+    public void enableNav() {
+        UploadActivityActivity.enableNav = true;
     }
 
     public boolean sleep(long millis) {

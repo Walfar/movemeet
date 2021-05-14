@@ -1,4 +1,4 @@
-package com.sdp.movemeet.viewTest.activityTest;
+package com.sdp.movemeet.view.activity;
 
 import android.view.View;
 import android.widget.DatePicker;
@@ -85,6 +85,7 @@ public class UploadActivityActivityTest {
     public void setup() {
         // Disable navigation for tests
         UploadActivityActivity.enableNav = false;
+        MainActivity.enableNav = false;
 
         // Set up mocks and their behaviors
         // Set up fake database
@@ -363,6 +364,12 @@ public class UploadActivityActivityTest {
         });
 
         assert (wait(latch));
+    }
+
+    @After
+    public void enableNav() {
+        MainActivity.enableNav = true;
+        UploadActivityActivity.enableNav = true;
     }
 
 
