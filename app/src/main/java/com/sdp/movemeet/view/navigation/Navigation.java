@@ -42,7 +42,7 @@ public class Navigation extends AppCompatActivity {
     public static void goToChat(View view) {
         Context context = view.getContext();
         Intent intent = new Intent(context, ChatActivity.class);
-        intent.putExtra("ACTIVITY_CHAT_ID", "general_chat");
+        intent.putExtra("ACTIVITY_CHAT_ID", "general_chat_new_format"); // general_chat"
         context.startActivity(intent);
     }
 
