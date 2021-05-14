@@ -79,7 +79,6 @@ public class EditProfileActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
         }
-
     }
 
     private void assignViewsAndAdjustData() {
