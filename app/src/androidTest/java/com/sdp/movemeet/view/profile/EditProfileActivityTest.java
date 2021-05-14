@@ -62,7 +62,7 @@ public class EditProfileActivityTest {
             assert(false);
         }
 
-        //ActivityScenario scenario = ActivityScenario.launch(ProfileActivity.class);
+        ActivityScenario scenario = ActivityScenario.launch(ProfileActivity.class);
     }
 
     @Test
