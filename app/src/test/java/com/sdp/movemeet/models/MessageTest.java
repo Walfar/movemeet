@@ -2,6 +2,7 @@ package com.sdp.movemeet.models;
 
 import org.junit.Test;
 
+
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
@@ -29,6 +30,7 @@ public class MessageTest {
 
     @Test
     public void messageGetCorrect(){
+
         Message message = new Message(DUMMY_USER, DUMMY_TEXT, DUMMY_USERID, null /* no image */, Long.toString(new Date().getTime()));
         assertEquals(DUMMY_USER, message.getMessageUser());
         assertEquals(DUMMY_TEXT, message.getMessageText());

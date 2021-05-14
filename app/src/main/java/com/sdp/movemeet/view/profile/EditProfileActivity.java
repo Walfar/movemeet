@@ -79,6 +79,7 @@ public class EditProfileActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
         }
+
     }
 
     private void assignViewsAndAdjustData() {
@@ -146,6 +147,7 @@ public class EditProfileActivity extends AppCompatActivity {
             });
         }
     }
+
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE) // making this method always public for testing and private otherwise
     public void accessFirestoreUsersCollectionForUpdate() {
