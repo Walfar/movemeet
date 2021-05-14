@@ -36,6 +36,8 @@ import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Activity;
@@ -62,12 +64,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
 
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
-    TextView textView;
-
-    TextView fullName, email, phone, organizerView, numberParticipantsView, participantNamesView;
+    TextView organizerView, numberParticipantsView, participantNamesView;
     FirebaseFirestore fStore;
     StorageReference storageReference;
     String userId;
@@ -92,6 +89,12 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+        if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            finish();
+        }
+
         if (intent != null) {
             activity = (Activity) intent.getSerializableExtra("activity");
             uri = intent.getData();
@@ -100,19 +103,13 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             }
         }
 
-        fAuth = FirebaseAuth.getInstance();
-        storageReference = FirebaseStorage.getInstance().getReference();
-        fStore = FirebaseFirestore.getInstance();
-        userId = fAuth.getCurrentUser().getUid();
+        storageReference = BackendInstanceProvider.getStorageInstance().getReference();
+        fStore = BackendInstanceProvider.getFirestoreInstance();
 
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
         activityManager = new FirestoreActivityManager(fStore, FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
 
-
-        if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            finish();
-        }
+        userId = fAuth.getCurrentUser().getUid();
 
         if (activity != null) {
             displayDescriptionActivityData();
