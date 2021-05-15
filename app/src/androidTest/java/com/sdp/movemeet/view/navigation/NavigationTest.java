@@ -20,10 +20,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
+import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
 import com.sdp.movemeet.view.chat.ChatActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.main.MainActivity;
+import com.sdp.movemeet.view.profile.EditProfileActivity;
 import com.sdp.movemeet.view.profile.ProfileActivity;
 
 import org.junit.After;
@@ -59,6 +61,10 @@ public class NavigationTest {
         Navigation.profileField = false;
         MainActivity.enableNav = true;
         UploadActivityActivity.enableNav = true;
+        ActivityDescriptionActivity.enableNav = true;
+        ChatActivity.enableNav = true;
+        ProfileActivity.enableNav = true;
+
         CountDownLatch latch = new CountDownLatch(1);
 
         fAuth = FirebaseAuth.getInstance();
@@ -121,6 +127,45 @@ public class NavigationTest {
         }catch(Exception e){}
 
         onView(withId(R.id.nav_start_activity)).perform(click());
+
+        try{
+            Thread.sleep(500);
+        }catch(Exception e){}
+
+        // Open Drawer to click on navigation.
+        onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
+
+        try{
+            Thread.sleep(500);
+        }catch(Exception e){}
+
+        onView(withId(R.id.nav_list_activities)).perform(click());
+
+        try{
+            Thread.sleep(500);
+        }catch(Exception e){}
+
+        // Open Drawer to click on navigation.
+        onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
+
+        try{
+            Thread.sleep(500);
+        }catch(Exception e){}
+
+        onView(withId(R.id.nav_chat)).perform(click());
+
+        try{
+            Thread.sleep(500);
+        }catch(Exception e){}
+
+        // Open Drawer to click on navigation.
+        onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
+
+        try{
+            Thread.sleep(500);
+        }catch(Exception e){}
+
+        onView(withId(R.id.nav_edit_profile)).perform(click());
 
         try{
             Thread.sleep(500);
