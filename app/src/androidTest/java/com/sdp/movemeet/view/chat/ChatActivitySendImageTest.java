@@ -24,48 +24,48 @@ import static junit.framework.Assert.assertTrue;
 
 public class ChatActivitySendImageTest {
 
-//    private StorageReference storageReference;
-//    @Rule
-//    public IntentsTestRule<ChatActivity> activityRule = new IntentsTestRule<>(ChatActivity.class);
-//
-//    @Before
-//    public void setUp() {
-//        // Setting up Firebase Storage
-//        storageReference = FirebaseStorage.getInstance().getReference();
-//
-//        // Saving the mocked picked image
-//        savePickedImage();
-//    }
-//
-//    @Test
-//    public void sendImageViaChat() {
-//        File dir = activityRule.getActivity().getExternalCacheDir();
-//        File file = new File(dir.getPath(), "pickImageResult.jpeg");
-//        Uri imageUri = Uri.fromFile(file);
-//        String fullNameString = "Anthony";
-//        String userId = "xzkBeYkTY7ccFIYY6F9OHDuup8I2";
-//        activityRule.getActivity().createTempMessage(imageUri, fullNameString, userId);
-//    }
-//
-//
-//
-//    private void savePickedImage() {
-//        Bitmap bm = BitmapFactory.decodeResource(activityRule.getActivity().getResources(), R.drawable.run_man);
-//        assertTrue(bm != null);
-//        File dir = activityRule.getActivity().getExternalCacheDir();
-//        File file = new File(dir.getPath(), "pickImageResult.jpeg");
-//        System.out.println(file.getAbsolutePath());
-//        FileOutputStream outStream = null;
-//        try {
-//            outStream = new FileOutputStream(file);
-//            bm.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
-//            outStream.flush();
-//            outStream.close();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private StorageReference storageReference;
+    @Rule
+    public IntentsTestRule<ChatActivity> activityRule = new IntentsTestRule<>(ChatActivity.class);
+
+    @Before
+    public void setUp() {
+        // Setting up Firebase Storage
+        storageReference = FirebaseStorage.getInstance().getReference();
+
+        // Saving the mocked picked image
+        savePickedImage();
+    }
+
+    @Test
+    public void sendImageViaChat() {
+        File dir = activityRule.getActivity().getExternalCacheDir();
+        File file = new File(dir.getPath(), "pickImageResult.jpeg");
+        Uri imageUri = Uri.fromFile(file);
+        String fullNameString = "Anthony";
+        String userId = "xzkBeYkTY7ccFIYY6F9OHDuup8I2";
+        activityRule.getActivity().createTempMessage(imageUri, fullNameString, userId);
+    }
+
+
+
+    private void savePickedImage() {
+        Bitmap bm = BitmapFactory.decodeResource(activityRule.getActivity().getResources(), R.drawable.run_man);
+        assertTrue(bm != null);
+        File dir = activityRule.getActivity().getExternalCacheDir();
+        File file = new File(dir.getPath(), "pickImageResult.jpeg");
+        System.out.println(file.getAbsolutePath());
+        FileOutputStream outStream = null;
+        try {
+            outStream = new FileOutputStream(file);
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
+            outStream.flush();
+            outStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
