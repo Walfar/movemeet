@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.rule.ActivityTestRule;
@@ -20,7 +21,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
+import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
+import com.sdp.movemeet.view.activity.ActivityListActivity;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
 import com.sdp.movemeet.view.chat.ChatActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
@@ -41,6 +44,8 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.mockito.Mockito.mock;
@@ -94,6 +99,7 @@ public class NavigationTest {
 
         //ActivityScenario scenario = ActivityScenario.launch(MainActivity.class);
         // Open Drawer to click on navigation.
+        Intents.init();
         onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
 
         try{
@@ -102,9 +108,11 @@ public class NavigationTest {
 
         onView(withId(R.id.nav_home)).perform(click());
 
+
         try{
             Thread.sleep(500);
         }catch(Exception e){}
+        intended(hasComponent(MainActivity.class.getName()));
 
         // Open Drawer to click on navigation.
         onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
@@ -118,6 +126,7 @@ public class NavigationTest {
         try{
             Thread.sleep(500);
         }catch(Exception e){}
+        intended(hasComponent(UploadActivityActivity.class.getName()));
 
         // Open Drawer to click on navigation.
         onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
@@ -131,6 +140,7 @@ public class NavigationTest {
         try{
             Thread.sleep(500);
         }catch(Exception e){}
+        intended(hasComponent(ActivityDescriptionActivity.class.getName()));
 
         // Open Drawer to click on navigation.
         onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
@@ -144,6 +154,7 @@ public class NavigationTest {
         try{
             Thread.sleep(500);
         }catch(Exception e){}
+        intended(hasComponent(ActivityListActivity.class.getName()));
 
         // Open Drawer to click on navigation.
         onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
@@ -158,6 +169,8 @@ public class NavigationTest {
             Thread.sleep(500);
         }catch(Exception e){}
 
+        intended(hasComponent(ChatActivity.class.getName()));
+
         // Open Drawer to click on navigation.
         onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
 
@@ -170,6 +183,7 @@ public class NavigationTest {
         try{
             Thread.sleep(500);
         }catch(Exception e){}
+        intended(hasComponent(ProfileActivity.class.getName()));
 
     }
 
