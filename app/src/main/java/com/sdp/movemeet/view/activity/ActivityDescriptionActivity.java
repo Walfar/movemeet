@@ -144,14 +144,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
-    public void logout(View view) {
-        if (userId != null) {
-            fAuth.signOut(); // this will do the logout of the user from Firebase
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        }
-    }
-
 
     /**
      * Title of the activity
