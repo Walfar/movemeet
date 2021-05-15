@@ -53,10 +53,10 @@ public class NavigationTest {
     //@Rule
     //public ActivityScenarioRule<MainActivity> testRule = new ActivityScenarioRule<>(MainActivity.class)
 
-    @Test
-    public void truc(){}
+
     @Before
     public void signIn(){
+        Navigation.profileField = false;
         MainActivity.enableNav = true;
         UploadActivityActivity.enableNav = true;
         CountDownLatch latch = new CountDownLatch(1);
