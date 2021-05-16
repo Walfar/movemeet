@@ -74,7 +74,7 @@ public class EditProfileActivity extends AppCompatActivity {
             userId = fAuth.getCurrentUser().getUid();
             userImagePath = "users/" + userId + "/profile.jpg";
             storageReference = FirebaseStorage.getInstance().getReference();
-            loadRegisteredUserProfilePicture(userId);
+            loadRegisteredUserProfilePicture();
         } else {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
@@ -98,7 +98,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
 
-    private void loadRegisteredUserProfilePicture(String userId) {
+    private void loadRegisteredUserProfilePicture() {
         progressBar.setVisibility(View.VISIBLE);
         StorageReference profileRef = storageReference.child(userImagePath);
         FirebaseInteraction.getImageFromFirebase(profileRef, profileImage, progressBar);

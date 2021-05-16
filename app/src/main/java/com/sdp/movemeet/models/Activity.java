@@ -1,12 +1,8 @@
 package com.sdp.movemeet.models;
 
-import com.google.firebase.firestore.DocumentReference;
-
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  *
@@ -19,7 +15,6 @@ public class Activity extends FirebaseObject implements Serializable {
 
     private final String activityId;
     private final String organizerId;
-    private String documentPath;
     private String title;
     private int numberParticipant;
     private ArrayList<String> participantsId;
@@ -33,10 +28,6 @@ public class Activity extends FirebaseObject implements Serializable {
     private final Sport sport;
     private String address;
     private Date createdAt;
-
-    private DocumentReference backendRef;
-
-    static  private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
 
     /**
      * Construct a new activity
@@ -315,24 +306,6 @@ public class Activity extends FirebaseObject implements Serializable {
         return createdAt;
     }
 
-    /**
-     *
-     * @return a DocumentReference to the activity
-     */
-    public DocumentReference getBackendRef() {
-        return this.backendRef;
-    }
-
-    /**
-     * Sets the backend reference property if it was previously null, does nothing otherwise.
-     *
-     * @param newRef the new value used to reference this activity in its collection in the backend
-     * @return the DocumentReference used to reference this activity in its collection in the backend
-     */
-    public DocumentReference setBackendRef(DocumentReference newRef) throws IllegalArgumentException {
-        if (backendRef == null) backendRef = newRef;
-        return backendRef;
-    }
 
 
     @Override
@@ -361,5 +334,4 @@ public class Activity extends FirebaseObject implements Serializable {
                 sport.equals(obj.sport) && address.equals(obj.address) && createdAt.equals(obj.createdAt);
 
     }
-
 }

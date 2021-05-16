@@ -95,15 +95,7 @@ public class ChatActivity extends AppCompatActivity {
     RecyclerView messageRecyclerView;
     ImageButton btnSend;
 
-    TextView fullNameDrawer;
-    TextView emailDrawer;
-    TextView phoneDrawer;
     TextView initialChatWelcomeMessage;
-
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
-    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -63,12 +63,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
 
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
-    TextView textView;
-
-    TextView fullName, email, phone, organizerView, numberParticipantsView, participantNamesView;
+    TextView organizerView, numberParticipantsView, participantNamesView;
     FirebaseFirestore fStore;
     StorageReference storageReference;
     String userId;
@@ -90,16 +85,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
 
-        Intent intent = getIntent();
-
-        if (intent != null) {
-            activity = (Activity) intent.getSerializableExtra("activity");
-            uri = intent.getData();
-            if (uri != null) {
-                loadActivityHeaderPicture();
-            }
-        }
-
         fAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
         fStore = FirebaseFirestore.getInstance();
@@ -108,6 +93,16 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
         activityManager = new FirestoreActivityManager(fStore, FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
 
+        Intent intent = getIntent();
+
+        if (intent != null) {
+            activity = (Activity) intent.getSerializableExtra("activity");
+            loadActivityHeaderPicture();
+//            uri = intent.getData();
+//            if (uri != null) {
+//                loadActivityHeaderPicture();
+//            }
+        }
 
         if (fAuth.getCurrentUser() == null) {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
@@ -321,11 +316,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     /**
      * Load the dedicated picture of the activity
      */
-    private void loadActivityHeaderPicture() {
+    private void loadActivityHeaderPicture_old() {
         activityImage = findViewById(R.id.activity_image_description);
         progressBar = findViewById(R.id.progress_bar_activity_description);
         progressBar.setVisibility(View.VISIBLE);
-
         imagePath = "activities/" + activity.getActivityId() + "/activityImage.jpg";
         StorageReference imageRef = storageReference.child(imagePath);
         imageRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -341,6 +335,14 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             }
         });
     }
+    private void loadActivityHeaderPicture() {
+        activityImage = findViewById(R.id.activity_image_description);
+        progressBar = findViewById(R.id.progress_bar_activity_description);
+        progressBar.setVisibility(View.VISIBLE);
+        imagePath = "activities/" + activity.getActivityId() + "/activityImage.jpg"; // TODO: change ".getActivityId()" with ".getDocumentPath()" once this last method will be working again!
+        StorageReference imageRef = storageReference.child(imagePath);
+        FirebaseInteraction.getImageFromFirebase(imageRef, activityImage, progressBar);
+    }
 
     /**
      * Launch the Gallery to select a header picture for the activity
@@ -348,7 +350,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     public void changeActivityPicture(View view) {
         if (userId.equals(organizerId)) {
             Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(openGalleryIntent, 1000);
+            startActivityForResult(openGalleryIntent, 1001);
         } else {
             Toast.makeText(ActivityDescriptionActivity.this, "Only the organizer can change the header picture!", Toast.LENGTH_SHORT).show();
         }
@@ -357,7 +359,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1000) {
+        if (requestCode == 1001) {
             if (resultCode == android.app.Activity.RESULT_OK) {
                 Uri imageUri = data.getData();
                 progressBar.setVisibility(View.VISIBLE);
@@ -366,9 +368,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        finish();
-    }
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        finish();
+//    }
 }
