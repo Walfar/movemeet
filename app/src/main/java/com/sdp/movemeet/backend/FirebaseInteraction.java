@@ -51,28 +51,28 @@ public class FirebaseInteraction {
      * @param activity The activity from which this function is called
      * @return An array of TextViews containing the updated user data
      */
-    public static TextView[] retrieveDataFromFirebase(FirebaseFirestore fStore, String userId, TextView[] textViewArray, Activity activity) {
-        DocumentReference documentReference = fStore.collection("users").document(userId);
-        documentReference.addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if (documentSnapshot == null) {
-                    //nothing
-                } else if (textViewArray.length == 4) {
-                    textViewArray[0].setText(documentSnapshot.getString("fullName"));
-                    textViewArray[1].setText(documentSnapshot.getString("email"));
-                    textViewArray[2].setText(documentSnapshot.getString("phone"));
-                    textViewArray[3].setText(documentSnapshot.getString("description"));
-                } else {
-                    textViewArray[0].setText(documentSnapshot.getString("fullName"));
-                    textViewArray[1].setText(documentSnapshot.getString("email"));
-                    textViewArray[2].setText(documentSnapshot.getString("phone"));
-                }
-            }
-        });
-
-        return textViewArray;
-    }
+//    public static TextView[] retrieveDataFromFirebase(FirebaseFirestore fStore, String userId, TextView[] textViewArray, Activity activity) {
+//        DocumentReference documentReference = fStore.collection("users").document(userId);
+//        documentReference.addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+//                if (documentSnapshot == null) {
+//                    //nothing
+//                } else if (textViewArray.length == 4) {
+//                    textViewArray[0].setText(documentSnapshot.getString("fullName"));
+//                    textViewArray[1].setText(documentSnapshot.getString("email"));
+//                    textViewArray[2].setText(documentSnapshot.getString("phone"));
+//                    textViewArray[3].setText(documentSnapshot.getString("description"));
+//                } else {
+//                    textViewArray[0].setText(documentSnapshot.getString("fullName"));
+//                    textViewArray[1].setText(documentSnapshot.getString("email"));
+//                    textViewArray[2].setText(documentSnapshot.getString("phone"));
+//                }
+//            }
+//        });
+//
+//        return textViewArray;
+//    }
 
     /**
      * Create a HashMap containing the user data to be updated in Firebase Firestore. This function
@@ -157,7 +157,9 @@ public class FirebaseInteraction {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Log.d(TAG, "Image could not be fetched from Firebase Storage!");
+                Log.d(TAG, "Image could not be fetched from Firebase Storage! Don't panic!" +
+                        "It's probably because no images have been saved in Firebase Storage for" +
+                        "this document yet!");
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }

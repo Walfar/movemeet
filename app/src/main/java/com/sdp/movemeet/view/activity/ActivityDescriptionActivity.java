@@ -98,10 +98,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (intent != null) {
             activity = (Activity) intent.getSerializableExtra("activity");
             loadActivityHeaderPicture();
-//            uri = intent.getData();
-//            if (uri != null) {
-//                loadActivityHeaderPicture();
-//            }
         }
 
         if (fAuth.getCurrentUser() == null) {
@@ -225,9 +221,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             try {
                 activity.addParticipantId(userId);
                 createParticipantNumberView();
-                // TODO: check if this is good with Kepler
+                // TODO: check with Kepler why this creates another activity!
                 //activityManager.add(activity, FirestoreActivityManager.ACTIVITIES_COLLECTION + "/" + activity.getDocumentPath()).addOnSuccessListener(new OnSuccessListener() {
-                activityManager.set(activity, FirestoreActivityManager.ACTIVITIES_COLLECTION + "/" + activity.getDocumentPath(), "participantId", userId).addOnSuccessListener(new OnSuccessListener() {
+                activityManager.updt(userId, FirestoreActivityManager.ACTIVITIES_COLLECTION + "/" + activity.getDocumentPath(), "participantId").addOnSuccessListener(new OnSuccessListener() { // "participantId", userId // String field, String value
                     @Override
                     public void onSuccess(Object o) {
                         Log.d(TAG, "Participant registered in Firebase Firestore!");
@@ -316,25 +312,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     /**
      * Load the dedicated picture of the activity
      */
-    private void loadActivityHeaderPicture_old() {
-        activityImage = findViewById(R.id.activity_image_description);
-        progressBar = findViewById(R.id.progress_bar_activity_description);
-        progressBar.setVisibility(View.VISIBLE);
-        imagePath = "activities/" + activity.getActivityId() + "/activityImage.jpg";
-        StorageReference imageRef = storageReference.child(imagePath);
-        imageRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "Get image: SUCCESS");
-                    FirebaseInteraction.getImageFromFirebase(imageRef, activityImage, progressBar);
-                } else {
-                    Log.d(TAG, "Activity have no image");
-                    activityImage.setImageAlpha(R.drawable.run_woman);
-                }
-            }
-        });
-    }
     private void loadActivityHeaderPicture() {
         activityImage = findViewById(R.id.activity_image_description);
         progressBar = findViewById(R.id.progress_bar_activity_description);
@@ -368,9 +345,4 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        finish();
-//    }
 }

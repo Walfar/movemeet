@@ -319,7 +319,7 @@ public class ChatActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         Message imageMessage = new Message(fullNameString, noMessageText, userId, uri.toString(), Long.toString(new Date().getTime()));
-                                        messageManager.set(imageMessage, chatRoom.toString().split("/",4)[3] + "/" + key, null, null); // ✅
+                                        messageManager.set(imageMessage, chatRoom.toString().split("/",4)[3] + "/" + key); // ✅
                                     }
                                 });
                     }
