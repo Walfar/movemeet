@@ -89,7 +89,7 @@
     <string name ="activity_profile_phone">Phone</string>
     <string name ="activity_profile_phone_hint">Your Phone</string>
     <string name="activity_profile_icon_description">Icon Phone</string>
-    <string name ="activity_profile_description">Phone</string>
+    <string name ="activity_profile_description">Description</string>
     <string name ="activity_profile_description_hint">Your Phone</string>
     <string name ="activity_profile_icon_change_profile">Icon Change Profile</string>
     <string name ="activity_profile_icon_delete_account">Delete account</string>

@@ -321,7 +321,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         activityImage = findViewById(R.id.activity_image_description);
         progressBar = findViewById(R.id.progress_bar_activity_description);
         progressBar.setVisibility(View.VISIBLE);
-        imagePath = "activities/" + activity.getActivityId() + "/activityImage.jpg"; // TODO: change ".getActivityId()" with ".getDocumentPath()" once this last method will be working again!
+        imagePath = "activities/" + activity.getDocumentPath() + "/activityImage.jpg";
         StorageReference imageRef = storageReference.child(imagePath);
         FirebaseInteraction.getImageFromFirebase(imageRef, activityImage, progressBar);
     }
