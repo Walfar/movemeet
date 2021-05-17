@@ -12,6 +12,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.FirebaseInteraction;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -26,6 +27,7 @@ import static junit.framework.Assert.assertTrue;
 
 public class EditProfileActivityImagePickerTest {
 
+    private FirebaseStorage fStorage;
     private StorageReference storageReference;
     private String imagePath = "users/ydXLPxZQMXRRVHY4oGUTggDpZvp1/profile.jpg";
 
@@ -35,7 +37,8 @@ public class EditProfileActivityImagePickerTest {
     @Before
     public void setUp() {
         // Setting up Firebase Storage
-        storageReference = FirebaseStorage.getInstance().getReference();
+        fStorage = BackendInstanceProvider.getStorageInstance();
+        storageReference = fStorage.getReference();
 
         // Saving the mocked picked image
         savePickedImage();

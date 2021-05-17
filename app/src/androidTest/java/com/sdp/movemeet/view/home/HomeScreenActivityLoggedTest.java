@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.view.main.MainActivity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.view.map.GPSRecordingActivity;
@@ -42,7 +43,7 @@ public class HomeScreenActivityLoggedTest {
     @Before
     public void setUp() {
         Intents.init();
-        fAuth = FirebaseAuth.getInstance();
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         fAuth.signInWithEmailAndPassword("test@test.com", "password").addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
