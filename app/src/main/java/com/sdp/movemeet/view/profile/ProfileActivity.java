@@ -32,6 +32,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.home.HomeScreenActivity;
@@ -54,7 +56,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     ImageView profileImage;
     TextView fullName, email, phone, description;
-    TextView fullNameDrawer, emailDrawer, phoneDrawer;
     ProgressBar progressBar;
 
     String userId, userImagePath;
@@ -63,13 +64,9 @@ public class ProfileActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     BackendManager<User> userManager;
+    FirebaseStorage fStorage;
     StorageReference storageReference;
     StorageReference profileRef;
-
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
-    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,15 +81,14 @@ public class ProfileActivity extends AppCompatActivity {
         phone = findViewById(R.id.text_view_activity_profile_phone);
         description = findViewById(R.id.text_view_activity_profile_description);
 
-        fStore = FirebaseFirestore.getInstance();
+        fStore = BackendInstanceProvider.getFirestoreInstance();
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
-
-        fAuth = FirebaseAuth.getInstance();
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+        fStorage = BackendInstanceProvider.getStorageInstance();
         if (fAuth.getCurrentUser() != null) {
             userId = fAuth.getCurrentUser().getUid();
             displayRegisteredUserData();
-
-            storageReference = FirebaseStorage.getInstance().getReference();
+            storageReference = fStorage.getReference();
             loadRegisteredUserProfilePicture();
         }
 
@@ -121,9 +117,6 @@ public class ProfileActivity extends AppCompatActivity {
                         email.setText(user.getEmail());
                         phone.setText(user.getPhoneNumber());
                         description.setText(user.getDescription());
-                        //fullNameDrawer.setText(user.getFullName());
-                        //emailDrawer.setText(user.getEmail());
-                        //phoneDrawer.setText(user.getPhoneNumber());
                     } else {
                         Log.d(TAG, "No such document!");
                     }

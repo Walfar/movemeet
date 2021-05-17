@@ -90,7 +90,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         fStorage = BackendInstanceProvider.getStorageInstance();
         storageReference = fStorage.getReference();
-        fStore = BackendInstanceProvider.getFirestoreInstance(); //FirebaseFirestore.getInstance();
+        fStore = BackendInstanceProvider.getFirestoreInstance();
         userId = fAuth.getCurrentUser().getUid();
 
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
