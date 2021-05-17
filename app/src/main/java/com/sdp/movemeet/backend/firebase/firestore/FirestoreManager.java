@@ -61,18 +61,13 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendMana
     @Override
     public Task<Void> set(T object, String path) {
         if (object == null) throw new IllegalArgumentException();
-        // TODO: check why the number of registered participants vary on Firebase Firestore
         Map<String, Object> data = serializer.serialize(object);
         return db.document(path).set(data);
-        // TODO: replace return statement above by following one when ".getDocumentPath()" will be working again!
-        //  or maybe it will work again once the getDocumentPath() will work again!
-        //return db.document(path).update("participantId", FieldValue.arrayUnion(object)); // object will be in this case the "String value" containing the ID of the participant to add!
     }
 
     @Override
     public Task<Void> updt(String value, String path, String field) {
         if (value == null || path == null) throw new IllegalArgumentException();
-        // TODO: this should work once the getDocumentPath() will be working again!
         return db.document(path).update(field, FieldValue.arrayUnion(value)); // object will be in this case the "String value" containing the ID of the participant to add!
     }
 

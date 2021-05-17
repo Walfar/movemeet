@@ -26,7 +26,7 @@ public interface BackendManager<T> {
     Task<?> set(T object, String path);
 
     /**
-     * Update (add) a String value to a Firebase Firestore field
+     * Update (i.e. add) a String value to a Firebase Firestore array field
      * @param value the String value to update in the array.
      * @param path the path of the instance in the backend.
      * @param field the field to which the array corresponds in the backend.
