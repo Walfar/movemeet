@@ -25,6 +25,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.home.LoginActivity;
@@ -50,6 +52,7 @@ public class EditProfileActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     BackendManager<User> userManager;
+    FirebaseStorage fStorage;
     StorageReference storageReference;
 
     @Override
@@ -65,15 +68,15 @@ public class EditProfileActivity extends AppCompatActivity {
 
         assignViewsAndAdjustData();
 
-        fAuth = FirebaseAuth.getInstance();
-        fStore = FirebaseFirestore.getInstance();
-
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+        fStore = BackendInstanceProvider.getFirestoreInstance();
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
+        fStorage = BackendInstanceProvider.getStorageInstance();
 
         if (fAuth.getCurrentUser() != null) {
             userId = fAuth.getCurrentUser().getUid();
             userImagePath = "users/" + userId + "/profile.jpg";
-            storageReference = FirebaseStorage.getInstance().getReference();
+            storageReference = fStorage.getReference();
             loadRegisteredUserProfilePicture();
         } else {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
