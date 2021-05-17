@@ -20,6 +20,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.FirebaseInteraction;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
@@ -34,6 +35,7 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
 
     Activity activity;
     private static final String TAG = "ActDescActivity";
+    FirebaseStorage fStorage;
     StorageReference storageReference;
     ImageView activityImage;
     String imagePath;
@@ -56,7 +58,8 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
             loadActivityHeaderPicture();
         }
 
-        storageReference = FirebaseStorage.getInstance().getReference();
+        fStorage = BackendInstanceProvider.getStorageInstance();
+        storageReference = fStorage.getReference();
 
         if (activity != null) {
             displayDescriptionActivityData();
