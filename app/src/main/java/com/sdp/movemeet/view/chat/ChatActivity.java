@@ -44,6 +44,8 @@ import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.backend.firebase.firebaseDB.FirebaseDBMessageManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.MessageSerializer;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Message;
@@ -72,13 +74,17 @@ public class ChatActivity extends AppCompatActivity {
     public static final String noImageUrl = "no imageUrl";
 
     // Firebase instance variables
+    FirebaseAuth fAuth;
+    FirebaseFirestore fStore;
+    FirebaseStorage fStorage;
+    StorageReference storageReference;
+    FirebaseDatabase database;
+    DatabaseReference chatRef;
+    DatabaseReference chatRoom;
+    FirebaseRecyclerAdapter<Message, MessageViewHolder> firebaseAdapter;
+
     BackendManager<Message> messageManager;
     BackendManager<User> userManager;
-    private FirebaseAuth fAuth;
-    private StorageReference storageReference;
-    private DatabaseReference chatRef;
-    private DatabaseReference chatRoom;
-    private FirebaseRecyclerAdapter<Message, MessageViewHolder> firebaseAdapter;
 
     User user;
 
@@ -103,7 +109,7 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         // Initializing Firebase Realtime Database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        database = BackendInstanceProvider.getDatabaseInstance();
         chatRef = database.getReference().child(CHATS_CHILD); // "chats" node reference in Firebase Realtime Database
 
         messageInput = findViewById(R.id.message_input_text);
@@ -114,11 +120,13 @@ public class ChatActivity extends AppCompatActivity {
 
         messageManager = new FirebaseDBMessageManager(database, new MessageSerializer());
 
-        fAuth = FirebaseAuth.getInstance();
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+        fStorage = BackendInstanceProvider.getStorageInstance();
+        fStore = BackendInstanceProvider.getFirestoreInstance();
+
         if (fAuth.getCurrentUser() != null) {
             userId = fAuth.getCurrentUser().getUid();
-            FirebaseFirestore fStore = FirebaseFirestore.getInstance();
-            storageReference = FirebaseStorage.getInstance().getReference();
+            storageReference = fStorage.getReference();
             userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
             getRegisteredUserData();
         }
