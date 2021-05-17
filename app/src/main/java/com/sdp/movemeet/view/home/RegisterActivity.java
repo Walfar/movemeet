@@ -25,8 +25,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.User;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.view.main.MainActivity;
 
 import java.util.HashMap;
@@ -58,8 +60,8 @@ public class RegisterActivity extends AppCompatActivity {
         registerBtn = findViewById(R.id.button_register);
         loginBtn = findViewById(R.id.text_view_login_here);
 
-        fAuth = FirebaseAuth.getInstance(); // getting the current instance of the database (to perform actions on the database)
-        fStore = FirebaseFirestore.getInstance(); // instantiating the Firebase Firestore variable
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+        fStore = BackendInstanceProvider.getFirestoreInstance();
         // FirebaseFirestore db, String collection, BackendSerializer<User> serializer
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
         progressBar = findViewById(R.id.progressBar);
