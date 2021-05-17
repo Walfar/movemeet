@@ -109,7 +109,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     userIDString = fAuth.getCurrentUser().getUid();
-                    String path = FirebaseFirestore.getInstance().collection(FirestoreUserManager.USERS_COLLECTION).document(userIDString).getPath();
+                    String path = fStore.collection(FirestoreUserManager.USERS_COLLECTION).document(userIDString).getPath();
                     user.setDocumentPath(path);
                     userManager.add(user, null).addOnSuccessListener(new OnSuccessListener() {
                         @Override

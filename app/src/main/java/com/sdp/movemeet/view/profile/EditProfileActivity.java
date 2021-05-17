@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -140,6 +141,7 @@ public class EditProfileActivity extends AppCompatActivity {
             fUser.updateEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
+                    //accessFirestoreUsersCollectionForUpdate();
                     accessFirestoreUsersCollectionForUpdate();
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -154,14 +156,18 @@ public class EditProfileActivity extends AppCompatActivity {
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE) // making this method always public for testing and private otherwise
     public void accessFirestoreUsersCollectionForUpdate() {
-        DocumentReference docRef = fStore.collection("users").document(userId);
-        Map<String, Object> edited = FirebaseInteraction.updateDataInFirebase(profileFullName, profileEmail, profilePhone, profileDescription);
-        docRef.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
+        User user = new User(profileFullName.getText().toString(), profileEmail.getText().toString(), profilePhone.getText().toString(), profileDescription.getText().toString());
+        userManager.add(user, FirestoreUserManager.USERS_COLLECTION + "/" + userId).addOnSuccessListener(new OnSuccessListener() {
             @Override
-            public void onSuccess(Void aVoid) {
+            public void onSuccess(Object o) {
                 Toast.makeText(EditProfileActivity.this, "Profile updated.", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                 finish();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "onFailure: " + e.toString());
             }
         });
     }

@@ -205,7 +205,7 @@ public class ProfileActivity extends AppCompatActivity {
         // Delete user from Firebase Authentication
         FirebaseUser user = fAuth.getCurrentUser();
         if (user != null) {
-            // TODO: Bug to fix --> check why this function sometimes doesn't delete the Firebase "user authentication" (i.e. the user account)
+            // TODO: Bug to fix --> check why this function sometimes doesn't delete the Firebase "user authentication" (i.e. the actual user account)
             user.delete()
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
