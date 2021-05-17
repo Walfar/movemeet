@@ -59,14 +59,15 @@ import java.util.ArrayList;
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 public class ActivityDescriptionActivity extends AppCompatActivity {
 
-    FirebaseAuth fAuth;
     private static final String TAG = "ActDescActivity";
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
 
     TextView organizerView, numberParticipantsView, participantNamesView;
+    FirebaseAuth fAuth;
     FirebaseFirestore fStore;
+    FirebaseStorage fStorage;
     StorageReference storageReference;
     String userId;
     String organizerId;
@@ -75,7 +76,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     ImageView activityImage;
     String imagePath;
     ProgressBar progressBar;
-    Uri uri;
 
     BackendManager<Activity> activityManager;
     BackendManager<User> userManager;
@@ -87,10 +87,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
 
-        //fAuth = FirebaseAuth.getInstance();
         fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
-        storageReference = FirebaseStorage.getInstance().getReference();
-        fStore = FirebaseFirestore.getInstance();
+        fStorage = BackendInstanceProvider.getStorageInstance();
+        storageReference = fStorage.getReference();
+        fStore = BackendInstanceProvider.getFirestoreInstance(); //FirebaseFirestore.getInstance();
         userId = fAuth.getCurrentUser().getUid();
 
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
@@ -250,9 +250,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (activity.getParticipantId().contains(userId)) {
             Intent intent = new Intent(ActivityDescriptionActivity.this, ChatActivity.class);
             String activityDocumentPath = activity.getDocumentPath();
-//            if (activityDocumentPath.contains("activities/")) {
-//                activityDocumentPath = activityDocumentPath.replace("activities/", "");
-//            }
             activityDocumentPath = activityDocumentPath.replace("activities/", "");
             intent.putExtra("ACTIVITY_CHAT_ID", activityDocumentPath);
             String activityTitle = activity.getTitle();
