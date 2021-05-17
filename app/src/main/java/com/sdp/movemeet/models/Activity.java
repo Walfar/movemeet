@@ -6,12 +6,11 @@ import java.util.Date;
 
 /**
  *
- *
  *  This class represents an activity.
  *
  * */
 
-public class Activity extends FirebaseObject implements Serializable {
+public class Activity implements Serializable, FirebaseObject {
 
     private final String activityId;
     private final String organizerId;
@@ -23,6 +22,7 @@ public class Activity extends FirebaseObject implements Serializable {
     private double latitude;
 
     private String description;
+    private String documentPath;
     private Date date;
     private double duration;
     private final Sport sport;
@@ -75,7 +75,7 @@ public class Activity extends FirebaseObject implements Serializable {
         this.longitude = longitude;
         this.latitude = latitude;
         this.description = description;
-        super.documentPath = documentPath;
+        this.documentPath = documentPath;
         this.date = date;
         this.duration = duration;
         this.sport = sport;
@@ -84,7 +84,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @return the activity's is
      */
     public String getActivityId() {
@@ -92,7 +91,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @return the activity's organizer
      */
     public String getOrganizerId() {
@@ -100,7 +98,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @return the activity's title
      */
     public String getTitle() {
@@ -108,7 +105,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @return the activity's number of participant
      */
     public int getNumberParticipant() {
@@ -116,7 +112,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @return the activity's participants
      */
     public ArrayList<String> getParticipantId() {
@@ -124,7 +119,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @return the activity's longitude
      */
     public double getLongitude() {
@@ -132,7 +126,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @return the activity's latitude
      */
     public double getLatitude() {
@@ -140,15 +133,21 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @return the activity's description
      */
     public String getDescription() {
         return description;
     }
 
+
     /**
-     *
+     * @return the activity's document path
+     */
+    public String getDocumentPath() {
+        return documentPath; // this.documentPath
+    }
+
+    /**
      * @return the activity's date
      */
     public Date getDate() {
@@ -156,7 +155,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @return the activity's duration
      */
     public double getDuration() {
@@ -164,7 +162,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @return the activity's sport
      */
     public Sport getSport() {
@@ -172,7 +169,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @return the activity's address
      */
     public String getAddress() {
@@ -180,7 +176,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @param title change activity's title
      */
     public void setTitle(String title) {
@@ -191,7 +186,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @param numberParticipant change activity's number participant
      */
     public void setNumberParticipant(int numberParticipant) {
@@ -202,7 +196,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @param longitude change activity's longitude
      */
     public void setLongitude(double longitude) {
@@ -210,7 +203,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @param latitude change activity's latitude
      */
     public void setLatitude(double latitude) {
@@ -218,7 +210,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @param description change activity's description
      */
     public void setDescription(String description) {
@@ -229,7 +220,14 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
+     * @param path change activity's document path
+     */
+    public String setDocumentPath(String path) {
+        if (documentPath == null) documentPath = path;
+        return documentPath;
+    }
+
+    /**
      * @param date change activity's date
      */
     public void setDate(Date date) {
@@ -240,7 +238,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @param duration change activity's duration
      */
     public void setDuration(double duration) {
@@ -251,7 +248,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @param address change activity's address
      */
     public void setAddress(String address) {
@@ -262,7 +258,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @param participant add a participant
      */
     public void addParticipantId(String participant){
@@ -279,7 +274,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @param participant remove a participant
      */
     public void removeParticipantId(String participant){
@@ -291,7 +285,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @param createdAt date of creation
      */
     public void setCreatedAt(Date createdAt) {
@@ -299,7 +292,6 @@ public class Activity extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @return date of creation
      */
     public Date getCreatedAt() {

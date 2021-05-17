@@ -158,8 +158,8 @@ public class FirebaseInteraction {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 Log.d(TAG, "Image could not be fetched from Firebase Storage! Don't panic!" +
-                        "It's probably because no images have been saved in Firebase Storage for" +
-                        "this document yet!");
+                        " It's probably because no images have been saved in Firebase Storage for" +
+                        " this document yet!");
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }

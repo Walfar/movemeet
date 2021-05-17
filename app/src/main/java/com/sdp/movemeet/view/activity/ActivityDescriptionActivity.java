@@ -223,7 +223,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 createParticipantNumberView();
                 // TODO: check with Kepler why this creates another activity!
                 //activityManager.add(activity, FirestoreActivityManager.ACTIVITIES_COLLECTION + "/" + activity.getDocumentPath()).addOnSuccessListener(new OnSuccessListener() {
-                activityManager.updt(userId, FirestoreActivityManager.ACTIVITIES_COLLECTION + "/" + activity.getDocumentPath(), "participantId").addOnSuccessListener(new OnSuccessListener() { // "participantId", userId // String field, String value
+                //activityManager.updt(userId, FirestoreActivityManager.ACTIVITIES_COLLECTION + "/" + activity.getDocumentPath(), "participantId").addOnSuccessListener(new OnSuccessListener() { // "participantId", userId // String field, String value
+                activityManager.updt(userId, activity.getDocumentPath(), "participantId").addOnSuccessListener(new OnSuccessListener() {
                     @Override
                     public void onSuccess(Object o) {
                         Log.d(TAG, "Participant registered in Firebase Firestore!");
@@ -249,6 +250,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (activity.getParticipantId().contains(userId)) {
             Intent intent = new Intent(ActivityDescriptionActivity.this, ChatActivity.class);
             String activityDocumentPath = activity.getDocumentPath();
+//            if (activityDocumentPath.contains("activities/")) {
+//                activityDocumentPath = activityDocumentPath.replace("activities/", "");
+//            }
+            activityDocumentPath = activityDocumentPath.replace("activities/", "");
             intent.putExtra("ACTIVITY_CHAT_ID", activityDocumentPath);
             String activityTitle = activity.getTitle();
             intent.putExtra("ACTIVITY_TITLE", activityTitle);
