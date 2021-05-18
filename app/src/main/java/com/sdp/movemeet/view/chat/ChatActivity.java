@@ -123,7 +123,11 @@ public class ChatActivity extends AppCompatActivity {
         messageManager = new FirebaseDBMessageManager(database, new MessageSerializer());
 
         fAuth = FirebaseAuth.getInstance();
-        if (fAuth.getCurrentUser() != null) {
+        // The aim is to block any direct access to this page if the user is not logged in
+        if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
+            finish();
+        } else {
             userId = fAuth.getCurrentUser().getUid();
             FirebaseFirestore fStore = FirebaseFirestore.getInstance();
             storageReference = FirebaseStorage.getInstance().getReference();
@@ -144,12 +148,6 @@ public class ChatActivity extends AppCompatActivity {
         addExistingMessagesAndListenForNewMessages();
 
         if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
-
-        // The aim is to block any direct access to this page if the user is not logged in
-        if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        }
 
     }
 
