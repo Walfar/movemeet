@@ -15,7 +15,7 @@ public class DistanceCalculator {
     // private final Double EARTH_RADIUS = 6.3781 * Math.pow(10, 3);
 
     // This constant is more ~canonical~
-    private final Double EARTH_RADIUS = 6.371 * Math.pow(10, 3);
+    private final static Double EARTH_RADIUS = 6.371 * Math.pow(10, 3);
     private Double userLatitude, userLongitude;
     private ArrayList<Pair> activityDistanceMap;
     private boolean sorted;
@@ -140,7 +140,7 @@ public class DistanceCalculator {
      * @param lat2 the latitude of the second point (the activity)
      * @param lng2 the longitude of the second point (the activity)
      */
-    public Double calculateDistance(Double lat1, Double lng1, Double lat2, Double lng2) {
+    public static Double calculateDistance(Double lat1, Double lng1, Double lat2, Double lng2) {
         Double p = Math.PI / 180;
 
         //Double a =  Math.pow(Math.sin((lat2 - lat1)/2),2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin((lng2 - lng1)/2),2);
