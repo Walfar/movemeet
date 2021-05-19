@@ -94,24 +94,25 @@ public class FirebaseInteraction {
 //        return edited;
 //    }
 
-    /**
-     * Check if the user is still signed in. If it is not the case, the user is automatically
-     * redirected to the {@link LoginActivity}.
-     *
-     * @param fAuth The Firebase Authentication reference that allows to access to the user object
-     * @param activity The activity from which this function is called
-     */
-    public static void checkIfUserSignedIn(FirebaseAuth fAuth, Activity activity) {
-        FirebaseUser user = fAuth.getCurrentUser();
-        if (user == null) {
-            // If not signed in, then launch the LoginActivity
-            Intent intent = new Intent(activity, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            Context mContext = activity.getApplicationContext();
-            mContext.startActivity(intent);
-            activity.finish();
-        }
-    }
+
+//    /**
+//     * Check if the user is still signed in. If it is not the case, the user is automatically
+//     * redirected to the {@link LoginActivity}.
+//     *
+//     * @param fAuth The Firebase Authentication reference that allows to access to the user object
+//     * @param activity The activity from which this function is called
+//     */
+//    public static void checkIfUserSignedIn(FirebaseAuth fAuth, Activity activity) {
+//        FirebaseUser user = fAuth.getCurrentUser();
+//        if (user == null) {
+//            // If not signed in, then launch the LoginActivity
+//            Intent intent = new Intent(activity, LoginActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            Context mContext = activity.getApplicationContext();
+//            mContext.startActivity(intent);
+//            activity.finish();
+//        }
+//    }
 
 
 //    /**

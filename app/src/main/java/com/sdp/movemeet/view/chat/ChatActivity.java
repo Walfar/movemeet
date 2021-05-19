@@ -94,6 +94,8 @@ public class ChatActivity extends AppCompatActivity {
     String receivedActivityChatId;
     String receivedActivityTitle;
 
+    String imagePath;
+
     int initialMessageCounter = 0;
 
     MultiAutoCompleteTextView messageInput;
@@ -130,9 +132,6 @@ public class ChatActivity extends AppCompatActivity {
             userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
             getRegisteredUserData();
         }
-
-        // Initializing Firebase Authentication and checking if the user is signed in
-        FirebaseInteraction.checkIfUserSignedIn(fAuth, ChatActivity.this);
 
         Intent data = getIntent();
         settingUpChatRoom(data);
@@ -243,13 +242,6 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        // Checking if user is signed in
-        FirebaseInteraction.checkIfUserSignedIn(fAuth, ChatActivity.this);
-    }
-
-    @Override
     public void onPause() {
         // Stop listening for updates from Firebase Realtime Database
         firebaseAdapter.stopListening();
@@ -298,6 +290,7 @@ public class ChatActivity extends AppCompatActivity {
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE) // making this method always public for testing and private otherwise
     public void createTempMessage(Uri uri, String fullNameString, String userId) {
         Message tempMessage = new Message(fullNameString, "Image loading...", userId, LOADING_IMAGE_URL, Long.toString(new Date().getTime()));
+        // TODO: Make abstraction for this part of code below (Firebase Realtime Database abstraction) --> difficult!
         chatRoom.push().setValue(tempMessage, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -309,8 +302,20 @@ public class ChatActivity extends AppCompatActivity {
                 String key = databaseReference.getKey();
                 StorageReference fileRef = storageReference.child(CHATS_CHILD).child(CHAT_ROOM_ID).child(key).child(uri.getLastPathSegment());
                 putImageInStorage(fileRef, uri, key);
+
+                // TODO: replace the end of this part of code to implement the .add method!
+                // --- --- --- ---
+                imagePath = CHATS_CHILD + "/" + CHAT_ROOM_ID + "/" + key + "/chatImage.jpg";
+//                Image image = new Image(uri.getLastPathSegment(), )
+//                image.setDocumentPath(imagePath);
+
             }
         });
+    }
+
+
+    private void putImageInStorage_new(StorageReference storageReference, Uri uri, final String key) {
+
     }
 
 

@@ -33,6 +33,7 @@ import com.sdp.movemeet.view.activity.ActivityDescriptionActivityUnregister;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.main.MainActivity;
+import com.sdp.movemeet.view.navigation.Navigation;
 
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
@@ -268,6 +269,7 @@ public class MainMapFragmentTest {
 
     @After
     public void after() {
+        Navigation.profileField = false;
         Intents.release();
     }
 

@@ -45,6 +45,8 @@ public class Navigation extends AppCompatActivity {
 
     private Activity activity;
     private int activityId;
+    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    public static boolean profileField = true;
 
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
@@ -145,7 +147,6 @@ public class Navigation extends AppCompatActivity {
         }
     }
 
-
     /**
      * Fills in the navigation bar's text fields with the user's information
      * 0 = fullName
@@ -208,7 +209,7 @@ public class Navigation extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
         navigationView.setCheckedItem(this.activityId);
 
-        fillNavigationProfileFields(new TextView[] {fullName, email, phone});
+        if (profileField) fillNavigationProfileFields(new TextView[] {fullName, email, phone});
     }
 
     private boolean onNavigationItemSelected(MenuItem menuItem) {

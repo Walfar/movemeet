@@ -43,7 +43,7 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-;
+
 
 @RunWith(AndroidJUnit4.class)
 public class ActivityDescriptionActivityTest {
@@ -127,9 +127,7 @@ public class ActivityDescriptionActivityTest {
         } catch (InterruptedException e) {
             assert (false);
         }
-
     }
-
 
     @Test
     public void create() {

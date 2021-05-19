@@ -17,8 +17,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
@@ -326,6 +328,11 @@ public class UploadActivityActivityTest {
     @After
     public void tearDown() {
         Intents.release();
+        BackendInstanceProvider.database = FirebaseDatabase.getInstance();
+        BackendInstanceProvider.storage = FirebaseStorage.getInstance();
+        BackendInstanceProvider.firestore = FirebaseFirestore.getInstance();
+
+        AuthenticationInstanceProvider.fAuth = FirebaseAuth.getInstance();
     }
 
     public static ViewAction forceDoubleClick() {
