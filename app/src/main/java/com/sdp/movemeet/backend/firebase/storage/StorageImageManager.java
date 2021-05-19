@@ -1,21 +1,13 @@
 package com.sdp.movemeet.backend.firebase.storage;
 
 import android.net.Uri;
-import android.view.View;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
-import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.backend.BackendManager;
-import com.sdp.movemeet.models.Image;
-import com.squareup.picasso.Picasso;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
+import com.sdp.movemeet.models.Image;
 
 public class StorageImageManager implements BackendManager<Image> {
 

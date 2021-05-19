@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -14,28 +13,19 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
-import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
@@ -55,7 +45,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /***
- * Activity for show the description of an activity. Informations about an activity are : sport, date and time, time estimate, organiser,
+ * Activity for show the description of an activity. Informations about an activity are : sport, date and time, time estimate, organizer,
  * a list of participants, a picture, address, and description. A user can register to an activity, and access to the chat.
  */
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -275,9 +265,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        String organiserFullName = (String) document.getData().get("fullName");
-                        organizerView.setText(organiserFullName);
-                        Log.i(TAG, "organiser name: " + organiserFullName);
+                        String organizerFullName = (String) document.getData().get("fullName");
+                        organizerView.setText(organizerFullName);
+                        Log.i(TAG, "Organizer name: " + organizerFullName);
                     } else {
                         Log.d(TAG, "No such document!");
                     }
@@ -331,7 +321,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     public void changeActivityPicture(View view) {
         if (userId.equals(organizerId)) {
             Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(openGalleryIntent, 1001);
+            startActivityForResult(openGalleryIntent, 1000);
         } else {
             Toast.makeText(ActivityDescriptionActivity.this, "Only the organizer can change the header picture!", Toast.LENGTH_SHORT).show();
         }
@@ -340,11 +330,12 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1001) {
+        if (requestCode == 1000) {
             if (resultCode == android.app.Activity.RESULT_OK) {
                 Uri imageUri = data.getData();
-                progressBar.setVisibility(View.VISIBLE);
-                FirebaseInteraction.uploadImageToFirebase(storageReference, imagePath, imageUri, activityImage, progressBar);
+                Image image = new Image(imageUri, activityImage);
+                image.setDocumentPath(imagePath);
+                ImageHandler.uploadImage(image, progressBar);
             }
         }
     }

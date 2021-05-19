@@ -13,6 +13,8 @@ import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
+import com.sdp.movemeet.models.Image;
+import com.sdp.movemeet.utility.ImageHandler;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -25,21 +27,17 @@ import java.io.IOException;
 
 import static junit.framework.Assert.assertTrue;
 
+// This test tests both ImageHandler.uploadImage and ImageHandler.loadImage since the later one is
+// an integral part of the first one.
 public class EditProfileActivityImagePickerTest {
 
-    private FirebaseStorage fStorage;
-    private StorageReference storageReference;
-    private String imagePath = "users/ydXLPxZQMXRRVHY4oGUTggDpZvp1/profile.jpg";
+    private String userImagePath = "users/B6PwbuQT3rRIyOemWtNQu7xfXmq2/profile.jpg"; // Antho1
 
     @Rule
     public IntentsTestRule<EditProfileActivity> activityRule = new IntentsTestRule<>(EditProfileActivity.class);
 
     @Before
     public void setUp() {
-        // Setting up Firebase Storage
-        fStorage = BackendInstanceProvider.getStorageInstance();
-        storageReference = fStorage.getReference();
-
         // Saving the mocked picked image
         savePickedImage();
     }
@@ -51,7 +49,9 @@ public class EditProfileActivityImagePickerTest {
         Uri imageUri = Uri.fromFile(file);
         ProgressBar progressBar = activityRule.getActivity().findViewById(R.id.progress_bar_edit_profile);
         ImageView profileImage = activityRule.getActivity().findViewById(R.id.image_view_edit_profile_image);
-        FirebaseInteraction.uploadImageToFirebase(storageReference, imagePath, imageUri, profileImage, progressBar);
+        Image image = new Image(imageUri, profileImage);
+        image.setDocumentPath(userImagePath);
+        ImageHandler.uploadImage(image, progressBar);
     }
 
     private void savePickedImage() {

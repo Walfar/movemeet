@@ -113,90 +113,68 @@ public class FirebaseInteraction {
         }
     }
 
-    /**
-     * Sign out the user in case it is null (i.e. Firebase Authentication service can't retrieve the
-     * user object anymore).
-     *
-     * @param fAuth The Firebase Authentication reference that allows to access to the user object
-     * @param activity The activity from which this function is called
-     */
-    public static void logoutIfUserNonNull(FirebaseAuth fAuth, Activity activity) {
-        FirebaseUser user = fAuth.getCurrentUser();
-        if (user != null) {
-            // Logging out the user from Firebase
-            FirebaseAuth.getInstance().signOut();
-            // Launching the LoginActivity
-            Intent intent = new Intent(activity, LoginActivity.class);
-            Context context = activity.getApplicationContext();
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra("EXIT", true);
-            context.startActivity(intent);
-            activity.finish();
-        }
-    }
 
-    /**
-     * Fetch an image (user profile picture or activity header picture) from Firebase Storage.
-     *
-     * @param imageRef Reference object to Firebase Storage
-     * @param imageView ImageView holder for the image to fetch from Firebase Storage
-     * @param progressBar A ProgressBar displayed as long as the image is not yet fetched
-     */
-    public static void getImageFromFirebase(StorageReference imageRef, ImageView imageView, ProgressBar progressBar) {
-        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Log.d(TAG, "Image successfully fetched from Firebase Storage!");
-                Picasso.get().load(uri).into(imageView);
-                if (progressBar != null) {
-                    progressBar.setVisibility(View.GONE);
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.d(TAG, "Image could not be fetched from Firebase Storage! Don't panic!" +
-                        " It's probably because no images have been saved in Firebase Storage for" +
-                        " this document yet!");
-                if (progressBar != null) {
-                    progressBar.setVisibility(View.GONE);
-                }
-            }
-        });
-    }
+//    /**
+//     * Fetch an image (user profile picture or activity header picture) from Firebase Storage.
+//     *
+//     * @param imageRef Reference object to Firebase Storage
+//     * @param imageView ImageView holder for the image to fetch from Firebase Storage
+//     * @param progressBar A ProgressBar displayed as long as the image is not yet fetched
+//     */
+//    public static void getImageFromFirebase(StorageReference imageRef, ImageView imageView, ProgressBar progressBar) {
+//        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//            @Override
+//            public void onSuccess(Uri uri) {
+//                Log.d(TAG, "Image successfully fetched from Firebase Storage!");
+//                Picasso.get().load(uri).into(imageView);
+//                if (progressBar != null) {
+//                    progressBar.setVisibility(View.GONE);
+//                }
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                Log.d(TAG, "Image could not be fetched from Firebase Storage! Don't panic!" +
+//                        " It's probably because no images have been saved in Firebase Storage for" +
+//                        " this document yet!");
+//                if (progressBar != null) {
+//                    progressBar.setVisibility(View.GONE);
+//                }
+//            }
+//        });
+//    }
 
-    /**
-     * Upload an image (user profile picture or activity header picture) to Firebase Storage.
-     *
-     * @param storageReference Reference object to Firebase Storage
-     * @param imagePath Path leading to the location in Firebase Storage in which the image will be
-     *                  uploaded
-     * @param imageUri URI of the selected image
-     * @param imageView ImageView holding the selected image
-     * @param progressBar A ProgressBar displayed as long as the image is not yet placed in the
-     *                    ImageView imageView
-     */
-    public static void uploadImageToFirebase(StorageReference storageReference, String imagePath, Uri imageUri, ImageView imageView, ProgressBar progressBar) {
-        final StorageReference fileRef = storageReference.child(imagePath);
-        fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Picasso.get().load(uri).into(imageView); // Picasso helps us link the URI to the ImageView
-                        progressBar.setVisibility(View.GONE);
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                progressBar.setVisibility(View.GONE);
-            }
-        });
-    }
+
+//    /**
+//     * Upload an image (user profile picture or activity header picture) to Firebase Storage.
+//     *
+//     * @param storageReference Reference object to Firebase Storage
+//     * @param imagePath Path leading to the location in Firebase Storage in which the image will be
+//     *                  uploaded
+//     * @param imageUri URI of the selected image
+//     * @param imageView ImageView holding the selected image
+//     * @param progressBar A ProgressBar displayed as long as the image is not yet placed in the
+//     *                    ImageView imageView
+//     */
+//    public static void uploadImageToFirebase(StorageReference storageReference, String imagePath, Uri imageUri, ImageView imageView, ProgressBar progressBar) {
+//        final StorageReference fileRef = storageReference.child(imagePath);
+//        fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                    @Override
+//                    public void onSuccess(Uri uri) {
+//                        Picasso.get().load(uri).into(imageView); // Picasso helps us link the URI to the ImageView
+//                        progressBar.setVisibility(View.GONE);
+//                    }
+//                });
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                progressBar.setVisibility(View.GONE);
+//            }
+//        });
+//    }
 
 }
