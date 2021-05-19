@@ -210,13 +210,14 @@ public class NavigationTest {
         try{
             Thread.sleep(500);
         }catch(Exception e){}
-        Intents.release();
 
+        Intents.release();
     }
 
-    /*@After
+    @After
     public void SignOut() {
-        fAuth.signOut();
-    }*/
+        //fAuth.signOut();
+        Intents.release();
+    }
 }
 
