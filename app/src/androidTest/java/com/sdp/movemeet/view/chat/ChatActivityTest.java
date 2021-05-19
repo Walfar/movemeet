@@ -23,10 +23,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.view.chat.ChatActivity;
 import com.sdp.movemeet.view.main.MainActivity;
+import com.sdp.movemeet.view.navigation.Navigation;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -57,7 +59,7 @@ public class ChatActivityTest {
 
     @Test
     public void chatActivityTest() {
-        ChatActivity.enableNav = false;
+        Navigation.profileField = false;
         CountDownLatch latch = new CountDownLatch(1);
 
         fAuth = FirebaseAuth.getInstance();

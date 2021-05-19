@@ -10,6 +10,7 @@ import com.sdp.movemeet.R;
 
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.view.chat.ChatActivity;
+import com.sdp.movemeet.view.navigation.Navigation;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -33,7 +34,7 @@ public class ChatActivitySecurityTest {
 
     @Test
     public void redirectionTest() {
-        ChatActivity.enableNav = false;
+        Navigation.profileField = false;
         ActivityScenario scenario = ActivityScenario.launch(ChatActivity.class);
 
         try {

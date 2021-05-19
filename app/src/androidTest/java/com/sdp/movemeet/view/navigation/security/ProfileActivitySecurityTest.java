@@ -8,6 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
+import com.sdp.movemeet.view.navigation.Navigation;
 import com.sdp.movemeet.view.profile.ProfileActivity;
 
 import org.junit.Before;
@@ -32,7 +33,7 @@ public class ProfileActivitySecurityTest {
 
     @Test
     public void redirectionTest() {
-        ProfileActivity.enableNav = false;
+        Navigation.profileField = false;
         ActivityScenario scenario = ActivityScenario.launch(ProfileActivity.class);
 
         try {

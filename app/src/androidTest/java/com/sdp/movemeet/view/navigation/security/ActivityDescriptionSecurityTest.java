@@ -9,6 +9,7 @@ import com.sdp.movemeet.R;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.view.chat.ChatActivity;
 import com.sdp.movemeet.view.main.MainActivity;
+import com.sdp.movemeet.view.navigation.Navigation;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -32,7 +33,7 @@ public class ActivityDescriptionSecurityTest {
 
     @Test
     public void redirectionTest() {
-        ActivityDescriptionActivity.enableNav = false;
+        Navigation.profileField = false;
         ActivityScenario scenario = ActivityScenario.launch(ActivityDescriptionActivity.class);
 
         try {

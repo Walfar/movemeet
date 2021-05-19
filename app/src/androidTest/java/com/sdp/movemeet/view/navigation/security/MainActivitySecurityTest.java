@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.view.main.MainActivity;
+import com.sdp.movemeet.view.navigation.Navigation;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -31,7 +32,7 @@ public class MainActivitySecurityTest {
 
     @Test
     public void redirectionTest() {
-        MainActivity.enableNav = false;
+        Navigation.profileField = false;
         ActivityScenario scenario = ActivityScenario.launch(MainActivity.class);
 
         try {

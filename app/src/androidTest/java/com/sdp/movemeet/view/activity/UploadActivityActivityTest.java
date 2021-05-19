@@ -32,6 +32,7 @@ import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
 import com.sdp.movemeet.view.main.MainActivity;
+import com.sdp.movemeet.view.navigation.Navigation;
 import com.sdp.movemeet.view.navigation.security.MainActivitySecurityTest;
 
 import org.hamcrest.Matcher;
@@ -89,8 +90,7 @@ public class UploadActivityActivityTest {
     @Before
     public void setup() {
         // Disable navigation for tests
-        UploadActivityActivity.enableNav = false;
-        MainActivity.enableNav = false;
+        Navigation.profileField = false;
 
         // Set up mocks and their behaviors
         // Set up fake database
