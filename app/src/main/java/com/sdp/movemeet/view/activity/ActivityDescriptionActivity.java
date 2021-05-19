@@ -103,7 +103,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
         fStore = FirebaseFirestore.getInstance();
-        userId = fAuth.getCurrentUser().getUid();
 
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
         activityManager = new FirestoreActivityManager(fStore, FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
@@ -112,6 +111,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (fAuth.getCurrentUser() == null) {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             finish();
+        } else {
+            userId = fAuth.getCurrentUser().getUid();
         }
 
         if (activity != null) {
@@ -141,14 +142,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         for (int i = 0; i < participantIds.size(); i++) {
             String currentParticipantId = participantIds.get(i);
             getCurrentParticipantName(currentParticipantId);
-        }
-    }
-
-    public void logout(View view) {
-        if (userId != null) {
-            fAuth.signOut(); // this will do the logout of the user from Firebase
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
         }
     }
 
