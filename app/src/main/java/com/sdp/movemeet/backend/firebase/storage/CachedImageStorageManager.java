@@ -20,26 +20,27 @@ import androidx.core.app.ActivityCompat;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.StorageTask;
 import com.sdp.movemeet.models.Image;
+import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
 
-public class CachedImageStorageManager extends ImageStorageManager {
+public class CachedImageStorageManager {
 
-    private Activity activity;
+    private ActivityDescriptionActivity activity;
 
     private String TAG = "Cache TAG";
 
     public CachedImageStorageManager(Activity activity) {
-        this.activity = activity;
+        this.activity = (ActivityDescriptionActivity) activity;
     }
 
-    @Override
-    public StorageTask add(Image image, String path) {
-        //Add to local cache
+
+    private void saveInCache(ImageView imageView, String path) {
         if (isStorageWritePermissionGranted()) {
             Log.d(TAG, "saving image to cache");
-            Bitmap bitmap = getBitmapFromView(image.getImageView());
+            Bitmap bitmap = getBitmapFromView(imageView);
             String root = Environment.getExternalStorageDirectory().toString();
             File imagesDir = new File(root, "/saved_images");
             if (!imagesDir.exists()) {
@@ -64,31 +65,33 @@ public class CachedImageStorageManager extends ImageStorageManager {
                 e.printStackTrace();
             }
         }
-        //Add to storage
-        return super.add(image, path);
     }
-
-    @Override
-    public Task<Uri> get(String path) {
+    
+    public void loadFromCache(String path) {
         Log.d(TAG, "Loading image from cache");
         if (isStorageReadPermissionGranted()) {
-            String imagePath = Environment.getExternalStorageDirectory().toString() + "/saved_images/" + path + "/activityImage.jpg";
+            String imagePath = Environment.getExternalStorageDirectory().toString() + path;
             try {
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inPreferredConfig = Bitmap.Config.ARGB_8888;
                 Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
                 if (bitmap == null) {
                     Log.d(TAG, "image could not be decoded");
-                    return null;
+                    //If image is not in cache, we try fetching from DB (and add it to cache on success)
+                    activity.getImageStorageManager().get(path).addOnSuccessListener(uri -> {
+                        Picasso.get().load(uri).into(activity.getActivityImage());
+                        saveInCache(activity.getActivityImage(), path);
+                    });
+                } else {
+                    activity.getActivityImage().setImageBitmap(bitmap);
+                    Log.d(TAG, "image has been set");
                 }
-                //imageView.setImageBitmap(bitmap);
-                Log.d(TAG, "image has been set");
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return super.get(path);
     }
+
 
     public static Bitmap getBitmapFromView(View view) {
         //Define a bitmap with the same size as the view

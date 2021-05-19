@@ -10,7 +10,6 @@ public class Image implements FirebaseObject {
 
     public Image(ImageView imageView, Uri imageUri, String imagePath) {
         this.imageView = imageView;
-        this.imagePath = imagePath;
         this.imageUri = imageUri;
     }
 
@@ -18,6 +17,8 @@ public class Image implements FirebaseObject {
     public String getDocumentPath() {
         return imagePath;
     }
+
+
 
     @Override
     public String setDocumentPath(String path) {

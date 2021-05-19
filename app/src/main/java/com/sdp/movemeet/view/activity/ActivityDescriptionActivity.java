@@ -3,6 +3,7 @@ package com.sdp.movemeet.view.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
@@ -31,6 +32,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.backend.FirebaseInteraction;
+import com.sdp.movemeet.backend.firebase.storage.ImageStorageManager;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.view.navigation.Navigation;
@@ -46,6 +48,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     private Activity act;
     private static final String TAG = "ActDescActivity";
+
+    private ImageStorageManager imageBackendManager = new ImageStorageManager();
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -102,6 +106,14 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
         }
+    }
+
+    public ImageView getActivityImage() {
+        return activityImage;
+    }
+
+    public ImageStorageManager getImageStorageManager() {
+        return imageBackendManager;
     }
 
     private void getParticipantNames() {
