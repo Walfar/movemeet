@@ -88,7 +88,11 @@ public class ProfileActivity extends AppCompatActivity {
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
 
         fAuth = FirebaseAuth.getInstance();
-        if (fAuth.getCurrentUser() != null) {
+        //The aim is to block any direct access to this page if the user is not logged
+        if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            finish();
+        } else {
             userId = fAuth.getCurrentUser().getUid();
             displayRegisteredUserData();
 
@@ -97,13 +101,6 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         if(enableNav) new Navigation(this, R.id.nav_edit_profile).createDrawer();
-
-        //The aim is to block any direct access to this page if the user is not logged
-        //Smth must be wrong since it prevents automatic connection during certain tests
-        if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            finish();
-        }
 
     }
 
