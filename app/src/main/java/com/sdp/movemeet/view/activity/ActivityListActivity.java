@@ -27,25 +27,11 @@ import com.sdp.movemeet.R;
 
 public class ActivityListActivity extends AppCompatActivity {
 
-    /*
-    TextView fullName, email, phone;
-    FirebaseAuth fAuth;
-    FirebaseFirestore fStore;
-    String userId;
-
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
-    TextView textView;*/
-
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
-    public static boolean enableNav = true;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        if(enableNav) new Navigation(this, R.id.nav_list_activities).createDrawer();
+        if(Navigation.profileField) new Navigation(this, R.id.nav_list_activities).createDrawer();
     }
 }

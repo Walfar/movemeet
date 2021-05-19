@@ -60,9 +60,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     private static final String TAG = "ActDescActivity";
 
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
-    public static boolean enableNav = true;
-
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
@@ -119,7 +116,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             displayDescriptionActivityData();
         }
 
-        if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
+        if(Navigation.profileField) new Navigation(this, R.id.nav_home).createDrawer();
     }
 
 

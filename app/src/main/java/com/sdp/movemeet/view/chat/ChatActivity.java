@@ -55,9 +55,6 @@ import java.util.Date;
 
 public class ChatActivity extends AppCompatActivity {
 
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
-    public static boolean enableNav = true;
-
     private static final String TAG = "ChatActivity";
     public static final String CHATS_CHILD = "chats";
 
@@ -147,7 +144,7 @@ public class ChatActivity extends AppCompatActivity {
 
         addExistingMessagesAndListenForNewMessages();
 
-        if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
+        if(Navigation.profileField) new Navigation(this, R.id.nav_home).createDrawer();
 
     }
 

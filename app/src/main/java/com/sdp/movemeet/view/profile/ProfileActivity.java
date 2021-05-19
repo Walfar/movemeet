@@ -49,12 +49,9 @@ public class ProfileActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE_PHONE = "phone";
     public static final String EXTRA_MESSAGE_DESCRIPTION = "description";
 
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
-    public static boolean enableNav = true;
 
     ImageView profileImage;
     TextView fullName, email, phone, description;
-    TextView fullNameDrawer, emailDrawer, phoneDrawer;
     ProgressBar progressBar;
 
     String userId, userImagePath;
@@ -65,11 +62,6 @@ public class ProfileActivity extends AppCompatActivity {
     BackendManager<User> userManager;
     StorageReference storageReference;
     StorageReference profileRef;
-
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
-    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +92,7 @@ public class ProfileActivity extends AppCompatActivity {
             loadRegisteredUserProfilePicture();
         }
 
-        if(enableNav) new Navigation(this, R.id.nav_edit_profile).createDrawer();
+        if(Navigation.profileField) new Navigation(this, R.id.nav_edit_profile).createDrawer();
 
     }
 

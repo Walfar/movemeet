@@ -1,11 +1,13 @@
 package com.sdp.movemeet.models;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.DocumentReference;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -15,7 +17,7 @@ import java.util.Locale;
  *
  * */
 
-public class Activity extends FirebaseObject implements Serializable {
+public class Activity implements Serializable, FirebaseObject {
 
     private final String activityId;
     private final String organizerId;
@@ -33,8 +35,6 @@ public class Activity extends FirebaseObject implements Serializable {
     private final Sport sport;
     private String address;
     private Date createdAt;
-
-    private DocumentReference backendRef;
 
     static  private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
 
@@ -84,7 +84,7 @@ public class Activity extends FirebaseObject implements Serializable {
         this.longitude = longitude;
         this.latitude = latitude;
         this.description = description;
-        super.documentPath = documentPath;
+        this.documentPath = documentPath;
         this.date = date;
         this.duration = duration;
         this.sport = sport;
@@ -315,25 +315,6 @@ public class Activity extends FirebaseObject implements Serializable {
         return createdAt;
     }
 
-    /**
-     *
-     * @return a DocumentReference to the activity
-     */
-    public DocumentReference getBackendRef() {
-        return this.backendRef;
-    }
-
-    /**
-     * Sets the backend reference property if it was previously null, does nothing otherwise.
-     *
-     * @param newRef the new value used to reference this activity in its collection in the backend
-     * @return the DocumentReference used to reference this activity in its collection in the backend
-     */
-    public DocumentReference setBackendRef(DocumentReference newRef) throws IllegalArgumentException {
-        if (backendRef == null) backendRef = newRef;
-        return backendRef;
-    }
-
 
     @Override
     public String toString(){
@@ -362,4 +343,13 @@ public class Activity extends FirebaseObject implements Serializable {
 
     }
 
+    @Override
+    public String getDocumentPath() {
+        return this.documentPath;
+    }
+
+    @Override
+    public void setDocumentPath(String path) {
+        this.documentPath = path;
+    }
 }

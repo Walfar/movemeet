@@ -48,6 +48,10 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
     public boolean recording;
     private Button recButton;
 
+    private long time;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public ArrayList<LatLng> path;
+
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public SupportMapFragment supportMapFragment;
 
@@ -69,9 +73,6 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
             updatePath(locationResult.getLastLocation());
         }
     };
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    public ArrayList<LatLng> path;
 
 
     @Override

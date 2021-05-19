@@ -71,11 +71,6 @@ public class NavigationTest {
     @Before
     public void signIn(){
         Navigation.profileField = false;
-        MainActivity.enableNav = true;
-        UploadActivityActivity.enableNav = true;
-        ActivityDescriptionActivity.enableNav = true;
-        ChatActivity.enableNav = true;
-        ProfileActivity.enableNav = true;
 
         CountDownLatch latch = new CountDownLatch(1);
 
@@ -210,13 +205,13 @@ public class NavigationTest {
         try{
             Thread.sleep(500);
         }catch(Exception e){}
-        Intents.release();
 
     }
 
-    /*@After
+    @After
     public void SignOut() {
-        fAuth.signOut();
-    }*/
+        Intents.release();
+        //fAuth.signOut();
+    }
 }
 

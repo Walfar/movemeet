@@ -26,9 +26,6 @@ import com.sdp.movemeet.view.navigation.Navigation;
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.sdp.movemeet.MESSAGE";
 
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
-    public static boolean enableNav = true;
-
     FirebaseAuth fAuth;
 
     @Override
@@ -43,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
-        if (enableNav) new Navigation(this, R.id.nav_home).createDrawer();
+        if (Navigation.profileField) new Navigation(this, R.id.nav_home).createDrawer();
 
     }
 }

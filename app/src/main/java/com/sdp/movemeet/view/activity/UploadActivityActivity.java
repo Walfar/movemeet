@@ -52,8 +52,6 @@ public class UploadActivityActivity extends AppCompatActivity {
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public BackendManager<Activity> activityBackendManager;
 
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
-    public static boolean enableNav = true;
 
     private Spinner spinner;
     private Calendar calendar;
@@ -120,7 +118,7 @@ public class UploadActivityActivity extends AppCompatActivity {
             }
         }
 
-        if (enableNav) new Navigation(this, R.id.nav_add_activity).createDrawer();
+        if (Navigation.profileField) new Navigation(this, R.id.nav_add_activity).createDrawer();
 
     }
 
