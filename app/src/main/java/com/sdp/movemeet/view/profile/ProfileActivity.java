@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -13,33 +12,29 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
+import com.sdp.movemeet.models.Image;
 import com.sdp.movemeet.models.User;
+import com.sdp.movemeet.utility.ImageHandler;
 import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
-import com.sdp.movemeet.R;
-import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.view.navigation.Navigation;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -89,7 +84,10 @@ public class ProfileActivity extends AppCompatActivity {
             userId = fAuth.getCurrentUser().getUid();
             displayRegisteredUserData();
             storageReference = fStorage.getReference();
-            loadRegisteredUserProfilePicture();
+            Image image = new Image(null, profileImage);
+            userImagePath = "users/" + userId + "/profile.jpg";
+            image.setDocumentPath(userImagePath);
+            ImageHandler.loadImage(image, progressBar);
         }
 
         if(enableNav) new Navigation(this, R.id.nav_edit_profile).createDrawer();
@@ -102,6 +100,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
     }
+
 
     public void displayRegisteredUserData() {
         Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + userId);
@@ -125,13 +124,6 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-
-    private void loadRegisteredUserProfilePicture() {
-        userImagePath = "users/" + userId + "/profile.jpg";
-        profileRef = storageReference.child(userImagePath);
-        FirebaseInteraction.getImageFromFirebase(profileRef, profileImage, null);
     }
 
 
@@ -161,7 +153,6 @@ public class ProfileActivity extends AppCompatActivity {
                 deleteFirestoreDataAndAuthentication();
             }
         });
-
     }
 
 

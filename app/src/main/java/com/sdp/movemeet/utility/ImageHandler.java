@@ -1,56 +1,29 @@
-package com.sdp.movemeet.backend.firebase.storage;
+package com.sdp.movemeet.utility;
 
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.backend.BackendManager;
+import com.sdp.movemeet.backend.firebase.storage.StorageImageManager;
 import com.sdp.movemeet.models.Image;
 import com.squareup.picasso.Picasso;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.sdp.movemeet.view.home.LoginActivity;
-import com.sdp.movemeet.view.profile.EditProfileActivity;
-import com.squareup.picasso.Picasso;
-
-import java.util.HashMap;
-import java.util.Map;
-
-public class ImageManager {
+public class ImageHandler {
 
     private static final String TAG = "FirebaseInteraction";
 
     private static BackendManager<Image> imageBackendManager;
 
     public static void loadImage(Image image, ProgressBar progressBar) {
+        progressBar.setVisibility(View.VISIBLE);
         imageBackendManager = new StorageImageManager();
         Task<Uri> document = (Task<Uri>) imageBackendManager.get(image.getDocumentPath());
         document.addOnSuccessListener(new OnSuccessListener<Uri>() {

@@ -12,7 +12,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import com.google.android.gms.tasks.Task;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,14 +20,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
-import com.sdp.movemeet.backend.firebase.storage.ImageManager;
-import com.sdp.movemeet.backend.firebase.storage.StorageImageManager;
+import com.sdp.movemeet.utility.ImageHandler;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
@@ -36,12 +33,8 @@ import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.models.Image;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.R;
-import com.sdp.movemeet.backend.FirebaseInteraction;
-import com.squareup.picasso.Picasso;
 
 import androidx.annotation.VisibleForTesting;
-
-import java.util.Map;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -84,7 +77,7 @@ public class EditProfileActivity extends AppCompatActivity {
             Image image = new Image(null, profileImage);
             userImagePath = "users/" + userId + "/profile.jpg";
             image.setDocumentPath(userImagePath);
-            ImageManager.loadImage(image, progressBar);
+            ImageHandler.loadImage(image, progressBar);
         } else {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
@@ -121,12 +114,9 @@ public class EditProfileActivity extends AppCompatActivity {
         if (requestCode == 1000) {
             if (resultCode == Activity.RESULT_OK) {
                 Uri imageUri = data.getData();
-                progressBar.setVisibility(View.VISIBLE);
                 Image image = new Image(imageUri, profileImage);
                 image.setDocumentPath(userImagePath);
-                // TODO: check that the function on the following line works! ✅
-                ImageManager.uploadImage(image, progressBar);
-                //FirebaseInteraction.uploadImageToFirebase(storageReference, userImagePath, imageUri, profileImage, progressBar);
+                ImageHandler.uploadImage(image, progressBar);
             }
         }
     }
