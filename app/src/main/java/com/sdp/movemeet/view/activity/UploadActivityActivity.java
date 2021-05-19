@@ -121,8 +121,6 @@ public class UploadActivityActivity extends AppCompatActivity {
         }
 
         if (enableNav) new Navigation(this, R.id.nav_add_activity).createDrawer();
-        /*Navigation nav = new Navigation(this, R.id.nav_add_activity);
-        nav.createDrawer();*/
 
     }
 

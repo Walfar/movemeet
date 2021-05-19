@@ -29,22 +29,12 @@ public class MainActivity extends AppCompatActivity {
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
 
-    TextView fullName, email, phone;
     FirebaseAuth fAuth;
-    FirebaseFirestore fStore;
-    String userId;
-
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
-    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        if (enableNav) new Navigation(this, R.id.nav_home).createDrawer();
 
         //The aim is to block any direct access to this page if the user is not logged
         fAuth = FirebaseAuth.getInstance();
@@ -52,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
         }
+
+        if (enableNav) new Navigation(this, R.id.nav_home).createDrawer();
 
     }
 }
