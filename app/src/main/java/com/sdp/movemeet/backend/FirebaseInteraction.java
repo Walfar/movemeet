@@ -41,16 +41,16 @@ public class FirebaseInteraction {
 
     private static final String TAG = "FirebaseInteraction";
 
-    /**
-     * Retrieve user data (full name, email, phone number and profile description) from Firebase
-     * Firestore and directly update corresponding TextViews.
-     * @param fStore Firebase Firestore reference
-     * @param userId The ID of the user
-     * @param textViewArray A TextView array containing the TextViews referencing user data (full
-     *                      name, email, phone number and profile description) to be updated
-     * @param activity The activity from which this function is called
-     * @return An array of TextViews containing the updated user data
-     */
+//    /**
+//     * Retrieve user data (full name, email, phone number and profile description) from Firebase
+//     * Firestore and directly update corresponding TextViews.
+//     * @param fStore Firebase Firestore reference
+//     * @param userId The ID of the user
+//     * @param textViewArray A TextView array containing the TextViews referencing user data (full
+//     *                      name, email, phone number and profile description) to be updated
+//     * @param activity The activity from which this function is called
+//     * @return An array of TextViews containing the updated user data
+//     */
 //    public static TextView[] retrieveDataFromFirebase(FirebaseFirestore fStore, String userId, TextView[] textViewArray, Activity activity) {
 //        DocumentReference documentReference = fStore.collection("users").document(userId);
 //        documentReference.addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
@@ -74,25 +74,25 @@ public class FirebaseInteraction {
 //        return textViewArray;
 //    }
 
-    /**
-     * Create a HashMap containing the user data to be updated in Firebase Firestore. This function
-     * is used in {@link EditProfileActivity} to adjust the user data.
-     *
-     * @param profileFullName TextView corresponding to the full name of the user
-     * @param profileEmail TextView corresponding to the email of the user
-     * @param profilePhone TextView corresponding to the phone number of the user
-     * @param profileDescription TextView corresponding to the profile description set by the user
-     * @return A HashMap containing the updated user information
-     */
-    public static Map<String, Object> updateDataInFirebase(TextView profileFullName, TextView profileEmail, TextView profilePhone, TextView profileDescription) {
-        Map<String, Object> edited = new HashMap<>();
-        edited.put("fullName", profileFullName.getText().toString());
-        edited.put("email", profileEmail.getText().toString());
-        edited.put("phone", profilePhone.getText().toString());
-        edited.put("description", profileDescription.getText().toString());
-
-        return edited;
-    }
+//    /**
+//     * Create a HashMap containing the user data to be updated in Firebase Firestore. This function
+//     * is used in {@link EditProfileActivity} to adjust the user data.
+//     *
+//     * @param profileFullName TextView corresponding to the full name of the user
+//     * @param profileEmail TextView corresponding to the email of the user
+//     * @param profilePhone TextView corresponding to the phone number of the user
+//     * @param profileDescription TextView corresponding to the profile description set by the user
+//     * @return A HashMap containing the updated user information
+//     */
+//    public static Map<String, Object> updateDataInFirebase(TextView profileFullName, TextView profileEmail, TextView profilePhone, TextView profileDescription) {
+//        Map<String, Object> edited = new HashMap<>();
+//        edited.put("fullName", profileFullName.getText().toString());
+//        edited.put("email", profileEmail.getText().toString());
+//        edited.put("phone", profilePhone.getText().toString());
+//        edited.put("description", profileDescription.getText().toString());
+//
+//        return edited;
+//    }
 
     /**
      * Check if the user is still signed in. If it is not the case, the user is automatically
@@ -127,12 +127,12 @@ public class FirebaseInteraction {
             FirebaseAuth.getInstance().signOut();
             // Launching the LoginActivity
             Intent intent = new Intent(activity, LoginActivity.class);
-            Context mContext = activity.getApplicationContext();
+            Context context = activity.getApplicationContext();
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("EXIT", true);
-            mContext.startActivity(intent);
+            context.startActivity(intent);
             activity.finish();
         }
     }

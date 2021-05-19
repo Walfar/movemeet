@@ -12,7 +12,7 @@ import com.sdp.movemeet.models.FirebaseObject;
 import java.util.Map;
 
 /**
- * A class capable of interacting with a FirebaseFirestore backend to perform storage operations
+ * A class capable of interacting with a Firebase Firestore backend to perform storage operations
  * for objects of type T
  * @param <T> The type of object handled by this FirestoreManager
  */
@@ -25,7 +25,7 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendMana
     /**
      * Creates a new FirestoreManager
      *
-     * @param db         the instance of FirebaseFirestore to interact with.
+     * @param db         the instance of Firebase Firestore to interact with.
      * @param collection the Firestore collection in which to perform operations
      * @param serializer a BackendSerializer capable of (de)serializing objects of type T
      */
@@ -39,7 +39,7 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendMana
     }
 
     /**
-     * Adds an object to the FirebaseFirestore backend. Because of the structure of Firestore,
+     * Adds an object to the Firebase Firestore backend. Because of the structure of Firestore,
      * the path parameter is ignored; a new path is automatically generated, or the old path is used
      * if the instance has already been uploaded to the backend.
      *
@@ -66,12 +66,14 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendMana
     public Task<Void> set(T object, String path) {
         if (object == null) throw new IllegalArgumentException();
         Map<String, Object> data = serializer.serialize(object);
+
         return db.document(path).set(data);
     }
 
     @Override
     public Task<Void> updt(String value, String path, String field) {
         if (value == null || path == null) throw new IllegalArgumentException();
+
         return db.document(path).update(field, FieldValue.arrayUnion(value)); // object will be in this case the "String value" containing the ID of the participant to add!
     }
 

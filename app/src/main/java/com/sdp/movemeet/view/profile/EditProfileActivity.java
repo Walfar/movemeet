@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import com.google.android.gms.tasks.Task;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,13 +27,17 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
+import com.sdp.movemeet.backend.firebase.storage.ImageManager;
+import com.sdp.movemeet.backend.firebase.storage.StorageImageManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.User;
+import com.sdp.movemeet.models.Image;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.FirebaseInteraction;
+import com.squareup.picasso.Picasso;
 
 import androidx.annotation.VisibleForTesting;
 
@@ -48,7 +53,6 @@ public class EditProfileActivity extends AppCompatActivity {
     ImageButton saveBtn;
 
     String userId, fullNameString, emailString, phoneString, descriptionString, userImagePath;
-    User user;
 
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
@@ -76,15 +80,18 @@ public class EditProfileActivity extends AppCompatActivity {
 
         if (fAuth.getCurrentUser() != null) {
             userId = fAuth.getCurrentUser().getUid();
-            userImagePath = "users/" + userId + "/profile.jpg";
             storageReference = fStorage.getReference();
-            loadRegisteredUserProfilePicture();
+            Image image = new Image(null, profileImage);
+            userImagePath = "users/" + userId + "/profile.jpg";
+            image.setDocumentPath(userImagePath);
+            ImageManager.loadImage(image, progressBar);
         } else {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
         }
 
     }
+
 
     private void assignViewsAndAdjustData() {
         profileImage = findViewById(R.id.image_view_edit_profile_image);
@@ -102,13 +109,6 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
 
-    private void loadRegisteredUserProfilePicture() {
-        progressBar.setVisibility(View.VISIBLE);
-        StorageReference profileRef = storageReference.child(userImagePath);
-        FirebaseInteraction.getImageFromFirebase(profileRef, profileImage, progressBar);
-    }
-
-
     public void changeProfilePicture(View view) {
         Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(openGalleryIntent, 1000);
@@ -122,7 +122,11 @@ public class EditProfileActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 Uri imageUri = data.getData();
                 progressBar.setVisibility(View.VISIBLE);
-                FirebaseInteraction.uploadImageToFirebase(storageReference, userImagePath, imageUri, profileImage, progressBar);
+                Image image = new Image(imageUri, profileImage);
+                image.setDocumentPath(userImagePath);
+                // TODO: check that the function on the following line works! ✅
+                ImageManager.uploadImage(image, progressBar);
+                //FirebaseInteraction.uploadImageToFirebase(storageReference, userImagePath, imageUri, profileImage, progressBar);
             }
         }
     }
@@ -141,7 +145,6 @@ public class EditProfileActivity extends AppCompatActivity {
             fUser.updateEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    //accessFirestoreUsersCollectionForUpdate();
                     accessFirestoreUsersCollectionForUpdate();
                 }
             }).addOnFailureListener(new OnFailureListener() {
