@@ -23,11 +23,8 @@ import com.sdp.movemeet.R;
 /***
  *  This class create the list of activities, on witch the user is registered.
  */
-
-
 public class ActivityListActivity extends AppCompatActivity {
 
-    /*
     TextView fullName, email, phone;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
@@ -36,7 +33,7 @@ public class ActivityListActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
-    TextView textView;*/
+    TextView textView;
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
