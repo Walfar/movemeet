@@ -74,8 +74,8 @@ public class EditProfileActivity extends AppCompatActivity {
         if (fAuth.getCurrentUser() != null) {
             userId = fAuth.getCurrentUser().getUid();
             storageReference = fStorage.getReference();
-            Image image = new Image(null, profileImage);
             userImagePath = "users/" + userId + "/profile.jpg";
+            Image image = new Image(null, profileImage);
             image.setDocumentPath(userImagePath);
             ImageHandler.loadImage(image, progressBar);
         } else {

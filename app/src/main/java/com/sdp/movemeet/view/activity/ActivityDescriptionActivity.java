@@ -43,7 +43,9 @@ import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Activity;
+import com.sdp.movemeet.models.Image;
 import com.sdp.movemeet.models.User;
+import com.sdp.movemeet.utility.ImageHandler;
 import com.sdp.movemeet.view.chat.ChatActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.navigation.Navigation;
@@ -317,10 +319,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void loadActivityHeaderPicture() {
         activityImage = findViewById(R.id.activity_image_description);
         progressBar = findViewById(R.id.progress_bar_activity_description);
-        progressBar.setVisibility(View.VISIBLE);
         imagePath = activity.getDocumentPath() + "/activityImage.jpg";
-        StorageReference imageRef = storageReference.child(imagePath);
-        FirebaseInteraction.getImageFromFirebase(imageRef, activityImage, progressBar);
+        Image image = new Image(null, activityImage);
+        image.setDocumentPath(imagePath);
+        ImageHandler.loadImage(image, progressBar);
     }
 
     /**

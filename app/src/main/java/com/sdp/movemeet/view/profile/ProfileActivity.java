@@ -84,8 +84,8 @@ public class ProfileActivity extends AppCompatActivity {
             userId = fAuth.getCurrentUser().getUid();
             displayRegisteredUserData();
             storageReference = fStorage.getReference();
-            Image image = new Image(null, profileImage);
             userImagePath = "users/" + userId + "/profile.jpg";
+            Image image = new Image(null, profileImage);
             image.setDocumentPath(userImagePath);
             ImageHandler.loadImage(image, progressBar);
         }
