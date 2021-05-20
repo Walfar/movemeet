@@ -271,7 +271,7 @@ public class UserTest {
         User user = new User(DUMMY_FULL_NAME, DUMMY_EMAIL, DUMMY_PHONE_NUMBER, DUMMY_DESCRIPTION, DUMMY_USER_ID, DUMMY_IMAGE_ID, DUMMY_DOCUMENT_PATH, DUMMY_REGISTERED_ACTIVITY);
 
         String activity1 = "BOB";
-        String activity2 = "bob";
+        String activity2 = "bob2";
         user.addActivitiesToRegistered(activity1);
         user.addActivitiesToRegistered(activity2);
 
@@ -291,7 +291,7 @@ public class UserTest {
         User user = new User(DUMMY_FULL_NAME, DUMMY_EMAIL, DUMMY_PHONE_NUMBER, DUMMY_DESCRIPTION, DUMMY_USER_ID, DUMMY_IMAGE_ID, DUMMY_DOCUMENT_PATH, DUMMY_REGISTERED_ACTIVITY);
 
         String activity1 = "BOB";
-        String activity2 = "bob";
+        String activity2 = "bob2";
 
         user.addActivitiesToRegistered(activity1);
         user.addActivitiesToRegistered(activity2);
