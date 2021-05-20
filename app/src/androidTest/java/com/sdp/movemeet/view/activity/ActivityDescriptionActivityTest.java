@@ -18,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.FirebaseInteraction;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.Sport;
 import com.sdp.movemeet.view.chat.ChatActivity;
@@ -42,7 +43,7 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-;
+
 
 @RunWith(AndroidJUnit4.class)
 public class ActivityDescriptionActivityTest {
@@ -87,7 +88,7 @@ public class ActivityDescriptionActivityTest {
     public void signIn() {
         CountDownLatch latch = new CountDownLatch(1);
 
-        fAuth = FirebaseAuth.getInstance();
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
 
         fAuth.signInWithEmailAndPassword("movemeet@gmail.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -126,9 +127,7 @@ public class ActivityDescriptionActivityTest {
         } catch (InterruptedException e) {
             assert (false);
         }
-
     }
-
 
     @Test
     public void create() {

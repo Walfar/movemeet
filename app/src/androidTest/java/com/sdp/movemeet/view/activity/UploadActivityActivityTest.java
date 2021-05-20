@@ -335,11 +335,14 @@ public class UploadActivityActivityTest {
         BackendInstanceProvider.firestore = FirebaseFirestore.getInstance();
 
         AuthenticationInstanceProvider.fAuth = FirebaseAuth.getInstance();
+<<<<<<< HEAD
     }
 
     @AfterClass
     public static void after() {
 
+=======
+>>>>>>> feature/246_firebase-storage-abstraction
     }
 
     public static ViewAction forceDoubleClick() {

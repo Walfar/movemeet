@@ -44,6 +44,8 @@ import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.backend.firebase.firebaseDB.FirebaseDBMessageManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.MessageSerializer;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Message;
@@ -72,13 +74,17 @@ public class ChatActivity extends AppCompatActivity {
     public static final String noImageUrl = "no imageUrl";
 
     // Firebase instance variables
+    FirebaseAuth fAuth;
+    FirebaseFirestore fStore;
+    FirebaseStorage fStorage;
+    StorageReference storageReference;
+    FirebaseDatabase database;
+    DatabaseReference chatRef;
+    DatabaseReference chatRoom;
+    FirebaseRecyclerAdapter<Message, MessageViewHolder> firebaseAdapter;
+
     BackendManager<Message> messageManager;
     BackendManager<User> userManager;
-    private FirebaseAuth fAuth;
-    private StorageReference storageReference;
-    private DatabaseReference chatRef;
-    private DatabaseReference chatRoom;
-    private FirebaseRecyclerAdapter<Message, MessageViewHolder> firebaseAdapter;
 
     User user;
 
@@ -88,6 +94,8 @@ public class ChatActivity extends AppCompatActivity {
     String receivedActivityChatId;
     String receivedActivityTitle;
 
+    String imagePath;
+
     int initialMessageCounter = 0;
 
     MultiAutoCompleteTextView messageInput;
@@ -95,15 +103,7 @@ public class ChatActivity extends AppCompatActivity {
     RecyclerView messageRecyclerView;
     ImageButton btnSend;
 
-    TextView fullNameDrawer;
-    TextView emailDrawer;
-    TextView phoneDrawer;
     TextView initialChatWelcomeMessage;
-
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
-    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +111,7 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         // Initializing Firebase Realtime Database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        database = BackendInstanceProvider.getDatabaseInstance();
         chatRef = database.getReference().child(CHATS_CHILD); // "chats" node reference in Firebase Realtime Database
 
         messageInput = findViewById(R.id.message_input_text);
@@ -122,21 +122,25 @@ public class ChatActivity extends AppCompatActivity {
 
         messageManager = new FirebaseDBMessageManager(database, new MessageSerializer());
 
+<<<<<<< HEAD
         fAuth = FirebaseAuth.getInstance();
         // The aim is to block any direct access to this page if the user is not logged in
         if (fAuth.getCurrentUser() == null) {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
         } else {
+=======
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+        fStorage = BackendInstanceProvider.getStorageInstance();
+        fStore = BackendInstanceProvider.getFirestoreInstance();
+
+        if (fAuth.getCurrentUser() != null) {
+>>>>>>> feature/246_firebase-storage-abstraction
             userId = fAuth.getCurrentUser().getUid();
-            FirebaseFirestore fStore = FirebaseFirestore.getInstance();
-            storageReference = FirebaseStorage.getInstance().getReference();
+            storageReference = fStorage.getReference();
             userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
             getRegisteredUserData();
         }
-
-        // Initializing Firebase Authentication and checking if the user is signed in
-        FirebaseInteraction.checkIfUserSignedIn(fAuth, ChatActivity.this);
 
         Intent data = getIntent();
         settingUpChatRoom(data);
@@ -241,13 +245,6 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        // Checking if user is signed in
-        FirebaseInteraction.checkIfUserSignedIn(fAuth, ChatActivity.this);
-    }
-
-    @Override
     public void onPause() {
         // Stop listening for updates from Firebase Realtime Database
         firebaseAdapter.stopListening();
@@ -296,6 +293,7 @@ public class ChatActivity extends AppCompatActivity {
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE) // making this method always public for testing and private otherwise
     public void createTempMessage(Uri uri, String fullNameString, String userId) {
         Message tempMessage = new Message(fullNameString, "Image loading...", userId, LOADING_IMAGE_URL, Long.toString(new Date().getTime()));
+        // TODO: Make abstraction for this part of code below (Firebase Realtime Database abstraction) --> difficult!
         chatRoom.push().setValue(tempMessage, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -307,8 +305,20 @@ public class ChatActivity extends AppCompatActivity {
                 String key = databaseReference.getKey();
                 StorageReference fileRef = storageReference.child(CHATS_CHILD).child(CHAT_ROOM_ID).child(key).child(uri.getLastPathSegment());
                 putImageInStorage(fileRef, uri, key);
+
+                // TODO: replace the end of this part of code to implement the .add method!
+                // --- --- --- ---
+                imagePath = CHATS_CHILD + "/" + CHAT_ROOM_ID + "/" + key + "/chatImage.jpg";
+//                Image image = new Image(uri.getLastPathSegment(), )
+//                image.setDocumentPath(imagePath);
+
             }
         });
+    }
+
+
+    private void putImageInStorage_new(StorageReference storageReference, Uri uri, final String key) {
+
     }
 
 
@@ -325,7 +335,7 @@ public class ChatActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         Message imageMessage = new Message(fullNameString, noMessageText, userId, uri.toString(), Long.toString(new Date().getTime()));
-                                        messageManager.set(imageMessage, chatRoom.toString().split("/",4)[3] + "/" + key, null, null); // ✅
+                                        messageManager.set(imageMessage, chatRoom.toString().split("/",4)[3] + "/" + key); // ✅
                                     }
                                 });
                     }

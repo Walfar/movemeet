@@ -18,6 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.sdp.movemeet.R;
@@ -32,6 +33,7 @@ import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.view.activity.ActivityListActivity;
+import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.main.MainActivity;
 import com.sdp.movemeet.view.profile.ProfileActivity;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
@@ -123,6 +125,29 @@ public class Navigation extends AppCompatActivity {
 
 
     /**
+     * Sign out the user in case it is not null (i.e. in case the Firebase Authentication service
+     * is able to retrieve the user object).
+     * @param fAuth The Firebase Authentication reference that allows to access to the user object
+     * @param activity The activity from which this function is called
+     */
+    public static void logoutIfUserNonNull(FirebaseAuth fAuth, Activity activity) {
+        FirebaseUser user = fAuth.getCurrentUser();
+        if (user != null) {
+            // Logging out the user from Firebase
+            FirebaseAuth.getInstance().signOut();
+            // Launching the LoginActivity
+            Intent intent = new Intent(activity, LoginActivity.class);
+            Context context = activity.getApplicationContext();
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("EXIT", true);
+            context.startActivity(intent);
+            activity.finish();
+        }
+    }
+
+    /**
      * Fills in the navigation bar's text fields with the user's information
      * 0 = fullName
      * 1 = email
@@ -203,7 +228,7 @@ public class Navigation extends AppCompatActivity {
                     finish();
                     break;
                 case R.id.nav_logout:
-                    FirebaseInteraction.logoutIfUserNonNull(
+                    logoutIfUserNonNull(
                             AuthenticationInstanceProvider.getAuthenticationInstance(),
                             this.activity);
                     finish();

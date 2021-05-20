@@ -1,7 +1,11 @@
 package com.sdp.movemeet.view.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -14,31 +18,31 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
-import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.backend.firebase.storage.StorageImageManager;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Activity;
+import com.sdp.movemeet.models.Image;
 import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.utility.ActivityPictureCache;
+import com.sdp.movemeet.utility.ImageHandler;
 import com.sdp.movemeet.view.chat.ChatActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.navigation.Navigation;
@@ -47,26 +51,24 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import static com.sdp.movemeet.utility.ActivityPictureCache.loadFromCache;
+
 /***
- * Activity for show the description of an activity. Informations about an activity are : sport, date and time, time estimate, organiser,
+ * Activity for show the description of an activity. Informations about an activity are : sport, date and time, time estimate, organizer,
  * a list of participants, a picture, address, and description. A user can register to an activity, and access to the chat.
  */
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 public class ActivityDescriptionActivity extends AppCompatActivity {
 
-    FirebaseAuth fAuth;
     private static final String TAG = "ActDescActivity";
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
 
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
-    TextView textView;
-
-    TextView fullName, email, phone, organizerView, numberParticipantsView, participantNamesView;
+    TextView organizerView, numberParticipantsView, participantNamesView;
+    FirebaseAuth fAuth;
     FirebaseFirestore fStore;
+    FirebaseStorage fStorage;
     StorageReference storageReference;
     String userId;
     String organizerId;
@@ -75,12 +77,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     ImageView activityImage;
     String imagePath;
     ProgressBar progressBar;
-    Uri uri;
 
     BackendManager<Activity> activityManager;
     BackendManager<User> userManager;
-    StorageImageManager storageImageManager;
-    ActivityPictureCache cache;
     Activity activity;
 
 
@@ -89,24 +88,22 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
 
-        Intent intent = getIntent();
 
-        if (intent != null) {
-            activity = (Activity) intent.getSerializableExtra("activity");
-            uri = intent.getData();
-            if (uri != null) {
-                loadActivityHeaderPicture();
-            }
-        }
-
-        fAuth = FirebaseAuth.getInstance();
-        storageReference = FirebaseStorage.getInstance().getReference();
-        fStore = FirebaseFirestore.getInstance();
-        storageImageManager = new StorageImageManager();
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+        fStorage = BackendInstanceProvider.getStorageInstance();
+        storageReference = fStorage.getReference();
+        fStore = BackendInstanceProvider.getFirestoreInstance();
+        userId = fAuth.getCurrentUser().getUid();
 
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
         activityManager = new FirestoreActivityManager(fStore, FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
 
+        Intent intent = getIntent();
+
+        if (intent != null) {
+            activity = (Activity) intent.getSerializableExtra("activity");
+            loadActivityHeaderPicture();
+        }
 
         if (fAuth.getCurrentUser() == null) {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
@@ -120,10 +117,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
 
         if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
-    }
-
-    public ImageView getActivityImage() {
-       return activityImage;
     }
 
 
@@ -227,9 +220,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             try {
                 activity.addParticipantId(userId);
                 createParticipantNumberView();
-                // TODO: check if this is good with Kepler
-                //activityManager.add(activity, FirestoreActivityManager.ACTIVITIES_COLLECTION + "/" + activity.getDocumentPath()).addOnSuccessListener(new OnSuccessListener() {
-                activityManager.set(activity, FirestoreActivityManager.ACTIVITIES_COLLECTION + "/" + activity.getDocumentPath(), "participantId", userId).addOnSuccessListener(new OnSuccessListener() {
+                activityManager.updt(userId, activity.getDocumentPath(), "participantId").addOnSuccessListener(new OnSuccessListener() {
                     @Override
                     public void onSuccess(Object o) {
                         Log.d(TAG, "Participant registered in Firebase Firestore!");
@@ -255,6 +246,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (activity.getParticipantId().contains(userId)) {
             Intent intent = new Intent(ActivityDescriptionActivity.this, ChatActivity.class);
             String activityDocumentPath = activity.getDocumentPath();
+            activityDocumentPath = activityDocumentPath.replace("activities/", "");
             intent.putExtra("ACTIVITY_CHAT_ID", activityDocumentPath);
             String activityTitle = activity.getTitle();
             intent.putExtra("ACTIVITY_TITLE", activityTitle);
@@ -277,9 +269,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        String organiserFullName = (String) document.getData().get("fullName");
-                        organizerView.setText(organiserFullName);
-                        Log.i(TAG, "organiser name: " + organiserFullName);
+                        String organizerFullName = (String) document.getData().get("fullName");
+                        organizerView.setText(organizerFullName);
+                        Log.i(TAG, "Organizer name: " + organizerFullName);
                     } else {
                         Log.d(TAG, "No such document!");
                     }
@@ -321,26 +313,49 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void loadActivityHeaderPicture() {
         activityImage = findViewById(R.id.activity_image_description);
         progressBar = findViewById(R.id.progress_bar_activity_description);
-        progressBar.setVisibility(View.VISIBLE);
+        imagePath = activity.getDocumentPath() + "/activityImage.jpg";
 
-        imagePath = "activities/" + activity.getActivityId() + "/activityImage.jpg";
+        Image image = new Image(null, activityImage);
+        image.setDocumentPath(imagePath);
+        ImageHandler.loadImage(image, this);
+    }
 
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
 
-        cache.loadFromCache(imagePath);
-        
-        StorageReference imageRef = storageReference.child(imagePath);
-        imageRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "Get image: SUCCESS");
-                    FirebaseInteraction.getImageFromFirebase(imageRef, activityImage, progressBar);
-                } else {
-                    Log.d(TAG, "Activity have no image");
-                    activityImage.setImageAlpha(R.drawable.run_woman);
-                }
+    public boolean isStorageWritePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (this.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v(TAG, "Write permission is granted");
+                return true;
+            } else {
+                Log.v(TAG, "Write permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
             }
-        });
+        } else { //permission is automatically granted on sdk<23 upon installation
+            Log.v(TAG, "Write permission is granted");
+            return true;
+        }
+    }
+
+    public boolean isStorageReadPermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (this.checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v(TAG, "Read permission is granted");
+                return true;
+            } else {
+                Log.v(TAG, "Read permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        } else { //permission is automatically granted on sdk<23 upon installation
+            Log.v(TAG, "Read permission is granted");
+            return true;
+        }
     }
 
     /**
@@ -361,15 +376,11 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (requestCode == 1000) {
             if (resultCode == android.app.Activity.RESULT_OK) {
                 Uri imageUri = data.getData();
-                progressBar.setVisibility(View.VISIBLE);
-                FirebaseInteraction.uploadImageToFirebase(storageReference, imagePath, imageUri, activityImage, progressBar);
+                Image image = new Image(imageUri, activityImage);
+                image.setDocumentPath(imagePath);
+                ImageHandler.uploadImage(image, this);
             }
         }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        finish();
-    }
 }

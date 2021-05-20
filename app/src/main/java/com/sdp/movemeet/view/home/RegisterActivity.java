@@ -1,8 +1,5 @@
 package com.sdp.movemeet.view.home;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,23 +11,24 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.main.MainActivity;
-
-import java.util.HashMap;
-import java.util.Map;
 
 // First activity that the users is going to see when launching the app
 public class RegisterActivity extends AppCompatActivity {
@@ -58,8 +56,8 @@ public class RegisterActivity extends AppCompatActivity {
         registerBtn = findViewById(R.id.button_register);
         loginBtn = findViewById(R.id.text_view_login_here);
 
-        fAuth = FirebaseAuth.getInstance(); // getting the current instance of the database (to perform actions on the database)
-        fStore = FirebaseFirestore.getInstance(); // instantiating the Firebase Firestore variable
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+        fStore = BackendInstanceProvider.getFirestoreInstance();
         // FirebaseFirestore db, String collection, BackendSerializer<User> serializer
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
         progressBar = findViewById(R.id.progressBar);
@@ -107,7 +105,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     userIDString = fAuth.getCurrentUser().getUid();
-                    String path = FirebaseFirestore.getInstance().collection(FirestoreUserManager.USERS_COLLECTION).document(userIDString).getPath();
+                    String path = fStore.collection(FirestoreUserManager.USERS_COLLECTION).document(userIDString).getPath();
                     user.setDocumentPath(path);
                     userManager.add(user, null).addOnSuccessListener(new OnSuccessListener() {
                         @Override
