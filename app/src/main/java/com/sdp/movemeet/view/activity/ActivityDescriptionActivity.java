@@ -58,23 +58,22 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
     public static final String ACTIVITY_IMAGE_NAME = "activityImage.jpg";
 
-    TextView organizerView, numberParticipantsView, participantNamesView;
-    FirebaseAuth fAuth;
-    FirebaseFirestore fStore;
-    FirebaseStorage fStorage;
-    StorageReference storageReference;
-    String userId;
-    String organizerId;
-    StringBuilder participantNamesString = new StringBuilder();
+    private TextView organizerView, numberParticipantsView, participantNamesView;
+    private FirebaseAuth fAuth;
+    private FirebaseFirestore fStore;
+    private FirebaseStorage fStorage;
+    private StorageReference storageReference;
+    private String userId, organizerId, imagePath;
+    private StringBuilder participantNamesString = new StringBuilder();
 
     ImageView activityImage;
-    String imagePath;
     ProgressBar progressBar;
 
     BackendManager<Activity> activityManager;
     BackendManager<User> userManager;
-    Activity activity;
 
+    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    public Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +99,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
         if (intent != null) {
             activity = (Activity) intent.getSerializableExtra("activity");
-            loadActivityHeaderPicture();
         }
 
         if (activity != null) {
@@ -120,6 +118,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         getOrganizerName();
         createParticipantNumberView();
         getParticipantNames();
+        loadActivityHeaderPicture();
     }
 
     private void getParticipantNames() {
