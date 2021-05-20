@@ -26,11 +26,6 @@ public class ImageStorageManager extends StorageManager<Image> {
     @Override
     public StorageTask add(Image image, String path) {
         return imageRef.child(path).putFile(image.getImageUri());
-        /* StorageReference fileRef = FirebaseStorage.getInstance().getReference().child(path);
-        Stores image in db, and retrieves corresponding view
-        return fileRef.putFile(image.getImageUri()).addOnSuccessListener(
-                taskSnapshot -> fileRef.getDownloadUrl().addOnSuccessListener(
-                        uri -> Picasso.get().load(uri).into(image.getImageView()))); */
     }
 
 

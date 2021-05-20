@@ -1,4 +1,4 @@
-package com.sdp.movemeet.backend.firebase.storage;
+package com.sdp.movemeet.utility;
 
 import android.Manifest;
 import android.app.Activity;
@@ -26,13 +26,13 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.FileOutputStream;
 
-public class CachedImageStorageManager {
+public class Cache {
 
     private ActivityDescriptionActivity activity;
 
     private String TAG = "Cache TAG";
 
-    public CachedImageStorageManager(Activity activity) {
+    public Cache(Activity activity) {
         this.activity = (ActivityDescriptionActivity) activity;
     }
 
@@ -66,7 +66,7 @@ public class CachedImageStorageManager {
             }
         }
     }
-    
+
     public void loadFromCache(String path) {
         Log.d(TAG, "Loading image from cache");
         if (isStorageReadPermissionGranted()) {
