@@ -42,20 +42,20 @@ public class ActivityDescriptionSecurityTest {
         FirebaseAuth mockAuth = mock(FirebaseAuth.class);
         AuthenticationInstanceProvider.fAuth = mockAuth;
         when(mockAuth.getCurrentUser()).thenReturn(null);
-        Intents.init();
     }
 
     @Test
     public void redirectionTest() {
+        Intents.init();
         Navigation.profileField = false;
         ActivityScenario scenario = ActivityScenario.launch(ActivityDescriptionActivity.class);
 
         intended(hasComponent(hasClassName(LoginActivity.class.getName())));
+        Intents.release();
     }
 
     @After
     public void tearDown() {
-        Intents.release();
         AuthenticationInstanceProvider.fAuth = FirebaseAuth.getInstance();
     }
 }
