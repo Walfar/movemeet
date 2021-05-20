@@ -28,6 +28,7 @@ public class WorkoutActivity extends AppCompatActivity {
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
 
+        // add download here
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
