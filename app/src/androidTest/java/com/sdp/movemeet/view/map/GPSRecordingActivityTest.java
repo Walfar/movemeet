@@ -1,11 +1,13 @@
 package com.sdp.movemeet.view.map;
 
 import android.Manifest;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Looper;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.GrantPermissionRule;
@@ -19,8 +21,17 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
+import com.sdp.movemeet.models.Activity;
+import com.sdp.movemeet.models.Sport;
 import com.sdp.movemeet.utility.LocationFetcher;
+import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,17 +43,26 @@ import org.mockito.stubbing.Answer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.pressBack;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.isNotNull;
+import static org.mockito.Matchers.notNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -62,9 +82,10 @@ public class GPSRecordingActivityTest {
     @Rule
     public GrantPermissionRule CoarseLocationPermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_COARSE_LOCATION);
 
+    Activity activity;
 
-    @Rule
-    public ActivityScenarioRule<GPSRecordingActivity> testRule = new ActivityScenarioRule<>(GPSRecordingActivity.class);
+    /*@Rule
+    public ActivityScenarioRule<GPSRecordingActivity> testRule = new ActivityScenarioRule<>(GPSRecordingActivity.class);*/
 
     private UiDevice device;
 
@@ -75,9 +96,41 @@ public class GPSRecordingActivityTest {
 
     @Before
     public void setup() {
-        device = UiDevice.getInstance(getInstrumentation());
+        activity = new Activity(
+            "12345",
+            "1",
+            "title",
+            2,
+                new ArrayList<String>(),
+            2.45,
+                3.697,
+                "description",
+            "documentPath",
+        new Date(2021, 11, 10, 1, 10),
+        10.4,
+        Sport.Running,
+        "address",
+                new Date()
+        );
 
-        scenario = testRule.getScenario();
+        FirebaseAuth fAuth = mock(FirebaseAuth.class);
+        FirebaseUser mockUser = mock(FirebaseUser.class);
+
+        when(fAuth.getCurrentUser()).thenReturn(mockUser);
+        when(mockUser.getUid()).thenReturn("1");
+
+        AuthenticationInstanceProvider.fAuth = fAuth;
+
+        Intent intent = new Intent(getApplicationContext(), GPSRecordingActivity.class).putExtra(ActivityDescriptionActivity.RECORDING_EXTRA_NAME, activity);
+
+        FirestoreActivityManager mockfStoreActivityManager = mock(FirestoreActivityManager.class);
+        GPSRecordingActivity.firestoreActivityManager = mockfStoreActivityManager;
+        when(mockfStoreActivityManager.add(any(), any())).thenReturn(mock(Task.class));
+
+        scenario = ActivityScenario.launch(intent);
+
+
+        device = UiDevice.getInstance(getInstrumentation());
 
         fakeLocation = new Location(LocationManager.PASSIVE_PROVIDER);
         fakeLocation.setLatitude(FAKE_LATITUDE);
@@ -116,6 +169,7 @@ public class GPSRecordingActivityTest {
 
     @Test
     public void checkPathGetsRecorded() {
+        Intents.init();
 
         onView(withId(R.id.gmap_recording)).check(matches(isDisplayed()));
 
@@ -140,16 +194,11 @@ public class GPSRecordingActivityTest {
         onView(withId(R.id.recordButton)).perform(click());
         onView(withId(R.id.recordButton)).check(matches(withText("Start")));
 
-        scenario.onActivity(activity -> {
-            locationFetcher.stopLocationUpdates();
-            locationFetcher.startLocationUpdates();
-        });
 
-        assert(sleep(2_000));
+        onView(isRoot()).perform(pressBack());
+        intended(hasComponent(ActivityDescriptionActivity.class.getName()));
 
-        scenario.onActivity(activity -> {
-            assertEquals("Activity kept recording but should have stopped", true, ((GPSRecordingActivity) activity).path.isEmpty());
-        });
+        Intents.release();
 
     }
 
@@ -158,6 +207,8 @@ public class GPSRecordingActivityTest {
         scenario.onActivity(activity -> {
             locationFetcher.stopLocationUpdates();
         });
+
+        AuthenticationInstanceProvider.fAuth = FirebaseAuth.getInstance();
     }
 
     public boolean sleep(int millis) {

@@ -35,8 +35,6 @@ import com.sdp.movemeet.utility.LocationFetcher;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.view.main.MainActivity;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,7 +54,9 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
     }
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
-    public FirestoreActivityManager firestoreActivityManager;
+    public static FirestoreActivityManager firestoreActivityManager = new FirestoreActivityManager(BackendInstanceProvider.getFirestoreInstance(),
+            FirestoreActivityManager.ACTIVITIES_COLLECTION,
+            new ActivitySerializer());
 
     public final static String MAP_NOT_READY_DESC = "Map isn't ready yet";
     public final static String MAP_READY_DESC = "Map is ready!";
@@ -123,10 +123,6 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
         locationFetcher.startLocationUpdates();
 
         supportMapFragment.getMapAsync(GPSRecordingActivity.this);
-
-        firestoreActivityManager = new FirestoreActivityManager(BackendInstanceProvider.getFirestoreInstance(),
-                FirestoreActivityManager.ACTIVITIES_COLLECTION,
-                new ActivitySerializer());
     }
 
 
@@ -155,7 +151,7 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
             GPSRecordingActivity recordingActivity = this;
             firestoreActivityManager.add(activity, null).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
-                public void onComplete(@NonNull @NotNull Task<Void> task) {
+                public void onComplete(@NonNull Task<Void> task) {
                     recordingActivity.finish();
                 }
             });
