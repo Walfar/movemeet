@@ -43,9 +43,11 @@ import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Activity;
+import com.sdp.movemeet.models.Sport;
 import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.chat.ChatActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
+import com.sdp.movemeet.view.map.GPSRecordingActivity;
 import com.sdp.movemeet.view.navigation.Navigation;
 
 import java.text.DateFormat;
@@ -61,6 +63,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
     FirebaseAuth fAuth;
     private static final String TAG = "ActDescActivity";
+    public static final String DESCRIPTION_ACTIVITY_KEY = "activitykey";
+    public static final String RECORDING_EXTRA_NAME = "gpsreckey";
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
@@ -96,7 +100,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
 
         if (intent != null) {
-            activity = (Activity) intent.getSerializableExtra("activity");
+            activity = (Activity) intent.getSerializableExtra(DESCRIPTION_ACTIVITY_KEY);
             uri = intent.getData();
             if (uri != null) {
                 loadActivityHeaderPicture();
@@ -130,6 +134,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         getOrganizerName();
         createParticipantNumberView();
         getParticipantNames();
+
+        findViewById(R.id.activityGPSRecDescription).setEnabled(activity.getSport() == Sport.Running);
     }
 
     private void getParticipantNames() {
@@ -254,6 +260,16 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         } else {
             Toast.makeText(ActivityDescriptionActivity.this, "Please register if you want to access the chat!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Goes to the GPS recording activity
+     */
+    public void goToGPSRecording(View view) {
+        Intent intent = new Intent(ActivityDescriptionActivity.this, GPSRecordingActivity.class);
+        intent.putExtra(RECORDING_EXTRA_NAME, activity);
+        startActivity(intent);
+        //finish();
     }
 
     /**

@@ -6,7 +6,10 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  *
@@ -34,7 +37,7 @@ public class Activity extends FirebaseObject implements Serializable {
     private String address;
     private Date createdAt;
 
-    private DocumentReference backendRef;
+    private Map<String, GPSPath> participantRecordings;
 
     static  private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
 
@@ -90,6 +93,8 @@ public class Activity extends FirebaseObject implements Serializable {
         this.sport = sport;
         this.address = address;
         this.createdAt = createdAt;
+
+        this.participantRecordings = new HashMap<String, GPSPath>();
     }
 
     /**
@@ -315,23 +320,21 @@ public class Activity extends FirebaseObject implements Serializable {
         return createdAt;
     }
 
+
     /**
-     *
-     * @return a DocumentReference to the activity
+     * Retrieves this activity's GPS recording data for all users
+     * @return an array of GPSPaths containing data recorded for this activity.
      */
-    public DocumentReference getBackendRef() {
-        return this.backendRef;
+    public Map<String, GPSPath> getParticipantRecordings() {
+        return this.participantRecordings;
     }
 
     /**
-     * Sets the backend reference property if it was previously null, does nothing otherwise.
-     *
-     * @param newRef the new value used to reference this activity in its collection in the backend
-     * @return the DocumentReference used to reference this activity in its collection in the backend
+     * Sets this activity's GPS recording data for all participants
+     * @param newRecordings an array of GPSPath containing information to attach to this activity.
      */
-    public DocumentReference setBackendRef(DocumentReference newRef) throws IllegalArgumentException {
-        if (backendRef == null) backendRef = newRef;
-        return backendRef;
+    public void setParticipantRecordings(Map<String, GPSPath> newRecordings) {
+        this.participantRecordings = newRecordings;
     }
 
 

@@ -12,10 +12,10 @@ import java.util.List;
  */
 public class GPSPath implements Serializable {
 
-    private List<LatLng> path;
+    private transient List<LatLng> path;
     private long time;
-    private transient float averageSpeed;
-    private transient float distance;
+    private float averageSpeed;
+    private float distance;
 
     /**
      * Returns a new GPSPath, having
@@ -74,6 +74,25 @@ public class GPSPath implements Serializable {
 
         this.distance = computeTotalDistance(this.path);
         if (this.time >= 0) this.averageSpeed = computeAverageSpeed(this.distance, this.time);
+    }
+
+    /**
+     * Sets this GPSPath's total distance attribute
+     * @param newDistance the new distance value to set, in meters
+     */
+    public void setDistance(float newDistance) {
+        this.distance = newDistance;
+
+        if (this.time > 0) this.averageSpeed = computeAverageSpeed(this.distance, this.time);
+    }
+
+    /**
+     * Sets this GPSPath's average speed attribute
+     * (Note: this method exists for serialization)
+     * @param newAvgSpeed the new average speed to set for this GPSPath, in km/h
+     */
+    public void setAverageSpeed(float newAvgSpeed) {
+        this.averageSpeed = newAvgSpeed;
     }
 
     /**

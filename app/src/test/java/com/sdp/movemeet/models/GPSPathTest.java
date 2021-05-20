@@ -2,8 +2,12 @@ package com.sdp.movemeet.models;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -148,5 +152,57 @@ public class GPSPathTest {
 
         path.setTime(200000);
         assert(avgSpeed != path.getAverageSpeed());
+    }
+
+    @Test
+    public void setDistanceWorks() {
+        ArrayList<LatLng> list = new ArrayList<LatLng>();
+        list.add(new LatLng(0,0));
+        list.add(new LatLng(1, 1));
+
+        long time = 100000;
+        GPSPath path = new GPSPath(list, time);
+
+        float dist = path.getDistance();
+        path.setDistance(0);
+        assert(dist != path.getDistance());
+    }
+
+    @Test
+    public void setAverageSpeedWorks() {
+        ArrayList<LatLng> list = new ArrayList<LatLng>();
+        list.add(new LatLng(0,0));
+        list.add(new LatLng(1, 1));
+
+        long time = 100000;
+        GPSPath path = new GPSPath(list, time);
+
+        float avgSpeed = path.getAverageSpeed();
+        path.setAverageSpeed(0);
+        assert(avgSpeed != path.getAverageSpeed());
+    }
+
+    @Test
+    public void testSerializability()  {
+        ArrayList<LatLng> list = new ArrayList<LatLng>();
+        list.add(new LatLng(0,0));
+        list.add(new LatLng(1, 1));
+
+        long time = 100000;
+
+        GPSPath path = new GPSPath(list, time);
+
+        boolean exceptionThrown = false;
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(path);
+            oos.flush();
+            byte [] data = bos.toByteArray();
+
+        } catch(IOException ex) {
+            exceptionThrown = true;
+        }
+        assert(exceptionThrown == false);
     }
 }
