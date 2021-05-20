@@ -164,7 +164,7 @@ public class MainMapFragmentTest {
     public void clickingOnActivityMakesCorrectIntentWhenLogged() {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
         Activity act = new Activity("activity id", "organizer id", "my title", 4, new ArrayList<>(), 0, 0,
-                    "desc", null, new Date(), 1, Soccer, "Dubai UAE", new Date());
+                    "desc", "activities/123455", new Date(), 1, Soccer, "Dubai UAE", new Date());
         ActivitiesUpdater.activities.add(act);
         mapFragment.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -184,7 +184,7 @@ public class MainMapFragmentTest {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
         mapFragment.user = null;
         Activity act = new Activity("activity id", "organizer id", "my title", 4, new ArrayList<>(), 0, 0,
-                    "desc", null, new Date(), 1, Soccer, "Dubai UAE", new Date());
+                    "desc", "activities/123455", new Date(), 1, Soccer, "Dubai UAE", new Date());
         ActivitiesUpdater.activities.add(act);
         mapFragment.getActivity().runOnUiThread(new Runnable() {
             @Override
