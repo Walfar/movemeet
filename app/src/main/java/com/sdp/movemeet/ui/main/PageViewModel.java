@@ -12,9 +12,35 @@ public class PageViewModel extends ViewModel {
     private LiveData<String> mText = Transformations.map(mIndex, new Function<Integer, String>() {
         @Override
         public String apply(Integer input) {
-            return "Hello world from section: " + input;
+            switch (input) {
+                case 1:
+                    return "Text-based descriptions of workouts";
+                case 2:
+                    return "Images of workouts";
+                case 3:
+                    return "Workouts in PDF format";
+                default:
+                    return "New workout tab";
+            }
         }
     });
+
+    /*
+
+    private LiveData<String> mText = Transformations.map(mIndex, new Function<Integer, String>() {
+        @Override
+        public String apply(Integer input) {
+            switch (input) {
+                case 1:
+                    return "Text-based descriptions of workouts";
+                case 2:
+                    return "Images of workouts";
+                case 3:
+                    return "Workouts in PDF format";
+            }
+        }
+    });
+     */
 
     public void setIndex(int index) {
         mIndex.setValue(index);
