@@ -2,6 +2,7 @@ package com.sdp.movemeet.backend.serialization;
 
 import com.sdp.movemeet.models.User;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,18 +16,22 @@ public class UserSerializer implements BackendSerializer<User> {
     public static final String PHONE_KEY = "phone";
     // The key used to access the description attribute of a serialized User
     public static final String DESCRIPTION_KEY = "description";
+    // The key used to access the list of registered activities attribute of a serialized User
+    public static final String REGISTERED_ACTIVITIES_KEY = "activityId";
 
     @Override
     public User deserialize(Map<String, Object> data) {
 
-        User user = new User (
+        User user = new User(
                 (String) data.get(FULL_NAME_KEY),
 
                 (String) data.get(EMAIL_KEY),
 
                 (String) data.get(PHONE_KEY),
 
-                (String) data.get(DESCRIPTION_KEY)
+                (String) data.get(DESCRIPTION_KEY),
+
+                (ArrayList<String>) data.get(REGISTERED_ACTIVITIES_KEY)
         );
 
         return user;
@@ -43,6 +48,8 @@ public class UserSerializer implements BackendSerializer<User> {
         data.put(PHONE_KEY, user.getPhoneNumber());
 
         data.put(DESCRIPTION_KEY, user.getDescription());
+
+        data.put(REGISTERED_ACTIVITIES_KEY, user.getRegisteredActivities());
 
         return data;
     }
