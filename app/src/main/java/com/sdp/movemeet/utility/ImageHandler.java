@@ -23,7 +23,9 @@ public class ImageHandler {
     private static BackendManager<Image> imageBackendManager;
 
     public static void loadImage(Image image, ProgressBar progressBar) {
-        progressBar.setVisibility(View.VISIBLE);
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
         imageBackendManager = new StorageImageManager();
         Task<Uri> document = (Task<Uri>) imageBackendManager.get(image.getDocumentPath());
         document.addOnSuccessListener(new OnSuccessListener<Uri>() {

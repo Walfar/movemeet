@@ -44,10 +44,12 @@ import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.backend.firebase.firebaseDB.FirebaseDBMessageManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
+import com.sdp.movemeet.backend.firebase.storage.StorageImageManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.MessageSerializer;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
+import com.sdp.movemeet.models.Image;
 import com.sdp.movemeet.models.Message;
 import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.home.LoginActivity;
@@ -57,7 +59,7 @@ import java.util.Date;
 
 public class ChatActivity extends AppCompatActivity {
 
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
 
     private static final String TAG = "ChatActivity";
@@ -68,7 +70,8 @@ public class ChatActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE = 2;
 
-    private static final String LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif";
+    public static final String LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif";
+    public static final String CHAT_IMAGE_NAME = "chatImage.jpg";
 
     public static final String noMessageText = "no messageText";
     public static final String noImageUrl = "no imageUrl";
@@ -78,6 +81,7 @@ public class ChatActivity extends AppCompatActivity {
     FirebaseFirestore fStore;
     FirebaseStorage fStorage;
     StorageReference storageReference;
+    BackendManager<Image> imageBackendManager;
     FirebaseDatabase database;
     DatabaseReference chatRef;
     DatabaseReference chatRoom;
@@ -142,7 +146,7 @@ public class ChatActivity extends AppCompatActivity {
 
         addExistingMessagesAndListenForNewMessages();
 
-        if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
+        if (enableNav) new Navigation(this, R.id.nav_home).createDrawer();
 
         // The aim is to block any direct access to this page if the user is not logged in
         if (fAuth.getCurrentUser() == null) {
@@ -261,7 +265,7 @@ public class ChatActivity extends AppCompatActivity {
         Message message = new Message(userName, messageText, userId, noImageUrl, Long.toString(new Date().getTime()));
         if (messageText.length() > 0) {
             Log.d(TAG, "message.getImageUrl(): " + message.getImageUrl());
-            messageManager.add(message, chatRoom.toString().split("/",4)[3]);
+            messageManager.add(message, chatRoom.toString().split("/", 4)[3]);
             messageInput.setText("");
         } else {
             Toast.makeText(getApplicationContext(), "Empty message.", Toast.LENGTH_SHORT).show();
@@ -287,10 +291,12 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE) // making this method always public for testing and private otherwise
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    // making this method always public for testing and private otherwise
     public void createTempMessage(Uri uri, String fullNameString, String userId) {
         Message tempMessage = new Message(fullNameString, "Image loading...", userId, LOADING_IMAGE_URL, Long.toString(new Date().getTime()));
         // TODO: Make abstraction for this part of code below (Firebase Realtime Database abstraction) --> difficult!
+        //  Probably add another .add method that can deal with "DatabaseReference.CompletionListener" ? --> ask Kepler for advice
         chatRoom.push().setValue(tempMessage, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -298,51 +304,41 @@ public class ChatActivity extends AppCompatActivity {
                     Log.w(TAG, "Unable to write message to database.", databaseError.toException());
                     return;
                 }
-                // Building a StorageReference and then uploading the image file
                 String key = databaseReference.getKey();
-                StorageReference fileRef = storageReference.child(CHATS_CHILD).child(CHAT_ROOM_ID).child(key).child(uri.getLastPathSegment());
-                putImageInStorage(fileRef, uri, key);
-
-                // TODO: replace the end of this part of code to implement the .add method!
-                // --- --- --- ---
-                imagePath = CHATS_CHILD + "/" + CHAT_ROOM_ID + "/" + key + "/chatImage.jpg";
-//                Image image = new Image(uri.getLastPathSegment(), )
-//                image.setDocumentPath(imagePath);
-
+                imageBackendManager = new StorageImageManager();
+                imagePath = CHATS_CHILD + "/" + CHAT_ROOM_ID + "/" + key + "/" + CHAT_IMAGE_NAME;
+                Image image = new Image(uri, null);
+                image.setDocumentPath(imagePath); // probably useless
+                UploadTask uploadTask = (UploadTask) imageBackendManager.add(image, imagePath);
+                putImageInStorage(uploadTask, key);
             }
         });
     }
 
 
-    private void putImageInStorage_new(StorageReference storageReference, Uri uri, final String key) {
-
-    }
-
-
-    private void putImageInStorage(StorageReference storageReference, Uri uri, final String key) {
+    private void putImageInStorage(UploadTask uploadTask, String key) {
         // Upload the image to Firebase Storage
-        storageReference.putFile(uri)
-                .addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // After the image loads, get a public downloadUrl for the image
-                        // and add it to the message.
-                        taskSnapshot.getMetadata().getReference().getDownloadUrl()
-                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        Message imageMessage = new Message(fullNameString, noMessageText, userId, uri.toString(), Long.toString(new Date().getTime()));
-                                        messageManager.set(imageMessage, chatRoom.toString().split("/",4)[3] + "/" + key); // ✅
-                                    }
-                                });
-                    }
-                })
-                .addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Image upload task was not successful.", e);
-                    }
-                });
+        uploadTask.addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // After the image loads, get a public downloadUrl for the image
+                // and add it to the message.
+                taskSnapshot.getMetadata().getReference().getDownloadUrl()
+                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Message imageMessage = new Message(fullNameString, noMessageText, userId, uri.toString(), Long.toString(new Date().getTime()));
+                            messageManager.set(imageMessage, chatRoom.toString().split("/", 4)[3] + "/" + key);
+                        }
+                    });
+            }
+        }).addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Image upload task was not successful.", e);
+            }
+        });
+
     }
 
 }

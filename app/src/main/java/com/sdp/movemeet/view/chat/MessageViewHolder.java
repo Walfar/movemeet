@@ -1,21 +1,16 @@
 package com.sdp.movemeet.view.chat;
 
-import android.net.Uri;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.models.Image;
 import com.sdp.movemeet.models.Message;
+import com.sdp.movemeet.utility.ImageHandler;
 
 import java.text.SimpleDateFormat;
 
@@ -23,8 +18,6 @@ import java.text.SimpleDateFormat;
  * Objects of this class embed a message in an adapted view.
  */
 public class MessageViewHolder extends RecyclerView.ViewHolder {
-
-    private static final String TAG = "MessageViewHolder";
 
     TextView messageTextView;
     ImageView messageImageView;
@@ -51,25 +44,24 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
      * @param message Message object containing the message data
      */
     public void bindMessage(Message message) {
-
+        // Handling the view for the author of the message
         if (message.getMessageUser() != null) {
             messengerTextView.setText(message.getMessageUser());
             messengerTextView.setVisibility(TextView.VISIBLE);
         }
-
-        // Handling the text message
+        // Handling the view for the text message
         if (message.getMessageText() != null) {
             messageTextView.setText(message.getMessageText());
             messageTextView.setVisibility(TextView.VISIBLE);
             messageImageView.setVisibility(ImageView.GONE);
-        // Handling the image message
         }
+        // Handling the ImageView of the image message
         if (message.getImageUrl() != null && message.getImageUrl().contains("http")) {
             handlingImageMessage(message);
             messageImageView.setVisibility(ImageView.VISIBLE);
             messageTextView.setVisibility(TextView.GONE);
         }
-
+        // Handling the date view of the message
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String messageTimeString = simpleDateFormat.format(Long.valueOf(message.getMessageTime()));
         messageTimeTextView.setText(messageTimeString);
@@ -84,31 +76,21 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
      */
     private void handlingImageMessage(Message message) {
         String imageUrl = message.getImageUrl();
-        if (imageUrl.startsWith("gs://")) {
 
-            StorageReference storageReference = FirebaseStorage.getInstance()
-                    .getReferenceFromUrl(imageUrl);
-
-            storageReference.getDownloadUrl()
-                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            String downloadUrl = uri.toString();
-                            Glide.with(messageImageView.getContext())
-                                    .load(downloadUrl)
-                                    .into(messageImageView);
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Getting download url was not successful.", e);
-                        }
-                    });
-        } else {
+        // TODO: my alternative:
+        if (imageUrl.equals(ChatActivity.LOADING_IMAGE_URL)) {
             Glide.with(messageImageView.getContext())
                     .load(message.getImageUrl())
                     .into(messageImageView);
+        } else {
+            // Converting the URL of the image into a path in Firebase Storage
+            int startIdx = imageUrl.indexOf(ChatActivity.CHATS_CHILD);
+            int endIdx = imageUrl.indexOf(ChatActivity.CHAT_IMAGE_NAME) + ChatActivity.CHAT_IMAGE_NAME.length();
+            String imagePath = imageUrl.substring(startIdx, endIdx);
+            imagePath = imagePath.replace("%2F","/");
+            Image image = new Image(null, messageImageView);
+            image.setDocumentPath(imagePath);
+            ImageHandler.loadImage(image, null);
         }
     }
 
