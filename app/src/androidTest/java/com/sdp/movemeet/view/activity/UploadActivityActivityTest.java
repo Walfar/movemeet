@@ -15,10 +15,13 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.api.Backend;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
@@ -33,6 +36,7 @@ import com.sdp.movemeet.view.navigation.security.MainActivitySecurityTest;
 
 import org.hamcrest.Matcher;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -326,6 +330,16 @@ public class UploadActivityActivityTest {
     @After
     public void tearDown() {
         Intents.release();
+        BackendInstanceProvider.database = FirebaseDatabase.getInstance();
+        BackendInstanceProvider.storage = FirebaseStorage.getInstance();
+        BackendInstanceProvider.firestore = FirebaseFirestore.getInstance();
+
+        AuthenticationInstanceProvider.fAuth = FirebaseAuth.getInstance();
+    }
+
+    @AfterClass
+    public static void after() {
+
     }
 
     public static ViewAction forceDoubleClick() {
