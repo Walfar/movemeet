@@ -203,9 +203,9 @@ public class Navigation extends AppCompatActivity {
                     finish();
                     break;
                 case R.id.nav_logout:
-                    /*FirebaseInteraction.logoutIfUserNonNull(
+                    FirebaseInteraction.logoutIfUserNonNull(
                             AuthenticationInstanceProvider.getAuthenticationInstance(),
-                            this.activity); */
+                            this.activity);
                     finish();
                     break;
                 case R.id.nav_start_activity:
@@ -225,5 +225,5 @@ public class Navigation extends AppCompatActivity {
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }
+

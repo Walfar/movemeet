@@ -37,13 +37,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:height="100dp"
                 android:fontFamily="@font/armata"
                 android:padding="20dp"
-                android:paddingLeft="20dp"
-                android:text="Activities"
-                android:textSize="40dp" />
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="@string/activity_list_title"
+                android:textSize="40sp" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

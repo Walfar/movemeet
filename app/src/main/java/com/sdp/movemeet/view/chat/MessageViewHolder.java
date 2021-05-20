@@ -61,16 +61,17 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         if (message.getMessageText() != null) {
             messageTextView.setText(message.getMessageText());
             messageTextView.setVisibility(TextView.VISIBLE);
-            // Handling the image message
-        } else if (message.getImageUrl() != null) {
+            messageImageView.setVisibility(ImageView.GONE);
+        // Handling the image message
+        }
+        if (message.getImageUrl() != null && message.getImageUrl().contains("http")) {
             handlingImageMessage(message);
-
             messageImageView.setVisibility(ImageView.VISIBLE);
             messageTextView.setVisibility(TextView.GONE);
         }
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String messageTimeString = simpleDateFormat.format(message.getMessageTime());
+        String messageTimeString = simpleDateFormat.format(Long.valueOf(message.getMessageTime()));
         messageTimeTextView.setText(messageTimeString);
         messageTimeTextView.setVisibility(TextView.VISIBLE);
     }

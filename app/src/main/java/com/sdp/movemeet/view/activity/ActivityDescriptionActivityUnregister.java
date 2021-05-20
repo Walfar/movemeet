@@ -10,23 +10,29 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.sdp.movemeet.backend.FirebaseInteraction;
-import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.models.Activity;
+import com.sdp.movemeet.view.home.HomeScreenActivity;
+import com.sdp.movemeet.view.home.LoginActivity;
 
+/**
+ * Activity description for unregistered user. An unregistered user can't see all information of an activity,
+ * he cannot see the organiser name, the date and participants. If the user want to know more about this activity, there
+ * is a button for sign up in movemeet
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
 
-    FirebaseAuth fAuth;
-    private Activity act;
+    Activity activity;
     private static final String TAG = "ActDescActivity";
     StorageReference storageReference;
     ImageView activityImage;
@@ -37,19 +43,27 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_description);
+        setContentView(R.layout.activity_description_unregister);
 
         Intent intent = getIntent();
 
         if (intent != null) {
-            act = (Activity) intent.getSerializableExtra("activity");
+            activity = (Activity) intent.getSerializableExtra("activity");
         }
 
         uri = intent.getData();
-        if(uri != null){
+        if (uri != null) {
             loadActivityHeaderPicture();
         }
 
+        storageReference = FirebaseStorage.getInstance().getReference();
+
+        if (activity != null) {
+            displayDescriptionActivityData();
+        }
+    }
+
+    public void displayDescriptionActivityData() {
         createTitleView();
         createParticipantNumberView();
         createDescriptionView();
@@ -59,62 +73,67 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
     }
 
     public void goToLogin(View v) {
-        if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        }
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
+        finish();
     }
 
+    /**
+     * Title from the activity
+     */
     private void createTitleView() {
-        // activityTitle from the activity
         TextView activityTitle = (TextView) findViewById(R.id.activity_title_description);
-        if (act != null) activityTitle.setText(act.getTitle());
+        activityTitle.setText(activity.getTitle());
     }
 
+    /**
+     * Number of participants from the activity
+     */
     private void createParticipantNumberView() {
-        // number of participants from the activity
         TextView numberParticipantsView = (TextView) findViewById(R.id.activity_number_description);
-        if (act != null) {
-            numberParticipantsView.setText(act.getParticipantId().size() + "/" + act.getNumberParticipant());
-        }
+        numberParticipantsView.setText(activity.getParticipantId().size() + "/" + activity.getNumberParticipant());
     }
 
+    /**
+     * Description from the activity
+     */
     private void createDescriptionView() {
-        // description from the activity
         TextView descriptionView = (TextView) findViewById(R.id.activity_description_description);
-        if (act != null) descriptionView.setText(act.getDescription());
+        descriptionView.setText(activity.getDescription());
     }
 
-
+    /**
+     * Sport of the activity
+     */
     private void createSportView() {
         TextView sportView = (TextView) findViewById(R.id.activity_sport_description);
-        if (act != null) {
-            sportView.setText(act.getSport().toString());
-        }
+        sportView.setText(activity.getSport().toString());
     }
 
+    /**
+     * Duration of the activity
+     */
     private void createDurationView() {
         TextView durationView = (TextView) findViewById(R.id.activity_duration_description);
-        if (act != null) {
-            durationView.setText(String.valueOf((int) act.getDuration()));
-        }
+        durationView.setText(String.valueOf((int) activity.getDuration()));
     }
 
+    /**
+     * Address of the activity
+     */
     private void createAddressView() {
-        // address from the activity
         TextView addressView = (TextView) findViewById(R.id.activity_address_description);
-        if (act != null) {
-            addressView.setText(act.getAddress());
-        }
+        addressView.setText(activity.getAddress());
     }
 
+    /**
+     * Image of the activity
+     */
     private void loadActivityHeaderPicture() {
         activityImage = findViewById(R.id.activity_image_description);
         progressBar = findViewById(R.id.progress_bar_activity_description);
         progressBar.setVisibility(View.VISIBLE);
-        storageReference = FirebaseStorage.getInstance().getReference();
-        if (act != null) {
-            imagePath = "activities/" + act.getActivityId() + "/activityImage.jpg";
+        if (activity != null) {
+            imagePath = "activities/" + activity.getActivityId() + "/activityImage.jpg";
             StorageReference imageRef = storageReference.child(imagePath);
             imageRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override

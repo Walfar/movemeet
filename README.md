@@ -13,10 +13,10 @@
 
 This app was created for the CS-306 Software Development Project course.
 
-*movemeet* is an Android application allowing you to organize any type of sports activity. The user can either join activities or plan an activity at the location he wants directly via an interactive map. He can then add a description to his activity and invite partners to join him! Each activity has its own chat allowing participants to communicate in a simple and efficient way. The app includes additional features such as workout exercises and the possibility to record your GPS track during a run or a walk.
+**movemeet** is an Android application allowing you to organize any type of sports activity. The user can either join activities or plan an activity at the location he wants directly via an interactive map. He can then add a description to his activity and invite partners to join him! Each activity has its own chat allowing participants to communicate in a simple and efficient way. The app includes additional features such as workout exercises and the possibility to record your GPS track during a run or a walk.
 
 ### Technologies
-* This software is an Android app developped with Android Studio and written in Java
+* This software is an Android app developed with Android Studio and written in Java
 * Firebase is used for the backend data management (user accounts, sports activity parameters) and for the chat
 
 ### Developers
