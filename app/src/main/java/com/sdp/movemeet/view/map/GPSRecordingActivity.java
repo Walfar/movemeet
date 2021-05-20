@@ -100,16 +100,10 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_g_p_s_recording);
 
-        if (AuthenticationInstanceProvider.getAuthenticationInstance().getCurrentUser() == null) {
-            Intent intent = new Intent(GPSRecordingActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
         Intent intent = getIntent();
         activity = (Activity) intent.getSerializableExtra(ActivityDescriptionActivity.RECORDING_EXTRA_NAME);
 
-        if (activity == null) {
+        if (AuthenticationInstanceProvider.getAuthenticationInstance().getCurrentUser() == null || activity == null) {
             intent = new Intent(GPSRecordingActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
