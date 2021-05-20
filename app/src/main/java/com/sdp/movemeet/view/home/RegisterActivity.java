@@ -29,6 +29,7 @@ import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.main.MainActivity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -95,7 +96,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        User user = new User(fullNameString, emailString, phoneString, "");
+        ArrayList<String> listRegisteredActivity = new ArrayList<>();
+        User user = new User(fullNameString, emailString, phoneString, "", listRegisteredActivity);
 
         registeringUserToFirebase(user);
 
