@@ -17,7 +17,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.movemeet.noActionBar">
-        <activity android:name=".view.activity.ActivityListActivity"></activity>
+        <activity
+            android:name=".WorkoutActivity"
+            android:label="@string/title_activity_workout"
+            android:theme="@style/Theme.movemeet.noActionBar.NoActionBar"></activity>
+        <activity android:name=".view.activity.ActivityListActivity" />
         <activity android:name=".view.map.GPSRecordingActivity" />
         <activity
             android:name=".view.profile.EditProfileActivity"
@@ -74,8 +78,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sdp.movemeet.view.home.HomeScreenActivity" />
         </activity>
-        <activity android:name=".view.activity.ActivityDescriptionActivity"></activity>
-
+        <activity android:name=".view.activity.ActivityDescriptionActivity" />
         <activity
             android:name=".view.activity.ActivityDescriptionActivityUnregister"
             android:parentActivityName=".view.main.MainUnregisterActivity"

@@ -21,6 +21,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.WorkoutActivity;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
@@ -116,6 +117,16 @@ public class Navigation extends AppCompatActivity {
     public static void goToListOfActivities(View view) {
         Context context = view.getContext();
         Intent intent = new Intent(context, ActivityListActivity.class);
+        context.startActivity(intent);
+    }
+
+    /**
+     * Starts the Workout activity
+     * @param view the View in which to start the activity
+     */
+    public static void goToWorkoutActivity(View view) {
+        Context context = view.getContext();
+        Intent intent = new Intent(context, WorkoutActivity.class);
         context.startActivity(intent);
     }
 
@@ -216,6 +227,10 @@ public class Navigation extends AppCompatActivity {
                     break;
                 case R.id.nav_list_activities:
                     Navigation.goToListOfActivities(this.navigationView);
+                    finish();
+                    break;
+                case R.id.nav_workouts:
+                    Navigation.goToWorkoutActivity(this.navigationView);
                     finish();
                     break;
             }

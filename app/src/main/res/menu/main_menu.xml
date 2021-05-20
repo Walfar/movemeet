@@ -44,6 +44,19 @@
         </menu>
     </item>
 
+    <item android:title="Workouts">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_workouts"
+                    android:icon="@drawable/settings"
+                    android:title="Workouts">
+
+                </item>
+            </group>
+        </menu>
+    </item>
+
     <item android:title="@string/drawer_settings_group">
         <menu>
             <group android:checkableBehavior="single">
