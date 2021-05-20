@@ -84,16 +84,19 @@ public class UploadActivityActivity extends AppCompatActivity {
 
         // Setup Firebase services
         fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+        if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            finish();
+        }
+
+        if (enableNav) new Navigation(this, R.id.nav_add_activity).createDrawer();
+
         activityBackendManager = new FirestoreActivityManager(
                 BackendInstanceProvider.getFirestoreInstance(),
                 FirestoreActivityManager.ACTIVITIES_COLLECTION,
                 new ActivitySerializer());
 
         //The aim is to block any direct access to this page if the user is not logged
-        if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            finish();
-        }
 
         // Setup activity creation form inputs
         setupSportSpinner(this);
@@ -119,10 +122,6 @@ public class UploadActivityActivity extends AppCompatActivity {
                 retrieveAddress(bundle.getParcelable("position"));
             }
         }
-
-        if (enableNav) new Navigation(this, R.id.nav_add_activity).createDrawer();
-        /*Navigation nav = new Navigation(this, R.id.nav_add_activity);
-        nav.createDrawer();*/
 
     }
 

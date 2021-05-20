@@ -29,12 +29,11 @@ import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.Activity;
-import com.sdp.movemeet.view.activity.UploadActivityActivity;
 import com.sdp.movemeet.view.main.MainActivity;
-import com.sdp.movemeet.view.navigation.security.MainActivitySecurityTest;
 
 import org.hamcrest.Matcher;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -333,6 +332,11 @@ public class UploadActivityActivityTest {
         BackendInstanceProvider.firestore = FirebaseFirestore.getInstance();
 
         AuthenticationInstanceProvider.fAuth = FirebaseAuth.getInstance();
+    }
+
+    @AfterClass
+    public static void after() {
+
     }
 
     public static ViewAction forceDoubleClick() {

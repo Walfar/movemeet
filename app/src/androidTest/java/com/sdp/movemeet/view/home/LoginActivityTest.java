@@ -70,7 +70,6 @@ public class LoginActivityTest {
     }
 
     @Test
-    @LargeTest
     public void Login_TrueNonEmpty(){
         onView(withId(R.id.edit_text_email))
                 .perform(typeText(trueEmail), closeSoftKeyboard());

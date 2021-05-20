@@ -15,17 +15,6 @@ import com.sdp.movemeet.R;
 
 public class ActivityListActivity extends AppCompatActivity {
 
-    /*
-    TextView fullName, email, phone;
-    FirebaseAuth fAuth;
-    FirebaseFirestore fStore;
-    String userId;
-
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
-    TextView textView;*/
-
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
 

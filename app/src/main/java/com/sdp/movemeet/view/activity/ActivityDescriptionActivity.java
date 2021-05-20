@@ -82,13 +82,19 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_description);
 
         fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
-        fStorage = BackendInstanceProvider.getStorageInstance();
-        storageReference = fStorage.getReference();
-        fStore = BackendInstanceProvider.getFirestoreInstance();
-        userId = fAuth.getCurrentUser().getUid();
+        if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            finish();
+        } else {
+            userId = fAuth.getCurrentUser().getUid();
+            fStorage = BackendInstanceProvider.getStorageInstance();
+            storageReference = fStorage.getReference();
+            fStore = BackendInstanceProvider.getFirestoreInstance();
+            userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
+            activityManager = new FirestoreActivityManager(fStore, FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
+        }
 
-        userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
-        activityManager = new FirestoreActivityManager(fStore, FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
+        if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
 
         Intent intent = getIntent();
 
@@ -97,16 +103,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             loadActivityHeaderPicture();
         }
 
-        if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            finish();
-        }
-
         if (activity != null) {
             displayDescriptionActivityData();
         }
-
-        if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
     }
 
 
@@ -129,14 +128,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         for (int i = 0; i < participantIds.size(); i++) {
             String currentParticipantId = participantIds.get(i);
             getCurrentParticipantName(currentParticipantId);
-        }
-    }
-
-    public void logout(View view) {
-        if (userId != null) {
-            fAuth.signOut(); // this will do the logout of the user from Firebase
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
         }
     }
 

@@ -58,6 +58,19 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
+        fAuth = FirebaseAuth.getInstance();
+        if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
+            finish();
+        } else {
+            userId = fAuth.getCurrentUser().getUid();
+            storageReference = fStorage.getReference();
+            userImagePath = "users/" + userId + "/profile.jpg";
+            Image image = new Image(null, profileImage);
+            image.setDocumentPath(userImagePath);
+            ImageHandler.loadImage(image, progressBar);
+        }
+
         Intent data = getIntent();
         fullNameString = data.getStringExtra("fullName");
         emailString = data.getStringExtra("email");
@@ -70,19 +83,6 @@ public class EditProfileActivity extends AppCompatActivity {
         fStore = BackendInstanceProvider.getFirestoreInstance();
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
         fStorage = BackendInstanceProvider.getStorageInstance();
-
-        if (fAuth.getCurrentUser() != null) {
-            userId = fAuth.getCurrentUser().getUid();
-            storageReference = fStorage.getReference();
-            userImagePath = "users/" + userId + "/profile.jpg";
-            Image image = new Image(null, profileImage);
-            image.setDocumentPath(userImagePath);
-            ImageHandler.loadImage(image, progressBar);
-        } else {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        }
-
     }
 
 

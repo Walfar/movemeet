@@ -68,6 +68,17 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+        //The aim is to block any direct access to this page if the user is not logged
+        if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            finish();
+        } else {
+            userId = fAuth.getCurrentUser().getUid();
+        }
+
+        if(enableNav) new Navigation(this, R.id.nav_edit_profile).createDrawer();
+
         profileImage = findViewById(R.id.image_view_profile_image);
         progressBar = findViewById(R.id.progress_bar_profile);
 
@@ -78,27 +89,13 @@ public class ProfileActivity extends AppCompatActivity {
 
         fStore = BackendInstanceProvider.getFirestoreInstance();
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
-        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         fStorage = BackendInstanceProvider.getStorageInstance();
-        if (fAuth.getCurrentUser() != null) {
-            userId = fAuth.getCurrentUser().getUid();
-            displayRegisteredUserData();
-            storageReference = fStorage.getReference();
-            userImagePath = "users/" + userId + "/profile.jpg";
-            Image image = new Image(null, profileImage);
-            image.setDocumentPath(userImagePath);
-            ImageHandler.loadImage(image, progressBar);
-        }
-
-        if(enableNav) new Navigation(this, R.id.nav_edit_profile).createDrawer();
-
-        //The aim is to block any direct access to this page if the user is not logged
-        //Smth must be wrong since it prevents automatic connection during certain tests
-        if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            finish();
-        }
-
+        displayRegisteredUserData();
+        storageReference = fStorage.getReference();
+        userImagePath = "users/" + userId + "/profile.jpg";
+        Image image = new Image(null, profileImage);
+        image.setDocumentPath(userImagePath);
+        ImageHandler.loadImage(image, progressBar);
     }
 
 

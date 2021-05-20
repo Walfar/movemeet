@@ -49,6 +49,13 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+
+        if (fAuth.getCurrentUser() != null) { // if the user is already logged in (i.e. the current user object is present), we directly send him to the "MainActivity"
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
+        }
+
         fullNameEditText = findViewById(R.id.edit_text_full_name);
         emailEditText = findViewById(R.id.edit_text_email);
         passwordEditText = findViewById(R.id.edit_text_password);
@@ -56,16 +63,9 @@ public class RegisterActivity extends AppCompatActivity {
         registerBtn = findViewById(R.id.button_register);
         loginBtn = findViewById(R.id.text_view_login_here);
 
-        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         fStore = BackendInstanceProvider.getFirestoreInstance();
-        // FirebaseFirestore db, String collection, BackendSerializer<User> serializer
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
         progressBar = findViewById(R.id.progressBar);
-
-        if (fAuth.getCurrentUser() != null) { // if the user is already logged in (i.e. the current user object is present), we directly send him to the "MainActivity"
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            finish();
-        }
 
     }
 

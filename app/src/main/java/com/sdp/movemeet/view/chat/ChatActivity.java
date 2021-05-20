@@ -107,6 +107,17 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        fAuth = FirebaseAuth.getInstance();
+        // The aim is to block any direct access to this page if the user is not logged in
+        if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
+            finish();
+        } else {
+            userId = fAuth.getCurrentUser().getUid();
+        }
+
+        if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
+
         // Initializing Firebase Realtime Database
         database = BackendInstanceProvider.getDatabaseInstance();
         chatRef = database.getReference().child(CHATS_CHILD); // "chats" node reference in Firebase Realtime Database
@@ -123,12 +134,9 @@ public class ChatActivity extends AppCompatActivity {
         fStorage = BackendInstanceProvider.getStorageInstance();
         fStore = BackendInstanceProvider.getFirestoreInstance();
 
-        if (fAuth.getCurrentUser() != null) {
-            userId = fAuth.getCurrentUser().getUid();
-            storageReference = fStorage.getReference();
-            userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
-            getRegisteredUserData();
-        }
+        storageReference = fStorage.getReference();
+        userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
+        getRegisteredUserData();
 
         Intent data = getIntent();
         settingUpChatRoom(data);
@@ -138,14 +146,6 @@ public class ChatActivity extends AppCompatActivity {
         // Realtime Database. A new element for each message is automatically added to the UI.
 
         addExistingMessagesAndListenForNewMessages();
-
-        if (enableNav) new Navigation(this, R.id.nav_home).createDrawer();
-
-        // The aim is to block any direct access to this page if the user is not logged in
-        if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        }
 
     }
 

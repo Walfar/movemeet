@@ -101,6 +101,7 @@ public class MainMapFragmentTest {
 
     @Before
     public void setUp() {
+        Navigation.profileField = false;
         fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         fAuth.signInWithEmailAndPassword("test@test.com", "password");
         Intents.init();

@@ -26,14 +26,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (enableNav) new Navigation(this, R.id.nav_home).createDrawer();
-
         //The aim is to block any direct access to this page if the user is not logged
         fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         if (fAuth.getCurrentUser() == null) {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
         }
+
+        if (enableNav) new Navigation(this, R.id.nav_home).createDrawer();
 
     }
 }
