@@ -56,6 +56,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
 
+    public static final String ACTIVITY_IMAGE_NAME = "activityImage.jpg";
+
     TextView organizerView, numberParticipantsView, participantNamesView;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
@@ -309,7 +311,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void loadActivityHeaderPicture() {
         activityImage = findViewById(R.id.activity_image_description);
         progressBar = findViewById(R.id.progress_bar_activity_description);
-        imagePath = activity.getDocumentPath() + "/activityImage.jpg";
+        imagePath = activity.getDocumentPath() + "/" + ACTIVITY_IMAGE_NAME;
         Image image = new Image(null, activityImage);
         image.setDocumentPath(imagePath);
         ImageHandler.loadImage(image, progressBar);

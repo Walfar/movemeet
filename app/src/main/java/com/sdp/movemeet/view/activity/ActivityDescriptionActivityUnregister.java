@@ -28,6 +28,8 @@ import com.sdp.movemeet.view.home.LoginActivity;
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
 
+    public static final String ACTIVITY_IMAGE_NAME = "activityImage.jpg";
+
     Activity activity;
     private static final String TAG = "ActDescActivity";
     FirebaseStorage fStorage;
@@ -125,7 +127,7 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
     private void loadActivityHeaderPicture() {
         activityImage = findViewById(R.id.activity_image_description);
         progressBar = findViewById(R.id.progress_bar_activity_description);
-        imagePath = activity.getDocumentPath() + "/activityImage.jpg";
+        imagePath = activity.getDocumentPath() + "/" + ACTIVITY_IMAGE_NAME;
         Image image = new Image(null, activityImage);
         image.setDocumentPath(imagePath);
         ImageHandler.loadImage(image, progressBar);
