@@ -150,7 +150,9 @@
     <string name="activity_chat_initial_message">Initial chat welcome message</string>
     <string name="activity_send_image_button">Send Image</string>
     <string name="title_activity_workout">WorkoutActivity</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_1">Text Workouts</string>
+    <string name="tab_text_2">Image Workouts</string>
+    <string name="tab_text_3">PDF Workouts</string>
+
 
 </resources>
