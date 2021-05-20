@@ -275,29 +275,6 @@ public class UserTest {
         user.addActivitiesToRegistered(activity1);
         user.addActivitiesToRegistered(activity2);
 
-        assertEquals(2, user.getRegisteredActivities().size());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void userRemoveParticipantNull() {
-        User user = new User(DUMMY_FULL_NAME, DUMMY_EMAIL, DUMMY_PHONE_NUMBER, DUMMY_DESCRIPTION, DUMMY_USER_ID, DUMMY_IMAGE_ID, DUMMY_DOCUMENT_PATH, DUMMY_REGISTERED_ACTIVITY);
-
-        user.removeActivity(null);
-
-    }
-
-    @Test
-    public void userRemoveCorrect() {
-        User user = new User(DUMMY_FULL_NAME, DUMMY_EMAIL, DUMMY_PHONE_NUMBER, DUMMY_DESCRIPTION, DUMMY_USER_ID, DUMMY_IMAGE_ID, DUMMY_DOCUMENT_PATH, DUMMY_REGISTERED_ACTIVITY);
-
-        String activity1 = "BOB";
-        String activity2 = "bob2";
-
-        user.addActivitiesToRegistered(activity1);
-        user.addActivitiesToRegistered(activity2);
-
-        user.removeActivity(activity1);
-
-        assertEquals(1, user.getRegisteredActivities().size());
+        assertEquals(3, user.getRegisteredActivities().size());
     }
 }

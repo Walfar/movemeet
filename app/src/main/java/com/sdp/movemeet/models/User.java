@@ -166,24 +166,11 @@ public class User extends FirebaseObject implements Serializable {
             throw new IllegalArgumentException();
         }
         if(registeredActivities.contains(activityId)){
-            throw new IllegalArgumentException("Already registered");
+            throw new IllegalArgumentException("Activity already registered");
         }
 
         this.registeredActivities.add(activityId);
     }
-
-    /**
-     *
-     * @param activityId remove an activity
-     */
-    public void removeActivity(String activityId){
-        if(activityId == null){
-            throw new IllegalArgumentException();
-        }
-
-        this.registeredActivities.remove(activityId);
-    }
-
 
     public String getDocumentPath() {
         return super.getDocumentPath();
