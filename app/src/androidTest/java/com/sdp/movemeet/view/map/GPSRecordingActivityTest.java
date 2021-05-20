@@ -28,6 +28,7 @@ import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
+import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.Sport;
 import com.sdp.movemeet.utility.LocationFetcher;
@@ -209,6 +210,9 @@ public class GPSRecordingActivityTest {
             locationFetcher.stopLocationUpdates();
         });
 
+        GPSRecordingActivity.firestoreActivityManager = new FirestoreActivityManager(BackendInstanceProvider.getFirestoreInstance(),
+                FirestoreActivityManager.ACTIVITIES_COLLECTION,
+                new ActivitySerializer());
         AuthenticationInstanceProvider.fAuth = FirebaseAuth.getInstance();
     }
 
