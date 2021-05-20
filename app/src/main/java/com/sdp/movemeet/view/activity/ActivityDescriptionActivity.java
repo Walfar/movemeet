@@ -96,7 +96,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         if (fAuth.getCurrentUser() == null) {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            finish();
+            this.finish();
         }
 
         if (intent != null) {
@@ -113,13 +113,11 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
         activityManager = new FirestoreActivityManager(fStore, FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
 
-        userId = fAuth.getCurrentUser().getUid();
-
         if (activity != null) {
             displayDescriptionActivityData();
         }
 
-        if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
+        if(Navigation.profileField) new Navigation(this, R.id.nav_home).createDrawer();
     }
 
 
@@ -221,6 +219,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Syncing registered participant to Firebase Firestore (field array "participantId")
      */
     public void registerToActivity(View v) {
+        userId = fAuth.getCurrentUser().getUid();
         if (userId != null) {
             try {
                 activity.addParticipantId(userId);
@@ -250,6 +249,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Allowing the access to the chat of the activity only if the user is registered to the activity
      */
     public void goToIndividualChat(View view) {
+        userId = fAuth.getCurrentUser().getUid();
         if (activity.getParticipantId().contains(userId)) {
             Intent intent = new Intent(ActivityDescriptionActivity.this, ChatActivity.class);
             String activityDocumentPath = activity.getDocumentPath();
@@ -351,6 +351,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Launch the Gallery to select a header picture for the activity
      */
     public void changeActivityPicture(View view) {
+        userId = fAuth.getCurrentUser().getUid();
         if (userId.equals(organizerId)) {
             Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(openGalleryIntent, 1000);
