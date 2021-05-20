@@ -77,8 +77,8 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     private void handlingImageMessage(Message message) {
         String imageUrl = message.getImageUrl();
 
-        // TODO: my alternative:
         if (imageUrl.equals(ChatActivity.LOADING_IMAGE_URL)) {
+            // Temporarily uploading the loading wheel to Firebase Storage
             Glide.with(messageImageView.getContext())
                     .load(message.getImageUrl())
                     .into(messageImageView);

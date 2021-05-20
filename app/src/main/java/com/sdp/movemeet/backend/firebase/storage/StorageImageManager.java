@@ -19,10 +19,6 @@ public class StorageImageManager implements BackendManager<Image> {
 
     @Override
     public StorageTask add(Image image, String path) {
-        //Stores image in db, and retrieves corresponding view
-//        return storageReference.child(path).putFile(image.getImageUri()).addOnSuccessListener(
-//                taskSnapshot -> storageReference.child(path).getDownloadUrl().addOnSuccessListener(
-//                        uri -> Picasso.get().load(uri).into(image.getImageView()))); // Picasso helps us link the URI to the ImageView
         return storageReference.child(path).putFile(image.getImageUri());
     }
 

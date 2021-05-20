@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.MultiAutoCompleteTextView;
@@ -14,11 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,7 +22,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,7 +35,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
-import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.backend.firebase.firebaseDB.FirebaseDBMessageManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.backend.firebase.storage.StorageImageManager;
@@ -176,7 +169,6 @@ public class ChatActivity extends AppCompatActivity {
         receivedActivityChatId = data.getStringExtra("ACTIVITY_CHAT_ID");
         receivedActivityTitle = data.getStringExtra("ACTIVITY_TITLE");
         if (receivedActivityChatId != null) {
-            //Log.d(TAG, "DocumentSnapshot data: " + receivedActivityChatId);
             activityChatId = receivedActivityChatId;
             // Dynamically creating a new child under the branch "chats" in Firebase Realtime
             // Database with the value of "activityChatId" in case it doesn't exist yet
@@ -232,9 +224,6 @@ public class ChatActivity extends AppCompatActivity {
                         UserSerializer userSerializer = new UserSerializer();
                         user = userSerializer.deserialize(document.getData());
                         fullNameString = user.getFullName();
-                        //fullNameDrawer.setText(user.getFullName());
-                        //emailDrawer.setText(user.getEmail());
-                        //phoneDrawer.setText(user.getPhoneNumber());
                     } else {
                         Log.d(TAG, "No such document!");
                     }
@@ -321,7 +310,7 @@ public class ChatActivity extends AppCompatActivity {
         uploadTask.addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // After the image loads, get a public downloadUrl for the image
+                // After the image loads, get a URI for the image
                 // and add it to the message.
                 taskSnapshot.getMetadata().getReference().getDownloadUrl()
                     .addOnSuccessListener(new OnSuccessListener<Uri>() {
