@@ -1,6 +1,5 @@
 package com.sdp.movemeet.view.chat;
 
-
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -21,8 +20,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.view.chat.ChatActivity;
 import com.sdp.movemeet.view.main.MainActivity;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -60,7 +61,7 @@ public class ChatActivityTest {
         ChatActivity.enableNav = false;
         CountDownLatch latch = new CountDownLatch(1);
 
-        fAuth = FirebaseAuth.getInstance();
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         fAuth.signInWithEmailAndPassword("movemeet@gmail.com", "password").addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
@@ -91,7 +92,7 @@ public class ChatActivityTest {
             assert (false);
         }
 
-        firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseDatabase = BackendInstanceProvider.getDatabaseInstance();
 
         DatabaseReference rootRef = firebaseDatabase.getReference();
 
@@ -104,7 +105,7 @@ public class ChatActivityTest {
                 FirebaseUser user = fAuth.getCurrentUser();
                 if (user != null) {
                     // Logging out the user from Firebase
-                    FirebaseAuth.getInstance().signOut();
+                    fAuth.signOut();
                 }
             }
 

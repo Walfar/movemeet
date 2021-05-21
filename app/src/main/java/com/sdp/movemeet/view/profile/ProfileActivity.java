@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -13,31 +12,29 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
+import com.sdp.movemeet.models.Image;
 import com.sdp.movemeet.models.User;
+import com.sdp.movemeet.utility.ImageHandler;
 import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
-import com.sdp.movemeet.R;
-import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.view.navigation.Navigation;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -52,31 +49,26 @@ public class ProfileActivity extends AppCompatActivity {
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
 
-    ImageView profileImage;
-    TextView fullName, email, phone, description;
-    TextView fullNameDrawer, emailDrawer, phoneDrawer;
-    ProgressBar progressBar;
+    private ImageView profileImage;
+    private TextView fullName, email, phone, description;
+    private ProgressBar progressBar;
 
-    String userId, userImagePath;
-    User user;
+    private String userId, userImagePath;
+    private User user;
 
-    FirebaseAuth fAuth;
-    FirebaseFirestore fStore;
-    BackendManager<User> userManager;
-    StorageReference storageReference;
-    StorageReference profileRef;
-
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
-    TextView textView;
+    private FirebaseAuth fAuth;
+    private FirebaseFirestore fStore;
+    private BackendManager<User> userManager;
+    private FirebaseStorage fStorage;
+    private StorageReference storageReference;
+    private StorageReference profileRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        fAuth = FirebaseAuth.getInstance();
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         //The aim is to block any direct access to this page if the user is not logged
         if (fAuth.getCurrentUser() == null) {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
@@ -95,15 +87,17 @@ public class ProfileActivity extends AppCompatActivity {
         phone = findViewById(R.id.text_view_activity_profile_phone);
         description = findViewById(R.id.text_view_activity_profile_description);
 
-        fStore = FirebaseFirestore.getInstance();
+        fStore = BackendInstanceProvider.getFirestoreInstance();
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
-
+        fStorage = BackendInstanceProvider.getStorageInstance();
         displayRegisteredUserData();
-
-        storageReference = FirebaseStorage.getInstance().getReference();
-        loadRegisteredUserProfilePicture();
-
+        storageReference = fStorage.getReference();
+        userImagePath = "users/" + userId + "/profile.jpg";
+        Image image = new Image(null, profileImage);
+        image.setDocumentPath(userImagePath);
+        ImageHandler.loadImage(image, progressBar);
     }
+
 
     public void displayRegisteredUserData() {
         Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + userId);
@@ -119,9 +113,6 @@ public class ProfileActivity extends AppCompatActivity {
                         email.setText(user.getEmail());
                         phone.setText(user.getPhoneNumber());
                         description.setText(user.getDescription());
-                        //fullNameDrawer.setText(user.getFullName());
-                        //emailDrawer.setText(user.getEmail());
-                        //phoneDrawer.setText(user.getPhoneNumber());
                     } else {
                         Log.d(TAG, "No such document!");
                     }
@@ -130,13 +121,6 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-
-    private void loadRegisteredUserProfilePicture() {
-        userImagePath = "users/" + userId + "/profile.jpg";
-        profileRef = storageReference.child(userImagePath);
-        FirebaseInteraction.getImageFromFirebase(profileRef, profileImage, null);
     }
 
 
@@ -166,7 +150,6 @@ public class ProfileActivity extends AppCompatActivity {
                 deleteFirestoreDataAndAuthentication();
             }
         });
-
     }
 
 
@@ -210,7 +193,7 @@ public class ProfileActivity extends AppCompatActivity {
         // Delete user from Firebase Authentication
         FirebaseUser user = fAuth.getCurrentUser();
         if (user != null) {
-            // TODO: Bug to fix --> check why this function sometimes doesn't delete the Firebase "user authentication" (i.e. the user account)
+            // TODO: Bug to fix --> check why this function sometimes doesn't delete the Firebase "user authentication" (i.e. the actual user account)
             user.delete()
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override

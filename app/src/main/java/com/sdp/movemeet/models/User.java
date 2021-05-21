@@ -8,7 +8,7 @@ import java.io.Serializable;
  *
  * */
 
-public class User extends FirebaseObject implements Serializable {
+public class User implements Serializable, FirebaseObject {
 
     private final String fullName;
     private final String email;
@@ -60,12 +60,11 @@ public class User extends FirebaseObject implements Serializable {
         this.description = description;
         this.idUser = idUser;
         this.imageId = imageId;
-        super.documentPath = documentPath;
+        this.documentPath = documentPath;
 
     }
 
     /**
-     *
      * @return the user's full name
      */
     public String getFullName() {
@@ -73,7 +72,6 @@ public class User extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @return the user's email
      */
     public String getEmail() {
@@ -81,13 +79,11 @@ public class User extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @return the user's id
      */
     public String getIdUser() { return idUser; }
 
     /**
-     *
      * @return the user's phone number
      */
     public String getPhoneNumber() {
@@ -95,7 +91,6 @@ public class User extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @return the user's image id
      */
     public String getImageId() {
@@ -103,7 +98,6 @@ public class User extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @return the user's description
      */
     public String getDescription() {
@@ -111,7 +105,13 @@ public class User extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
+     * @return the document path of the user
+     */
+    public String getDocumentPath() {
+        return this.documentPath;
+    }
+
+    /**
      * @param idUser change user's id
      */
     public void setIdUser(String idUser) {
@@ -122,7 +122,6 @@ public class User extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @param phone change user's phone number
      */
     public void setPhoneNumber(String phone) {
@@ -133,7 +132,6 @@ public class User extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @param description change user's description
      */
     public void setDescription(String description) {
@@ -144,7 +142,6 @@ public class User extends FirebaseObject implements Serializable {
     }
 
     /**
-     *
      * @param imageId changer user's image
      */
     public void setImageId(String imageId) {
@@ -154,12 +151,12 @@ public class User extends FirebaseObject implements Serializable {
         this.imageId = imageId;
     }
 
-    public String getDocumentPath() {
-        return super.getDocumentPath();
-    }
-
+    /**
+     * @param path change the document path of the user
+     */
     public String setDocumentPath(String path) {
-        return super.setDocumentPath(path);
+        if (documentPath == null) documentPath = path;
+        return documentPath;
     }
 
     @Override
