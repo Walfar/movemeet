@@ -16,12 +16,23 @@ import com.sdp.movemeet.backend.firebase.storage.StorageImageManager;
 import com.sdp.movemeet.models.Image;
 import com.squareup.picasso.Picasso;
 
+/**
+ * This class allows to both load images from and upload images to the Firebase Storage service.
+ * In case the image is not present in the local cache, it is fetched from Firebase Storage.
+ * On the contrary, if the the image is already in the local cache, it is simply loaded from there.
+ */
 public class ImageHandler {
 
     private static final String TAG = "FirebaseInteraction";
 
     private static BackendManager<Image> imageBackendManager;
 
+    /**
+     * Fetch an image (user profile picture, activity header picture or chat image) from Firebase Storage.
+     *
+     * @param image Image object to be loaded from Firebase Storage or from the local cache.
+     * @param progressBar A ProgressBar displayed as long as the image is not yet fetched.
+     */
     public static void loadImage(Image image, ProgressBar progressBar) {
         if (progressBar != null) {
             progressBar.setVisibility(View.VISIBLE);
@@ -51,7 +62,12 @@ public class ImageHandler {
         });
     }
 
-
+    /**
+     * Upload an image (user profile picture, activity header picture or chat image) to Firebase Storage.
+     *
+     * @param image Image object to be uploaded to Firebase Storage or saved to the local cache.
+     * @param progressBar A ProgressBar displayed as long as the image is not yet uploaded or saved.
+     */
     public static void uploadImage(Image image, ProgressBar progressBar) {
         imageBackendManager = new StorageImageManager();
         UploadTask uploadTask = (UploadTask) imageBackendManager.add(image, image.getDocumentPath());

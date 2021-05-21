@@ -211,7 +211,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             try {
                 activity.addParticipantId(userId);
                 createParticipantNumberView();
-                activityManager.updt(userId, activity.getDocumentPath(), "participantId").addOnSuccessListener(new OnSuccessListener() {
+                activityManager.update(activity.getDocumentPath(), "participantId", userId).addOnSuccessListener(new OnSuccessListener() {
                     @Override
                     public void onSuccess(Object o) {
                         Log.d(TAG, "Participant registered in Firebase Firestore!");

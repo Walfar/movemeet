@@ -71,10 +71,10 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendMana
     }
 
     @Override
-    public Task<Void> updt(String value, String path, String field) {
-        if (value == null || path == null) throw new IllegalArgumentException();
+    public Task<Void> update(String path, String field, String value) {
+        if (path == null || field == null || value == null) throw new IllegalArgumentException();
 
-        return db.document(path).update(field, FieldValue.arrayUnion(value)); // object will be in this case the "String value" containing the ID of the participant to add!
+        return db.document(path).update(field, FieldValue.arrayUnion(value));
     }
 
     @Override

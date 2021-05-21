@@ -24,17 +24,17 @@ public class StorageImageManager implements BackendManager<Image> {
 
     @Override
     public Task<?> set(Image object, String path) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public Task<?> updt(String value, String path, String field) {
-        return null;
+    public Task<?> update(String path, String field, String value) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Task<?> delete(String path) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -44,6 +44,6 @@ public class StorageImageManager implements BackendManager<Image> {
 
     @Override
     public Task<?> search(String field, Object value) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 }
