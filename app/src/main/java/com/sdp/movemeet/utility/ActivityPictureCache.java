@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -32,26 +33,27 @@ public abstract class ActivityPictureCache {
     public static String TAG = "Cache TAG";
 
 
-    public static void saveToCache(ImageView imageView, String path) {
+    public static void saveToCache(Bitmap bitmap, String path) {
+        String[] directories = path.split("/");
+        String fileName = directories[directories.length-1];
+        String imagePath = path.substring(0, path.length() - fileName.length());
         Log.d(TAG, "saving image to cache");
-        Bitmap bitmap = getBitmapFromView(imageView);
+        Log.d(TAG, "filename is " + fileName);
+        Log.d(TAG, "imagePath is " + imagePath);
         String root = Environment.getExternalStorageDirectory().toString();
-        File imagesDir = new File(root, "/saved_images");
-        if (!imagesDir.exists()) {
-            imagesDir.mkdirs();
+        File imageDir = new File(root + "/" + imagePath);
+        if (!imageDir.exists()) {
+            imageDir.mkdirs();
         }
-        File activityDir = new File(imagesDir, "/" + path);
-        if (!activityDir.exists()) {
-            activityDir.mkdirs();
-        }
-        File file = new File(activityDir, "/activityImage.jpg");
+        File file = new File(imageDir, fileName);
         if (file.exists()) {
             file.delete();
         }
         try {
             file.createNewFile(); // if file already exists will do nothing
             FileOutputStream out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            //Bitmap bitmap = getBitmapFromView(imageView);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
             out.flush();
             out.close();
             Log.d(TAG, "succcessfully cached image at path " + file.getPath());
@@ -62,7 +64,8 @@ public abstract class ActivityPictureCache {
 
     public static Bitmap loadFromCache(String path) {
         Log.d(TAG, "Loading image from cache");
-        String imagePath = Environment.getExternalStorageDirectory().toString() + path;
+        String imagePath = Environment.getExternalStorageDirectory().toString() + "/" + path;
+        Log.d(TAG, "path is " + imagePath);
         try {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
@@ -74,22 +77,11 @@ public abstract class ActivityPictureCache {
     }
 
 
-    private static Bitmap getBitmapFromView(View view) {
-        //Define a bitmap with the same size as the view
+    private static Bitmap getBitmapFromView(ImageView view) {
         Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
-        //Bind a canvas to it
         Canvas canvas = new Canvas(returnedBitmap);
-        //Get the view's background
-        Drawable bgDrawable = view.getBackground();
-        if (bgDrawable != null)
-            //has background drawable, then draw it on the canvas
-            bgDrawable.draw(canvas);
-        else
-            //does not have background drawable, then draw white background on the canvas
-            canvas.drawColor(Color.WHITE);
-        // draw the view on the canvas
+        view.layout(view.getLeft(), view.getTop(), view.getRight(), view.getBottom());
         view.draw(canvas);
-        //return the bitmap
         return returnedBitmap;
     }
 

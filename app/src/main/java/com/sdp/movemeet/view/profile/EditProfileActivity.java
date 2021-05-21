@@ -77,7 +77,7 @@ public class EditProfileActivity extends AppCompatActivity {
             userImagePath = "users/" + userId + "/profile.jpg";
             Image image = new Image(null, profileImage);
             image.setDocumentPath(userImagePath);
-            ImageHandler.loadImage(image, progressBar);
+            ImageHandler.loadImage(image, this);
         } else {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
@@ -85,6 +85,9 @@ public class EditProfileActivity extends AppCompatActivity {
 
     }
 
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
 
     private void assignViewsAndAdjustData() {
         profileImage = findViewById(R.id.image_view_edit_profile_image);
@@ -116,7 +119,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 Uri imageUri = data.getData();
                 Image image = new Image(imageUri, profileImage);
                 image.setDocumentPath(userImagePath);
-                ImageHandler.uploadImage(image, progressBar);
+                ImageHandler.uploadImage(image, this);
             }
         }
     }

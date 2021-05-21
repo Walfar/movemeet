@@ -39,8 +39,10 @@ import com.sdp.movemeet.utility.LocationFetcher;
 
 import java.util.ArrayList;
 
+import static com.sdp.movemeet.utility.ActivitiesUpdater.activities;
 import static com.sdp.movemeet.utility.ActivitiesUpdater.getActivities;
 import static com.sdp.movemeet.utility.ActivitiesUpdater.updateListActivities;
+import static com.sdp.movemeet.utility.PermissionChecker.isLocationPermissionGranted;
 
 
 /**
@@ -90,13 +92,11 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
+        supportMapFragment.getMapAsync(this);
 
         //At creation, we haven't called the locationCallback yet
         first_callback = true;
         activitiesMarkers = new ArrayList<>();
-
-        //Update the local list of activities from the database. On success, we update the map by dispalying the activities markers
-        updateListActivities(o -> supportMapFragment.getMapAsync(googleMap -> displayNearbyMarkers()));
 
         user = fAuth.getCurrentUser();
 
@@ -105,15 +105,15 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {
                 currentLocation = locationResult.getLastLocation();
-                supportMapFragment.getMapAsync(googleMap -> {displayMarkerOnMapReadyAndZoomInFirstCallback();});
+                displayMarkerOnMapReadyAndZoomInFirstCallback();
             }
         };
         //Start fetching and updating the user's location in real time
         locationFetcher = new LocationFetcher(supportMapFragment, locationCallback);
         locationFetcher.startLocationUpdates();
 
-        //We also define the main OnMapReady callback for setting the map listeners
-        supportMapFragment.getMapAsync(this);
+        //Update the local list of activities from the database. On success, we update the map by dispalying the activities markers
+        updateListActivities(o -> displayNearbyMarkers());
 
         return view;
     }
@@ -130,7 +130,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         }
 
         //In the case where the user didn't grant permission, we set a default location
-        if (!locationFetcher.isPermissionGranted()) currentLocation = locationFetcher.getDefaultLocation();
+        if (!isLocationPermissionGranted(getActivity())) currentLocation = locationFetcher.getDefaultLocation();
 
     }
 
@@ -173,9 +173,9 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
             Intent intent;
             // Different activity if user unregistered
             if (user == null) {
-                intent = new Intent(supportMapFragment.getActivity(), ActivityDescriptionActivityUnregister.class);
+                intent = new Intent(getActivity(), ActivityDescriptionActivityUnregister.class);
             } else {
-                intent = new Intent(supportMapFragment.getActivity(), ActivityDescriptionActivity.class);
+                intent = new Intent(getActivity(), ActivityDescriptionActivity.class);
             }
             intent.putExtra("activity", act);
             startActivity(intent);
@@ -225,6 +225,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void displayNearbyMarkers() {
         Log.d(TAG, "displaying act markers");
+        Log.d(TAG, "activities size is " + activities.size());
         if (currentLocation == null) currentLocation = locationFetcher.getDefaultLocation();
 
         DistanceCalculator dc = new DistanceCalculator(currentLocation.getLatitude(), currentLocation.getLongitude());
@@ -232,6 +233,8 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         dc.setActivities(getActivities());
         dc.calculateDistances();
         dc.sort();
+
+        int idx = 1;
         //For the moment, we get all activities as the distance calculator is not fully functional yet
         for (Activity act : dc.getTopActivities(getActivities().size())) {
             //We display all activities on the corresponding location and with the icon associated to the sport
@@ -239,7 +242,11 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
             MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
             if (googleMap != null) {
+                Log.d(TAG, "idx is " + idx);
+                Log.d(TAG, markerOpt.getTitle());
+                idx++;
                 markerOpt.icon(BitmapDescriptorFactory.fromResource(chooseIcon(act)));
+                Log.d(TAG, markerOpt.getIcon().toString());
                 Marker marker = googleMap.addMarker(markerOpt);
                 marker.setTag(act);
                 activitiesMarkers.add(marker);

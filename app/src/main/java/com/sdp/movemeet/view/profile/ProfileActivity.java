@@ -88,11 +88,15 @@ public class ProfileActivity extends AppCompatActivity {
             userImagePath = "users/" + userId + "/profile.jpg";
             Image image = new Image(null, profileImage);
             image.setDocumentPath(userImagePath);
-            ImageHandler.loadImage(image, progressBar);
+            ImageHandler.loadImage(image, this);
         }
 
         if(enableNav) new Navigation(this, R.id.nav_edit_profile).createDrawer();
 
+    }
+
+    public ProgressBar getProgressBar() {
+        return getProgressBar();
     }
 
 

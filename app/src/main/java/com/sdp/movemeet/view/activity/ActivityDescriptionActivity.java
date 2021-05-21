@@ -80,7 +80,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
     BackendManager<Activity> activityManager;
     BackendManager<User> userManager;
-    Activity activity;
+    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    public Activity activity;
 
 
     @Override
@@ -324,39 +325,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         return progressBar;
     }
 
-    public boolean isStorageWritePermissionGranted() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (this.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) {
-                Log.v(TAG, "Write permission is granted");
-                return true;
-            } else {
-                Log.v(TAG, "Write permission is revoked");
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                return false;
-            }
-        } else { //permission is automatically granted on sdk<23 upon installation
-            Log.v(TAG, "Write permission is granted");
-            return true;
-        }
-    }
-
-    public boolean isStorageReadPermissionGranted() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (this.checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) {
-                Log.v(TAG, "Read permission is granted");
-                return true;
-            } else {
-                Log.v(TAG, "Read permission is revoked");
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                return false;
-            }
-        } else { //permission is automatically granted on sdk<23 upon installation
-            Log.v(TAG, "Read permission is granted");
-            return true;
-        }
-    }
 
     /**
      * Launch the Gallery to select a header picture for the activity

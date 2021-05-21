@@ -122,20 +122,11 @@ public class ChatActivity extends AppCompatActivity {
 
         messageManager = new FirebaseDBMessageManager(database, new MessageSerializer());
 
-<<<<<<< HEAD
-        fAuth = FirebaseAuth.getInstance();
-        // The aim is to block any direct access to this page if the user is not logged in
-        if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        } else {
-=======
         fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         fStorage = BackendInstanceProvider.getStorageInstance();
         fStore = BackendInstanceProvider.getFirestoreInstance();
 
         if (fAuth.getCurrentUser() != null) {
->>>>>>> feature/246_firebase-storage-abstraction
             userId = fAuth.getCurrentUser().getUid();
             storageReference = fStorage.getReference();
             userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
