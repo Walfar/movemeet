@@ -30,14 +30,13 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
 
     public static final String ACTIVITY_IMAGE_NAME = "activityImage.jpg";
 
-    Activity activity;
+    private Activity activity;
     private static final String TAG = "ActDescActivity";
-    FirebaseStorage fStorage;
-    StorageReference storageReference;
-    ImageView activityImage;
-    String imagePath;
-    ProgressBar progressBar;
-    Uri uri;
+    private FirebaseStorage fStorage;
+    private StorageReference storageReference;
+    private ImageView activityImage;
+    private String imagePath;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

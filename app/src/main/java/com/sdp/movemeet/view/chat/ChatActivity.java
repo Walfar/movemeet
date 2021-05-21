@@ -70,44 +70,38 @@ public class ChatActivity extends AppCompatActivity {
     public static final String noImageUrl = "no imageUrl";
 
     // Firebase instance variables
-    FirebaseAuth fAuth;
-    FirebaseFirestore fStore;
-    FirebaseStorage fStorage;
-    StorageReference storageReference;
-    BackendManager<Image> imageBackendManager;
-    FirebaseDatabase database;
-    DatabaseReference chatRef;
-    DatabaseReference chatRoom;
-    FirebaseRecyclerAdapter<Message, MessageViewHolder> firebaseAdapter;
+    private FirebaseAuth fAuth;
+    private FirebaseFirestore fStore;
+    private FirebaseStorage fStorage;
+    private StorageReference storageReference;
+    private BackendManager<Image> imageBackendManager;
+    private FirebaseDatabase database;
+    private DatabaseReference chatRef;
+    private DatabaseReference chatRoom;
+    private FirebaseRecyclerAdapter<Message, MessageViewHolder> firebaseAdapter;
 
-    BackendManager<Message> messageManager;
-    BackendManager<User> userManager;
+    private BackendManager<Message> messageManager;
+    private BackendManager<User> userManager;
 
-    User user;
+    private User user;
 
-    String userId;
-    String fullNameString;
-    String activityChatId;
-    String receivedActivityChatId;
-    String receivedActivityTitle;
+    private String userId, fullNameString, activityChatId, receivedActivityChatId, receivedActivityTitle, imagePath;
 
-    String imagePath;
+    private int initialMessageCounter = 0;
 
-    int initialMessageCounter = 0;
+    private MultiAutoCompleteTextView messageInput;
+    private ProgressBar chatLoader;
+    private RecyclerView messageRecyclerView;
+    private ImageButton btnSend;
 
-    MultiAutoCompleteTextView messageInput;
-    ProgressBar chatLoader;
-    RecyclerView messageRecyclerView;
-    ImageButton btnSend;
-
-    TextView initialChatWelcomeMessage;
+    private TextView initialChatWelcomeMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        fAuth = FirebaseAuth.getInstance();
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         // The aim is to block any direct access to this page if the user is not logged in
         if (fAuth.getCurrentUser() == null) {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
@@ -130,11 +124,10 @@ public class ChatActivity extends AppCompatActivity {
 
         messageManager = new FirebaseDBMessageManager(database, new MessageSerializer());
 
-        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         fStorage = BackendInstanceProvider.getStorageInstance();
-        fStore = BackendInstanceProvider.getFirestoreInstance();
-
         storageReference = fStorage.getReference();
+
+        fStore = BackendInstanceProvider.getFirestoreInstance();
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
         getRegisteredUserData();
 
@@ -146,8 +139,8 @@ public class ChatActivity extends AppCompatActivity {
         // Realtime Database. A new element for each message is automatically added to the UI.
 
         addExistingMessagesAndListenForNewMessages();
-
     }
+
 
     private void addExistingMessagesAndListenForNewMessages() {
         // Using the MessageAdapter class to create the overall view of the chat room
@@ -164,6 +157,7 @@ public class ChatActivity extends AppCompatActivity {
         );
     }
 
+
     private void settingUpChatRoom(Intent data) {
         // Create a new chat room for the sport activity in case it deosn't yet exist
         receivedActivityChatId = data.getStringExtra("ACTIVITY_CHAT_ID");
@@ -179,6 +173,7 @@ public class ChatActivity extends AppCompatActivity {
         chatRoom = chatRef.child(CHAT_ROOM_ID);
         countMessagesInChatRoom();
     }
+
 
     private void countMessagesInChatRoom() {
         // Count the number of messages (children) in the current chatRoom. In case the chat room
@@ -197,7 +192,6 @@ public class ChatActivity extends AppCompatActivity {
                     initialChatWelcomeMessage.setVisibility(View.VISIBLE);
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.v(TAG, "databaseError: " + databaseError);
@@ -205,13 +199,6 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    public void logout(View view) {
-        if (fAuth.getCurrentUser() != null) {
-            fAuth.getInstance().signOut(); // this will do the logout of the user from Firebase
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        }
-    }
 
     public void getRegisteredUserData() {
         Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + userId);
@@ -234,6 +221,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+
     @Override
     public void onPause() {
         // Stop listening for updates from Firebase Realtime Database
@@ -241,12 +229,14 @@ public class ChatActivity extends AppCompatActivity {
         super.onPause();
     }
 
+
     @Override
     public void onResume() {
         // Start listening for updates from Firebase Realtime Database
         super.onResume();
         firebaseAdapter.startListening();
     }
+
 
     public void sendMessage(View view) {
         String userName = fullNameString;
@@ -261,12 +251,14 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
+
     public void sendImage(View view) {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
         startActivityForResult(intent, REQUEST_IMAGE);
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -279,6 +271,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         }
     }
+
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     // making this method always public for testing and private otherwise

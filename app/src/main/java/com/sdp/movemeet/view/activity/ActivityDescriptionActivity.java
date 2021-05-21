@@ -57,6 +57,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     public static boolean enableNav = true;
 
     public static final String ACTIVITY_IMAGE_NAME = "activityImage.jpg";
+    private static final int REQUEST_IMAGE = 1000;
 
     private TextView organizerView, numberParticipantsView, participantNamesView;
     private FirebaseAuth fAuth;
@@ -66,14 +67,13 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private String userId, organizerId, imagePath;
     private StringBuilder participantNamesString = new StringBuilder();
 
-    ImageView activityImage;
-    ProgressBar progressBar;
+    private ImageView activityImage;
+    private ProgressBar progressBar;
 
-    BackendManager<Activity> activityManager;
-    BackendManager<User> userManager;
+    private BackendManager<Activity> activityManager;
+    private BackendManager<User> userManager;
 
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
-    public Activity activity;
+    private Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -313,7 +313,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     public void changeActivityPicture(View view) {
         if (userId.equals(organizerId)) {
             Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(openGalleryIntent, 1000);
+            startActivityForResult(openGalleryIntent, REQUEST_IMAGE);
         } else {
             Toast.makeText(ActivityDescriptionActivity.this, "Only the organizer can change the header picture!", Toast.LENGTH_SHORT).show();
         }
@@ -322,7 +322,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1000) {
+        if (requestCode == REQUEST_IMAGE) {
             if (resultCode == android.app.Activity.RESULT_OK) {
                 Uri imageUri = data.getData();
                 Image image = new Image(imageUri, activityImage);

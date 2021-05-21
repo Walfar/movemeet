@@ -35,14 +35,14 @@ public class RegisterActivity extends AppCompatActivity {
 
     public static final String TAG = "TAG";
 
-    EditText fullNameEditText, emailEditText, passwordEditText, phoneEditText;
-    Button registerBtn;
-    TextView loginBtn;
-    FirebaseAuth fAuth;
-    ProgressBar progressBar;
-    FirebaseFirestore fStore;
-    BackendManager<User> userManager;
-    String userIDString, emailString, passwordString, fullNameString, phoneString;
+    private EditText fullNameEditText, emailEditText, passwordEditText, phoneEditText;
+    private Button registerBtn;
+    private TextView loginBtn;
+    private FirebaseAuth fAuth;
+    private ProgressBar progressBar;
+    private FirebaseFirestore fStore;
+    private BackendManager<User> userManager;
+    private String userIDString, emailString, passwordString, fullNameString, phoneString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,6 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
-
         if (fAuth.getCurrentUser() != null) { // if the user is already logged in (i.e. the current user object is present), we directly send him to the "MainActivity"
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();

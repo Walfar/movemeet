@@ -8,6 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.R;
 
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.view.chat.ChatActivity;
 
@@ -27,8 +28,8 @@ public class ChatActivitySecurityTest {
 
     @Before
     public void checkUserNotLogged() {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        if (firebaseAuth.getCurrentUser() != null) firebaseAuth.signOut();
+        FirebaseAuth fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+        if (fAuth.getCurrentUser() != null) fAuth.signOut();
     }
 
     @Test

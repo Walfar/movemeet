@@ -49,19 +49,19 @@ public class ProfileActivity extends AppCompatActivity {
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
 
-    ImageView profileImage;
-    TextView fullName, email, phone, description;
-    ProgressBar progressBar;
+    private ImageView profileImage;
+    private TextView fullName, email, phone, description;
+    private ProgressBar progressBar;
 
-    String userId, userImagePath;
-    User user;
+    private String userId, userImagePath;
+    private User user;
 
-    FirebaseAuth fAuth;
-    FirebaseFirestore fStore;
-    BackendManager<User> userManager;
-    FirebaseStorage fStorage;
-    StorageReference storageReference;
-    StorageReference profileRef;
+    private FirebaseAuth fAuth;
+    private FirebaseFirestore fStore;
+    private BackendManager<User> userManager;
+    private FirebaseStorage fStorage;
+    private StorageReference storageReference;
+    private StorageReference profileRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

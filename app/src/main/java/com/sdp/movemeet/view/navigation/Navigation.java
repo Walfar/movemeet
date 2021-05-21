@@ -128,7 +128,7 @@ public class Navigation extends AppCompatActivity {
         FirebaseUser user = fAuth.getCurrentUser();
         if (user != null) {
             // Logging out the user from Firebase
-            FirebaseAuth.getInstance().signOut();
+            fAuth.signOut();
             // Launching the LoginActivity
             Intent intent = new Intent(activity, LoginActivity.class);
             Context context = activity.getApplicationContext();

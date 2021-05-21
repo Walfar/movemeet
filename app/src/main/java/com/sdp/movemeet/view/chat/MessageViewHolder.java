@@ -19,10 +19,10 @@ import java.text.SimpleDateFormat;
  */
 public class MessageViewHolder extends RecyclerView.ViewHolder {
 
-    TextView messageTextView;
-    ImageView messageImageView;
-    TextView messengerTextView;
-    TextView messageTimeTextView;
+    private TextView messageTextView;
+    private ImageView messageImageView;
+    private TextView messengerTextView;
+    private TextView messageTimeTextView;
 
     /**
      * Reference the message data in UI elements (TextViews and ImageView)
