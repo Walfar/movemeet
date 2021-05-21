@@ -36,17 +36,20 @@ import com.sdp.movemeet.R;
 
 import androidx.annotation.VisibleForTesting;
 
+import java.util.ArrayList;
+
 public class EditProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "TAG";
     private static final int REQUEST_IMAGE = 1000;
 
     private ImageView profileImage;
-    private EditText profileFullName, profileEmail, profilePhone, profileDescription;
+    private EditText profileFullName, profileEmail, profilePhone, profileDescription, profileRegisteredActivities;
     private ProgressBar progressBar;
     private ImageButton saveBtn;
 
     private String userId, fullNameString, emailString, phoneString, descriptionString, userImagePath;
+    private ArrayList<String> registeredActivity;
 
     private FirebaseAuth fAuth;
     private FirebaseFirestore fStore;
@@ -72,6 +75,8 @@ public class EditProfileActivity extends AppCompatActivity {
         emailString = data.getStringExtra("email");
         phoneString = data.getStringExtra("phone");
         descriptionString = data.getStringExtra("description");
+        registeredActivity = data.getStringArrayListExtra("registeredActivities");
+
         assignViewsAndAdjustData();
 
         fStorage = BackendInstanceProvider.getStorageInstance();
@@ -149,7 +154,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE) // making this method always public for testing and private otherwise
     public void accessFirestoreUsersCollectionForUpdate() {
-        User user = new User(profileFullName.getText().toString(), profileEmail.getText().toString(), profilePhone.getText().toString(), profileDescription.getText().toString());
+        User user = new User(profileFullName.getText().toString(), profileEmail.getText().toString(), profilePhone.getText().toString(), profileDescription.getText().toString(), registeredActivity);
         userManager.add(user, FirestoreUserManager.USERS_COLLECTION + "/" + userId).addOnSuccessListener(new OnSuccessListener() {
             @Override
             public void onSuccess(Object o) {
