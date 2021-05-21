@@ -95,20 +95,28 @@ public class ChatActivity extends AppCompatActivity {
     RecyclerView messageRecyclerView;
     ImageButton btnSend;
 
-    TextView fullNameDrawer;
-    TextView emailDrawer;
-    TextView phoneDrawer;
     TextView initialChatWelcomeMessage;
-
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
-    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        fAuth = FirebaseAuth.getInstance();
+        // The aim is to block any direct access to this page if the user is not logged in
+        if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
+            finish();
+        } else {
+            userId = fAuth.getCurrentUser().getUid();
+        }
+
+        if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
+
+        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference();
+        userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
+        getRegisteredUserData();
 
         // Initializing Firebase Realtime Database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -122,19 +130,6 @@ public class ChatActivity extends AppCompatActivity {
 
         messageManager = new FirebaseDBMessageManager(database, new MessageSerializer());
 
-        fAuth = FirebaseAuth.getInstance();
-        // The aim is to block any direct access to this page if the user is not logged in
-        if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        } else {
-            userId = fAuth.getCurrentUser().getUid();
-            FirebaseFirestore fStore = FirebaseFirestore.getInstance();
-            storageReference = FirebaseStorage.getInstance().getReference();
-            userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
-            getRegisteredUserData();
-        }
-
         // Initializing Firebase Authentication and checking if the user is signed in
         FirebaseInteraction.checkIfUserSignedIn(fAuth, ChatActivity.this);
 
@@ -146,8 +141,6 @@ public class ChatActivity extends AppCompatActivity {
         // Realtime Database. A new element for each message is automatically added to the UI.
 
         addExistingMessagesAndListenForNewMessages();
-
-        if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
 
     }
 

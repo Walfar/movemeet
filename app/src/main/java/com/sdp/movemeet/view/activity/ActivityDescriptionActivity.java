@@ -80,6 +80,16 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
 
+        fAuth = FirebaseAuth.getInstance();
+        if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            finish();
+        } else {
+            userId = fAuth.getCurrentUser().getUid();
+        }
+
+        if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
+
         Intent intent = getIntent();
 
         if (intent != null) {
@@ -89,27 +99,15 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 loadActivityHeaderPicture();
             }
         }
-
-        fAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
         fStore = FirebaseFirestore.getInstance();
 
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
         activityManager = new FirestoreActivityManager(fStore, FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
 
-
-        if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            finish();
-        } else {
-            userId = fAuth.getCurrentUser().getUid();
-        }
-
         if (activity != null) {
             displayDescriptionActivityData();
         }
-
-        if (enableNav) new Navigation(this, R.id.nav_home).createDrawer();
     }
 
 

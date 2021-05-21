@@ -31,8 +31,11 @@ import java.util.ArrayList;
 /***
  *  This class create the list of activities, on witch the user is registered.
  */
+
+
 public class ActivityListActivity extends AppCompatActivity {
 
+    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userId;
