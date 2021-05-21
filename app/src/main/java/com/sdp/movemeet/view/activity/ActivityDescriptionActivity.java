@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -14,34 +13,29 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
-import com.sdp.movemeet.backend.FirebaseInteraction;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Activity;
+import com.sdp.movemeet.models.Image;
 import com.sdp.movemeet.models.User;
+import com.sdp.movemeet.utility.ImageHandler;
 import com.sdp.movemeet.view.chat.ChatActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.navigation.Navigation;
@@ -51,46 +45,52 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /***
- * Activity for show the description of an activity. Informations about an activity are : sport, date and time, time estimate, organiser,
+ * Activity for show the description of an activity. Informations about an activity are : sport, date and time, time estimate, organizer,
  * a list of participants, a picture, address, and description. A user can register to an activity, and access to the chat.
  */
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 public class ActivityDescriptionActivity extends AppCompatActivity {
 
-    FirebaseAuth fAuth;
     private static final String TAG = "ActDescActivity";
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
 
-    TextView organizerView, numberParticipantsView, participantNamesView;
-    FirebaseFirestore fStore;
-    StorageReference storageReference;
-    String userId;
-    String organizerId;
-    StringBuilder participantNamesString = new StringBuilder();
+    public static final String ACTIVITY_IMAGE_NAME = "activityImage.jpg";
+    private static final int REQUEST_IMAGE = 1000;
 
-    ImageView activityImage;
-    String imagePath;
-    ProgressBar progressBar;
-    Uri uri;
+    private TextView organizerView, numberParticipantsView, participantNamesView;
+    private FirebaseAuth fAuth;
+    private FirebaseFirestore fStore;
+    private FirebaseStorage fStorage;
+    private StorageReference storageReference;
+    private String userId, organizerId, imagePath;
+    private StringBuilder participantNamesString = new StringBuilder();
 
-    BackendManager<Activity> activityManager;
-    BackendManager<User> userManager;
-    Activity activity;
+    private ImageView activityImage;
+    private ProgressBar progressBar;
 
+    private BackendManager<Activity> activityManager;
+    private BackendManager<User> userManager;
+
+    private Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
 
-        fAuth = FirebaseAuth.getInstance();
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         if (fAuth.getCurrentUser() == null) {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             finish();
         } else {
             userId = fAuth.getCurrentUser().getUid();
+            fStorage = BackendInstanceProvider.getStorageInstance();
+            storageReference = fStorage.getReference();
+            fStore = BackendInstanceProvider.getFirestoreInstance();
+            userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
+            activityManager = new FirestoreActivityManager(fStore, FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
         }
 
         if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
@@ -99,16 +99,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
         if (intent != null) {
             activity = (Activity) intent.getSerializableExtra("activity");
-            uri = intent.getData();
-            if (uri != null) {
-                loadActivityHeaderPicture();
-            }
         }
-        storageReference = FirebaseStorage.getInstance().getReference();
-        fStore = FirebaseFirestore.getInstance();
-
-        userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
-        activityManager = new FirestoreActivityManager(fStore, FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
 
         if (activity != null) {
             displayDescriptionActivityData();
@@ -127,13 +118,17 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         getOrganizerName();
         createParticipantNumberView();
         getParticipantNames();
+        loadActivityHeaderPicture();
     }
 
     private void getParticipantNames() {
         ArrayList<String> participantIds = activity.getParticipantId();
+        Log.i(TAG, "activity.getParticipantId(): " + activity.getParticipantId());
+        Log.i(TAG, "activity.getDocumentPath(): " + activity.getDocumentPath());
         participantNamesString = new StringBuilder();
         for (int i = 0; i < participantIds.size(); i++) {
             String currentParticipantId = participantIds.get(i);
+            Log.i(TAG, "current currentParticipantId: " + currentParticipantId);
             getCurrentParticipantName(currentParticipantId);
         }
     }
@@ -216,13 +211,19 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             try {
                 activity.addParticipantId(userId);
                 createParticipantNumberView();
-                // TODO: check if this is good with Kepler
-                //activityManager.add(activity, FirestoreActivityManager.ACTIVITIES_COLLECTION + "/" + activity.getDocumentPath()).addOnSuccessListener(new OnSuccessListener() {
-                activityManager.set(activity, FirestoreActivityManager.ACTIVITIES_COLLECTION + "/" + activity.getDocumentPath(), "participantId", userId).addOnSuccessListener(new OnSuccessListener() {
+                activityManager.update(activity.getDocumentPath(), "participantId", userId).addOnSuccessListener(new OnSuccessListener() {
                     @Override
                     public void onSuccess(Object o) {
                         Log.d(TAG, "Participant registered in Firebase Firestore!");
                         getParticipantNames();
+                        // TODO: (By Victor) here --> get activity from the MainMapFragment and update it!
+                        //  (in order to sync the Firebase Firestore new updates with the local sport activities and their views)
+                        //  (because if we register, exit ActivityDescriptionActivity and then re-enter ActivityDescriptionActivity,
+                        //  then the Firebase Firestore backend works and is updated, but the local activity is not updated according
+                        //  to this version of the backend)
+                        //  Probable solution:
+                        //  Implement a method in the OnResume of MainMapFragment to clear the list of activities
+                        //  and then update them from Firebase Firestore (but this is not very optimal, because it takes time)
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -244,6 +245,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (activity.getParticipantId().contains(userId)) {
             Intent intent = new Intent(ActivityDescriptionActivity.this, ChatActivity.class);
             String activityDocumentPath = activity.getDocumentPath();
+            activityDocumentPath = activityDocumentPath.replace("activities/", "");
             intent.putExtra("ACTIVITY_CHAT_ID", activityDocumentPath);
             String activityTitle = activity.getTitle();
             intent.putExtra("ACTIVITY_TITLE", activityTitle);
@@ -266,9 +268,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        String organiserFullName = (String) document.getData().get("fullName");
-                        organizerView.setText(organiserFullName);
-                        Log.i(TAG, "organiser name: " + organiserFullName);
+                        String organizerFullName = (String) document.getData().get("fullName");
+                        organizerView.setText(organizerFullName);
+                        Log.i(TAG, "Organizer name: " + organizerFullName);
                     } else {
                         Log.d(TAG, "No such document!");
                     }
@@ -310,22 +312,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void loadActivityHeaderPicture() {
         activityImage = findViewById(R.id.activity_image_description);
         progressBar = findViewById(R.id.progress_bar_activity_description);
-        progressBar.setVisibility(View.VISIBLE);
-
-        imagePath = "activities/" + activity.getActivityId() + "/activityImage.jpg";
-        StorageReference imageRef = storageReference.child(imagePath);
-        imageRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "Get image: SUCCESS");
-                    FirebaseInteraction.getImageFromFirebase(imageRef, activityImage, progressBar);
-                } else {
-                    Log.d(TAG, "Activity have no image");
-                    activityImage.setImageAlpha(R.drawable.run_woman);
-                }
-            }
-        });
+        imagePath = activity.getDocumentPath() + "/" + ACTIVITY_IMAGE_NAME;
+        Image image = new Image(null, activityImage);
+        image.setDocumentPath(imagePath);
+        ImageHandler.loadImage(image, progressBar);
     }
 
     /**
@@ -334,7 +324,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     public void changeActivityPicture(View view) {
         if (userId.equals(organizerId)) {
             Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(openGalleryIntent, 1000);
+            startActivityForResult(openGalleryIntent, REQUEST_IMAGE);
         } else {
             Toast.makeText(ActivityDescriptionActivity.this, "Only the organizer can change the header picture!", Toast.LENGTH_SHORT).show();
         }
@@ -343,18 +333,14 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1000) {
+        if (requestCode == REQUEST_IMAGE) {
             if (resultCode == android.app.Activity.RESULT_OK) {
                 Uri imageUri = data.getData();
-                progressBar.setVisibility(View.VISIBLE);
-                FirebaseInteraction.uploadImageToFirebase(storageReference, imagePath, imageUri, activityImage, progressBar);
+                Image image = new Image(imageUri, activityImage);
+                image.setDocumentPath(imagePath);
+                ImageHandler.uploadImage(image, progressBar);
             }
         }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        finish();
-    }
 }

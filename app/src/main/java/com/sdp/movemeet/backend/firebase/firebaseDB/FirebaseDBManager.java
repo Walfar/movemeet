@@ -44,7 +44,7 @@ abstract class FirebaseDBManager<T extends FirebaseObject> implements BackendMan
     }
 
     @Override
-    public Task<?> set(T object, String path, String field, String value) {
+    public Task<?> set(T object, String path) {
         if (object == null || path == null || path.isEmpty()) throw new IllegalArgumentException();
 
         Map<String, Object> data = serializer.serialize(object);
@@ -52,6 +52,9 @@ abstract class FirebaseDBManager<T extends FirebaseObject> implements BackendMan
         newChild.setValue(data);
         return newChild.setValue(data);
     }
+
+    @Override
+    public Task<?> update(String path, String field, String value) { throw new UnsupportedOperationException(); }
 
     @Override
     public Task<?> delete(String path) {

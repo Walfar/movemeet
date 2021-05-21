@@ -14,6 +14,7 @@ import android.view.View;
 import com.google.firebase.auth.FirebaseAuth;
 
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.view.main.MainActivity;
 import com.sdp.movemeet.view.main.MainUnregisterActivity;
 import com.sdp.movemeet.view.map.GPSRecordingActivity;
@@ -24,6 +25,8 @@ import static com.sdp.movemeet.utility.LocationFetcher.REQUEST_CODE;
 
 
 public class HomeScreenActivity extends AppCompatActivity {
+
+    private FirebaseAuth fAuth;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -73,7 +76,8 @@ public class HomeScreenActivity extends AppCompatActivity {
      * @return true if the user is logged, false otherwise
      */
     private boolean isUserLogged() {
-        return (FirebaseAuth.getInstance().getCurrentUser() != null);
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+        return (fAuth.getCurrentUser() != null);
     }
 
 }

@@ -30,8 +30,8 @@ public class MessageAdapter extends FirebaseRecyclerAdapter<Message, MessageView
     private final int MESSAGE_IN_VIEW_TYPE = 1;
     private final int MESSAGE_OUT_VIEW_TYPE = 2;
 
-    Activity chatActivity;
-    String userId;
+    private Activity chatActivity;
+    private String userId;
 
     /**
      * Constructor that creates a MessageAdapter object.

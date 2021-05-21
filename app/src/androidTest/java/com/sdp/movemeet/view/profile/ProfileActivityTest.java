@@ -16,6 +16,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.view.home.RegisterActivity;
 
 import org.hamcrest.Matcher;
@@ -44,7 +45,6 @@ public class ProfileActivityTest {
     public static final String TEST_EMAIL = "yolotest@gmail.com";
     public static final String TEST_PASSWORD = "123456";
     public static final String TEST_PHONE = "0798841817";
-    public static final String TEST_DESCRIPTION = "My yolo description";
 
     private FirebaseAuth fAuth;
     private FirebaseUser user;
@@ -73,7 +73,7 @@ public class ProfileActivityTest {
 
         // Logging in
         CountDownLatch latch = new CountDownLatch(1);
-        fAuth = FirebaseAuth.getInstance();
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         fAuth.signInWithEmailAndPassword(TEST_EMAIL, TEST_PASSWORD).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {

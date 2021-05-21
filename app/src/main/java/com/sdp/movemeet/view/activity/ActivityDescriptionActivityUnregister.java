@@ -3,42 +3,40 @@ package com.sdp.movemeet.view.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.R;
-import com.sdp.movemeet.backend.FirebaseInteraction;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.models.Activity;
-import com.sdp.movemeet.view.home.HomeScreenActivity;
+import com.sdp.movemeet.models.Image;
+import com.sdp.movemeet.utility.ImageHandler;
 import com.sdp.movemeet.view.home.LoginActivity;
 
 /**
  * Activity description for unregistered user. An unregistered user can't see all information of an activity,
- * he cannot see the organiser name, the date and participants. If the user want to know more about this activity, there
+ * he cannot see the organizer name, the date and participants. If the user want to know more about this activity, there
  * is a button for sign up in movemeet
  */
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
 
-    Activity activity;
+    public static final String ACTIVITY_IMAGE_NAME = "activityImage.jpg";
+
+    private Activity activity;
     private static final String TAG = "ActDescActivity";
-    StorageReference storageReference;
-    ImageView activityImage;
-    String imagePath;
-    ProgressBar progressBar;
-    Uri uri;
+    private FirebaseStorage fStorage;
+    private StorageReference storageReference;
+    private ImageView activityImage;
+    private String imagePath;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +47,11 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
 
         if (intent != null) {
             activity = (Activity) intent.getSerializableExtra("activity");
-        }
-
-        uri = intent.getData();
-        if (uri != null) {
             loadActivityHeaderPicture();
         }
 
-        storageReference = FirebaseStorage.getInstance().getReference();
+        fStorage = BackendInstanceProvider.getStorageInstance();
+        storageReference = fStorage.getReference();
 
         if (activity != null) {
             displayDescriptionActivityData();
@@ -131,34 +126,10 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
     private void loadActivityHeaderPicture() {
         activityImage = findViewById(R.id.activity_image_description);
         progressBar = findViewById(R.id.progress_bar_activity_description);
-        progressBar.setVisibility(View.VISIBLE);
-        if (activity != null) {
-            imagePath = "activities/" + activity.getActivityId() + "/activityImage.jpg";
-            StorageReference imageRef = storageReference.child(imagePath);
-            imageRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, "Get image: SUCCESS");
-                        FirebaseInteraction.getImageFromFirebase(imageRef, activityImage, progressBar);
-                    } else {
-                        Log.d(TAG, "Activity have no image");
-                        activityImage.setImageAlpha(R.drawable.run_woman);
-                    }
-                }
-            });
-        }
+        imagePath = activity.getDocumentPath() + "/" + ACTIVITY_IMAGE_NAME;
+        Image image = new Image(null, activityImage);
+        image.setDocumentPath(imagePath);
+        ImageHandler.loadImage(image, progressBar);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1000) {
-            if (resultCode == android.app.Activity.RESULT_OK) {
-                Uri imageUri = data.getData();
-                progressBar.setVisibility(View.VISIBLE);
-                FirebaseInteraction.uploadImageToFirebase(storageReference, imagePath, imageUri, activityImage, progressBar);
-            }
-        }
-    }
 }
