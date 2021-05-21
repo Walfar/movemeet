@@ -34,8 +34,22 @@ public class WorkoutActivity extends AppCompatActivity {
             public void onClick(View view) {
                 System.out.println("Downloading");
 
-                Snackbar.make(view, "All workouts downloaded!", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                // System.out.println()
+
+                switch (viewPager.getCurrentItem()) {
+                    case 0: // text-based workouts
+                        Snackbar.make(view, "All text-based workouts downloaded!", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                        break;
+                    case 1: // image-based workouts
+                        Snackbar.make(view, "All image-based workouts downloaded!", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                        break;
+                    case 2: // PDF-based workouts
+                        Snackbar.make(view, "All PDF-based workouts downloaded!", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                        break;
+                }
             }
         });
     }
