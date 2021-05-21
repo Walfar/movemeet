@@ -57,6 +57,14 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
+        fAuth = FirebaseAuth.getInstance();
+        if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
+            finish();
+        } else {
+            userId = fAuth.getCurrentUser().getUid();
+        }
+
         Intent data = getIntent();
         fullNameString = data.getStringExtra("fullName");
         emailString = data.getStringExtra("email");
@@ -65,20 +73,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
         assignViewsAndAdjustData();
 
-        fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
 
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
-
-        if (fAuth.getCurrentUser() != null) {
-            userId = fAuth.getCurrentUser().getUid();
-            userImagePath = "users/" + userId + "/profile.jpg";
-            storageReference = FirebaseStorage.getInstance().getReference();
-            loadRegisteredUserProfilePicture(userId);
-        } else {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        }
+        userImagePath = "users/" + userId + "/profile.jpg";
+        storageReference = FirebaseStorage.getInstance().getReference();
+        loadRegisteredUserProfilePicture(userId);
 
     }
 
