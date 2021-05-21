@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * This class represents a user.
  */
 
-public class User extends FirebaseObject implements Serializable {
+public class User implements Serializable, FirebaseObject {
 
     private final String fullName;
     private final String email;
@@ -62,9 +62,8 @@ public class User extends FirebaseObject implements Serializable {
         this.description = description;
         this.idUser = idUser;
         this.imageId = imageId;
+        this.documentPath = documentPath;
         this.registeredActivities = registeredActivities;
-        super.documentPath = documentPath;
-
     }
 
     /**
@@ -118,6 +117,13 @@ public class User extends FirebaseObject implements Serializable {
     }
 
     /**
+     * @return the document path of the user
+     */
+    public String getDocumentPath() {
+        return this.documentPath;
+    }
+
+    /**
      * @param idUser change user's id
      */
     public void setIdUser(String idUser) {
@@ -158,6 +164,9 @@ public class User extends FirebaseObject implements Serializable {
     }
 
     /**
+     * @param path change the document path of the user
+     */
+    /**
      *
      * @param activityId when a user register to an activity, add this activity to the list of registered activities
      */
@@ -172,12 +181,9 @@ public class User extends FirebaseObject implements Serializable {
         this.registeredActivities.add(activityId);
     }
 
-    public String getDocumentPath() {
-        return super.getDocumentPath();
-    }
-
     public String setDocumentPath(String path) {
-        return super.setDocumentPath(path);
+        if (documentPath == null) documentPath = path;
+        return documentPath;
     }
 
     @Override

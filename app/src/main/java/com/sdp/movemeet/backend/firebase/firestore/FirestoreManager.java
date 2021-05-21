@@ -4,6 +4,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.FirebaseObject;
@@ -11,7 +12,7 @@ import com.sdp.movemeet.models.FirebaseObject;
 import java.util.Map;
 
 /**
- * A class capable of interacting with a FirebaseFirestore backend to perform storage operations
+ * A class capable of interacting with a Firebase Firestore backend to perform storage operations
  * for objects of type T
  * @param <T> The type of object handled by this FirestoreManager
  */
@@ -24,7 +25,7 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendMana
     /**
      * Creates a new FirestoreManager
      *
-     * @param db         the instance of FirebaseFirestore to interact with.
+     * @param db         the instance of Firebase Firestore to interact with.
      * @param collection the Firestore collection in which to perform operations
      * @param serializer a BackendSerializer capable of (de)serializing objects of type T
      */
@@ -38,7 +39,7 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendMana
     }
 
     /**
-     * Adds an object to the FirebaseFirestore backend. Because of the structure of Firestore,
+     * Adds an object to the Firebase Firestore backend. Because of the structure of Firestore,
      * the path parameter is ignored; a new path is automatically generated, or the old path is used
      * if the instance has already been uploaded to the backend.
      *
@@ -49,8 +50,12 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendMana
     @Override
     public Task<Void> add(T object, String path) {
         if (object == null) throw new IllegalArgumentException();
-
-        String documentPath = db.collection(collection).document().getPath();
+        String documentPath;
+        if (path == null) {
+            documentPath = db.collection(collection).document().getPath();
+        } else {
+            documentPath = path;
+        }
         object.setDocumentPath(documentPath);
         Map<String, Object> data = serializer.serialize(object);
 
@@ -58,11 +63,18 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendMana
     }
 
     @Override
-    public Task<Void> set(T object, String path, String field, String value) {
+    public Task<Void> set(T object, String path) {
         if (object == null) throw new IllegalArgumentException();
-        // TODO: check why the number of registered participants vary on Firebase Firestore
         Map<String, Object> data = serializer.serialize(object);
+
         return db.document(path).set(data);
+    }
+
+    @Override
+    public Task<Void> update(String path, String field, String value) {
+        if (path == null || field == null || value == null) throw new IllegalArgumentException();
+
+        return db.document(path).update(field, FieldValue.arrayUnion(value));
     }
 
     @Override

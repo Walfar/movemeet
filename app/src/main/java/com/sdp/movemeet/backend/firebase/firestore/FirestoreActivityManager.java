@@ -11,7 +11,7 @@ import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
 
 /**
- * A class capable of handling Activity storage operations with a FirebaseFirestore backend
+ * A class capable of handling Activity storage operations with a Firebase Firestore backend
  */
 public class FirestoreActivityManager extends FirestoreManager<Activity> {
 
