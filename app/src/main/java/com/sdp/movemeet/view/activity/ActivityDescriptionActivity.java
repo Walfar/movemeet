@@ -123,9 +123,12 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
     private void getParticipantNames() {
         ArrayList<String> participantIds = activity.getParticipantId();
+        Log.i(TAG, "activity.getParticipantId(): " + activity.getParticipantId());
+        Log.i(TAG, "activity.getDocumentPath(): " + activity.getDocumentPath());
         participantNamesString = new StringBuilder();
         for (int i = 0; i < participantIds.size(); i++) {
             String currentParticipantId = participantIds.get(i);
+            Log.i(TAG, "current currentParticipantId: " + currentParticipantId);
             getCurrentParticipantName(currentParticipantId);
         }
     }
@@ -213,6 +216,14 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                     public void onSuccess(Object o) {
                         Log.d(TAG, "Participant registered in Firebase Firestore!");
                         getParticipantNames();
+                        // TODO: (By Victor) here --> get activity from the MainMapFragment and update it!
+                        //  (in order to sync the Firebase Firestore new updates with the local sport activities and their views)
+                        //  (because if we register, exit ActivityDescriptionActivity and then re-enter ActivityDescriptionActivity,
+                        //  then the Firebase Firestore backend works and is updated, but the local activity is not updated according
+                        //  to this version of the backend)
+                        //  Probable solution:
+                        //  Implement a method in the OnResume of MainMapFragment to clear the list of activities
+                        //  and then update them from Firebase Firestore (but this is not very optimal, because it takes time)
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
