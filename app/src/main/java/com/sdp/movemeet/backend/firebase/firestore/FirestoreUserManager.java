@@ -40,6 +40,5 @@ public class FirestoreUserManager extends FirestoreManager<User> {
         String path = USERS_COLLECTION + "/" + uid;
         return super.get(path);
     }
-
 }
 
