@@ -10,7 +10,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 
@@ -33,9 +32,6 @@ public class EditProfileActivityTest {
     public static final String TEST_EMAIL = "antho2@gmail.com";
     public static final String TEST_PHONE = "000000000000";
     public static final String TEST_DESCRIPTION = "";
-
-    public static final String USER_ID = "cyYedhxTkGV6uihozBJpO5YDyGs1"; // antho2@gmail.com
-    public static final String URI = "https://firebasestorage.googleapis.com/v0/b/movemeet-4cbf5.appspot.com/o/users%2FcyYedhxTkGV6uihozBJpO5YDyGs1%2Fprofile.jpg?alt=media&token=70637297-7622-4f99-90ac-7d6a12340066";
 
     private FirebaseAuth fAuth;
 

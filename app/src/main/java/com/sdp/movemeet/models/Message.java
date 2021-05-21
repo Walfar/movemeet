@@ -1,8 +1,5 @@
 package com.sdp.movemeet.models;
 
-import java.io.Serializable;
-import java.util.Date;
-
 /**
  *
  * This class represents a message

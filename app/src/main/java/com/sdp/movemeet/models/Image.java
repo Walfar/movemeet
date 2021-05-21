@@ -20,6 +20,10 @@ public class Image implements FirebaseObject {
      */
     public Image(Uri imageUri, ImageView imageImageView) {
 
+        if (imageUri == null && imageImageView == null) {
+            throw new IllegalArgumentException();
+        }
+
         this.imageUri = imageUri;
         this.imageImageView = imageImageView;
     }

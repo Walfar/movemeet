@@ -39,55 +39,50 @@ import androidx.annotation.VisibleForTesting;
 public class EditProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "TAG";
+    private static final int REQUEST_IMAGE = 1000;
 
-    ImageView profileImage;
-    EditText profileFullName, profileEmail, profilePhone, profileDescription;
-    ProgressBar progressBar;
-    ImageButton saveBtn;
+    private ImageView profileImage;
+    private EditText profileFullName, profileEmail, profilePhone, profileDescription;
+    private ProgressBar progressBar;
+    private ImageButton saveBtn;
 
-    String userId, fullNameString, emailString, phoneString, descriptionString, userImagePath;
+    private String userId, fullNameString, emailString, phoneString, descriptionString, userImagePath;
 
-    FirebaseAuth fAuth;
-    FirebaseFirestore fStore;
-    BackendManager<User> userManager;
-    FirebaseStorage fStorage;
-    StorageReference storageReference;
+    private FirebaseAuth fAuth;
+    private FirebaseFirestore fStore;
+    private BackendManager<User> userManager;
+    private FirebaseStorage fStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+        if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
+            finish();
+        } else {
+            userId = fAuth.getCurrentUser().getUid();
+        }
+
         Intent data = getIntent();
         fullNameString = data.getStringExtra("fullName");
         emailString = data.getStringExtra("email");
         phoneString = data.getStringExtra("phone");
         descriptionString = data.getStringExtra("description");
-
         assignViewsAndAdjustData();
 
-        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+        fStorage = BackendInstanceProvider.getStorageInstance();
+        userImagePath = "users/" + userId + "/profile.jpg";
+        Image image = new Image(null, profileImage);
+        image.setDocumentPath(userImagePath);
+        ImageHandler.loadImage(image, this);
+
         fStore = BackendInstanceProvider.getFirestoreInstance();
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
-        fStorage = BackendInstanceProvider.getStorageInstance();
-
-        if (fAuth.getCurrentUser() != null) {
-            userId = fAuth.getCurrentUser().getUid();
-            storageReference = fStorage.getReference();
-            userImagePath = "users/" + userId + "/profile.jpg";
-            Image image = new Image(null, profileImage);
-            image.setDocumentPath(userImagePath);
-            ImageHandler.loadImage(image, this);
-        } else {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
-            finish();
-        }
-
     }
 
-    public ProgressBar getProgressBar() {
-        return progressBar;
-    }
 
     private void assignViewsAndAdjustData() {
         profileImage = findViewById(R.id.image_view_edit_profile_image);
@@ -107,14 +102,18 @@ public class EditProfileActivity extends AppCompatActivity {
 
     public void changeProfilePicture(View view) {
         Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(openGalleryIntent, 1000);
+        startActivityForResult(openGalleryIntent, REQUEST_IMAGE);
+    }
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
     }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1000) {
+        if (requestCode == REQUEST_IMAGE) {
             if (resultCode == Activity.RESULT_OK) {
                 Uri imageUri = data.getData();
                 Image image = new Image(imageUri, profileImage);

@@ -15,7 +15,6 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.api.Backend;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
@@ -30,9 +29,7 @@ import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.Activity;
-import com.sdp.movemeet.view.activity.UploadActivityActivity;
 import com.sdp.movemeet.view.main.MainActivity;
-import com.sdp.movemeet.view.navigation.security.MainActivitySecurityTest;
 
 import org.hamcrest.Matcher;
 import org.junit.After;

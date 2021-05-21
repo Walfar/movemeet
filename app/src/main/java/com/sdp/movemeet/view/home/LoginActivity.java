@@ -23,11 +23,11 @@ import com.sdp.movemeet.view.main.MainActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText emailEditText, passwordEditText;
-    Button loginBtn;
-    TextView createBtn;
-    ProgressBar progressBar;
-    FirebaseAuth fAuth;
+    private EditText emailEditText, passwordEditText;
+    private Button loginBtn;
+    private TextView createBtn;
+    private ProgressBar progressBar;
+    private FirebaseAuth fAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

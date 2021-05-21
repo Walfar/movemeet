@@ -105,7 +105,7 @@ public class ChatActivityTest {
                 FirebaseUser user = fAuth.getCurrentUser();
                 if (user != null) {
                     // Logging out the user from Firebase
-                    FirebaseAuth.getInstance().signOut();
+                    fAuth.signOut();
                 }
             }
 
