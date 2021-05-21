@@ -30,6 +30,8 @@ import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.main.MainActivity;
 
+import java.util.ArrayList;
+
 // First activity that the users is going to see when launching the app
 public class RegisterActivity extends AppCompatActivity {
 
