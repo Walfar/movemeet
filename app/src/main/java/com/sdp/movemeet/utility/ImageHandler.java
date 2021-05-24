@@ -15,8 +15,6 @@ import androidx.annotation.Nullable;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.backend.BackendManager;
@@ -26,22 +24,29 @@ import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivityUnregister;
 import com.sdp.movemeet.view.profile.EditProfileActivity;
 import com.sdp.movemeet.view.profile.ProfileActivity;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-
-import java.io.FileNotFoundException;
-
 import static com.sdp.movemeet.utility.ActivityPictureCache.loadFromCache;
 import static com.sdp.movemeet.utility.ActivityPictureCache.saveToCache;
 import static com.sdp.movemeet.utility.PermissionChecker.isStorageReadPermissionGranted;
 import static com.sdp.movemeet.utility.PermissionChecker.isStorageWritePermissionGranted;
 
+/**
+ * This class allows to both load images from and upload images to the Firebase Storage service.
+ * In case the image is not present in the local cache, it is fetched from Firebase Storage.
+ * On the contrary, if the the image is already in the local cache, it is simply loaded from there.
+ */
 public abstract class ImageHandler {
 
     private static final String TAG = "ImageHandler";
 
     private static BackendManager<Image> imageBackendManager;
 
+
+    /**
+     * Fetch an image (user profile picture, activity header picture or chat image) from Firebase Storage.
+     *
+     * @param image Image object to be loaded from Firebase Storage or from the local cache.
+     * @param activity Activity on which we want to fetch the image
+     */
     public static void loadImage(Image image, Activity activity) {
         Log.d(TAG, "loading image");
         ProgressBar progressBar = getProgressBar(activity);
@@ -54,29 +59,15 @@ public abstract class ImageHandler {
         if (bitmap != null) {
             Log.d(TAG, "bitmap stored");
             imageView.setImageBitmap(bitmap);
-        } else {
-            progressBar.setVisibility(View.VISIBLE);
-            imageBackendManager = new StorageImageManager();
-            Task<Uri> document = (Task<Uri>) imageBackendManager.get(imagePath);
-            document.addOnSuccessListener(uri -> {
-                Log.d(TAG, "Image successfully fetched from Firebase Storage!");
-                image.setImageUri(uri);
-                setImageBitMapAndSaveToCache(activity, image);
-                if (progressBar != null) {
-                    progressBar.setVisibility(View.GONE);
-                }
-            }).addOnFailureListener(exception -> {
-                Log.d(TAG, "Image could not be fetched from Firebase Storage! Don't panic!" +
-                        " It's probably because no images have been saved in Firebase Storage for" +
-                        " this document yet!");
-                if (progressBar != null) {
-                    progressBar.setVisibility(View.GONE);
-                }
-            });
         }
     }
 
-    private static void setImageBitMapAndSaveToCache(Activity activity, Image image) {
+    /**
+     * For a given image, sets the corresponding bitmap and saves it to cache (if permission)
+     * @param image Image we want to store in the cache
+     * @param activity Activity from which we want to save the image
+     */
+    private static void setImageBitMapAndSaveToCache(Image image, Activity activity) {
         Glide.with(activity)
                 .asBitmap()
                 .load(image.getImageUri())
@@ -95,17 +86,26 @@ public abstract class ImageHandler {
     }
 
 
-
+    /**
+     * Upload an image (user profile picture, activity header picture or chat image) to Firebase Storage.
+     *
+     * @param image Image object to be uploaded to Firebase Storage or saved to the local cache.
+     * @param activity Activity from which we want to upload the image
+     */
     public static void uploadImage(Image image, Activity activity) {
-        //TODO use instance
         imageBackendManager = new StorageImageManager();
         UploadTask uploadTask = (UploadTask) imageBackendManager.add(image, image.getDocumentPath());
         uploadTask.addOnSuccessListener(taskSnapshot -> {
-            setImageBitMapAndSaveToCache(activity, image);
+            setImageBitMapAndSaveToCache(image, activity);
             loadImage(image, activity);
         }).addOnFailureListener(e -> getProgressBar(activity).setVisibility(View.GONE));
     }
 
+    /**
+     * Get the progress bar from an Activity
+     * @param activity Activity from which we get the progress bar
+     * @return the progress bar of the activity
+     */
     private static ProgressBar getProgressBar(Activity activity) {
         ProgressBar progressBar = null;
         if (activity instanceof ActivityDescriptionActivity) progressBar = ((ActivityDescriptionActivity) activity).getProgressBar();

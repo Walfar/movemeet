@@ -72,7 +72,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private FirebaseAuth fAuth;
     private FirebaseFirestore fStore;
     private FirebaseStorage fStorage;
-    private StorageReference storageReference;
     private String userId, organizerId, imagePath;
     private StringBuilder participantNamesString = new StringBuilder();
 
@@ -97,7 +96,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         } else {
             userId = fAuth.getCurrentUser().getUid();
             fStorage = BackendInstanceProvider.getStorageInstance();
-            storageReference = fStorage.getReference();
             fStore = BackendInstanceProvider.getFirestoreInstance();
             userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
             activityManager = new FirestoreActivityManager(fStore, FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
@@ -220,7 +218,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             try {
                 activity.addParticipantId(userId);
                 createParticipantNumberView();
-                activityManager.updt(userId, activity.getDocumentPath(), "participantId").addOnSuccessListener(new OnSuccessListener() {
+                activityManager.update(activity.getDocumentPath(), "participantId", userId).addOnSuccessListener(new OnSuccessListener() {
                     @Override
                     public void onSuccess(Object o) {
                         Log.d(TAG, "Participant registered in Firebase Firestore!");

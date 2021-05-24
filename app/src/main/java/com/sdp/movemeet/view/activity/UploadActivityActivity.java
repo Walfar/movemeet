@@ -382,5 +382,4 @@ public class UploadActivityActivity extends AppCompatActivity {
             }
         });
     }
-
 }

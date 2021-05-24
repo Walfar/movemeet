@@ -54,7 +54,7 @@ abstract class FirebaseDBManager<T extends FirebaseObject> implements BackendMan
     }
 
     @Override
-    public Task<?> updt(String value, String path, String field) { throw new UnsupportedOperationException(); }
+    public Task<?> update(String path, String field, String value) { throw new UnsupportedOperationException(); }
 
     @Override
     public Task<?> delete(String path) {
