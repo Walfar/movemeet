@@ -32,7 +32,6 @@ public abstract class ActivityPictureCache {
 
     public static String TAG = "Cache TAG";
 
-
     public static void saveToCache(Bitmap bitmap, String path) {
         String[] directories = path.split("/");
         String fileName = directories[directories.length-1];
@@ -75,15 +74,5 @@ public abstract class ActivityPictureCache {
         }
         return null;
     }
-
-
-    private static Bitmap getBitmapFromView(ImageView view) {
-        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(returnedBitmap);
-        view.layout(view.getLeft(), view.getTop(), view.getRight(), view.getBottom());
-        view.draw(canvas);
-        return returnedBitmap;
-    }
-
 
 }
