@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(AndroidJUnit4.class)
-public class PermissionCheckerGrantedTest {
+public class PermissionCheckerTest {
 
     @Rule
     public ActivityScenarioRule<HomeScreenActivity> activityRule = new ActivityScenarioRule<>(HomeScreenActivity.class);

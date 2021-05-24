@@ -41,7 +41,7 @@ public class ActivityPictureCacheTest {
                 e.printStackTrace();
             }
             Bitmap loadedBitmap = ActivityPictureCache.loadFromCache("imagePath");
-            assertThat(loadedBitmap.sameAs(bitmap), is(true));
+            if (loadedBitmap != null) assertThat(loadedBitmap.sameAs(bitmap), is(true));
         });
     }
 }
