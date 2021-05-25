@@ -104,7 +104,7 @@ public class ChatActivity extends AppCompatActivity {
         fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         // The aim is to block any direct access to this page if the user is not logged in
         if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             finish();
         } else {
             userId = fAuth.getCurrentUser().getUid();
