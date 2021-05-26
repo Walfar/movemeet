@@ -156,7 +156,7 @@ public class Navigation extends AppCompatActivity {
             String userId = firebaseUser.getUid();
             UserSerializer serializer = new UserSerializer();
             FirestoreUserManager backendUserManager =
-                    new FirestoreUserManager(BackendInstanceProvider.getFirestoreInstance(),
+                    new FirestoreUserManager(
                             FirestoreUserManager.USERS_COLLECTION,
                             serializer);
             backendUserManager.getUserFromUid(userId).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

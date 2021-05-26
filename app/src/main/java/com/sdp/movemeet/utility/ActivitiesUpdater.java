@@ -21,7 +21,7 @@ public abstract class ActivitiesUpdater {
     private static BackendSerializer<Activity> serializer =new ActivitySerializer();
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static ArrayList<Activity> activities = new ArrayList<>();
-    private static FirestoreActivityManager firestoreActivityManager = new FirestoreActivityManager(FirebaseFirestore.getInstance(), "activities", serializer);
+    private static FirestoreActivityManager firestoreActivityManager = new FirestoreActivityManager(FirestoreActivityManager.ACTIVITIES_COLLECTION, serializer);
 
     private static final String TAG = "Activities updater TAG";
 

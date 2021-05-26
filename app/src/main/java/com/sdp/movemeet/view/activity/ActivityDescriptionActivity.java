@@ -62,7 +62,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
     private TextView organizerView, numberParticipantsView, participantNamesView;
     private FirebaseAuth fAuth;
-    private FirebaseFirestore fStore;
     private FirebaseStorage fStorage;
     private StorageReference storageReference;
     private String userId, organizerId, imagePath;
@@ -89,9 +88,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             userId = fAuth.getCurrentUser().getUid();
             fStorage = BackendInstanceProvider.getStorageInstance();
             storageReference = fStorage.getReference();
-            fStore = BackendInstanceProvider.getFirestoreInstance();
-            userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
-            activityManager = new FirestoreActivityManager(fStore, FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
+            userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
+            activityManager = new FirestoreActivityManager(FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
         }
 
         if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();

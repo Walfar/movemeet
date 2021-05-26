@@ -60,7 +60,6 @@ public class ProfileActivity extends AppCompatActivity {
     private User user;
 
     private FirebaseAuth fAuth;
-    private FirebaseFirestore fStore;
     private BackendManager<User> userManager;
     private FirebaseStorage fStorage;
     private StorageReference storageReference;
@@ -90,8 +89,7 @@ public class ProfileActivity extends AppCompatActivity {
         phone = findViewById(R.id.text_view_activity_profile_phone);
         description = findViewById(R.id.text_view_activity_profile_description);
 
-        fStore = BackendInstanceProvider.getFirestoreInstance();
-        userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
+        userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
         fStorage = BackendInstanceProvider.getStorageInstance();
         displayRegisteredUserData();
         storageReference = fStorage.getReference();

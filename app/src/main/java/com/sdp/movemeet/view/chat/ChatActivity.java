@@ -72,7 +72,6 @@ public class ChatActivity extends AppCompatActivity {
 
     // Firebase instance variables
     private FirebaseAuth fAuth;
-    private FirebaseFirestore fStore;
     private FirebaseStorage fStorage;
     private StorageReference storageReference;
     private BackendManager<Image> imageBackendManager;
@@ -128,8 +127,7 @@ public class ChatActivity extends AppCompatActivity {
         fStorage = BackendInstanceProvider.getStorageInstance();
         storageReference = fStorage.getReference();
 
-        fStore = BackendInstanceProvider.getFirestoreInstance();
-        userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
+        userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
         getRegisteredUserData();
 
         Intent data = getIntent();

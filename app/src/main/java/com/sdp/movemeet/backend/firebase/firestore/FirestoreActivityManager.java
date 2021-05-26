@@ -7,6 +7,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
 
@@ -21,9 +22,9 @@ public class FirestoreActivityManager extends FirestoreManager<Activity> {
     private final FirebaseFirestore db;
     private final String collection;
 
-    public FirestoreActivityManager(FirebaseFirestore db, String collection, BackendSerializer<Activity> serializer) {
-        super(db, collection, serializer);
-        this.db = db;
+    public FirestoreActivityManager(String collection, BackendSerializer<Activity> serializer) {
+        super(collection, serializer);
+        this.db = BackendInstanceProvider.getFirestoreInstance();;
         this.collection = collection;
     }
 

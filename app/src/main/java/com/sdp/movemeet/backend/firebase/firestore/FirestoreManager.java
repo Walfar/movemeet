@@ -6,6 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.sdp.movemeet.backend.BackendManager;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.FirebaseObject;
 
@@ -25,15 +26,14 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendMana
     /**
      * Creates a new FirestoreManager
      *
-     * @param db         the instance of Firebase Firestore to interact with.
      * @param collection the Firestore collection in which to perform operations
      * @param serializer a BackendSerializer capable of (de)serializing objects of type T
      */
-    public FirestoreManager(FirebaseFirestore db, String collection, BackendSerializer<T> serializer) {
-        if (db == null || collection == null || serializer == null)
+    public FirestoreManager(String collection, BackendSerializer<T> serializer) {
+        if (collection == null || serializer == null)
             throw new IllegalArgumentException();
 
-        this.db = db;
+        this.db = BackendInstanceProvider.getFirestoreInstance();
         this.serializer = serializer;
         this.collection = collection;
     }

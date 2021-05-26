@@ -79,8 +79,7 @@ public class EditProfileActivity extends AppCompatActivity {
         image.setDocumentPath(userImagePath);
         ImageHandler.loadImage(image, progressBar);
 
-        FirebaseFirestore fStore = BackendInstanceProvider.getFirestoreInstance();
-        userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
+        userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
     }
 
 

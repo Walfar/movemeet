@@ -249,7 +249,7 @@ public class FirebaseDBActivityManagerTest {
         dbRef = mock(DatabaseReference.class);
         getSnap = mock(DataSnapshot.class);
         serializer = new ActivitySerializer();
-        fam = new FirebaseDBActivityManager(db, serializer);
+        fam = new FirebaseDBActivityManager(serializer);
 
         activity = ActivityTest.createFakeActivity();
         path = "child/child";
@@ -264,11 +264,11 @@ public class FirebaseDBActivityManagerTest {
     @Test
     public void constructorThrowsIllegalArgumentExceptionOnNullParameter() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new FirebaseDBActivityManager(null, serializer);
+            new FirebaseDBActivityManager(serializer);
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            new FirebaseDBActivityManager(db, null);
+            new FirebaseDBActivityManager(null);
         });
     }
 
