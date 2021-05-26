@@ -146,23 +146,20 @@ public class FirestoreActivityManagerTest {
         // Add
         when(docRef.set(any())).thenReturn(addTask);
 
-        activityManager = new FirestoreActivityManager(db,
+        activityManager = new FirestoreActivityManager(
                 FirestoreActivityManager.ACTIVITIES_COLLECTION,
                 serializer);
     }
 
     @Test
     public void constructorThrowsIllegalArgumentExceptionOnNullParameter() {
+
         assertThrows(IllegalArgumentException.class, () -> {
-            new FirestoreActivityManager(null, FirestoreActivityManager.ACTIVITIES_COLLECTION, serializer);
+            new FirestoreActivityManager(null, serializer);
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            new FirestoreActivityManager(db, null, serializer);
-        });
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            new FirestoreActivityManager(db, FirestoreActivityManager.ACTIVITIES_COLLECTION, null);
+            new FirestoreActivityManager(FirestoreActivityManager.ACTIVITIES_COLLECTION, null);
         });
     }
 
