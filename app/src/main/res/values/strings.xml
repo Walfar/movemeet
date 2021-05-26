@@ -54,7 +54,7 @@
     <!-- activity upload -->
     <string name="activity_upload_upload_activity_title">New Activity</string>
     <string name="activity_upload_edit_text_title_hint">Title</string>
-    <string name="activity_upload_edit_text_nparticipants_hint">Number of participants</string>
+    <string name="activity_upload_edit_text_nparticipants_hint">No. of participants</string>
     <string name="activity_upload_button_confirm_upload">Create</string>
     <string name="activity_upload_edit_text_location_hint">Location</string>
     <string name="activity_upload_edit_text_description_hint">A short description…</string>

@@ -21,156 +21,212 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/menu"/>
 
-        <TextView
-            android:id="@+id/uploadActivityTitle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            android:weightSum="100"
+            android:layout_marginTop="60dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/uploadActivityTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|center_horizontal"
+                    android:fontFamily="@font/armata"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="@string/activity_upload_upload_activity_title"
+                    android:textAlignment="center"
+                    android:textSize="30sp" />
+
+            </LinearLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="50"
+                android:scrollbars="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:isScrollContainer="true"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/editTextTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autofillHints="@string/activity_upload_edit_text_title_hint"
+                            android:ems="10"
+                            android:hint="@string/activity_upload_edit_text_title_hint"
+                            android:inputType="textPersonName"
+                            android:maxLength="32" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/editTextNParticipants"
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:autofillHints="@string/activity_upload_edit_text_nparticipants_hint"
+                            android:ems="10"
+                            android:hint="@string/activity_upload_edit_text_nparticipants_hint"
+                            android:inputType="number" />
+
+                        <Spinner
+                            android:id="@+id/spinnerSportType"
+                            android:layout_width="150dp"
+                            android:layout_height="46dp"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/editTextDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="@string/activity_upload_edit_text_date_hint"
+                        android:ems="10"
+                        android:focusable="true"
+                        android:hint="@string/activity_upload_edit_text_date_hint"
+                        android:inputType="date"
+                        android:onClick="setDate"
+                        app:layout_constraintTop_toBottomOf="@+id/editTextNParticipants" />
+                </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/editTextStartTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:autofillHints="@string/activity_upload_edit_text_start_time_hint"
+                            android:ems="10"
+                            android:focusable="true"
+                            android:hint="@string/activity_upload_edit_text_start_time_hint"
+                            android:inputType="time"
+                            android:onClick="setStartTime"
+                            app:layout_constraintTop_toBottomOf="@+id/editTextDate" />
+
+                        <EditText
+                            android:id="@+id/editTextTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:autofillHints="@string/activity_upload_edit_text_time_hint"
+                            android:ems="10"
+                            android:focusable="true"
+                            android:hint="@string/activity_upload_edit_text_time_hint"
+                            android:inputType="time"
+                            android:onClick="setDuration"
+                            app:layout_constraintStart_toEndOf="@+id/editTextStartTime"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/editTextDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autofillHints="@string/activity_upload_edit_text_description_hint"
+                            android:ems="10"
+                            android:hint="@string/activity_upload_edit_text_description_hint"
+                            android:inputType="textPersonName"
+                            android:paddingBottom="40dp"
+                            android:textAlignment="textStart"
+                            app:layout_constraintStart_toEndOf="@+id/editTextStartTime"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/activity_upload_upload_activity_title"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.100000024" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:paddingTop="20dp"
+            android:padding="10dp"
+            android:isScrollContainer="false"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayout">
 
-        <EditText
-            android:id="@+id/editTextTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:autofillHints="@string/activity_upload_edit_text_title_hint"
-            android:ems="10"
-            android:hint="@string/activity_upload_edit_text_title_hint"
-            android:inputType="textPersonName"
-            android:maxLength="32"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/uploadActivityTitle" />
+            <EditText
+                android:id="@+id/editTextLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/activity_upload_edit_text_location_hint"
+                android:ems="10"
+                android:hint="@string/activity_upload_edit_text_location_hint"
+                android:inputType="textPostalAddress"/>
 
-        <EditText
-            android:id="@+id/editTextNParticipants"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/activity_upload_edit_text_nparticipants_hint"
-            android:inputType="number"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.384"
-            app:layout_constraintStart_toEndOf="@+id/spinnerSportType"
-            app:layout_constraintTop_toTopOf="@+id/spinnerSportType"
-            android:autofillHints="@string/activity_upload_edit_text_nparticipants_hint" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                app:layout_constraintHeight_percent="0.7"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/fragment_container_view"
+                    android:name="com.sdp.movemeet.view.map.MiniMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
 
-        <Spinner
-            android:id="@+id/spinnerSportType"
-            android:layout_width="157dp"
-            android:layout_height="46dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintEnd_toStartOf="@+id/editTextNParticipants"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTitle" />
-
-        <EditText
-            android:id="@+id/editTextDescription"
-            android:layout_width="375dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:autofillHints="@string/activity_upload_edit_text_description_hint"
-            android:ems="10"
-            android:hint="@string/activity_upload_edit_text_description_hint"
-            android:inputType="textPersonName"
-            android:textAlignment="textStart"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextLocation" />
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fragment_container_view"
-            android:name="com.sdp.movemeet.view.map.MiniMapFragment"
-            android:layout_width="394dp"
-            android:layout_height="167dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.47"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.787" >
-
-        </androidx.fragment.app.FragmentContainerView>
-
-        <Button
-            android:id="@+id/buttonConfirmUpload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="confirmActivityUpload"
-            android:text="@string/activity_upload_button_confirm_upload"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.918" />
-
-
-        <EditText
-            android:id="@+id/editTextLocation"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:autofillHints="@string/activity_upload_edit_text_location_hint"
-            android:ems="10"
-            android:hint="@string/activity_upload_edit_text_location_hint"
-            android:inputType="textPostalAddress"
-            app:layout_constraintEnd_toEndOf="@+id/editTextNParticipants"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/spinnerSportType"
-            app:layout_constraintTop_toBottomOf="@+id/editTextStartTime" />
-
-        <EditText
-            android:id="@+id/editTextDate"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:autofillHints="@string/activity_upload_edit_text_date_hint"
-            android:ems="10"
-            android:focusable="true"
-            android:hint="@string/activity_upload_edit_text_date_hint"
-            android:inputType="date"
-            android:onClick="setDate"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerSportType" />
-
-        <EditText
-            android:id="@+id/editTextStartTime"
-            android:layout_width="75dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:autofillHints="@string/activity_upload_edit_text_start_time_hint"
-            android:ems="10"
-            android:focusable="true"
-            android:hint="@string/activity_upload_edit_text_start_time_hint"
-            android:inputType="time"
-            android:onClick="setStartTime"
-            app:layout_constraintStart_toEndOf="@+id/editTextDate"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerSportType" />
-
-        <EditText
-            android:id="@+id/editTextTime"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:autofillHints="@string/activity_upload_edit_text_time_hint"
-            android:ems="10"
-            android:focusable="true"
-            android:hint="@string/activity_upload_edit_text_time_hint"
-            android:inputType="time"
-            android:onClick="setDuration"
-            app:layout_constraintStart_toEndOf="@+id/editTextStartTime"
-            app:layout_constraintTop_toBottomOf="@+id/editTextNParticipants" />
-
+            <Button
+                android:id="@+id/buttonConfirmUpload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|center_horizontal"
+                android:fontFamily="@font/armata"
+                android:onClick="confirmActivityUpload"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="@string/activity_upload_button_confirm_upload"
+                android:textAlignment="center" />
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
