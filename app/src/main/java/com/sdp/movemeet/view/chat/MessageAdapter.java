@@ -65,7 +65,7 @@ public class MessageAdapter extends FirebaseRecyclerAdapter<Message, MessageView
         chatLoader.setVisibility(ProgressBar.INVISIBLE);
         TextView initialChatWelcomeMessage = (chatActivity).findViewById(R.id.initial_chat_welcome_message);
         initialChatWelcomeMessage.setVisibility(ProgressBar.INVISIBLE);
-        vh.bindMessage(message);
+        vh.bindMessage(message, (ChatActivity) chatActivity);
     }
 
     /**

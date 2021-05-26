@@ -41,9 +41,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "ProfileActivity";
 
-    private static final String USER_IMAGE_NAME = "profile.jpg";
-    private static final String PATH_SEPARATOR = "/";
-
     public static final String EXTRA_MESSAGE_FULL_NAME = "fullName";
     public static final String EXTRA_MESSAGE_EMAIL = "email";
     public static final String EXTRA_MESSAGE_PHONE = "phone";
@@ -52,16 +49,13 @@ public class ProfileActivity extends AppCompatActivity {
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
 
-    private ImageView profileImage;
     private TextView fullName, email, phone, description;
-    private ProgressBar progressBar;
 
     private String userId, userImagePath;
     private User user;
 
     private FirebaseAuth fAuth;
     private BackendManager<User> userManager;
-    private FirebaseStorage fStorage;
     private StorageReference storageReference;
     private StorageReference profileRef;
 
@@ -81,8 +75,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         if(enableNav) new Navigation(this, R.id.nav_edit_profile).createDrawer();
 
-        profileImage = findViewById(R.id.image_view_profile_image);
-        progressBar = findViewById(R.id.progress_bar_profile);
+        ImageView profileImage = findViewById(R.id.image_view_profile_image);
+        ProgressBar progressBar = findViewById(R.id.progress_bar_profile);
 
         fullName = findViewById(R.id.text_view_activity_profile_name);
         email = findViewById(R.id.text_view_activity_profile_email);
@@ -90,10 +84,11 @@ public class ProfileActivity extends AppCompatActivity {
         description = findViewById(R.id.text_view_activity_profile_description);
 
         userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
-        fStorage = BackendInstanceProvider.getStorageInstance();
-        displayRegisteredUserData();
+        FirebaseStorage fStorage = BackendInstanceProvider.getStorageInstance();
         storageReference = fStorage.getReference();
-        userImagePath = FirestoreUserManager.USERS_COLLECTION + PATH_SEPARATOR + userId + PATH_SEPARATOR + USER_IMAGE_NAME;
+        displayRegisteredUserData();
+        userImagePath = FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + userId
+                + ImageHandler.PATH_SEPARATOR + ImageHandler.USER_IMAGE_NAME;
         Image image = new Image(null, profileImage);
         image.setDocumentPath(userImagePath);
         ImageHandler.loadImage(image, progressBar);

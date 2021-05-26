@@ -45,6 +45,7 @@ import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Image;
 import com.sdp.movemeet.models.Message;
 import com.sdp.movemeet.models.User;
+import com.sdp.movemeet.utility.ImageHandler;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.navigation.Navigation;
 
@@ -64,8 +65,6 @@ public class ChatActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE = 2;
 
     public static final String LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif";
-    public static final String CHAT_IMAGE_NAME = "chatImage.jpg";
-    private static final String PATH_SEPARATOR = "/";
 
     public static final String noMessageText = "no messageText";
     public static final String noImageUrl = "no imageUrl";
@@ -243,7 +242,7 @@ public class ChatActivity extends AppCompatActivity {
         Message message = new Message(userName, messageText, userId, noImageUrl, Long.toString(new Date().getTime()));
         if (messageText.length() > 0) {
             Log.d(TAG, "message.getImageUrl(): " + message.getImageUrl());
-            messageManager.add(message, chatRoom.toString().split(PATH_SEPARATOR, 4)[3]);
+            messageManager.add(message, chatRoom.toString().split(ImageHandler.PATH_SEPARATOR, 4)[3]);
             messageInput.setText("");
         } else {
             Toast.makeText(getApplicationContext(), "Empty message.", Toast.LENGTH_SHORT).show();
@@ -287,7 +286,8 @@ public class ChatActivity extends AppCompatActivity {
                 }
                 String key = databaseReference.getKey();
                 imageBackendManager = new StorageImageManager();
-                imagePath = CHATS_CHILD + PATH_SEPARATOR + CHAT_ROOM_ID + PATH_SEPARATOR + key + PATH_SEPARATOR + CHAT_IMAGE_NAME;
+                imagePath = CHATS_CHILD + ImageHandler.PATH_SEPARATOR + CHAT_ROOM_ID + ImageHandler.PATH_SEPARATOR
+                        + key + ImageHandler.PATH_SEPARATOR + ImageHandler.CHAT_IMAGE_NAME;
                 Image image = new Image(uri, null);
                 image.setDocumentPath(imagePath); // probably useless
                 UploadTask uploadTask = (UploadTask) imageBackendManager.add(image, imagePath);
@@ -309,7 +309,7 @@ public class ChatActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Uri uri) {
                             Message imageMessage = new Message(fullNameString, noMessageText, userId, uri.toString(), Long.toString(new Date().getTime()));
-                            messageManager.set(imageMessage, chatRoom.toString().split(PATH_SEPARATOR, 4)[3] + PATH_SEPARATOR + key);
+                            messageManager.set(imageMessage, chatRoom.toString().split(ImageHandler.PATH_SEPARATOR, 4)[3] + ImageHandler.PATH_SEPARATOR + key);
                         }
                     });
             }

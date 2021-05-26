@@ -41,9 +41,6 @@ public class EditProfileActivity extends AppCompatActivity {
     private static final String TAG = "TAG";
     private static final int REQUEST_IMAGE = 1000;
 
-    private static final String USER_IMAGE_NAME = "profile.jpg";
-    private static final String PATH_SEPARATOR = "/";
-
     private ImageView profileImage;
     private EditText profileFullName, profileEmail, profilePhone, profileDescription;
     private ProgressBar progressBar;
@@ -74,7 +71,8 @@ public class EditProfileActivity extends AppCompatActivity {
         descriptionString = data.getStringExtra("description");
         assignViewsAndAdjustData();
 
-        userImagePath = FirestoreUserManager.USERS_COLLECTION + PATH_SEPARATOR + userId + PATH_SEPARATOR + USER_IMAGE_NAME;
+        userImagePath = FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + userId
+                + ImageHandler.PATH_SEPARATOR + ImageHandler.USER_IMAGE_NAME;
         Image image = new Image(null, profileImage);
         image.setDocumentPath(userImagePath);
         ImageHandler.loadImage(image, progressBar);
@@ -147,7 +145,7 @@ public class EditProfileActivity extends AppCompatActivity {
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE) // making this method always public for testing and private otherwise
     public void accessFirestoreUsersCollectionForUpdate() {
         User user = new User(profileFullName.getText().toString(), profileEmail.getText().toString(), profilePhone.getText().toString(), profileDescription.getText().toString());
-        userManager.add(user, FirestoreUserManager.USERS_COLLECTION + PATH_SEPARATOR + userId).addOnSuccessListener(new OnSuccessListener() {
+        userManager.add(user, FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + userId).addOnSuccessListener(new OnSuccessListener() {
             @Override
             public void onSuccess(Object o) {
                 Toast.makeText(EditProfileActivity.this, "Profile updated.", Toast.LENGTH_SHORT).show();

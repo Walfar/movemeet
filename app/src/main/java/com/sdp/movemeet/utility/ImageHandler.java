@@ -24,6 +24,10 @@ import com.squareup.picasso.Picasso;
 public class ImageHandler {
 
     private static final String TAG = "FirebaseInteraction";
+    public static final String USER_IMAGE_NAME = "profile.jpg";
+    public static final String ACTIVITY_IMAGE_NAME = "activityImage.jpg";
+    public static final String CHAT_IMAGE_NAME = "chatImage.jpg";
+    public static final String PATH_SEPARATOR = "/";
 
     private static BackendManager<Image> imageBackendManager;
 
