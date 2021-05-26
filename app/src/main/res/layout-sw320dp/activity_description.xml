@@ -277,7 +277,8 @@
                             android:fontFamily="@font/armata"
                             android:onClick="registerToActivity"
                             android:text="@string/activity_description_register_button"
-                            tools:ignore="ButtonStyle" />
+                            tools:ignore="ButtonStyle"
+                            android:visibility="invisible" />
 
                         <Button
                             android:id="@+id/activityGoDescription"
@@ -287,6 +288,7 @@
                             android:layout_marginRight="10dp"
                             android:fontFamily="@font/armata"
                             android:text="@string/activity_description_how_to_go_button"
+                            android:visibility="invisible"
                             tools:ignore="ButtonStyle" />
 
                         <Button
@@ -296,7 +298,8 @@
                             android:fontFamily="@font/armata"
                             android:onClick="goToIndividualChat"
                             android:text="@string/activity_description_chat_button"
-                            tools:ignore="ButtonStyle" />
+                            tools:ignore="ButtonStyle"
+                            android:visibility="invisible" />
                     </LinearLayout>
 
                 </LinearLayout>

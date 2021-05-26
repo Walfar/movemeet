@@ -142,7 +142,7 @@ public class NavigationTest {
             Thread.sleep(500);
         }catch(Exception e){}
 
-        onView(withId(R.id.nav_start_activity)).perform(click());
+        /*onView(withId(R.id.nav_start_activity)).perform(click());
 
         try{
             Thread.sleep(500);
@@ -154,7 +154,7 @@ public class NavigationTest {
 
         try{
             Thread.sleep(500);
-        }catch(Exception e){}
+        }catch(Exception e){}*/
 
         onView(withId(R.id.nav_list_activities)).perform(click());
 
@@ -170,7 +170,7 @@ public class NavigationTest {
             Thread.sleep(500);
         }catch(Exception e){}
 
-        onView(withId(R.id.nav_view)).perform(swipeUp());
+        /*onView(withId(R.id.nav_view)).perform(swipeUp());
         onView(withId(R.id.nav_chat)).perform(click());
 
         try{
@@ -184,7 +184,7 @@ public class NavigationTest {
 
         try{
             Thread.sleep(500);
-        }catch(Exception e){}
+        }catch(Exception e){}*/
 
         onView(withId(R.id.nav_view)).perform(swipeUp());
         onView(withId(R.id.nav_edit_profile)).perform(click());

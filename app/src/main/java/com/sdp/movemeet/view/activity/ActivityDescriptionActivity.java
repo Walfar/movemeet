@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -119,6 +120,28 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         createParticipantNumberView();
         getParticipantNames();
         loadActivityHeaderPicture();
+        setButton();
+    }
+
+    /**
+     * Modify the visibility of buttons in the layout
+     */
+    private void setButton() {
+        if (activity.getParticipantId().contains(userId)) {
+            findViewById(R.id.activityRegisterDescription).setVisibility(View.GONE);
+            findViewById(R.id.activityGoDescription).setVisibility(View.VISIBLE);
+            findViewById(R.id.activityChatDescription).setVisibility(View.VISIBLE);
+        } else {
+            if (activity.getParticipantId().size() < activity.getNumberParticipant()) {
+                findViewById(R.id.activityRegisterDescription).setVisibility(View.VISIBLE);
+                findViewById(R.id.activityGoDescription).setVisibility(View.GONE);
+                findViewById(R.id.activityChatDescription).setVisibility(View.GONE);
+            } else {
+                findViewById(R.id.activityRegisterDescription).setVisibility(View.VISIBLE);
+                findViewById(R.id.activityGoDescription).setVisibility(View.GONE);
+                findViewById(R.id.activityChatDescription).setVisibility(View.GONE);
+            }
+        }
     }
 
     private void getParticipantNames() {
@@ -216,6 +239,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                     public void onSuccess(Object o) {
                         Log.d(TAG, "Participant registered in Firebase Firestore!");
                         getParticipantNames();
+                        setButton();
                         // TODO: (By Victor) here --> get activity from the MainMapFragment and update it!
                         //  (in order to sync the Firebase Firestore new updates with the local sport activities and their views)
                         //  (because if we register, exit ActivityDescriptionActivity and then re-enter ActivityDescriptionActivity,

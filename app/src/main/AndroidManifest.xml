@@ -21,7 +21,12 @@
         <activity android:name=".view.map.GPSRecordingActivity" />
         <activity
             android:name=".view.profile.EditProfileActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@style/Theme.movemeet">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sdp.movemeet.view.home.HomeScreenActivity" />
+        </activity>
         <activity android:name=".view.profile.ProfileActivity" />
         <activity android:name=".view.activity.UploadActivityActivity" android:windowSoftInputMode="adjustNothing"/>
         <!--
@@ -74,7 +79,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sdp.movemeet.view.home.HomeScreenActivity" />
         </activity>
-        <activity android:name=".view.activity.ActivityDescriptionActivity"></activity>
+        <activity android:name=".view.activity.ActivityDescriptionActivity"
+            android:theme="@style/Theme.movemeet">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sdp.movemeet.view.main.MainUnregisterActivity" />
+        </activity>
 
         <activity
             android:name=".view.activity.ActivityDescriptionActivityUnregister"

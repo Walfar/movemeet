@@ -203,7 +203,7 @@ public class Navigation extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
         navigationView.setCheckedItem(this.activityId);
 
-        if (profileField) fillNavigationProfileFields(new TextView[] {fullName, email, phone});
+        /*if (profileField) fillNavigationProfileFields(new TextView[] {fullName, email, phone});*/
     }
 
     private boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -227,14 +227,14 @@ public class Navigation extends AppCompatActivity {
                             this.activity);
                     finish();
                     break;
-                case R.id.nav_start_activity:
+                /*case R.id.nav_start_activity:
                     Navigation.startActivity(this.navigationView);
                     finish();
-                    break;
-                case R.id.nav_chat:
+                    break;*/
+               /*case R.id.nav_chat:
                     Navigation.goToChat(this.navigationView);
                     finish();
-                    break;
+                    break;*/
                 case R.id.nav_list_activities:
                     Navigation.goToListOfActivities(this.navigationView);
                     finish();
