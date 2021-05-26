@@ -28,7 +28,7 @@ public class StorageImageManager implements BackendManager<Image> {
     }
 
     @Override
-    public Task<?> update(String path, String field, String value) {
+    public Task<?> update(String path, String field, String value, String method) {
         throw new UnsupportedOperationException();
     }
 

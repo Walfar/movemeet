@@ -64,11 +64,8 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             messageImageView.setVisibility(ImageView.VISIBLE);
             messageTextView.setVisibility(TextView.GONE);
         }
-        // Handling the ImageView of the user profile picture
-        // TODO: implement user profile picture in chat here!!!
-        //------------
+        // Handling the ImageView of the user profile picture in any case
         handlingUserProfilePicture(message);
-        //------------
         // Handling the date view of the message
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String messageTimeString = simpleDateFormat.format(Long.valueOf(message.getMessageTime()));

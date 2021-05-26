@@ -201,14 +201,14 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Syncing registered participant to Firebase Firestore (field array "participantId")
+     * Registering user to the activity document Firebase Firestore (field array "participantId")
      */
     public void registerToActivity(View v) {
-        if (userId != null) {
+        if (!activity.getParticipantId().contains(userId)) {
             try {
                 activity.addParticipantId(userId);
                 createParticipantNumberView();
-                activityManager.update(activity.getDocumentPath(), "participantId", userId).addOnSuccessListener(new OnSuccessListener() {
+                activityManager.update(activity.getDocumentPath(), "participantId", userId, "union").addOnSuccessListener(new OnSuccessListener() {
                     @Override
                     public void onSuccess(Object o) {
                         Log.d(TAG, "Participant registered in Firebase Firestore!");
@@ -234,6 +234,41 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 Toast.makeText(ActivityDescriptionActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "An error occurred! Participant may be already registered in Firebase Firestore!");
             }
+        } else {
+            Toast.makeText(ActivityDescriptionActivity.this, "Already registered!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Registering user from the activity document on Firebase Firestore (field array "participantId")
+     */
+    public void unregisterFromActivity(View v) {
+        if (activity.getParticipantId().contains(userId)) {
+            if (!userId.equals(organizerId)) {
+                try {
+                    activity.removeParticipantId(userId);
+                    createParticipantNumberView();
+                    activityManager.update(activity.getDocumentPath(), "participantId", userId, "remove").addOnSuccessListener(new OnSuccessListener() {
+                        @Override
+                        public void onSuccess(Object o) {
+                            Log.d(TAG, "Participant unregistered from Firebase Firestore!");
+                            getParticipantNames();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "An error occurred! Participant may be already unregistered from Firebase Firestore! Exception: " + e.getMessage());
+                        }
+                    });
+                } catch (Exception e) {
+                    Toast.makeText(ActivityDescriptionActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "An error occurred! Participant may be already unregistered from Firebase Firestore!");
+                }
+            } else {
+                Toast.makeText(ActivityDescriptionActivity.this, "The organizer cannot unregister from his activity!", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(ActivityDescriptionActivity.this, "Not registered yet!", Toast.LENGTH_SHORT).show();
         }
     }
 

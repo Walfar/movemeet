@@ -5,6 +5,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.FieldValue;
+import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
@@ -71,10 +72,14 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendMana
     }
 
     @Override
-    public Task<Void> update(String path, String field, String value) {
+    public Task<Void> update(String path, String field, String value, String method) {
         if (path == null || field == null || value == null) throw new IllegalArgumentException();
-
-        return db.document(path).update(field, FieldValue.arrayUnion(value));
+        switch (method) {
+            case "remove":
+                return db.document(path).update(field, FieldValue.arrayRemove(value));
+            default:
+                return db.document(path).update(field, FieldValue.arrayUnion(value));
+        }
     }
 
     @Override

@@ -300,6 +300,15 @@
                             tools:ignore="ButtonStyle" />
                     </LinearLayout>
 
+                    <Button
+                        android:id="@+id/activityUnregisterDescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/armata"
+                        android:onClick="unregisterFromActivity"
+                        android:text="@string/activity_description_unregister_button"
+                        tools:ignore="ButtonStyle" />
+
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>
