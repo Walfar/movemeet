@@ -102,7 +102,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         if (intent != null) {
-            activity = (Activity) intent.getSerializableExtra("activity");
+            activity = (Activity) intent.getSerializableExtra(DESCRIPTION_ACTIVITY_KEY);
         }
 
         if (activity != null) {

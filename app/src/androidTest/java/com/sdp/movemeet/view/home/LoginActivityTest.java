@@ -8,6 +8,7 @@ import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -34,6 +35,14 @@ public class LoginActivityTest {
 
     @Rule
     public ActivityScenarioRule<LoginActivity> LoginTestRule = new ActivityScenarioRule<>(LoginActivity.class);
+
+    @Before
+    public void signOutBeforeTest() {
+        FirebaseAuth fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+        if (fAuth.getCurrentUser() != null) {
+            fAuth.signOut();
+        }
+    }
 
     @Test public void Login_Empty(){
         onView(withId(R.id.button_login)).perform(click());

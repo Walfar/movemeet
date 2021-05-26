@@ -285,6 +285,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
+                            android:onClick="goToGPSRecording"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:text="@string/activity_description_GPS_recording_button"

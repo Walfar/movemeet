@@ -33,6 +33,7 @@ import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.Sport;
 import com.sdp.movemeet.utility.LocationFetcher;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
+import com.sdp.movemeet.view.navigation.Navigation;
 
 import org.junit.After;
 import org.junit.Before;
@@ -98,6 +99,10 @@ public class GPSRecordingActivityTest {
 
     @Before
     public void setup() {
+
+        Navigation.profileField = false;
+        ActivityDescriptionActivity.enableNav = false;
+
         activity = new Activity(
             "12345",
             "1",
@@ -214,6 +219,8 @@ public class GPSRecordingActivityTest {
                 FirestoreActivityManager.ACTIVITIES_COLLECTION,
                 new ActivitySerializer());
         AuthenticationInstanceProvider.fAuth = FirebaseAuth.getInstance();
+        Navigation.profileField = true;
+        ActivityDescriptionActivity.enableNav = true;
     }
 
     public boolean sleep(int millis) {
