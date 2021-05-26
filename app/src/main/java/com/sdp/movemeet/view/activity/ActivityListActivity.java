@@ -35,8 +35,6 @@ import java.util.ArrayList;
 
 
 public class ActivityListActivity extends AppCompatActivity {
-
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userId;
