@@ -6,8 +6,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class AuthenticationInstanceProvider {
 
-    public static final AuthenticationInstanceProvider instance = new AuthenticationInstanceProvider();
-
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static FirebaseAuth fAuth;
 
@@ -16,6 +14,9 @@ public class AuthenticationInstanceProvider {
     }
 
     public static FirebaseAuth getAuthenticationInstance() {
-        return instance.fAuth;
+        if (fAuth == null) {
+            fAuth = FirebaseAuth.getInstance();
+        }
+        return fAuth;
     }
 }

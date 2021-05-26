@@ -9,9 +9,6 @@ import com.google.firebase.storage.FirebaseStorage;
 public class BackendInstanceProvider {
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
-    public static final BackendInstanceProvider instance = new BackendInstanceProvider();
-
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static FirebaseFirestore firestore;
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
@@ -21,22 +18,29 @@ public class BackendInstanceProvider {
     public static FirebaseDatabase database;
 
     private BackendInstanceProvider() {
-        firestore = FirebaseFirestore.getInstance();
-        storage = FirebaseStorage.getInstance();
-        database = FirebaseDatabase.getInstance();
+
     }
 
 
 
     public static FirebaseFirestore getFirestoreInstance() {
-        return instance.firestore;
+        if (firestore == null) {
+            firestore = FirebaseFirestore.getInstance();
+        }
+        return firestore;
     }
 
     public static FirebaseStorage getStorageInstance() {
-        return instance.storage;
+        if (storage == null) {
+            storage = FirebaseStorage.getInstance();
+        }
+        return storage;
     }
 
     public static FirebaseDatabase getDatabaseInstance() {
-        return instance.database;
+        if (database == null) {
+            database = FirebaseDatabase.getInstance();
+        }
+        return database;
     }
 }
