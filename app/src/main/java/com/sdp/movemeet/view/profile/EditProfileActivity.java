@@ -20,6 +20,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -52,6 +54,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private String userId, fullNameString, emailString, phoneString, descriptionString, userImagePath;
 
     private FirebaseAuth fAuth;
+    private FirebaseUser firebaseUser;
     private BackendManager<User> userManager;
     private StorageReference storageReference;
     private StorageReference profileRef;
@@ -62,11 +65,12 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_profile);
 
         fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
-        if (fAuth.getCurrentUser() == null) {
+        firebaseUser = fAuth.getCurrentUser();
+        if (firebaseUser == null) {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
             finish();
         } else {
-            userId = fAuth.getCurrentUser().getUid();
+            userId = firebaseUser.getUid();
         }
 
         Intent data = getIntent();
@@ -129,10 +133,8 @@ public class EditProfileActivity extends AppCompatActivity {
         }
         final String email = profileEmail.getText().toString();
 
-        FirebaseUser fUser = fAuth.getCurrentUser();
-
-        if (fUser != null) {
-            fUser.updateEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
+        if (firebaseUser != null) {
+            firebaseUser.updateEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     accessFirestoreUsersCollectionForUpdate();
@@ -222,24 +224,40 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void deleteUserFromFirebaseAuthentication() {
         // Delete user from Firebase Authentication
-        FirebaseUser user = fAuth.getCurrentUser();
-        if (user != null) {
-            // TODO: Bug to fix --> check why this function sometimes doesn't delete the Firebase "user authentication" (i.e. the actual user account)
-            user.delete()
+        if (firebaseUser != null) {
+
+            AuthCredential credential = EmailAuthProvider.getCredential("user@example.com", "password1234");
+            // Prompt the user to re-provide their sign-in credentials
+            firebaseUser.reauthenticate(credential)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Log.d(TAG, "deleteUserAccount - 3) ✅ Firebase Authentication for current user successfully deleted!");
-                                Toast.makeText(EditProfileActivity.this, "Account deleted!", Toast.LENGTH_SHORT).show();
-                                // Sending the user to the login screen
-                                startActivity(new Intent(EditProfileActivity.this, HomeScreenActivity.class));
-                                finish();
-                            } else {
-                                Log.d(TAG, "deleteUserAccount - 3) ❌ Firebase Authentication for current user could not be deleted!");
-                            }
+
+
+                            //---------
+                            // TODO: Bug to fix --> check why this function sometimes doesn't delete the Firebase "user authentication" (i.e. the actual user account)
+                            firebaseUser.delete()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d(TAG, "deleteUserAccount - 3) ✅ Firebase Authentication for current user successfully deleted!");
+                                                Toast.makeText(EditProfileActivity.this, "Account deleted!", Toast.LENGTH_SHORT).show();
+                                                // Sending the user to the login screen
+                                                startActivity(new Intent(EditProfileActivity.this, HomeScreenActivity.class));
+                                                finish();
+                                            } else {
+                                                Log.d(TAG, "deleteUserAccount - 3) ❌ Firebase Authentication for current user could not be deleted!");
+                                            }
+                                        }
+                                    });
+                            //---------
+
+
                         }
                     });
+
+
         }
     }
 

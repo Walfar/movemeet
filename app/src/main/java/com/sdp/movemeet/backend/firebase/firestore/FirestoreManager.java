@@ -1,5 +1,7 @@
 package com.sdp.movemeet.backend.firebase.firestore;
 
+import androidx.annotation.VisibleForTesting;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -20,8 +22,8 @@ import java.util.Map;
  */
 abstract class FirestoreManager<T extends FirebaseObject> implements BackendManager<T> {
 
-    private final BackendSerializer<T> serializer;
     private final FirebaseFirestore db;
+    private final BackendSerializer<T> serializer;
     private final String collection;
 
     /**

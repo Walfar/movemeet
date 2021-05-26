@@ -62,6 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerBtn = findViewById(R.id.button_register);
         loginBtn = findViewById(R.id.text_view_login_here);
 
+        fStore = BackendInstanceProvider.getFirestoreInstance();
         userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
         progressBar = findViewById(R.id.progressBar);
 

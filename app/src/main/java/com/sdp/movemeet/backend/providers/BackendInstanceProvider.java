@@ -17,12 +17,6 @@ public class BackendInstanceProvider {
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static FirebaseDatabase database;
 
-    private BackendInstanceProvider() {
-
-    }
-
-
-
     public static FirebaseFirestore getFirestoreInstance() {
         if (firestore == null) {
             firestore = FirebaseFirestore.getInstance();
