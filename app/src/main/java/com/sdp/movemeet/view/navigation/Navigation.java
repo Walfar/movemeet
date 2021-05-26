@@ -150,7 +150,7 @@ public class Navigation extends AppCompatActivity {
      * @param fields the fields to fill in, following the above order
      * @return the array of updated TextViews
      */
-    public static TextView[] fillNavigationProfileFields(TextView[] fields) {
+    /*public static TextView[] fillNavigationProfileFields(TextView[] fields) {
         FirebaseUser firebaseUser = AuthenticationInstanceProvider.getAuthenticationInstance().getCurrentUser();
         if (firebaseUser != null) {
             String userId = firebaseUser.getUid();
@@ -176,7 +176,7 @@ public class Navigation extends AppCompatActivity {
         }
 
         return fields;
-    }
+    }*/
 
     /**
      * Initializes a Navigation drawer, filling in all fields and setting up associated functions,
