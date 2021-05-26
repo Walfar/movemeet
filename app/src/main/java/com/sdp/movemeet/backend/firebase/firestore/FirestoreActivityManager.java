@@ -1,15 +1,12 @@
 package com.sdp.movemeet.backend.firebase.firestore;
 
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
-import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
+import com.sdp.movemeet.models.Activity;
 
 /**
  * A class capable of handling Activity storage operations with a Firebase Firestore backend
