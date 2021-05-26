@@ -39,7 +39,7 @@ import static org.hamcrest.Matchers.allOf;
 
 
 @RunWith(AndroidJUnit4.class)
-public class ProfileActivityTest {
+public class EditProfileActivityDeleteAccount {
 
     public static final String TEST_FULL_NAME = "Yolo Test";
     public static final String TEST_EMAIL = "yolotest@gmail.com";
@@ -86,8 +86,8 @@ public class ProfileActivityTest {
             }
         });
 
-        // Launching directly ProfileActivity (even if the "rule" is set to RegisterActivity)
-        try (ActivityScenario<ProfileActivity> scenario = ActivityScenario.launch(ProfileActivity.class)) {
+        // Launching directly EditProfileActivity (even if the "rule" is set to RegisterActivity)
+        try (ActivityScenario<EditProfileActivity> scenario = ActivityScenario.launch(EditProfileActivity.class)) {
 
             clickDeleteAccountButton();
 

@@ -228,17 +228,6 @@
             app:srcCompat="@drawable/baseline_settings_black_18dp"
             android:contentDescription="@string/activity_profile_icon_change_profile" />
 
-        <Button
-            android:id="@+id/button_delete_account"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:onClick="deleteUserAccount"
-            android:text="@string/activity_profile_icon_delete_account"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_activity_profile_description" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
