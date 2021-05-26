@@ -195,9 +195,9 @@ public class Navigation extends AppCompatActivity {
 
         View hView = navigationView.inflateHeaderView(R.layout.header);
 
-        TextView fullName = hView.findViewById(R.id.text_view_profile_name);
+        /*TextView fullName = hView.findViewById(R.id.text_view_profile_name);
         TextView phone = hView.findViewById(R.id.text_view_profile_phone);
-        TextView email = hView.findViewById(R.id.text_view_profile_email);
+        TextView email = hView.findViewById(R.id.text_view_profile_email);*/
 
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);

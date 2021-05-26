@@ -81,7 +81,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:backgroundTint="@color/red"
+        android:backgroundTint="@color/primary"
         android:onClick="RecordRun"
         android:text="@string/home_record_run"
         app:layout_constraintEnd_toEndOf="parent"

@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:background="@color/primary"
     android:gravity="bottom"
-    android:paddingTop="60dp">
+    android:paddingTop="30dp"
+    android:paddingBottom="10dp">
 
     <TextView
         android:id="@+id/header_title"
@@ -15,9 +16,19 @@
         android:text="@string/app_name"
         android:textSize="36sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/imageView6"
-        app:layout_constraintTop_toTopOf="parent">
-    </TextView>
+        app:fontFamily="@font/aclonica"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textSize="20sp"
+        android:text="@string/subtitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_title" />
 
     <!--<TextView
         android:id="@+id/text_view_profile_name"
