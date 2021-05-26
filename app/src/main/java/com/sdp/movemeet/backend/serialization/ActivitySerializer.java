@@ -53,6 +53,9 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
     public static final String DOCUMENT_PATH_KEY = "documentPath";
 
     public static final String GPS_RECORDINGS_KEY = "gpsRecordings";
+    private static final String REC_TIME_KEY = "time";
+    private static final String REC_DIST_KEY = "distance";
+    private static final String REC_SPEED_KEY = "averageSpeed";
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public Activity deserialize(Map<String, Object> data) {
@@ -77,8 +80,16 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
                 ((Timestamp) data.get(CREATION_KEY)).toDate()
         );
 
-        Map<String, GPSPath> recordings = (Map<String, GPSPath>) data.getOrDefault(GPS_RECORDINGS_KEY, null);
-        if (recordings != null) {
+        Map<String, Map<String, Object>> gpsMaps = (Map<String, Map<String, Object>>) data.getOrDefault(GPS_RECORDINGS_KEY, null);
+        if (gpsMaps != null) {
+            Map<String, GPSPath> recordings = new HashMap<String, GPSPath>();
+            for (String uid : gpsMaps.keySet()) {
+                GPSPath rec = new GPSPath();
+                rec.setTime(((Number) gpsMaps.get(uid).get(REC_TIME_KEY)).longValue());
+                rec.setDistance(((Number) gpsMaps.get(uid).get(REC_DIST_KEY)).floatValue());
+                rec.setAverageSpeed(((Number) gpsMaps.get(uid).get(REC_SPEED_KEY)).floatValue());
+                recordings.put(uid, rec);
+            }
             act.setParticipantRecordings(recordings);
         }
 

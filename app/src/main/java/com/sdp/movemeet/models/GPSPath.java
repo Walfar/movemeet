@@ -1,5 +1,7 @@
 package com.sdp.movemeet.models;
 
+import androidx.annotation.VisibleForTesting;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.sdp.movemeet.utility.DistanceCalculator;
 
@@ -13,9 +15,22 @@ import java.util.List;
 public class GPSPath implements Serializable {
 
     private transient List<LatLng> path;
-    private long time;
-    private float averageSpeed;
-    private float distance;
+    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    public long time;
+    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    public float averageSpeed;
+    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    public float distance;
+
+    /**
+     * Returns a new GPSPath, containing no data.
+     */
+    public GPSPath() {
+        this.path = null;
+        this.time = -1;
+        this.distance = -1;
+        this.averageSpeed = -1;
+    }
 
     /**
      * Returns a new GPSPath, having
@@ -51,7 +66,7 @@ public class GPSPath implements Serializable {
      * @return the total distance covered by this path, in meters
      */
     public float getDistance() {
-        if (this.distance < 0) this.distance = computeTotalDistance(this.path);
+        if (this.distance < 0 && path != null) this.distance = computeTotalDistance(this.path);
         return this.distance;
     }
 

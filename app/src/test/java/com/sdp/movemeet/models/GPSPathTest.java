@@ -14,10 +14,21 @@ import java.util.ArrayList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 
 public class GPSPathTest {
+
+    @Test
+    public void emptyConstructorInitializesValuesCorrecty() {
+        GPSPath path = new GPSPath();
+
+        assert(path.time == -1);
+        assertNull(path.getPath());
+        assert(path.distance == -1);
+        assert(path.averageSpeed == -1);
+    }
 
     @Test
     public void constructorThrowsIllegalArgumentExceptionOnNullPath() {
