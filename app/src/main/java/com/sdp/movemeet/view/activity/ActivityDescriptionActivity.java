@@ -138,6 +138,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 findViewById(R.id.activityChatDescription).setVisibility(View.GONE);
             } else {
                 findViewById(R.id.activityRegisterDescription).setVisibility(View.VISIBLE);
+                findViewById(R.id.activityRegisterDescription).setEnabled(false);
+                ((TextView) findViewById(R.id.activityRegisterDescription)).setText("No more free places");
                 findViewById(R.id.activityGoDescription).setVisibility(View.GONE);
                 findViewById(R.id.activityChatDescription).setVisibility(View.GONE);
             }
