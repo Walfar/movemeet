@@ -41,6 +41,9 @@ public class EditProfileActivity extends AppCompatActivity {
     private static final String TAG = "TAG";
     private static final int REQUEST_IMAGE = 1000;
 
+    private static final String USER_IMAGE_NAME = "profile.jpg";
+    private static final String PATH_SEPARATOR = "/";
+
     private ImageView profileImage;
     private EditText profileFullName, profileEmail, profilePhone, profileDescription;
     private ProgressBar progressBar;
@@ -49,10 +52,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private String userId, fullNameString, emailString, phoneString, descriptionString, userImagePath;
 
     private FirebaseAuth fAuth;
-    private FirebaseFirestore fStore;
     private BackendManager<User> userManager;
-    private FirebaseStorage fStorage;
-    private StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,14 +74,12 @@ public class EditProfileActivity extends AppCompatActivity {
         descriptionString = data.getStringExtra("description");
         assignViewsAndAdjustData();
 
-        fStorage = BackendInstanceProvider.getStorageInstance();
-        storageReference = fStorage.getReference();
-        userImagePath = "users/" + userId + "/profile.jpg";
+        userImagePath = FirestoreUserManager.USERS_COLLECTION + PATH_SEPARATOR + userId + PATH_SEPARATOR + USER_IMAGE_NAME;
         Image image = new Image(null, profileImage);
         image.setDocumentPath(userImagePath);
         ImageHandler.loadImage(image, progressBar);
 
-        fStore = BackendInstanceProvider.getFirestoreInstance();
+        FirebaseFirestore fStore = BackendInstanceProvider.getFirestoreInstance();
         userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
     }
 
@@ -150,7 +148,7 @@ public class EditProfileActivity extends AppCompatActivity {
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE) // making this method always public for testing and private otherwise
     public void accessFirestoreUsersCollectionForUpdate() {
         User user = new User(profileFullName.getText().toString(), profileEmail.getText().toString(), profilePhone.getText().toString(), profileDescription.getText().toString());
-        userManager.add(user, FirestoreUserManager.USERS_COLLECTION + "/" + userId).addOnSuccessListener(new OnSuccessListener() {
+        userManager.add(user, FirestoreUserManager.USERS_COLLECTION + PATH_SEPARATOR + userId).addOnSuccessListener(new OnSuccessListener() {
             @Override
             public void onSuccess(Object o) {
                 Toast.makeText(EditProfileActivity.this, "Profile updated.", Toast.LENGTH_SHORT).show();

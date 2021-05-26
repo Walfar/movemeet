@@ -15,6 +15,8 @@ public class FirestoreUserManager extends FirestoreManager<User> {
     // The name of the Firestore collection containing Activities
     public final static String USERS_COLLECTION = "users";
 
+    private final static String PATH_SEPARATOR = "/";
+
     private final FirebaseFirestore db;
     private final String collection;
 
@@ -37,7 +39,7 @@ public class FirestoreUserManager extends FirestoreManager<User> {
      * @return a Task<DocumentSnapshot> whose result can be deserialized into a User object
      */
     public Task<DocumentSnapshot> getUserFromUid(String uid) {
-        String path = USERS_COLLECTION + "/" + uid;
+        String path = USERS_COLLECTION + PATH_SEPARATOR + uid;
         return super.get(path);
     }
 }

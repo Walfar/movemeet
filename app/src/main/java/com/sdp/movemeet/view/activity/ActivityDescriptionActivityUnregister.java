@@ -29,6 +29,7 @@ import com.sdp.movemeet.view.home.LoginActivity;
 public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
 
     public static final String ACTIVITY_IMAGE_NAME = "activityImage.jpg";
+    private static final String PATH_SEPARATOR = "/";
 
     private Activity activity;
     private static final String TAG = "ActDescActivity";
@@ -85,7 +86,7 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
      */
     private void createParticipantNumberView() {
         TextView numberParticipantsView = (TextView) findViewById(R.id.activity_number_description);
-        numberParticipantsView.setText(activity.getParticipantId().size() + "/" + activity.getNumberParticipant());
+        numberParticipantsView.setText(activity.getParticipantId().size() + PATH_SEPARATOR + activity.getNumberParticipant());
     }
 
     /**
@@ -126,7 +127,7 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
     private void loadActivityHeaderPicture() {
         activityImage = findViewById(R.id.activity_image_description);
         progressBar = findViewById(R.id.progress_bar_activity_description);
-        imagePath = activity.getDocumentPath() + "/" + ACTIVITY_IMAGE_NAME;
+        imagePath = activity.getDocumentPath() + PATH_SEPARATOR + ACTIVITY_IMAGE_NAME;
         Image image = new Image(null, activityImage);
         image.setDocumentPath(imagePath);
         ImageHandler.loadImage(image, progressBar);

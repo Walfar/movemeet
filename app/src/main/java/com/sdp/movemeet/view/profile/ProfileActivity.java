@@ -41,6 +41,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "ProfileActivity";
 
+    private static final String USER_IMAGE_NAME = "profile.jpg";
+    private static final String PATH_SEPARATOR = "/";
+
     public static final String EXTRA_MESSAGE_FULL_NAME = "fullName";
     public static final String EXTRA_MESSAGE_EMAIL = "email";
     public static final String EXTRA_MESSAGE_PHONE = "phone";
@@ -92,7 +95,7 @@ public class ProfileActivity extends AppCompatActivity {
         fStorage = BackendInstanceProvider.getStorageInstance();
         displayRegisteredUserData();
         storageReference = fStorage.getReference();
-        userImagePath = "users/" + userId + "/profile.jpg";
+        userImagePath = FirestoreUserManager.USERS_COLLECTION + PATH_SEPARATOR + userId + PATH_SEPARATOR + USER_IMAGE_NAME;
         Image image = new Image(null, profileImage);
         image.setDocumentPath(userImagePath);
         ImageHandler.loadImage(image, progressBar);

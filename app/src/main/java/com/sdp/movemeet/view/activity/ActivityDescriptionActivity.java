@@ -57,6 +57,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     public static boolean enableNav = true;
 
     public static final String ACTIVITY_IMAGE_NAME = "activityImage.jpg";
+    private static final String PATH_SEPARATOR = "/";
     private static final int REQUEST_IMAGE = 1000;
 
     private TextView organizerView, numberParticipantsView, participantNamesView;
@@ -148,7 +149,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void createParticipantNumberView() {
         numberParticipantsView = (TextView) findViewById(R.id.activity_number_description);
         participantNamesView = (TextView) findViewById(R.id.activity_participants_description);
-        numberParticipantsView.setText(activity.getParticipantId().size() + "/" + activity.getNumberParticipant());
+        numberParticipantsView.setText(activity.getParticipantId().size() + PATH_SEPARATOR + activity.getNumberParticipant());
         participantNamesView.setText(" participants");
     }
 
@@ -224,6 +225,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                         //  Probable solution:
                         //  Implement a method in the OnResume of MainMapFragment to clear the list of activities
                         //  and then update them from Firebase Firestore (but this is not very optimal, because it takes time)
+                        //  --> OR: probably implement a kind of listener (as the one for the chat) that listens continuously to
+                        //  new entries in the database!
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -245,7 +248,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (activity.getParticipantId().contains(userId)) {
             Intent intent = new Intent(ActivityDescriptionActivity.this, ChatActivity.class);
             String activityDocumentPath = activity.getDocumentPath();
-            activityDocumentPath = activityDocumentPath.replace("activities/", "");
+            activityDocumentPath = activityDocumentPath.replace(FirestoreActivityManager.ACTIVITIES_COLLECTION + PATH_SEPARATOR, "");
             intent.putExtra("ACTIVITY_CHAT_ID", activityDocumentPath);
             String activityTitle = activity.getTitle();
             intent.putExtra("ACTIVITY_TITLE", activityTitle);
@@ -260,7 +263,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      */
     private void getOrganizerName() {
         organizerId = activity.getOrganizerId();
-        Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + organizerId);
+        Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + PATH_SEPARATOR + organizerId);
         document.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -285,7 +288,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Fetch the name of a participant from Firebase Firestore using his userId
      */
     private void getCurrentParticipantName(String participantId) {
-        Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + participantId);
+        Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + PATH_SEPARATOR + participantId);
         document.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -312,7 +315,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void loadActivityHeaderPicture() {
         activityImage = findViewById(R.id.activity_image_description);
         progressBar = findViewById(R.id.progress_bar_activity_description);
-        imagePath = activity.getDocumentPath() + "/" + ACTIVITY_IMAGE_NAME;
+        imagePath = activity.getDocumentPath() + PATH_SEPARATOR + ACTIVITY_IMAGE_NAME;
         Image image = new Image(null, activityImage);
         image.setDocumentPath(imagePath);
         ImageHandler.loadImage(image, progressBar);

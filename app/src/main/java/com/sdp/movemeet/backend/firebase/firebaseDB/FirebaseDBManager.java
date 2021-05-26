@@ -16,8 +16,6 @@ import java.util.Map;
  */
 abstract class FirebaseDBManager<T extends FirebaseObject> implements BackendManager<T> {
 
-    private final static String PATH_SEPARATOR = "/";
-
     private final BackendSerializer<T> serializer;
     private final FirebaseDatabase db;
 
