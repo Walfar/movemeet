@@ -6,8 +6,8 @@ import com.sdp.movemeet.backend.serialization.BackendSerializer;
 
 public class FirebaseDBActivityManager extends com.sdp.movemeet.backend.firebase.firebaseDB.FirebaseDBManager<Activity> {
 
-    public <T> FirebaseDBActivityManager(FirebaseDatabase db, BackendSerializer serializer) {
-        super(db, serializer);
+    public <T> FirebaseDBActivityManager(BackendSerializer serializer) {
+        super(serializer);
     }
 
 

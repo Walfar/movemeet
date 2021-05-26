@@ -123,7 +123,7 @@ public class ChatActivity extends AppCompatActivity {
         btnSend = findViewById(R.id.button_send_message);
         initialChatWelcomeMessage = findViewById(R.id.initial_chat_welcome_message);
 
-        messageManager = new FirebaseDBMessageManager(database, new MessageSerializer());
+        messageManager = new FirebaseDBMessageManager(new MessageSerializer());
 
         fStorage = BackendInstanceProvider.getStorageInstance();
         storageReference = fStorage.getReference();

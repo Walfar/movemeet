@@ -4,6 +4,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.sdp.movemeet.backend.BackendManager;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.models.FirebaseObject;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
 
@@ -21,14 +22,13 @@ abstract class FirebaseDBManager<T extends FirebaseObject> implements BackendMan
 
     /**
      * Creates a new FirebaseDBManager.
-     * @param db the instance of FirebaseDatabase to interact with.
      * @param serializer a BackendSerializer capable of de(serializing) objects of type T
      * @param <T> the type of object handled by this FirebaseDBManager
      */
-    public <T> FirebaseDBManager(FirebaseDatabase db, BackendSerializer serializer) {
-        if (db == null || serializer == null) throw new IllegalArgumentException();
+    public <T> FirebaseDBManager(BackendSerializer serializer) {
+        if (serializer == null) throw new IllegalArgumentException();
 
-        this.db = db;
+        this.db = BackendInstanceProvider.getDatabaseInstance();
         this.serializer = serializer;
     }
 
