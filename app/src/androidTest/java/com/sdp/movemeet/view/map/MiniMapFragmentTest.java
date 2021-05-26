@@ -26,6 +26,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
 
 import org.junit.Before;
@@ -57,7 +58,7 @@ public class MiniMapFragmentTest {
 
     @Before
     public void setUp() throws InterruptedException {
-        fAuth = FirebaseAuth.getInstance();
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         fAuth.signInWithEmailAndPassword("test@test.com", "password");
     }
 

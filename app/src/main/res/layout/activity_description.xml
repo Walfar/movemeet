@@ -25,11 +25,12 @@
             app:navigationIcon="@drawable/menu" />
 
         <LinearLayout
+            android:id="@+id/linearLayout4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="60dp"
             android:background="@android:color/white"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:layout_editor_absoluteY="60dp">
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -266,9 +267,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal"
+                        android:orientation="horizontal"
                         android:paddingTop="20dp"
-                        android:paddingBottom="5dp"
-                        android:orientation="horizontal">
+                        android:paddingBottom="5dp">
 
                         <Button
                             android:id="@+id/activityRegisterDescription"
@@ -299,18 +300,24 @@
                             tools:ignore="ButtonStyle" />
                     </LinearLayout>
 
-                    <ProgressBar
-                        android:id="@+id/progress_bar_activity_description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:backgroundTint="#F31505"
-                        android:paddingTop="10dp"
-                        android:visibility="invisible" />
-
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_bar_activity_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="#F31505"
+            android:paddingTop="10dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/toolbar"
+            app:layout_constraintVertical_bias="0.83" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView

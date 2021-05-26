@@ -28,6 +28,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivityUnregister;
@@ -52,7 +53,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public Location currentLocation;
 
-    private final FirebaseAuth fAuth = FirebaseAuth.getInstance();
+    private final FirebaseAuth fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public FirebaseUser user;
 

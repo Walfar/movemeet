@@ -18,8 +18,10 @@ public class BackendInstanceProvider {
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static FirebaseFirestore firestore;
+
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static FirebaseStorage storage;
+
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static FirebaseDatabase database;
 

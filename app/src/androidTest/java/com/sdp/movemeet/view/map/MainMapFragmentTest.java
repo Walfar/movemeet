@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.models.Sport;
@@ -88,7 +89,7 @@ import static org.mockito.Mockito.mock;
 public class MainMapFragmentTest {
 
     private UiDevice uiDevice = UiDevice.getInstance(getInstrumentation());
-    private FirebaseAuth fAuth = FirebaseAuth.getInstance();
+    private FirebaseAuth fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
     private String TAG = "Main Map Fragment Test";
 
     @Rule
@@ -101,7 +102,7 @@ public class MainMapFragmentTest {
     @Before
     public void setUp() {
         Navigation.profileField = false;
-        fAuth = FirebaseAuth.getInstance();
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         fAuth.signInWithEmailAndPassword("test@test.com", "password");
         Intents.init();
     }

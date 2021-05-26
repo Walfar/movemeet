@@ -8,7 +8,7 @@ import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.User;
 
 /**
- * A class capable of handling User storage operations with a FirebaseFirestore backend
+ * A class capable of handling User storage operations with a Firebase Firestore backend
  */
 public class FirestoreUserManager extends FirestoreManager<User> {
 
@@ -21,7 +21,7 @@ public class FirestoreUserManager extends FirestoreManager<User> {
     /**
      * Creates a new FirestoreManager capable of performing backend storage operations
      * on the User class.
-     * @param db the FirebaseFirestore instance serving as a backend
+     * @param db the Firebase Firestore instance serving as a backend
      * @param collection the Firestore collection in which to operate
      * @param serializer a BackendSerializer capable of (de)serializing Users
      */
@@ -40,6 +40,5 @@ public class FirestoreUserManager extends FirestoreManager<User> {
         String path = USERS_COLLECTION + "/" + uid;
         return super.get(path);
     }
-
 }
 
