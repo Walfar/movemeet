@@ -135,22 +135,21 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void setButton() {
         if (activity.getParticipantId().contains(userId)) {
             findViewById(R.id.activityRegisterDescription).setVisibility(View.GONE);
-            findViewById(R.id.activityGoDescription).setVisibility(View.VISIBLE);
+            findViewById(R.id.activityGPSRecDescription).setEnabled(activity.getSport() == Sport.Running);
             findViewById(R.id.activityChatDescription).setVisibility(View.VISIBLE);
         } else {
             if (activity.getParticipantId().size() < activity.getNumberParticipant()) {
                 findViewById(R.id.activityRegisterDescription).setVisibility(View.VISIBLE);
-                findViewById(R.id.activityGoDescription).setVisibility(View.GONE);
+                findViewById(R.id.activityGPSRecDescription).setVisibility(View.GONE);
                 findViewById(R.id.activityChatDescription).setVisibility(View.GONE);
             } else {
                 findViewById(R.id.activityRegisterDescription).setVisibility(View.VISIBLE);
                 findViewById(R.id.activityRegisterDescription).setEnabled(false);
                 ((TextView) findViewById(R.id.activityRegisterDescription)).setText("No more free places");
-                findViewById(R.id.activityGoDescription).setVisibility(View.GONE);
+                findViewById(R.id.activityGPSRecDescription).setVisibility(View.GONE);
                 findViewById(R.id.activityChatDescription).setVisibility(View.GONE);
             }
         }
-        findViewById(R.id.activityGPSRecDescription).setEnabled(activity.getSport() == Sport.Running);
     }
 
     private void getParticipantNames() {
