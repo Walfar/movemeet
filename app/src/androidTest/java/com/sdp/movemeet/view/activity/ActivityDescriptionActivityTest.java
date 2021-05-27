@@ -45,7 +45,7 @@ public class ActivityDescriptionActivityTest {
 
     private final static String DUMMY_ACTIVITY_ID = "12345";
     private final static String DUMMY_ORGANISATOR_ID = "1";
-    private final static String DUMMY_TITLE = "title";
+    private final static String DUMMY_TITLE = "dummy_title";
     private final static int DUMMY_NUMBER_PARTICIPANT = 2;
     private final static ArrayList<String> DUMMY_PARTICIPANTS_ID = new ArrayList<>();
     private final static double DUMMY_LONGITUDE = 2.45;
@@ -55,7 +55,7 @@ public class ActivityDescriptionActivityTest {
     private final static Date DUMMY_DATE = new Date(2021, 11, 10, 1, 10);
     private final static double DUMMY_DURATION = 10.4;
     private final static Sport DUMMY_SPORT = Sport.Running;
-    private final static String DUMMY_ADDRESS = "address";
+    private final static String DUMMY_ADDRESS = "dummy_address";
     public FirebaseAuth fAuth;
     private String user;
 
@@ -102,7 +102,7 @@ public class ActivityDescriptionActivityTest {
             assert (false);
         }
 
-        Intent intent = new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra("activity", activity);
+        Intent intent = new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra(ActivityDescriptionActivity.DESCRIPTION_ACTIVITY_KEY, activity);
 
 
         ActivityScenario testRule = ActivityScenario.launch(intent);

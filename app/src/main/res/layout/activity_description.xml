@@ -281,13 +281,14 @@
                             tools:ignore="ButtonStyle" />
 
                         <Button
-                            android:id="@+id/activityGoDescription"
+                            android:id="@+id/activityGPSRecDescription"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/armata"
+                            android:onClick="goToGPSRecording"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
-                            android:fontFamily="@font/armata"
-                            android:text="@string/activity_description_how_to_go_button"
+                            android:text="@string/activity_description_GPS_recording_button"
                             tools:ignore="ButtonStyle" />
 
                         <Button

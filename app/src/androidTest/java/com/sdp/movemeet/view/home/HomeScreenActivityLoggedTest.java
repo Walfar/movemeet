@@ -72,10 +72,4 @@ public class HomeScreenActivityLoggedTest {
         onView(withId(R.id.noAccountButton)).perform(click());
         intended(hasComponent(MainActivity.class.getName()));
     }
-
-    @Test
-    public void recordButtonHasCorrectIntent() {
-        onView(withId(R.id.recordRunButton)).perform(click());
-        intended(hasComponent(GPSRecordingActivity.class.getName()));
-    }
 }

@@ -178,7 +178,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
             } else {
                 intent = new Intent(supportMapFragment.getActivity(), ActivityDescriptionActivity.class);
             }
-            intent.putExtra("activity", act);
+            intent.putExtra(ActivityDescriptionActivity.DESCRIPTION_ACTIVITY_KEY, act);
             startActivity(intent);
         }
 

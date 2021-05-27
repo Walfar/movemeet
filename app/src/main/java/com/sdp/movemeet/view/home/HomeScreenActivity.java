@@ -64,14 +64,6 @@ public class HomeScreenActivity extends AppCompatActivity {
     }
 
     /**
-     * Called when the user clicks on the "record run" button. Brings to the GPS recording screen.
-     * @param v view for the record run button
-     */
-    public void RecordRun(View v) {
-        startActivity(new Intent(this, GPSRecordingActivity.class)); // Redirect the user to the GPS recording activity
-    }
-
-    /**
      * Checks if the user is already logged
      * @return true if the user is logged, false otherwise
      */

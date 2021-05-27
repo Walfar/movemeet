@@ -7,11 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
-import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
-import com.sdp.movemeet.view.chat.ChatActivity;
-import com.sdp.movemeet.view.main.MainActivity;
-import static org.mockito.Mockito.mock;
 
 import org.junit.Before;
 import org.junit.Rule;
