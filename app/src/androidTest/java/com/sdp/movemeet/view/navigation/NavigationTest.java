@@ -57,6 +57,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -122,12 +123,6 @@ public class NavigationTest {
             Thread.sleep(1500);
         }catch(Exception e){}
         Intents.intended(allOf(hasComponent(MainActivity.class.getName())));
-
-
-        Espresso.pressBack();
-
-        onView(withText("confirm exit ?")).check(matches(isDisplayed()));
-        onView(withText("No")).perform(click());
 
         // Open Drawer to click on navigation.
         onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
@@ -218,6 +213,37 @@ public class NavigationTest {
         try{
             Thread.sleep(500);
         }catch(Exception e){}
+        Intents.release();
+
+    }
+
+    @Test
+    public void MainDialogBox() {
+
+        onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
+
+        try{
+            Thread.sleep(500);
+        }catch(Exception e){}
+
+        onView(withId(R.id.nav_home)).perform(click());
+
+        try{
+            Thread.sleep(500);
+        }catch(Exception e){}
+
+        Espresso.pressBack();
+
+        onView(withText("confirm exit ?")).check(matches(isDisplayed()));
+        onView(withText("No")).perform(click());
+        Intents.intended(allOf(hasComponent(MainActivity.class.getName())));
+
+
+        Espresso.pressBack();
+
+        onView(withText("confirm exit ?")).check(matches(isDisplayed()));
+        onView(withText("Yes")).perform(click());
+
         Intents.release();
 
     }
