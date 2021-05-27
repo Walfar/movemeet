@@ -229,7 +229,7 @@ public class UserTest {
 
     @Test
     public void userRemoveCreatedActivityCorrect() {
-        User user = new User(DUMMY_FULL_NAME, DUMMY_EMAIL, DUMMY_PHONE_NUMBER, DUMMY_DESCRIPTION, DUMMY_USER_ID, DUMMY_IMAGE_ID, DUMMY_DOCUMENT_PATH, DUMMY_CREATE_ACTIVITIES_ID, DUMMY_REGISTERED_ACTIVITIES_ID);
+        User user = new User(DUMMY_FULL_NAME, DUMMY_EMAIL, DUMMY_PHONE_NUMBER, DUMMY_DESCRIPTION, DUMMY_USER_ID, DUMMY_IMAGE_ID, DUMMY_DOCUMENT_PATH, new ArrayList<String>(), DUMMY_REGISTERED_ACTIVITIES_ID);
 
         String activity1 = "1";
         String activity2 = "bob";
@@ -238,12 +238,11 @@ public class UserTest {
         user.removeCreatedActivityId(activity1);
 
         assertEquals(1, user.getCreateActivitiesId().size());
-        user = null;
     }
 
     @Test
     public void userRemoveRegisteredActivityCorrect() {
-        User user = new User(DUMMY_FULL_NAME, DUMMY_EMAIL, DUMMY_PHONE_NUMBER, DUMMY_DESCRIPTION, DUMMY_USER_ID, DUMMY_IMAGE_ID, DUMMY_DOCUMENT_PATH, DUMMY_CREATE_ACTIVITIES_ID, DUMMY_REGISTERED_ACTIVITIES_ID);
+        User user = new User(DUMMY_FULL_NAME, DUMMY_EMAIL, DUMMY_PHONE_NUMBER, DUMMY_DESCRIPTION, DUMMY_USER_ID, DUMMY_IMAGE_ID, DUMMY_DOCUMENT_PATH, DUMMY_CREATE_ACTIVITIES_ID, new ArrayList<String>());
 
         String activity1 = "1";
         String activity2 = "bob";
