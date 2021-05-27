@@ -170,6 +170,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 findViewById(R.id.activityGPSRecDescription).setVisibility(View.GONE);
                 findViewById(R.id.activityChatDescription).setVisibility(View.GONE);
             }
+        }
     }
 
     private void getParticipantNames() {
