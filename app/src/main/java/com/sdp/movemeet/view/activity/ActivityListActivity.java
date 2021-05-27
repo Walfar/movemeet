@@ -91,4 +91,28 @@ public class ActivityListActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void setActivities(View view) {
+        String activityId;
+        String image;
+        for (int i = 0; i < listOfRegisteredActivityId.size(); i++){
+            Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) activityManager.get(FirestoreActivityManager.ACTIVITIES_COLLECTION + "/" + i);
+            document.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if(task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if(document.exists()){
+                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                            activityId = (String) document.getData().get("title");
+                        }else{
+                            Log.i(TAG, "No such document !");
+                        }
+                    }else{
+                        Log.d(TAG, "Get failed with: ", task.getException());
+                    }
+                }
+            });
+        }
+    }
 }
