@@ -15,6 +15,8 @@ import androidx.annotation.Nullable;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.backend.BackendManager;
@@ -24,6 +26,8 @@ import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivityUnregister;
 import com.sdp.movemeet.view.profile.EditProfileActivity;
 import com.sdp.movemeet.view.profile.ProfileActivity;
+import com.squareup.picasso.Picasso;
+
 import static com.sdp.movemeet.utility.ActivityPictureCache.loadFromCache;
 import static com.sdp.movemeet.utility.ActivityPictureCache.saveToCache;
 import static com.sdp.movemeet.utility.PermissionChecker.isStorageReadPermissionGranted;
@@ -50,15 +54,42 @@ public abstract class ImageHandler {
     public static void loadImage(Image image, Activity activity) {
         Log.d(TAG, "loading image");
         ProgressBar progressBar = getProgressBar(activity);
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
         Bitmap bitmap = null;
         ImageView imageView = image.getImageView();
         String imagePath = image.getDocumentPath();
 
+        //First, we load from cache (will return null if bitmap is not in cache)
         if (isStorageReadPermissionGranted(activity)) bitmap = loadFromCache(imagePath);
 
         if (bitmap != null) {
+            // bitmap was successfully loaded from cache
             Log.d(TAG, "bitmap stored");
             imageView.setImageBitmap(bitmap);
+            if (progressBar != null) {
+                progressBar.setVisibility(View.GONE);
+            }
+        } else {
+            //Couldn't load from cache, try loading from Firebase
+            imageBackendManager = new StorageImageManager();
+            Task<Uri> document = (Task<Uri>) imageBackendManager.get(image.getDocumentPath());
+            document.addOnSuccessListener(uri -> {
+                Log.d(TAG, "Image successfully fetched from Firebase Storage!");
+                image.setImageUri(uri);
+                setImageBitMapAndSaveToCache(image, activity);
+                if (progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }
+            }).addOnFailureListener(exception -> {
+                Log.d(TAG, "Image could not be fetched from Firebase Storage! Don't panic!" +
+                        " It's probably because no images have been saved in Firebase Storage for" +
+                        " this document yet!");
+                if (progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }
+            });
         }
     }
 

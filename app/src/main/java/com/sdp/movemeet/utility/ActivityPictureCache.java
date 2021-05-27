@@ -32,6 +32,11 @@ public abstract class ActivityPictureCache {
 
     public static String TAG = "Cache TAG";
 
+    /**
+     * Saves a bitmap to the local cache, for the given path
+     * @param bitmap bitmap to cache
+     * @param path path where we save the bitmap
+     */
     public static void saveToCache(Bitmap bitmap, String path) {
         String[] directories = path.split("/");
         String fileName = directories[directories.length-1];
@@ -61,6 +66,11 @@ public abstract class ActivityPictureCache {
         }
     }
 
+    /**
+     * Loads a bitmap from the local cache, at the given path, or null if no such bitmap exists
+     * @param path path in which the bitmap is stored
+     * @return the bitmap loaded from cache, or null if failed to load
+     */
     public static Bitmap loadFromCache(String path) {
         Log.d(TAG, "Loading image from cache");
         String imagePath = Environment.getExternalStorageDirectory().toString() + "/" + path;
