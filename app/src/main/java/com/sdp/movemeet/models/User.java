@@ -16,7 +16,7 @@ public class User implements Serializable, FirebaseObject {
     private String idUser;
     private String imageId;
     private String documentPath;
-    private ArrayList<String> createActivitiesId;
+    private ArrayList<String> createdActivitiesId;
     private ArrayList<String> registeredActivitiesId;
 
 
@@ -28,7 +28,7 @@ public class User implements Serializable, FirebaseObject {
      * @param phone       : phone number of the user
      * @param description : description of the user
      */
-    public User(String fullName, String email, String phone, String description, ArrayList<String> createActivitiesId, ArrayList<String> registeredActivitiesId) {
+    public User(String fullName, String email, String phone, String description, ArrayList<String> createdActivitiesId, ArrayList<String> registeredActivitiesId) {
         if (fullName == null || email == null || phone == null) {
             throw new IllegalArgumentException();
         }
@@ -36,7 +36,7 @@ public class User implements Serializable, FirebaseObject {
         this.email = email;
         this.phone = phone;
         this.description = description;
-        this.createActivitiesId = createActivitiesId;
+        this.createdActivitiesId = createdActivitiesId;
         this.registeredActivitiesId = registeredActivitiesId;
     }
 
@@ -49,7 +49,7 @@ public class User implements Serializable, FirebaseObject {
      * @param documentPath : the document path of the activity in Firebase Firestore
      */
 
-    public User(String fullName, String email, String phone, String description, String idUser, String imageId, String documentPath, ArrayList<String> createActivitiesId, ArrayList<String> registeredActivitiesId) {
+    public User(String fullName, String email, String phone, String description, String idUser, String imageId, String documentPath, ArrayList<String> createdActivitiesId, ArrayList<String> registeredActivitiesId) {
         if (fullName == null || email == null || idUser == null || phone == null) {
             throw new IllegalArgumentException();
         }
@@ -65,7 +65,7 @@ public class User implements Serializable, FirebaseObject {
         this.idUser = idUser;
         this.imageId = imageId;
         this.documentPath = documentPath;
-        this.createActivitiesId = createActivitiesId;
+        this.createdActivitiesId = createdActivitiesId;
         this.registeredActivitiesId = registeredActivitiesId;
     }
 
@@ -121,8 +121,8 @@ public class User implements Serializable, FirebaseObject {
     /**
      * @return the list of activities created by the user
      */
-    public ArrayList<String> getCreateActivitiesId() {
-        return createActivitiesId;
+    public ArrayList<String> getCreatedActivitiesId() {
+        return createdActivitiesId;
     }
 
     /**
@@ -187,10 +187,10 @@ public class User implements Serializable, FirebaseObject {
         if(activityId == null){
             throw new IllegalArgumentException();
         }
-        if(createActivitiesId.contains(activityId)){
+        if(createdActivitiesId.contains(activityId)){
             throw new IllegalArgumentException();
         }
-        this.createActivitiesId.add(activityId);
+        this.createdActivitiesId.add(activityId);
     }
 
     /**
@@ -200,7 +200,7 @@ public class User implements Serializable, FirebaseObject {
         if(activityId == null){
             throw new IllegalArgumentException();
         }
-        this.createActivitiesId.remove(activityId);
+        this.createdActivitiesId.remove(activityId);
     }
 
 
@@ -233,7 +233,7 @@ public class User implements Serializable, FirebaseObject {
     public String toString() {
         return "FullName:" + fullName + "\nEmail:" + email + "\nId:" + idUser +
                 "\nPhone:" + phone + "\nImageId:" + imageId + "\nDescription:" + description +
-                "\nCreatedActivitiesId" + createActivitiesId + "\nRegisteredActivitiesId" + registeredActivitiesId;
+                "\nCreatedActivitiesId" + createdActivitiesId + "\nRegisteredActivitiesId" + registeredActivitiesId;
     }
 
     @Override
@@ -253,6 +253,6 @@ public class User implements Serializable, FirebaseObject {
         return fullName.equals(obj.fullName) && email.equals(obj.email) &&
                 idUser.equals(obj.idUser) && phone.equals(obj.phone) &&
                 imageId.equals(obj.imageId) && description.equals(obj.description) &&
-                createActivitiesId.equals(obj.createActivitiesId) && registeredActivitiesId.equals(obj.registeredActivitiesId);
+                createdActivitiesId.equals(obj.createdActivitiesId) && registeredActivitiesId.equals(obj.registeredActivitiesId);
     }
 }
