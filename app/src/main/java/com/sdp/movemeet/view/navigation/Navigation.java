@@ -73,6 +73,7 @@ public class Navigation extends AppCompatActivity {
     public static void goToActivityUpload(View view) {
         Context context = view.getContext();
         Intent intent = new Intent(context, UploadActivityActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         context.startActivity(intent);
     }
 
@@ -83,6 +84,7 @@ public class Navigation extends AppCompatActivity {
     public static void goToUserProfileActivity(View view) {
         Context context = view.getContext();
         Intent intent = new Intent(context, ProfileActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         context.startActivity(intent);
     }
 
@@ -114,6 +116,7 @@ public class Navigation extends AppCompatActivity {
     public static void goToListOfActivities(View view) {
         Context context = view.getContext();
         Intent intent = new Intent(context, ActivityListActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         context.startActivity(intent);
     }
 
@@ -195,6 +198,7 @@ public class Navigation extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
 
         //View hView = navigationView.inflateHeaderView(R.layout.header);
+        navigationView.inflateHeaderView(R.layout.header);
 
         /*TextView fullName = hView.findViewById(R.id.text_view_profile_name);
         TextView phone = hView.findViewById(R.id.text_view_profile_phone);
