@@ -49,6 +49,7 @@ import static org.hamcrest.Matchers.allOf;
 public class ChatActivityTest {
 
     private FirebaseAuth fAuth;
+    public static final String CHAT_MESSAGE = "my message";
 
     @Before
     public void signIn() {
@@ -86,7 +87,7 @@ public class ChatActivityTest {
             assert (false);
         }
 
-        onView(withId(R.id.message_input_text)).perform(replaceText("my message"), closeSoftKeyboard());
+        onView(withId(R.id.message_input_text)).perform(replaceText(CHAT_MESSAGE), closeSoftKeyboard());
 
         onView(withId(R.id.button_send_message)).perform(forceDoubleClick()); //.perform(click()); //.perform(forceDoubleClick());
 
@@ -104,7 +105,7 @@ public class ChatActivityTest {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int totalSize = (int) dataSnapshot.getChildrenCount();
-                onView(withIndex(withId(R.id.message_text), totalSize)).check(matches(withText("my message")));
+                onView(withIndex(withId(R.id.message_text), totalSize)).check(matches(withText(CHAT_MESSAGE)));
 
                 FirebaseUser user = fAuth.getCurrentUser();
                 if (user != null) {

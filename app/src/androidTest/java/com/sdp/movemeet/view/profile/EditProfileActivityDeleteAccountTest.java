@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -21,7 +20,6 @@ import com.sdp.movemeet.view.home.RegisterActivity;
 
 import org.hamcrest.Matcher;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -39,7 +37,9 @@ import static org.hamcrest.Matchers.allOf;
 
 
 @RunWith(AndroidJUnit4.class)
-public class EditProfileActivityDeleteAccount {
+public class EditProfileActivityDeleteAccountTest {
+
+    private static final String TAG = "DeleteAccountTest";
 
     public static final String TEST_FULL_NAME = "Yolo Test";
     public static final String TEST_EMAIL = "yolotest@gmail.com";
@@ -47,14 +47,19 @@ public class EditProfileActivityDeleteAccount {
     public static final String TEST_PHONE = "0798841817";
 
     private FirebaseAuth fAuth;
-    private FirebaseUser user;
-
-    @Rule
-    // TODO: why is this ActivityScenarioRule not launching RegisterActivity, but MainActivity sometimes?
-    public ActivityScenarioRule<RegisterActivity> testRule = new ActivityScenarioRule<>(RegisterActivity.class);
 
     @Before
-    public void createAccount() {
+    public void signOutAndCreateAccount() {
+
+        // Signing out
+        FirebaseAuth fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+        if (fAuth.getCurrentUser() != null) {
+            fAuth.signOut();
+        }
+
+        ActivityScenario scenario = ActivityScenario.launch(RegisterActivity.class);
+
+        // Creating an account
         onView(withId(R.id.edit_text_full_name)).perform(replaceText(TEST_FULL_NAME), closeSoftKeyboard());
         onView(withId(R.id.edit_text_email)).perform(replaceText(TEST_EMAIL), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password)).perform(replaceText(TEST_PASSWORD), closeSoftKeyboard());
@@ -65,6 +70,7 @@ public class EditProfileActivityDeleteAccount {
         } catch (InterruptedException e) {
             assert (false);
         }
+
     }
 
 
@@ -86,6 +92,12 @@ public class EditProfileActivityDeleteAccount {
             }
         });
 
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+
         // Launching directly EditProfileActivity (even if the "rule" is set to RegisterActivity)
         try (ActivityScenario<EditProfileActivity> scenario = ActivityScenario.launch(EditProfileActivity.class)) {
 
@@ -97,14 +109,23 @@ public class EditProfileActivityDeleteAccount {
             e.printStackTrace();
         }
 
-        try {
-            Thread.sleep(2500);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
+        // Trying to re-login to assert that the user account doesn't exist anymore
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+        fAuth.signInWithEmailAndPassword(TEST_EMAIL, TEST_PASSWORD).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                Log.d(TAG, "Login successful!");
+                latch.countDown();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Login failed. User account doesn't exist anymore!");
+                assert(true);
+            }
+        });
 
-        // TODO: check if the userId still exists or not (to have some kind of assertion here!)
-        user = fAuth.getCurrentUser();
+
     }
 
 

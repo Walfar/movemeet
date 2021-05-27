@@ -171,37 +171,6 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
 
-
-
-    //==========================
-//    public void deleteUserAccount(View view) {
-//
-//        firebaseUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                if (task.isSuccessful()) {
-//                    Log.d(TAG, "deleteUserAccount - 3) ✅ Firebase Authentication for current user successfully deleted!");
-//                    Toast.makeText(EditProfileActivity.this, "Account deleted!", Toast.LENGTH_SHORT).show();
-//                    // Sending the user to HomeScreenActivity
-//                    Intent intent = new Intent(EditProfileActivity.this, HomeScreenActivity.class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                    startActivity(intent);
-//                } else {
-//                    Log.d(TAG, "deleteUserAccount - 3) ❌ Firebase Authentication for current user could not be deleted! Error message: " + task.getException().getMessage());
-//                }
-//            }
-//        });
-//    }
-    //==========================
-
-
-
-
-
-
-    //==========================================
-
     public void deleteUserAccount(View view) {
         // 1) Delete the profile picture of the user from Firebase Storage (in case it exists)
         profileRef = storageReference.child(userImagePath);
@@ -276,59 +245,9 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
             }
         });
-
-        //-----------------------------------
-//        if (firebaseUser != null) {
-//
-//            AuthCredential credential = EmailAuthProvider.getCredential("user@example.com", "password1234");
-//            // Prompt the user to re-provide their sign-in credentials
-//            firebaseUser.reauthenticate(credential)
-//                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<Void> task) {
-//
-//                            if (task.isSuccessful()) {
-//                                Log.e("TAG", "onComplete: authentication complete");
-//
-//
-//                                //---------
-//                                // TODO: Bug to fix --> check why this function sometimes doesn't delete the Firebase "user authentication" (i.e. the actual user account)
-//                                firebaseUser.delete()
-//                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                            @Override
-//                                            public void onComplete(@NonNull Task<Void> task) {
-//                                                if (task.isSuccessful()) {
-//                                                    Log.d(TAG, "deleteUserAccount - 3) ✅ Firebase Authentication for current user successfully deleted!");
-//                                                    Toast.makeText(EditProfileActivity.this, "Account deleted!", Toast.LENGTH_SHORT).show();
-//                                                    // Sending the user to the login screen
-//                                                    startActivity(new Intent(EditProfileActivity.this, HomeScreenActivity.class));
-//                                                    finish();
-//                                                } else {
-//                                                    Log.d(TAG, "deleteUserAccount - 3) ❌ Firebase Authentication for current user could not be deleted!");
-//                                                }
-//                                            }
-//                                        });
-//                                //---------
-//
-//
-//                            } else {
-//                                Toast.makeText(EditProfileActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
-//                            }
-//
-//
-//                        }
-//                    });
-//        }
-        //-----------------------------------
-
-
     }
-
     // TODO: to completely delete the user account, it would be great to delete all the activiies he created as an organiizer!
     //  For this, we have to have access to all the activities he organized with an additional field in Firebase Firestore for user
     //  That would be called "organizedActivitiesId" (in addition to the already existing "activitiesId" created by Roxane for the
     //  ListOfActivities)
-
-    //==========================================
-
 }
