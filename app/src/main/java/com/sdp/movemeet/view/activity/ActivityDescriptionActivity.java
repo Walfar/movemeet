@@ -58,6 +58,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE = 1000;
 
+    public static final String ACTIVITY_CHAT_ID = "ActivityChatId";
+    public static final String ACTIVITY_TITLE = "ActivityTitle";
+
     private TextView organizerView, numberParticipantsView, participantNamesView;
     private FirebaseAuth fAuth;
     private FirebaseStorage fStorage;
@@ -280,9 +283,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             Intent intent = new Intent(ActivityDescriptionActivity.this, ChatActivity.class);
             String activityDocumentPath = activity.getDocumentPath();
             activityDocumentPath = activityDocumentPath.replace(FirestoreActivityManager.ACTIVITIES_COLLECTION + ImageHandler.PATH_SEPARATOR, "");
-            intent.putExtra("ACTIVITY_CHAT_ID", activityDocumentPath);
+            intent.putExtra(ACTIVITY_CHAT_ID, activityDocumentPath);
             String activityTitle = activity.getTitle();
-            intent.putExtra("ACTIVITY_TITLE", activityTitle);
+            intent.putExtra(ACTIVITY_TITLE, activityTitle);
             startActivity(intent);
         } else {
             Toast.makeText(ActivityDescriptionActivity.this, "Please register if you want to access the chat!", Toast.LENGTH_SHORT).show();

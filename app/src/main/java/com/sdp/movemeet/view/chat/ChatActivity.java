@@ -46,6 +46,7 @@ import com.sdp.movemeet.models.Image;
 import com.sdp.movemeet.models.Message;
 import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.utility.ImageHandler;
+import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.navigation.Navigation;
 
@@ -57,8 +58,8 @@ public class ChatActivity extends AppCompatActivity {
     public static boolean enableNav = true;
 
     private static final String TAG = "ChatActivity";
-    public static final String CHATS_CHILD = "chats";
 
+    public static final String CHATS_CHILD = "chats";
     public static String GENERAL_CHAT_CHILD = "general_chat_new_format"; //"general_chat";
     public static String CHAT_ROOM_ID;
 
@@ -158,8 +159,8 @@ public class ChatActivity extends AppCompatActivity {
 
     private void settingUpChatRoom(Intent data) {
         // Create a new chat room for the sport activity in case it deosn't yet exist
-        receivedActivityChatId = data.getStringExtra("ACTIVITY_CHAT_ID");
-        receivedActivityTitle = data.getStringExtra("ACTIVITY_TITLE");
+        receivedActivityChatId = data.getStringExtra(ActivityDescriptionActivity.ACTIVITY_CHAT_ID);
+        receivedActivityTitle = data.getStringExtra(ActivityDescriptionActivity.ACTIVITY_TITLE);
         if (receivedActivityChatId != null) {
             activityChatId = receivedActivityChatId;
             // Dynamically creating a new child under the branch "chats" in Firebase Realtime
