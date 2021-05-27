@@ -139,7 +139,7 @@
     <string name="activity_description_address">Address</string>
     <string name="activity_description_description">Description</string>
     <string name="activity_description_register_button">Register</string>
-    <string name="activity_description_how_to_go_button">How to Go ?</string>
+    <string name="activity_description_GPS_recording_button">Record GPS</string>
     <string name="activity_description_chat_button">Chat</string>
     <string name="activity_description_sign_in">Log in to register</string>
 

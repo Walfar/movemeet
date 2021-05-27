@@ -3,6 +3,10 @@ package com.sdp.movemeet.models;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  *
@@ -28,6 +32,8 @@ public class Activity implements Serializable, FirebaseObject {
     private final Sport sport;
     private String address;
     private Date createdAt;
+
+    private Map<String, GPSPath> participantRecordings;
 
     /**
      * Construct a new activity
@@ -81,6 +87,8 @@ public class Activity implements Serializable, FirebaseObject {
         this.sport = sport;
         this.address = address;
         this.createdAt = createdAt;
+
+        this.participantRecordings = new HashMap<String, GPSPath>();
     }
 
     /**
@@ -298,6 +306,22 @@ public class Activity implements Serializable, FirebaseObject {
         return createdAt;
     }
 
+
+    /**
+     * Retrieves this activity's GPS recording data for all users
+     * @return an array of GPSPaths containing data recorded for this activity.
+     */
+    public Map<String, GPSPath> getParticipantRecordings() {
+        return this.participantRecordings;
+    }
+
+    /**
+     * Sets this activity's GPS recording data for all participants
+     * @param newRecordings an array of GPSPath containing information to attach to this activity.
+     */
+    public void setParticipantRecordings(Map<String, GPSPath> newRecordings) {
+        this.participantRecordings = newRecordings;
+    }
 
 
     @Override

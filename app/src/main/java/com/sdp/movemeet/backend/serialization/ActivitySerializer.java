@@ -1,8 +1,12 @@
 package com.sdp.movemeet.backend.serialization;
 
+import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
+
 import com.google.firebase.Timestamp;
+import com.sdp.movemeet.models.GPSPath;
 import com.sdp.movemeet.models.Sport;
 import com.sdp.movemeet.models.Activity;
 
@@ -48,6 +52,9 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
     // The key used to access the documentPath attribute of a serialized Activity
     public static final String DOCUMENT_PATH_KEY = "documentPath";
 
+    public static final String GPS_RECORDINGS_KEY = "gpsRecordings";
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public Activity deserialize(Map<String, Object> data) {
 
         Activity act = new Activity(
@@ -69,6 +76,11 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
                 (String) data.get(ADDRESS_KEY),
                 ((Timestamp) data.get(CREATION_KEY)).toDate()
         );
+
+        Map<String, GPSPath> recordings = (Map<String, GPSPath>) data.getOrDefault(GPS_RECORDINGS_KEY, null);
+        if (recordings != null) {
+            act.setParticipantRecordings(recordings);
+        }
 
         return act;
     }
@@ -94,6 +106,8 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
         data.put(CREATION_KEY, activity.getCreatedAt());
 
         data.put(DOCUMENT_PATH_KEY, activity.getDocumentPath());
+
+        if (activity.getParticipantRecordings() != null) data.put(GPS_RECORDINGS_KEY, activity.getParticipantRecordings());
 
         return data;
     }

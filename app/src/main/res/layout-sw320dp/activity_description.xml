@@ -279,17 +279,17 @@
                             android:text="@string/activity_description_register_button"
                             tools:ignore="ButtonStyle"
                             android:visibility="invisible" />
-
-                        <Button
-                            android:id="@+id/activityGoDescription"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:fontFamily="@font/armata"
-                            android:text="@string/activity_description_how_to_go_button"
-                            android:visibility="invisible"
-                            tools:ignore="ButtonStyle" />
+                      
+                    <Button
+                        android:id="@+id/activityGPSRecDescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:fontFamily="@font/armata"
+                        android:onClick="goToGPSRecording"
+                        android:text="@string/activity_description_GPS_recording_button"
+                        tools:ignore="ButtonStyle" />
 
                         <Button
                             android:id="@+id/activityChatDescription"

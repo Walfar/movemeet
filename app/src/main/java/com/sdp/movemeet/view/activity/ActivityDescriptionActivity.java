@@ -37,10 +37,12 @@ import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.Image;
+import com.sdp.movemeet.models.Sport;
 import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.utility.ImageHandler;
 import com.sdp.movemeet.view.chat.ChatActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
+import com.sdp.movemeet.view.map.GPSRecordingActivity;
 import com.sdp.movemeet.view.navigation.Navigation;
 
 import java.text.DateFormat;
@@ -55,6 +57,8 @@ import java.util.ArrayList;
 public class ActivityDescriptionActivity extends AppCompatActivity {
 
     private static final String TAG = "ActDescActivity";
+    public static final String DESCRIPTION_ACTIVITY_KEY = "activitykey";
+    public static final String RECORDING_EXTRA_NAME = "gpsreckey";
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
@@ -101,7 +105,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         if (intent != null) {
-            activity = (Activity) intent.getSerializableExtra("activity");
+            activity = (Activity) intent.getSerializableExtra(DESCRIPTION_ACTIVITY_KEY);
         }
 
         if (activity != null) {
@@ -146,6 +150,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 findViewById(R.id.activityChatDescription).setVisibility(View.GONE);
             }
         }
+        findViewById(R.id.activityGPSRecDescription).setEnabled(activity.getSport() == Sport.Running);
     }
 
     private void getParticipantNames() {
@@ -234,6 +239,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Syncing registered participant to Firebase Firestore (field array "participantId")
      */
     public void registerToActivity(View v) {
+        userId = fAuth.getCurrentUser().getUid();
         if (userId != null) {
             try {
                 activity.addParticipantId(userId);
@@ -270,6 +276,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Allowing the access to the chat of the activity only if the user is registered to the activity
      */
     public void goToIndividualChat(View view) {
+        userId = fAuth.getCurrentUser().getUid();
         if (activity.getParticipantId().contains(userId)) {
             Intent intent = new Intent(ActivityDescriptionActivity.this, ChatActivity.class);
             String activityDocumentPath = activity.getDocumentPath();
@@ -281,6 +288,16 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         } else {
             Toast.makeText(ActivityDescriptionActivity.this, "Please register if you want to access the chat!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Goes to the GPS recording activity
+     */
+    public void goToGPSRecording(View view) {
+        Intent intent = new Intent(ActivityDescriptionActivity.this, GPSRecordingActivity.class);
+        intent.putExtra(RECORDING_EXTRA_NAME, activity);
+        startActivity(intent);
+        //finish();
     }
 
     /**
@@ -350,6 +367,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Launch the Gallery to select a header picture for the activity
      */
     public void changeActivityPicture(View view) {
+        userId = fAuth.getCurrentUser().getUid();
         if (userId.equals(organizerId)) {
             Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(openGalleryIntent, REQUEST_IMAGE);
