@@ -45,6 +45,8 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseFirestore fStore;
     private BackendManager<User> userManager;
     private String userIDString, emailString, passwordString, fullNameString, phoneString;
+    private ArrayList<String> createdActivitiesId;
+    private ArrayList<String> registeredActivitiesId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,8 +96,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        ArrayList<String> listRegisteredActivity = new ArrayList<>();
-        User user = new User(fullNameString, emailString, phoneString, "", listRegisteredActivity);
+        User user = new User(fullNameString, emailString, phoneString, "", createdActivitiesId, registeredActivitiesId);
 
         registeringUserToFirebase(user);
 

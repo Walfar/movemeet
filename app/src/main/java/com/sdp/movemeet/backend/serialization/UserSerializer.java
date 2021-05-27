@@ -16,13 +16,15 @@ public class UserSerializer implements BackendSerializer<User> {
     public static final String PHONE_KEY = "phone";
     // The key used to access the description attribute of a serialized User
     public static final String DESCRIPTION_KEY = "description";
-    // The key used to access the list of registered activities attribute of a serialized User
-    public static final String REGISTERED_ACTIVITIES_KEY = "activityId";
+    // The key used to access the created activities attribute of a serialized User
+    private static  final String CREATED_ACTIVITIES_KEY = "createdActivity";
+    // The key used to access the registered activities attribute of a serialized User
+    private static final String REGISTERED_ACTIVITIES_KEY = "registeredActivity";
 
     @Override
     public User deserialize(Map<String, Object> data) {
 
-        User user = new User(
+        User user = new User (
                 (String) data.get(FULL_NAME_KEY),
 
                 (String) data.get(EMAIL_KEY),
@@ -30,6 +32,8 @@ public class UserSerializer implements BackendSerializer<User> {
                 (String) data.get(PHONE_KEY),
 
                 (String) data.get(DESCRIPTION_KEY),
+
+                (ArrayList<String>) data.get(CREATED_ACTIVITIES_KEY),
 
                 (ArrayList<String>) data.get(REGISTERED_ACTIVITIES_KEY)
         );
@@ -48,8 +52,6 @@ public class UserSerializer implements BackendSerializer<User> {
         data.put(PHONE_KEY, user.getPhoneNumber());
 
         data.put(DESCRIPTION_KEY, user.getDescription());
-
-        data.put(REGISTERED_ACTIVITIES_KEY, user.getRegisteredActivities());
 
         return data;
     }
