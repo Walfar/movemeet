@@ -242,7 +242,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Registering user from the activity document on Firebase Firestore (field array "participantId")
+     * Unregistering user from the activity document on Firebase Firestore (field array "participantId")
      */
     public void unregisterFromActivity(View v) {
         if (activity.getParticipantId().contains(userId)) {

@@ -72,7 +72,7 @@ public class EditProfileActivityDeleteAccountTest {
     }
 
     @Test
-    public void deleteAccount_2() {
+    public void deleteAccount() {
 
         try (ActivityScenario<EditProfileActivity> scenario = ActivityScenario.launch(EditProfileActivity.class)) {
 
