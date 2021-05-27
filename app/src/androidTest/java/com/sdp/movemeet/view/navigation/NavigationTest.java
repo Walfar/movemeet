@@ -99,12 +99,13 @@ public class NavigationTest {
         }
 
         ActivityScenario scenario = ActivityScenario.launch(UploadActivityActivity.class);
-        Intents.init();
+
     }
 
     @Test
     public void NavigationTest() {
-
+        
+        Intents.init();
         //ActivityScenario scenario = ActivityScenario.launch(MainActivity.class);
         // Open Drawer to click on navigation.
         onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());

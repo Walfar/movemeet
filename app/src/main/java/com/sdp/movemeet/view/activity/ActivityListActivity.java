@@ -36,14 +36,14 @@ import java.util.ArrayList;
 
 
 public class ActivityListActivity extends AppCompatActivity {
-    FirebaseAuth fAuth;
-    FirebaseFirestore fStore;
-    String userId;
-    StorageReference storageReference;
+    private FirebaseAuth fAuth;
+    private FirebaseFirestore fStore;
+    private String userId;
+    private StorageReference storageReference;
 
-    BackendManager<Activity> activityManager;
-    BackendManager<User> userManager;
-    ArrayList<String> listOfRegisteredActivityId = new ArrayList<String>();
+    private BackendManager<Activity> activityManager;
+    private BackendManager<User> userManager;
+    private ArrayList<String> listOfRegisteredActivityId = new ArrayList<String>();
 
     private static final String TAG = "ListActivity";
 

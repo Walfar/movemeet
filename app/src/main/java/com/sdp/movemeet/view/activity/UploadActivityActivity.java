@@ -49,10 +49,10 @@ import java.util.List;
 public class UploadActivityActivity extends AppCompatActivity {
 
     private FirebaseAuth fAuth;
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    @VisibleForTesting()
     public BackendManager<Activity> activityBackendManager;
 
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    @VisibleForTesting()
     public static boolean enableNav = true;
 
     private Spinner spinner;
@@ -70,11 +70,11 @@ public class UploadActivityActivity extends AppCompatActivity {
     private int minutes = 0;
 
     private EditText addressText;
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    @VisibleForTesting()
     public double latitude = 0;
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    @VisibleForTesting()
     public double longitude = 0;
-
+    private String userId;
     public boolean validLocation;
 
     @Override
@@ -88,6 +88,8 @@ public class UploadActivityActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             finish();
         }
+
+        userId = fAuth.getCurrentUser().getUid();
 
         if (enableNav) new Navigation(this, R.id.nav_add_activity).createDrawer();
 
