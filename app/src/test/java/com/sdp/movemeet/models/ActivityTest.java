@@ -1,11 +1,22 @@
 package com.sdp.movemeet.models;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import org.apache.commons.lang3.SerializationUtils;
 import org.junit.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
+import static org.mockito.Mockito.mock;
 
 public class ActivityTest {
     private final static String DUMMY_ACTIVITY_ID = "12345";
@@ -191,6 +202,8 @@ public class ActivityTest {
         Date createAt = new Date(2022, 11, 10, 1, 10);
         activity.setCreatedAt(createAt);
 
+        activity.setParticipantRecordings(new HashMap<String, GPSPath>());
+
         assertEquals(activity.getCreatedAt(), createAt);
         assertEquals(activity.getTitle(), "Hello");
         assertEquals(activity.getNumberParticipant(), 3);
@@ -201,6 +214,8 @@ public class ActivityTest {
         assertEquals(activity.getDate(), newDate);
         assertEquals(activity.getDuration(), 20.4, 0.1);
         assertEquals(activity.getAddress(), "EPFL");
+
+        assertNotNull(activity.getParticipantRecordings());
 
         activity = null;
     }
@@ -727,5 +742,53 @@ public class ActivityTest {
         activity.addParticipantId(user1);
         activity.addParticipantId(user2);
         activity.addParticipantId(user3);
+    }
+
+    @Test
+    public void equalsReturnsTrueOnSameObject() {
+        Activity act = createFakeActivity();
+
+        assert(act.equals(act));
+    }
+
+    @Test
+    public void addParticipantIDThrowsIllegalArgumentExceptionOnAlreadyAddedParticipant() {
+        Activity act = createFakeActivity();
+        act.setNumberParticipant(3);
+        String id = "id";
+        act.addParticipantId(id);
+        assertThrows(IllegalArgumentException.class, () -> {
+            act.addParticipantId(id);
+        });
+    }
+
+    @Test
+    public void testSerializability()  {
+        ArrayList<LatLng> list = new ArrayList<LatLng>();
+        list.add(new LatLng(0,0));
+        list.add(new LatLng(1, 1));
+        long time = 100000;
+        GPSPath path = new GPSPath(list, time);
+
+        HashMap<String, GPSPath> recordings = new HashMap<String, GPSPath>();
+        recordings.put("id", path);
+        Activity act = createFakeActivity();
+        act.setParticipantRecordings(recordings);
+
+        Activity activity;
+
+        boolean exceptionThrown = false;
+        try {
+            byte[] data = SerializationUtils.serialize(act);
+            activity = SerializationUtils.deserialize(data);
+            assertNotNull(activity);
+            assert(activity.equals(act));
+        } catch (Exception e) {
+            exceptionThrown = true;
+        }
+
+        assert (exceptionThrown == false);
+
+
     }
 }

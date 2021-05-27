@@ -77,7 +77,8 @@ public class ActivityDescriptionActivityUnregisterTest {
     );
 
     @Rule
-    public ActivityScenarioRule<ActivityDescriptionActivityUnregister> testRule = new ActivityScenarioRule<>(new Intent(getApplicationContext(), ActivityDescriptionActivityUnregister.class).putExtra("activity", activity));
+    public ActivityScenarioRule<ActivityDescriptionActivityUnregister> testRule = new ActivityScenarioRule<>(new Intent(getApplicationContext(), ActivityDescriptionActivityUnregister.class)
+            .putExtra(ActivityDescriptionActivity.DESCRIPTION_ACTIVITY_KEY, activity));
 
    /* @Before
     public void createDescription() {
