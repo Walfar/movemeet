@@ -60,11 +60,11 @@ public class Navigation extends AppCompatActivity {
      * Starts the default ActivityDescription activity
      * @param view the View in which to start the activity
      */
-    public static void startActivity(View view) {
+    /*public static void startActivity(View view) {
         Context context = view.getContext();
         Intent intent = new Intent(context, ActivityDescriptionActivity.class);
         context.startActivity(intent);
-    }
+    }*/
 
     /**
      * Starts the ActivityUpload activity
@@ -100,12 +100,12 @@ public class Navigation extends AppCompatActivity {
      * Starts the chat activity
      * @param view the View in which to start the activity
      */
-    public static void goToChat(View view) {
+    /*public static void goToChat(View view) {
         Context context = view.getContext();
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra("ACTIVITY_CHAT_ID", "general_chat_new_format"); // general_chat"
         context.startActivity(intent);
-    }
+    }*/
 
     /**
      * Starts ActivityList activity
