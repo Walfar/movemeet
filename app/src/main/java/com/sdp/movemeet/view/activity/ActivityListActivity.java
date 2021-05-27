@@ -2,6 +2,7 @@ package com.sdp.movemeet.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -44,6 +45,9 @@ public class ActivityListActivity extends AppCompatActivity {
     BackendManager<User> userManager;
     ArrayList<String> listOfRegisteredActivityId = new ArrayList<String>();
 
+    private static final String TAG = "ListActivity";
+
+
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
 
@@ -68,19 +72,23 @@ public class ActivityListActivity extends AppCompatActivity {
         if (enableNav) new Navigation(this, R.id.nav_list_activities).createDrawer();
     }
 
-    /*public void getListOfActivity(View view) {
-        Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/registeredActivities");
-        document.addOnSuccessListener(new OnCompleteListener<DocumentSnapshot>(){
+    public void getListOfActivity(View view) {
+        Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + userId);
+        document.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task){
-                if (task.isSuccessful()){
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    if(document.exists()){
-                        listOfRegisteredActivityId = document.getData().get("id");
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        listOfRegisteredActivityId = (ArrayList<String>) document.getData().get("registeredActivities");
+                    }else{
+                        Log.i(TAG, "No such document !");
                     }
+                }else{
+                    Log.d(TAG, "Get failed with: ", task.getException());
                 }
             }
-
         });
-    }*/
+    }
 }
