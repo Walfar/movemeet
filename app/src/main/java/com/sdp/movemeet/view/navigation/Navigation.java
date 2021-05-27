@@ -141,6 +141,7 @@ public class Navigation extends AppCompatActivity {
         }
     }
 
+    /*
     /**
      * Fills in the navigation bar's text fields with the user's information
      * 0 = fullName
@@ -185,7 +186,7 @@ public class Navigation extends AppCompatActivity {
     public void createDrawer() {
         drawerLayout = activity.findViewById(R.id.drawer_layout);
         navigationView = activity.findViewById(R.id.nav_view);
-        TextView textView = activity.findViewById(R.id.textView);
+        //TextView textView = activity.findViewById(R.id.textView);
         Toolbar toolbar = activity.findViewById(R.id.toolbar);
 
         navigationView.bringToFront();
@@ -193,7 +194,7 @@ public class Navigation extends AppCompatActivity {
                 ActionBarDrawerToggle(activity, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
 
-        View hView = navigationView.inflateHeaderView(R.layout.header);
+        //View hView = navigationView.inflateHeaderView(R.layout.header);
 
         /*TextView fullName = hView.findViewById(R.id.text_view_profile_name);
         TextView phone = hView.findViewById(R.id.text_view_profile_phone);
