@@ -72,8 +72,8 @@ public class ChatActivityTest {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                //assert(false);
                 Log.d(TAG, "An error occured ! Chat authentication fails");
+                assert(false);
             }
         });
 

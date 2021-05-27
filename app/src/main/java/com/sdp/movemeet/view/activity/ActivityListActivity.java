@@ -68,7 +68,7 @@ public class ActivityListActivity extends AppCompatActivity {
         if (enableNav) new Navigation(this, R.id.nav_list_activities).createDrawer();
     }
 
-    public void getListOfActivity(View view) {
+    /*public void getListOfActivity(View view) {
         Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/registeredActivities");
         document.addOnSuccessListener(new OnCompleteListener<DocumentSnapshot>(){
             @Override
@@ -82,5 +82,5 @@ public class ActivityListActivity extends AppCompatActivity {
             }
 
         });
-    }
+    }*/
 }
