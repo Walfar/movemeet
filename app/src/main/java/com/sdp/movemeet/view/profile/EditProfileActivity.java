@@ -36,6 +36,8 @@ import com.sdp.movemeet.R;
 
 import androidx.annotation.VisibleForTesting;
 
+import java.util.ArrayList;
+
 public class EditProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "TAG";
@@ -52,6 +54,9 @@ public class EditProfileActivity extends AppCompatActivity {
     private FirebaseFirestore fStore;
     private BackendManager<User> userManager;
     private FirebaseStorage fStorage;
+
+    private ArrayList<String> createdActivitiesId;
+    private ArrayList<String> registeredActivitiesId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +156,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE) // making this method always public for testing and private otherwise
     public void accessFirestoreUsersCollectionForUpdate() {
-        User user = new User(profileFullName.getText().toString(), profileEmail.getText().toString(), profilePhone.getText().toString(), profileDescription.getText().toString());
+        User user = new User(profileFullName.getText().toString(), profileEmail.getText().toString(), profilePhone.getText().toString(),
+                profileDescription.getText().toString(), createdActivitiesId, registeredActivitiesId);
         userManager.add(user, FirestoreUserManager.USERS_COLLECTION + "/" + userId).addOnSuccessListener(new OnSuccessListener() {
             @Override
             public void onSuccess(Object o) {

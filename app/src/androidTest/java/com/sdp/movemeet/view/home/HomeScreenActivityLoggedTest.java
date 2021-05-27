@@ -11,10 +11,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.view.main.MainActivity;
-import com.sdp.movemeet.R;
-import com.sdp.movemeet.view.map.GPSRecordingActivity;
 
 import org.junit.After;
 import org.junit.Before;
@@ -71,11 +70,5 @@ public class HomeScreenActivityLoggedTest {
         while (user == null) Thread.sleep(2000);
         onView(withId(R.id.noAccountButton)).perform(click());
         intended(hasComponent(MainActivity.class.getName()));
-    }
-
-    @Test
-    public void recordButtonHasCorrectIntent() {
-        onView(withId(R.id.recordRunButton)).perform(click());
-        intended(hasComponent(GPSRecordingActivity.class.getName()));
     }
 }

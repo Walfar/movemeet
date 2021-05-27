@@ -1,7 +1,6 @@
 package com.sdp.movemeet.view.activity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -46,7 +45,7 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
         Intent intent = getIntent();
 
         if (intent != null) {
-            activity = (Activity) intent.getSerializableExtra("activity");
+            activity = (Activity) intent.getSerializableExtra(ActivityDescriptionActivity.DESCRIPTION_ACTIVITY_KEY);
             loadActivityHeaderPicture();
         }
 
