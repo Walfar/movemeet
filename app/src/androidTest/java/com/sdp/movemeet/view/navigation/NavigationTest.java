@@ -4,6 +4,7 @@ import android.view.Gravity;
 
 import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
@@ -54,6 +55,7 @@ import static androidx.test.espresso.intent.matcher.ComponentNameMatchers.hasSho
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -120,6 +122,12 @@ public class NavigationTest {
             Thread.sleep(1500);
         }catch(Exception e){}
         Intents.intended(allOf(hasComponent(MainActivity.class.getName())));
+
+
+        Espresso.pressBack();
+
+        onView(withText("confirm exit ?")).check(matches(isDisplayed()));
+        onView(withText("No")).perform(click());
 
         // Open Drawer to click on navigation.
         onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
