@@ -352,8 +352,9 @@
                             android:fontFamily="@font/armata"
                             android:onClick="registerToActivity"
                             android:text="@string/activity_description_register_button"
-                            tools:ignore="ButtonStyle" />
-
+                            tools:ignore="ButtonStyle"
+                            android:visibility="invisible" />
+                      
                     <Button
                         android:id="@+id/activityGPSRecDescription"
                         android:layout_width="wrap_content"
@@ -372,7 +373,8 @@
                             android:fontFamily="@font/armata"
                             android:onClick="goToIndividualChat"
                             android:text="@string/activity_description_chat_button"
-                            tools:ignore="ButtonStyle" />
+                            tools:ignore="ButtonStyle"
+                            android:visibility="invisible" />
                     </LinearLayout>
 
                 </LinearLayout>

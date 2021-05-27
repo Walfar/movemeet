@@ -47,9 +47,18 @@ public class HomeScreenActivity extends AppCompatActivity {
      * @param v view for the sign in button
      */
     public void signIn(View v) {
-        if (isUserLogged()) startActivity(new Intent(this, MainActivity.class));
-        else
-            startActivity(new Intent(this, LoginActivity.class)); // redirecting the user to the "Login" activity
+        if (isUserLogged()) {
+            Intent intent = new Intent(this, MainActivity.class);// we redirect the user to the "MainActivity"
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
+            finish();
+        }
+        else startActivity(new Intent(this, LoginActivity.class)); // redirecting the user to the "Login" activity
+
     }
 
     /**

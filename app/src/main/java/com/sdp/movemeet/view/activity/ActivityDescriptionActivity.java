@@ -1,11 +1,13 @@
 package com.sdp.movemeet.view.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -129,9 +132,18 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         createParticipantNumberView();
         getParticipantNames();
         loadActivityHeaderPicture();
+        setButton();
+    }
 
-        View recButton = findViewById(R.id.activityGPSRecDescription);
-        if (activity.getSport() == Sport.Running) {
+    /**
+     * Modify the visibility of buttons in the layout
+     */
+    private void setButton() {
+  View recButton = findViewById(R.id.activityGPSRecDescription);
+        if (activity.getParticipantId().contains(userId)) {
+            findViewById(R.id.activityRegisterDescription).setVisibility(View.GONE);
+            findViewById(R.id.activityChatDescription).setVisibility(View.VISIBLE);
+           if (activity.getSport() == Sport.Running) {
             recButton.setVisibility(View.VISIBLE);
             recButton.setEnabled(true);
             if (userId != null && activity.getParticipantRecordings().containsKey(userId)) {
@@ -145,6 +157,19 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             recButton.setEnabled(false);
             findViewById(R.id.activity_description_stats_layout).setVisibility(View.GONE);
             findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
+           }
+        } else {
+            if (activity.getParticipantId().size() < activity.getNumberParticipant()) {
+                findViewById(R.id.activityRegisterDescription).setVisibility(View.VISIBLE);
+                findViewById(R.id.activityGPSRecDescription).setVisibility(View.GONE);
+                findViewById(R.id.activityChatDescription).setVisibility(View.GONE);
+            } else {
+                findViewById(R.id.activityRegisterDescription).setVisibility(View.VISIBLE);
+                findViewById(R.id.activityRegisterDescription).setEnabled(false);
+                ((TextView) findViewById(R.id.activityRegisterDescription)).setText("No more free places");
+                findViewById(R.id.activityGPSRecDescription).setVisibility(View.GONE);
+                findViewById(R.id.activityChatDescription).setVisibility(View.GONE);
+            }
         }
     }
 
@@ -243,6 +268,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                     public void onSuccess(Object o) {
                         Log.d(TAG, "Participant registered in Firebase Firestore!");
                         getParticipantNames();
+                        setButton();
                         // TODO: (By Victor) here --> get activity from the MainMapFragment and update it!
                         //  (in order to sync the Firebase Firestore new updates with the local sport activities and their views)
                         //  (because if we register, exit ActivityDescriptionActivity and then re-enter ActivityDescriptionActivity,
