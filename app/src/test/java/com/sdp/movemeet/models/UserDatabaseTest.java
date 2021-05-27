@@ -42,4 +42,20 @@ public class UserDatabaseTest {
 
         db.cleanFile();
     }
+
+    @Test
+    public void PersistenceTest() throws IOException {
+        UserDatabase db = new UserDatabase();
+
+        db.addUser("hello", "world");
+
+        db.writeToFile();
+        db.readFromFile();
+
+        assertEquals(true, db.isInUsers("hello"));
+        assertEquals(false, db.isInUsers("goodbye"));
+
+        db.cleanFile();
+    }
+
 }
