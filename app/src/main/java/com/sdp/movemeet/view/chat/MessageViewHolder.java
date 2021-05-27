@@ -102,11 +102,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
                     .load(message.getImageUrl())
                     .into(messageImageView);
         } else {
-            // Converting the URL of the image into a path in Firebase Storage
-            int startIdx = imageUrl.indexOf(ChatActivity.CHATS_CHILD);
-            int endIdx = imageUrl.indexOf(ImageHandler.CHAT_IMAGE_NAME) + ImageHandler.CHAT_IMAGE_NAME.length();
-            String imagePath = imageUrl.substring(startIdx, endIdx);
-            imagePath = imagePath.replace("%2F", ImageHandler.PATH_SEPARATOR);
+            String imagePath = ImageHandler.convertURLtoPath(imageUrl);
             Image image = new Image(null, messageImageView);
             image.setDocumentPath(imagePath);
             ImageHandler.loadImage(image, null);
