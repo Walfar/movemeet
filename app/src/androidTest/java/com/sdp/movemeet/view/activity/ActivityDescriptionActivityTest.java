@@ -17,7 +17,6 @@ import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.Sport;
-import com.sdp.movemeet.view.chat.ChatActivity;
 
 import org.junit.After;
 import org.junit.Before;
@@ -33,11 +32,8 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
 
 
 @RunWith(AndroidJUnit4.class)

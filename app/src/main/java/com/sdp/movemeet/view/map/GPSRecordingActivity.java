@@ -33,6 +33,7 @@ import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.GPSPath;
 import com.sdp.movemeet.utility.LocationFetcher;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
+import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.main.MainActivity;
 
 import java.util.ArrayList;
@@ -104,7 +105,7 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
         activity = (Activity) intent.getSerializableExtra(ActivityDescriptionActivity.RECORDING_EXTRA_NAME);
 
         if (AuthenticationInstanceProvider.getAuthenticationInstance().getCurrentUser() == null || activity == null) {
-            intent = new Intent(GPSRecordingActivity.this, MainActivity.class);
+            intent = new Intent(GPSRecordingActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         }

@@ -15,11 +15,11 @@ import java.util.List;
 public class GPSPath implements Serializable {
 
     private transient List<LatLng> path;
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public long time;
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public float averageSpeed;
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public float distance;
 
     /**
@@ -35,6 +35,7 @@ public class GPSPath implements Serializable {
     /**
      * Returns a new GPSPath, having
      * computed stats for the recorded GPS points.
+     *
      * @param path
      */
     public GPSPath(List<LatLng> path, long time) {
@@ -49,6 +50,7 @@ public class GPSPath implements Serializable {
 
     /**
      * Returns the path saved in this GPSRecording as a list of coordinates
+     *
      * @return a List<LatLng> containing all points in this path, in order
      */
     public List<LatLng> getPath() {
@@ -74,13 +76,15 @@ public class GPSPath implements Serializable {
      * @return the average speed over this path, in km/h
      */
     public float getAverageSpeed() {
-        if (this.averageSpeed < 0) this.averageSpeed = computeAverageSpeed(getDistance(), this.time);
+        if (this.averageSpeed < 0)
+            this.averageSpeed = computeAverageSpeed(getDistance(), this.time);
         return averageSpeed;
     }
 
     /**
      * Replaces this GPSPath's list of coordinates with a new one.
      * Also triggers a recalculation of the average speed and total distance.
+     *
      * @param newPath the new path to store in this GPSPath
      */
     public void setPath(List<LatLng> newPath) {
@@ -93,6 +97,7 @@ public class GPSPath implements Serializable {
 
     /**
      * Sets this GPSPath's total distance attribute
+     *
      * @param newDistance the new distance value to set, in meters
      */
     public void setDistance(float newDistance) {
@@ -104,6 +109,7 @@ public class GPSPath implements Serializable {
     /**
      * Sets this GPSPath's average speed attribute
      * (Note: this method exists for serialization)
+     *
      * @param newAvgSpeed the new average speed to set for this GPSPath, in km/h
      */
     public void setAverageSpeed(float newAvgSpeed) {
@@ -113,6 +119,7 @@ public class GPSPath implements Serializable {
     /**
      * Replaces this GPSPath's time attribute with a new one.
      * Also triggers a recalculation of the average speed.
+     *
      * @param newTime
      */
     public void setTime(long newTime) {
@@ -125,8 +132,9 @@ public class GPSPath implements Serializable {
     /**
      * Computes the average speed of an object having travelled a certain distance over a certain
      * time.
+     *
      * @param distance The distance travelled, in meters
-     * @param time The time it took to travel, in milliseconds
+     * @param time     The time it took to travel, in milliseconds
      * @return the average speed (in km/h)
      */
     public static float computeAverageSpeed(float distance, long time) {
@@ -139,6 +147,7 @@ public class GPSPath implements Serializable {
     /**
      * Computes the total distance of a path, i.e. the total sum of
      * the pairwise distances of the points.
+     *
      * @param path a List of coordinates to compute the distance for
      * @return the total distance of the path, in meters.
      */

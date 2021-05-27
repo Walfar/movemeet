@@ -2,19 +2,16 @@ package com.sdp.movemeet.models;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 
@@ -24,10 +21,10 @@ public class GPSPathTest {
     public void emptyConstructorInitializesValuesCorrecty() {
         GPSPath path = new GPSPath();
 
-        assert(path.time == -1);
+        assert (path.time == -1);
         assertNull(path.getPath());
-        assert(path.distance == -1);
-        assert(path.averageSpeed == -1);
+        assert (path.distance == -1);
+        assert (path.averageSpeed == -1);
     }
 
     @Test
@@ -87,26 +84,26 @@ public class GPSPathTest {
     @Test
     public void GettersWorkAsExpected() {
         ArrayList<LatLng> list = new ArrayList<LatLng>();
-        list.add(new LatLng(0,0));
+        list.add(new LatLng(0, 0));
         list.add(new LatLng(1, 1));
 
         long time = 10;
 
         GPSPath path = new GPSPath(list, time);
-        assert(path.getTime() == 10);
-        assert(path.getPath().equals(list));
+        assert (path.getTime() == 10);
+        assert (path.getPath().equals(list));
 
         float dist = path.getDistance();
-        assert(dist > 0);
+        assert (dist > 0);
 
         float avgSpeed = path.getAverageSpeed();
-        assert(avgSpeed > 0);
+        assert (avgSpeed > 0);
     }
 
     @Test
     public void setTimeThrowsIllegalArgumentExceptionOnNegativeParameter() {
         ArrayList<LatLng> list = new ArrayList<LatLng>();
-        list.add(new LatLng(0,0));
+        list.add(new LatLng(0, 0));
         list.add(new LatLng(1, 1));
 
         long time = 10;
@@ -121,7 +118,7 @@ public class GPSPathTest {
     @Test
     public void setPathThrowsIllegalArgumentExceptionOnNullPath() {
         ArrayList<LatLng> list = new ArrayList<LatLng>();
-        list.add(new LatLng(0,0));
+        list.add(new LatLng(0, 0));
         list.add(new LatLng(1, 1));
 
         long time = 10;
@@ -136,7 +133,7 @@ public class GPSPathTest {
     @Test
     public void setPathAlsoTriggersAvgSpeedRecomputationOnValidTime() {
         ArrayList<LatLng> list = new ArrayList<LatLng>();
-        list.add(new LatLng(0,0));
+        list.add(new LatLng(0, 0));
         list.add(new LatLng(1, 1));
 
         long time = 10;
@@ -147,13 +144,13 @@ public class GPSPathTest {
         list.add(new LatLng(2, 2));
 
         path.setPath(list);
-        assert(dist != path.getDistance());
+        assert (dist != path.getDistance());
     }
 
     @Test
     public void setTimeAlsoTriggersAvgSpeedRecomputationOnValidDistance() {
         ArrayList<LatLng> list = new ArrayList<LatLng>();
-        list.add(new LatLng(0,0));
+        list.add(new LatLng(0, 0));
         list.add(new LatLng(1, 1));
 
         long time = 100000;
@@ -162,13 +159,13 @@ public class GPSPathTest {
         float avgSpeed = path.getAverageSpeed();
 
         path.setTime(200000);
-        assert(avgSpeed != path.getAverageSpeed());
+        assert (avgSpeed != path.getAverageSpeed());
     }
 
     @Test
     public void setDistanceWorks() {
         ArrayList<LatLng> list = new ArrayList<LatLng>();
-        list.add(new LatLng(0,0));
+        list.add(new LatLng(0, 0));
         list.add(new LatLng(1, 1));
 
         long time = 100000;
@@ -176,13 +173,13 @@ public class GPSPathTest {
 
         float dist = path.getDistance();
         path.setDistance(0);
-        assert(dist != path.getDistance());
+        assert (dist != path.getDistance());
     }
 
     @Test
     public void setAverageSpeedWorks() {
         ArrayList<LatLng> list = new ArrayList<LatLng>();
-        list.add(new LatLng(0,0));
+        list.add(new LatLng(0, 0));
         list.add(new LatLng(1, 1));
 
         long time = 100000;
@@ -190,13 +187,13 @@ public class GPSPathTest {
 
         float avgSpeed = path.getAverageSpeed();
         path.setAverageSpeed(0);
-        assert(avgSpeed != path.getAverageSpeed());
+        assert (avgSpeed != path.getAverageSpeed());
     }
 
     @Test
-    public void testSerializability()  {
+    public void testSerializability() {
         ArrayList<LatLng> list = new ArrayList<LatLng>();
-        list.add(new LatLng(0,0));
+        list.add(new LatLng(0, 0));
         list.add(new LatLng(1, 1));
 
         long time = 100000;
@@ -209,11 +206,11 @@ public class GPSPathTest {
             ObjectOutputStream oos = new ObjectOutputStream(bos);
             oos.writeObject(path);
             oos.flush();
-            byte [] data = bos.toByteArray();
+            byte[] data = bos.toByteArray();
 
-        } catch(IOException ex) {
+        } catch (IOException ex) {
             exceptionThrown = true;
         }
-        assert(exceptionThrown == false);
+        assert (exceptionThrown == false);
     }
 }
