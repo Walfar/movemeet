@@ -98,7 +98,7 @@ public class EditProfileActivityDeleteAccountTest {
             assert (false);
         }
 
-        // Launching directly EditProfileActivity (even if the "rule" is set to RegisterActivity)
+        // Launching directly EditProfileActivity
         try (ActivityScenario<EditProfileActivity> scenario = ActivityScenario.launch(EditProfileActivity.class)) {
 
             clickDeleteAccountButton();

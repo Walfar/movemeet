@@ -104,7 +104,7 @@ public class EditProfileActivityTest {
     }
 
     @After
-    public void SignOut() {
+    public void signOut() {
         fAuth.signOut();
     }
 

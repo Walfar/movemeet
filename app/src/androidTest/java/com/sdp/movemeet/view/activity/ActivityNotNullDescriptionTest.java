@@ -94,7 +94,7 @@ public class ActivityNotNullDescriptionTest {
     }
 
     @After
-    public void deleteAndSignOut() {
+    public void signOut() {
         fAuth.signOut();
     }
 
