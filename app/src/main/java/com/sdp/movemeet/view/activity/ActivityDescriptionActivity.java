@@ -159,6 +159,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
            }
         } else {
+            recButton.setVisibility(View.INVISIBLE);
+            recButton.setEnabled(false);
+            findViewById(R.id.activity_description_stats_layout).setVisibility(View.GONE);
+            findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
             if (activity.getParticipantId().size() < activity.getNumberParticipant()) {
                 findViewById(R.id.activityRegisterDescription).setVisibility(View.VISIBLE);
                 findViewById(R.id.activityGPSRecDescription).setVisibility(View.GONE);
