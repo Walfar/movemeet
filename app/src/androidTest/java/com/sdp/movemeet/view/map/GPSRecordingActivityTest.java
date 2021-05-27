@@ -8,7 +8,6 @@ import android.os.Looper;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.By;
@@ -23,7 +22,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
@@ -53,19 +51,14 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.pressBack;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.isNotNull;
-import static org.mockito.Matchers.notNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -104,19 +97,19 @@ public class GPSRecordingActivityTest {
         ActivityDescriptionActivity.enableNav = false;
 
         activity = new Activity(
-            "12345",
-            "1",
-            "title",
-            2,
+                "12345",
+                "1",
+                "title",
+                2,
                 new ArrayList<String>(),
-            2.45,
+                2.45,
                 3.697,
                 "description",
-            "documentPath",
-        new Date(2021, 11, 10, 1, 10),
-        10.4,
-        Sport.Running,
-        "address",
+                "documentPath",
+                new Date(2021, 11, 10, 1, 10),
+                10.4,
+                Sport.Running,
+                "address",
                 new Date()
         );
 
@@ -188,7 +181,7 @@ public class GPSRecordingActivityTest {
             locationFetcher.stopLocationUpdates();
             locationFetcher.startLocationUpdates();
         });
-        assert(sleep(2_000));
+        assert (sleep(2_000));
 
         scenario.onActivity(activity -> {
             assertFalse("Path was empty", ((GPSRecordingActivity) activity).path.isEmpty());

@@ -13,15 +13,16 @@ public class AuthenticationInstanceProvider {
     // The single instance to serve to all requests
     public static final AuthenticationInstanceProvider instance = new AuthenticationInstanceProvider();
 
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static FirebaseAuth fAuth;
 
-    private AuthenticationInstanceProvider () {
+    private AuthenticationInstanceProvider() {
         fAuth = FirebaseAuth.getInstance();
     }
 
     /**
      * Retrieves an authentication service instance
+     *
      * @return a singleton FirebaseAuth instance
      */
     public static FirebaseAuth getAuthenticationInstance() {

@@ -1,7 +1,6 @@
 package com.sdp.movemeet.view.home;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.filters.LargeTest;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.R;
@@ -16,12 +15,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 
 
 public class LoginActivityTest {
@@ -44,11 +38,13 @@ public class LoginActivityTest {
         }
     }
 
-    @Test public void Login_Empty(){
+    @Test
+    public void Login_Empty() {
         onView(withId(R.id.button_login)).perform(click());
     }
 
-    @Test public void Login_FalseNonEmpty() {
+    @Test
+    public void Login_FalseNonEmpty() {
         onView(withId(R.id.edit_text_email))
                 .perform(typeText(falseEmail), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password))
@@ -56,17 +52,20 @@ public class LoginActivityTest {
         onView(withId(R.id.button_login)).perform(click());
     }
 
-    @Test public void Login_EmptyMail() {
+    @Test
+    public void Login_EmptyMail() {
         onView(withId(R.id.button_login)).perform(click());
     }
 
-    @Test public void Login_EmptyPassword() {
+    @Test
+    public void Login_EmptyPassword() {
         onView(withId(R.id.edit_text_email))
                 .perform(typeText(falseEmail), closeSoftKeyboard());
         onView(withId(R.id.button_login)).perform(click());
     }
 
-    @Test public void Login_ShortPassword() {
+    @Test
+    public void Login_ShortPassword() {
         onView(withId(R.id.edit_text_email))
                 .perform(typeText(falseEmail), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password))
@@ -74,12 +73,13 @@ public class LoginActivityTest {
         onView(withId(R.id.button_login)).perform(click());
     }
 
-    @Test public void Register() {
+    @Test
+    public void Register() {
         onView(withId(R.id.text_view_create_account)).perform(click());
     }
 
     @Test
-    public void Login_TrueNonEmpty(){
+    public void Login_TrueNonEmpty() {
         onView(withId(R.id.edit_text_email))
                 .perform(typeText(trueEmail), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password))

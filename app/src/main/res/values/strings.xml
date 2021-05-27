@@ -144,6 +144,11 @@
     <string name="activity_description_chat_button">Chat</string>
     <string name="activity_description_sign_in">Log in to register</string>
 
+    <string name="activity_description_stats">Stats</string>
+    <string name="activity_description_dist">Distance: </string>
+    <string name="activity_description_time">Time: </string>
+    <string name="activity_description_avgSpeed">Average Speed: </string>
+
     <!-- chat -->
     <string name="activity_chat_addMessageImageView">addMessageImageView</string>
     <string name="activity_chat_type_post">Type your post</string>
