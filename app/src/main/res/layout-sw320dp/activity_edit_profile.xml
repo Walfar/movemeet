@@ -102,7 +102,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:onClick="deleteUserAccount"
+        android:onClick="deleteUserAccountCall"
         android:text="@string/activity_profile_icon_delete_account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

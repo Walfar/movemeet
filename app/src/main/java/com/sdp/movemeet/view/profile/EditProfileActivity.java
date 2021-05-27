@@ -14,31 +14,28 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
-import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
-import com.sdp.movemeet.utility.ImageHandler;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
-import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.models.Image;
+import com.sdp.movemeet.models.User;
+import com.sdp.movemeet.utility.ImageHandler;
 import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
-import com.sdp.movemeet.R;
-
-import androidx.annotation.VisibleForTesting;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -57,8 +54,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private BackendManager<User> userManager;
     private FirebaseStorage fStorage;
-    private StorageReference storageReference;
-    private StorageReference profileRef;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +78,6 @@ public class EditProfileActivity extends AppCompatActivity {
         assignViewsAndAdjustData();
 
         fStorage = BackendInstanceProvider.getStorageInstance();
-        storageReference = fStorage.getReference();
         userImagePath = FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + userId
                 + ImageHandler.PATH_SEPARATOR + ImageHandler.USER_IMAGE_NAME;
         Image image = new Image(null, profileImage);
@@ -171,32 +166,40 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
 
-    public void deleteUserAccount(View view) {
+    public void deleteUserAccountCall(View view) {
+        deleteUserAccount(userId, firebaseUser);
+    }
+
+
+    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    public void deleteUserAccount(String userId, FirebaseUser firebaseUser) {
         // 1) Delete the profile picture of the user from Firebase Storage (in case it exists)
-        profileRef = storageReference.child(userImagePath);
+        String userImagePath = FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + userId
+                + ImageHandler.PATH_SEPARATOR + ImageHandler.USER_IMAGE_NAME;
+        StorageReference profileRef = BackendInstanceProvider.getStorageInstance().getReference().child(userImagePath);
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                deleteProfilePicture();
+                deleteProfilePicture(profileRef, userId, firebaseUser);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 Log.d(TAG, "deleteUserAccount - 1) ❌ Firebase Storage user profile picture could not be fetched because it probably doesn't exist!");
                 // 2) Deleting all the user data from Firebase Firestore
-                deleteFirestoreDataAndAuthentication();
+                deleteFirestoreDataAndAuthentication(userId, firebaseUser);
             }
         });
     }
 
 
-    public void deleteProfilePicture() {
+    public void deleteProfilePicture(StorageReference profileRef, String userId, FirebaseUser firebaseUser) {
         profileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d(TAG, "deleteUserAccount - 1) ✅ Firebase Storage user profile picture successfully deleted!");
                 // 2) Deleting all the user data from Firebase Firestore
-                deleteFirestoreDataAndAuthentication();
+                deleteFirestoreDataAndAuthentication(userId, firebaseUser);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -207,14 +210,15 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
 
-    public void deleteFirestoreDataAndAuthentication() {
+    public void deleteFirestoreDataAndAuthentication(String userId, FirebaseUser firebaseUser) {
         // Delete all user data from Firebase Firestore
+        BackendManager<User> userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
         userManager.delete(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + userId).addOnSuccessListener(new OnSuccessListener() {
             @Override
             public void onSuccess(Object o) {
                 Log.d(TAG, "deleteUserAccount - 2) ✅ Firebase Firestore user data successfully deleted!");
                 // 3) Deleting the user from Firebase Authentication
-                deleteUserFromFirebaseAuthentication();
+                deleteUserFromFirebaseAuthentication(firebaseUser);
 
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -226,7 +230,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
 
-    private void deleteUserFromFirebaseAuthentication() {
+    private void deleteUserFromFirebaseAuthentication(FirebaseUser firebaseUser) {
         // Delete user from Firebase Authentication
 
         firebaseUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {

@@ -64,6 +64,12 @@ public class ProfileActivityTest {
             }
         });
 
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+
         ActivityScenario scenario = ActivityScenario.launch(ProfileActivity.class);
 
     }
