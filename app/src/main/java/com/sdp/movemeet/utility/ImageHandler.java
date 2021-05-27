@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -129,7 +130,10 @@ public abstract class ImageHandler {
         uploadTask.addOnSuccessListener(taskSnapshot -> {
             setImageBitMapAndSaveToCache(image, activity);
             loadImage(image, activity);
-        }).addOnFailureListener(e -> getProgressBar(activity).setVisibility(View.GONE));
+        }).addOnFailureListener(e -> {
+            Toast.makeText(activity.getApplication(), "you need an internet connection to change your profile picture !", Toast.LENGTH_LONG);
+            getProgressBar(activity).setVisibility(View.GONE);
+        });
     }
 
     /**

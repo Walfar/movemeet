@@ -179,6 +179,10 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
                 intent = new Intent(getActivity(), ActivityDescriptionActivity.class);
             }
             intent.putExtra(ActivityDescriptionActivity.DESCRIPTION_ACTIVITY_KEY, act);
+            if (newActivityMarker != null) {
+                newActivityMarker.remove();
+                newActivityMarker = null;
+            }
             startActivity(intent);
         }
 
