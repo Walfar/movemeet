@@ -63,7 +63,7 @@ public class ActivityTest {
     }
 
     @Test
-    public void activityConstructorCorrect(){
+    public void activityConstructorCorrect() {
 
         activity = ActivityTest.createFakeActivity();
 
@@ -86,7 +86,7 @@ public class ActivityTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public  void activityConstructorActivityIDEmpty(){
+    public void activityConstructorActivityIDEmpty() {
         Activity activity = new Activity(
                 null,
                 DUMMY_ORGANISATOR_ID,
@@ -105,7 +105,7 @@ public class ActivityTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public  void activityConstructorActivityOrganizerEmpty(){
+    public void activityConstructorActivityOrganizerEmpty() {
         Activity activity = new Activity(
                 DUMMY_ACTIVITY_ID,
                 null,
@@ -124,42 +124,42 @@ public class ActivityTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public  void activityConstructorActivityTitleEmpty(){
+    public void activityConstructorActivityTitleEmpty() {
 
         activity = ActivityTest.createFakeActivity();
         activity.setTitle(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public  void activityConstructorActivityParticipantsEmpty(){
+    public void activityConstructorActivityParticipantsEmpty() {
 
         activity = ActivityTest.createFakeActivity();
         activity.setNumberParticipant(0);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public  void activityConstructorActivityDescriptionEmpty(){
+    public void activityConstructorActivityDescriptionEmpty() {
 
         activity = ActivityTest.createFakeActivity();
         activity.setDescription(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public  void activityConstructorActivityDateEmpty(){
+    public void activityConstructorActivityDateEmpty() {
 
         activity = ActivityTest.createFakeActivity();
         activity.setDate(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public  void activityConstructorActivityDurationEmpty(){
+    public void activityConstructorActivityDurationEmpty() {
 
         activity = ActivityTest.createFakeActivity();
         activity.setDuration(0);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public  void activityConstructorActivitySportEmpty(){
+    public void activityConstructorActivitySportEmpty() {
         Activity activity = new Activity(
                 DUMMY_ACTIVITY_ID,
                 DUMMY_ORGANISATOR_ID,
@@ -178,7 +178,7 @@ public class ActivityTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public  void activityConstructorActivityAddressEmpty(){
+    public void activityConstructorActivityAddressEmpty() {
 
         activity = ActivityTest.createFakeActivity();
         activity.setAddress(null);
@@ -239,7 +239,7 @@ public class ActivityTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void activityAddParticipantNull(){
+    public void activityAddParticipantNull() {
 
         activity = ActivityTest.createFakeActivity();
 
@@ -248,7 +248,7 @@ public class ActivityTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void activityAddSameParticipantNull(){
+    public void activityAddSameParticipantNull() {
 
         activity = ActivityTest.createFakeActivity();
 
@@ -260,7 +260,7 @@ public class ActivityTest {
     }
 
     @Test
-    public void activityAddCorrect(){
+    public void activityAddCorrect() {
 
         activity = ActivityTest.createFakeActivity();
 
@@ -274,7 +274,7 @@ public class ActivityTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void activityRemoveParticipantNull(){
+    public void activityRemoveParticipantNull() {
 
         activity = ActivityTest.createFakeActivity();
 
@@ -283,7 +283,7 @@ public class ActivityTest {
     }
 
     @Test
-    public void activityRemoveCorrect(){
+    public void activityRemoveCorrect() {
         Activity activity = new Activity(
                 DUMMY_ACTIVITY_ID,
                 DUMMY_ORGANISATOR_ID,
@@ -313,7 +313,7 @@ public class ActivityTest {
     }
 
     @Test
-    public void activityToStringCorrect(){
+    public void activityToStringCorrect() {
 
         activity = ActivityTest.createFakeActivity();
 
@@ -325,7 +325,7 @@ public class ActivityTest {
     }
 
     @Test
-    public void activityEqualsCorrect(){
+    public void activityEqualsCorrect() {
 
         Activity activity1 = ActivityTest.createFakeActivity();
 
@@ -339,7 +339,7 @@ public class ActivityTest {
     }
 
     @Test
-    public void activityEqualsNull(){
+    public void activityEqualsNull() {
 
         Activity activity1 = ActivityTest.createFakeActivity();
 
@@ -350,7 +350,7 @@ public class ActivityTest {
     }
 
     @Test
-    public void activityEqualsClass(){
+    public void activityEqualsClass() {
 
         Activity activity1 = ActivityTest.createFakeActivity();
 
@@ -361,10 +361,8 @@ public class ActivityTest {
     }
 
 
-
-
     @Test
-    public void activityEqualsDifferentActivity1(){
+    public void activityEqualsDifferentActivity1() {
 
         Activity activity1 = ActivityTest.createFakeActivity();
 
@@ -392,7 +390,7 @@ public class ActivityTest {
     }
 
     @Test
-    public void activityEqualsDifferentActivity2(){
+    public void activityEqualsDifferentActivity2() {
 
         Activity activity1 = ActivityTest.createFakeActivity();
 
@@ -421,7 +419,7 @@ public class ActivityTest {
     }
 
     @Test
-    public void activityEqualsDifferentActivity3(){
+    public void activityEqualsDifferentActivity3() {
 
         Activity activity1 = ActivityTest.createFakeActivity();
 
@@ -438,7 +436,7 @@ public class ActivityTest {
     }
 
     @Test
-    public void activityEqualsDifferentActivity4(){
+    public void activityEqualsDifferentActivity4() {
 
         Activity activity1 = ActivityTest.createFakeActivity();
 
@@ -454,7 +452,7 @@ public class ActivityTest {
     }
 
     @Test
-    public void activityEqualsDifferentActivity5(){
+    public void activityEqualsDifferentActivity5() {
 
         Activity activity1 = ActivityTest.createFakeActivity();
 
@@ -486,12 +484,12 @@ public class ActivityTest {
     }
 
     @Test
-    public void activityEqualsDifferentActivity6(){
+    public void activityEqualsDifferentActivity6() {
 
         Activity activity1 = ActivityTest.createFakeActivity();
 
         Activity activity2 = ActivityTest.createFakeActivity();
-        activity2.setLongitude(DUMMY_LONGITUDE+1);
+        activity2.setLongitude(DUMMY_LONGITUDE + 1);
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -502,12 +500,12 @@ public class ActivityTest {
     }
 
     @Test
-    public void activityEqualsDifferentActivity7(){
+    public void activityEqualsDifferentActivity7() {
 
         Activity activity1 = ActivityTest.createFakeActivity();
 
         Activity activity2 = ActivityTest.createFakeActivity();
-        activity2.setLatitude(DUMMY_LATITUDE+1);
+        activity2.setLatitude(DUMMY_LATITUDE + 1);
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -518,7 +516,7 @@ public class ActivityTest {
     }
 
     @Test
-    public void activityEqualsDifferentActivity8(){
+    public void activityEqualsDifferentActivity8() {
 
         Activity activity1 = ActivityTest.createFakeActivity();
 
@@ -534,12 +532,12 @@ public class ActivityTest {
     }
 
     @Test
-    public void activityEqualsDifferentActivity9(){
+    public void activityEqualsDifferentActivity9() {
 
         Activity activity1 = ActivityTest.createFakeActivity();
 
         Activity activity2 = ActivityTest.createFakeActivity();
-        activity2.setDate(new Date(2022,3,26));
+        activity2.setDate(new Date(2022, 3, 26));
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -550,12 +548,12 @@ public class ActivityTest {
     }
 
     @Test
-    public void activityEqualsDifferentActivity10(){
+    public void activityEqualsDifferentActivity10() {
 
         Activity activity1 = ActivityTest.createFakeActivity();
 
         Activity activity2 = ActivityTest.createFakeActivity();
-        activity2.setDuration(DUMMY_DURATION+1);
+        activity2.setDuration(DUMMY_DURATION + 1);
 
         assertEquals(false, activity1.equals(activity2));
 
@@ -565,7 +563,7 @@ public class ActivityTest {
     }
 
     @Test
-    public void activityEqualsDifferentActivity11(){
+    public void activityEqualsDifferentActivity11() {
 
         Activity activity1 = ActivityTest.createFakeActivity();
 
@@ -594,7 +592,7 @@ public class ActivityTest {
     }
 
     @Test
-    public void activityEqualsDifferentActivity12(){
+    public void activityEqualsDifferentActivity12() {
 
         Activity activity1 = ActivityTest.createFakeActivity();
 
@@ -610,7 +608,7 @@ public class ActivityTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void activityChangeDuration(){
+    public void activityChangeDuration() {
         Activity activity = new Activity(
                 DUMMY_ACTIVITY_ID,
                 DUMMY_ORGANISATOR_ID,
@@ -633,7 +631,7 @@ public class ActivityTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void activityChangeDescription(){
+    public void activityChangeDescription() {
         Activity activity = new Activity(
                 DUMMY_ACTIVITY_ID,
                 DUMMY_ORGANISATOR_ID,
@@ -655,7 +653,7 @@ public class ActivityTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void activityChangeDate(){
+    public void activityChangeDate() {
         Activity activity = new Activity(
                 DUMMY_ACTIVITY_ID,
                 DUMMY_ORGANISATOR_ID,
@@ -676,7 +674,7 @@ public class ActivityTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void activityChangeParticipant(){
+    public void activityChangeParticipant() {
         Activity activity = new Activity(
                 DUMMY_ACTIVITY_ID,
                 DUMMY_ORGANISATOR_ID,
@@ -697,7 +695,7 @@ public class ActivityTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void activityChangeAddress(){
+    public void activityChangeAddress() {
         Activity activity = new Activity(
                 DUMMY_ACTIVITY_ID,
                 DUMMY_ORGANISATOR_ID,
@@ -718,7 +716,7 @@ public class ActivityTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void activityLimitParticipants(){
+    public void activityLimitParticipants() {
         Activity activity = new Activity(
                 DUMMY_ACTIVITY_ID,
                 DUMMY_ORGANISATOR_ID,
@@ -748,7 +746,7 @@ public class ActivityTest {
     public void equalsReturnsTrueOnSameObject() {
         Activity act = createFakeActivity();
 
-        assert(act.equals(act));
+        assert (act.equals(act));
     }
 
     @Test
@@ -763,9 +761,9 @@ public class ActivityTest {
     }
 
     @Test
-    public void testSerializability()  {
+    public void testSerializability() {
         ArrayList<LatLng> list = new ArrayList<LatLng>();
-        list.add(new LatLng(0,0));
+        list.add(new LatLng(0, 0));
         list.add(new LatLng(1, 1));
         long time = 100000;
         GPSPath path = new GPSPath(list, time);
@@ -782,7 +780,7 @@ public class ActivityTest {
             byte[] data = SerializationUtils.serialize(act);
             activity = SerializationUtils.deserialize(data);
             assertNotNull(activity);
-            assert(activity.equals(act));
+            assert (activity.equals(act));
         } catch (Exception e) {
             exceptionThrown = true;
         }

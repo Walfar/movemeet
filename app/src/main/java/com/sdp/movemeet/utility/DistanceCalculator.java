@@ -22,7 +22,8 @@ public class DistanceCalculator {
 
     /**
      * Called in MainMapFragment to display the closest activities to the user.
-     * @param userLatitude the latitude of the current location of the user
+     *
+     * @param userLatitude  the latitude of the current location of the user
      * @param userLongitude the longitude of the current location of the user
      */
     public DistanceCalculator(Double userLatitude, Double userLongitude) {
@@ -33,6 +34,7 @@ public class DistanceCalculator {
 
     /**
      * Called in MainMapFragment to update the list of the closest activities.
+     *
      * @param activities the list of all activities available to the user
      */
     public void setActivities(ArrayList<Activity> activities) {
@@ -63,6 +65,7 @@ public class DistanceCalculator {
 
     /**
      * Called in MainMapFragment to return the list of N closest activities.
+     *
      * @param n the number of activities to return
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -81,6 +84,7 @@ public class DistanceCalculator {
 
     /**
      * Called in MainMapFragment to return the list of activities that fall in a given radius.
+     *
      * @param radius the radius (in km) around the current location of the user
      */
     public ArrayList<Activity> getActivitiesInRadius(Double radius) {
@@ -135,6 +139,7 @@ public class DistanceCalculator {
 
     /**
      * Called locally to compute the distance between two geographical points.
+     *
      * @param lat1 the latitude of the first point (the user)
      * @param lng1 the longitude of the first point (the user)
      * @param lat2 the latitude of the second point (the activity)

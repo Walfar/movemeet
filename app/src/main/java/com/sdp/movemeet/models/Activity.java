@@ -4,15 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
- *
- *  This class represents an activity.
- *
- * */
+ * This class represents an activity.
+ */
 
 public class Activity implements Serializable, FirebaseObject {
 
@@ -37,19 +33,20 @@ public class Activity implements Serializable, FirebaseObject {
 
     /**
      * Construct a new activity
-     * @param activityId id of the activity
-     * @param organizerId user how create the activity
-     * @param title of the activity
+     *
+     * @param activityId        id of the activity
+     * @param organizerId       user how create the activity
+     * @param title             of the activity
      * @param numberParticipant for the activity
-     * @param participantsId how register for the activity
-     * @param longitude of the activity
-     * @param latitude of the activity
-     * @param description of the activity
-     * @param documentPath of the activity in Firebase Firestore
-     * @param date date and hour of the activity
-     * @param duration of the activity 1.0 -> 1 hour
-     * @param sport of the activity
-     * @param address of the activity
+     * @param participantsId    how register for the activity
+     * @param longitude         of the activity
+     * @param latitude          of the activity
+     * @param description       of the activity
+     * @param documentPath      of the activity in Firebase Firestore
+     * @param date              date and hour of the activity
+     * @param duration          of the activity 1.0 -> 1 hour
+     * @param sport             of the activity
+     * @param address           of the activity
      */
     public Activity(String activityId,
                     String organizerId,
@@ -64,12 +61,12 @@ public class Activity implements Serializable, FirebaseObject {
                     double duration,
                     Sport sport,
                     String address,
-                    Date createdAt){
+                    Date createdAt) {
 
-        if(activityId == null || organizerId == null || title == null || numberParticipant <= 0 )
+        if (activityId == null || organizerId == null || title == null || numberParticipant <= 0)
             throw new IllegalArgumentException();
 
-        if(date == null || sport == null || address == null || duration <= 0 || description == null)
+        if (date == null || sport == null || address == null || duration <= 0 || description == null)
             throw new IllegalArgumentException();
 
 
@@ -187,7 +184,7 @@ public class Activity implements Serializable, FirebaseObject {
      * @param title change activity's title
      */
     public void setTitle(String title) {
-        if(title == null){
+        if (title == null) {
             throw new IllegalArgumentException();
         }
         this.title = title;
@@ -197,7 +194,7 @@ public class Activity implements Serializable, FirebaseObject {
      * @param numberParticipant change activity's number participant
      */
     public void setNumberParticipant(int numberParticipant) {
-        if(numberParticipant <= 0){
+        if (numberParticipant <= 0) {
             throw new IllegalArgumentException();
         }
         this.numberParticipant = numberParticipant;
@@ -221,7 +218,7 @@ public class Activity implements Serializable, FirebaseObject {
      * @param description change activity's description
      */
     public void setDescription(String description) {
-        if(description == null){
+        if (description == null) {
             throw new IllegalArgumentException();
         }
         this.description = description;
@@ -239,7 +236,7 @@ public class Activity implements Serializable, FirebaseObject {
      * @param date change activity's date
      */
     public void setDate(Date date) {
-        if(date == null){
+        if (date == null) {
             throw new IllegalArgumentException();
         }
         this.date = date;
@@ -249,7 +246,7 @@ public class Activity implements Serializable, FirebaseObject {
      * @param duration change activity's duration
      */
     public void setDuration(double duration) {
-        if(duration <= 0){
+        if (duration <= 0) {
             throw new IllegalArgumentException();
         }
         this.duration = duration;
@@ -259,7 +256,7 @@ public class Activity implements Serializable, FirebaseObject {
      * @param address change activity's address
      */
     public void setAddress(String address) {
-        if(address == null){
+        if (address == null) {
             throw new IllegalArgumentException();
         }
         this.address = address;
@@ -268,14 +265,14 @@ public class Activity implements Serializable, FirebaseObject {
     /**
      * @param participant add a participant
      */
-    public void addParticipantId(String participant){
-        if(participant == null){
+    public void addParticipantId(String participant) {
+        if (participant == null) {
             throw new IllegalArgumentException();
         }
-        if(participantsId.contains(participant)){
+        if (participantsId.contains(participant)) {
             throw new IllegalArgumentException("Already registered");
         }
-        if(participantsId.size() >= this.numberParticipant){
+        if (participantsId.size() >= this.numberParticipant) {
             throw new IllegalArgumentException("The limit of participants has already been reached");
         }
         this.participantsId.add(participant);
@@ -284,8 +281,8 @@ public class Activity implements Serializable, FirebaseObject {
     /**
      * @param participant remove a participant
      */
-    public void removeParticipantId(String participant){
-        if(participant == null){
+    public void removeParticipantId(String participant) {
+        if (participant == null) {
             throw new IllegalArgumentException();
         }
 
@@ -309,6 +306,7 @@ public class Activity implements Serializable, FirebaseObject {
 
     /**
      * Retrieves this activity's GPS recording data for all users
+     *
      * @return an array of GPSPaths containing data recorded for this activity.
      */
     public Map<String, GPSPath> getParticipantRecordings() {
@@ -317,6 +315,7 @@ public class Activity implements Serializable, FirebaseObject {
 
     /**
      * Sets this activity's GPS recording data for all participants
+     *
      * @param newRecordings an array of GPSPath containing information to attach to this activity.
      */
     public void setParticipantRecordings(Map<String, GPSPath> newRecordings) {
@@ -325,21 +324,21 @@ public class Activity implements Serializable, FirebaseObject {
 
 
     @Override
-    public String toString(){
+    public String toString() {
         return "ActivityId:" + activityId + "\nOrganizerId" + organizerId + "\nTitle:" + title + "\nNumberParticipant:" + numberParticipant +
                 "\nParticipantId:" + participantsId + "\nLongitude:" + longitude + "\nLatitude:" + latitude + "\nDescription:" + description +
                 "\nDate:" + date + "\nDuration:" + duration + "\nSport:" + sport + "\nAddress:" + address + "\nCreated at:" + createdAt;
     }
 
     @Override
-    public boolean equals(Object o){
-        if(o == null)
+    public boolean equals(Object o) {
+        if (o == null)
             return false;
 
-        if(this == o)
+        if (this == o)
             return true;
 
-        if(getClass() != o.getClass())
+        if (getClass() != o.getClass())
             return false;
 
         Activity obj = (Activity) o;
