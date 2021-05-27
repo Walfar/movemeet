@@ -60,11 +60,11 @@ public class Navigation extends AppCompatActivity {
      * Starts the default ActivityDescription activity
      * @param view the View in which to start the activity
      */
-    public static void startActivity(View view) {
+    /*public static void startActivity(View view) {
         Context context = view.getContext();
         Intent intent = new Intent(context, ActivityDescriptionActivity.class);
         context.startActivity(intent);
-    }
+    }*/
 
     /**
      * Starts the ActivityUpload activity
@@ -73,6 +73,7 @@ public class Navigation extends AppCompatActivity {
     public static void goToActivityUpload(View view) {
         Context context = view.getContext();
         Intent intent = new Intent(context, UploadActivityActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         context.startActivity(intent);
     }
 
@@ -83,6 +84,7 @@ public class Navigation extends AppCompatActivity {
     public static void goToUserProfileActivity(View view) {
         Context context = view.getContext();
         Intent intent = new Intent(context, ProfileActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         context.startActivity(intent);
     }
 
@@ -100,12 +102,12 @@ public class Navigation extends AppCompatActivity {
      * Starts the chat activity
      * @param view the View in which to start the activity
      */
-    public static void goToChat(View view) {
+    /*public static void goToChat(View view) {
         Context context = view.getContext();
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra("ACTIVITY_CHAT_ID", "general_chat_new_format"); // general_chat"
         context.startActivity(intent);
-    }
+    }*/
 
     /**
      * Starts ActivityList activity
@@ -114,6 +116,7 @@ public class Navigation extends AppCompatActivity {
     public static void goToListOfActivities(View view) {
         Context context = view.getContext();
         Intent intent = new Intent(context, ActivityListActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         context.startActivity(intent);
     }
 
@@ -141,6 +144,7 @@ public class Navigation extends AppCompatActivity {
         }
     }
 
+    /*
     /**
      * Fills in the navigation bar's text fields with the user's information
      * 0 = fullName
@@ -150,7 +154,7 @@ public class Navigation extends AppCompatActivity {
      * @param fields the fields to fill in, following the above order
      * @return the array of updated TextViews
      */
-    public static TextView[] fillNavigationProfileFields(TextView[] fields) {
+    /*public static TextView[] fillNavigationProfileFields(TextView[] fields) {
         FirebaseUser firebaseUser = AuthenticationInstanceProvider.getAuthenticationInstance().getCurrentUser();
         if (firebaseUser != null) {
             String userId = firebaseUser.getUid();
@@ -176,7 +180,7 @@ public class Navigation extends AppCompatActivity {
         }
 
         return fields;
-    }
+    }*/
 
     /**
      * Initializes a Navigation drawer, filling in all fields and setting up associated functions,
@@ -185,7 +189,6 @@ public class Navigation extends AppCompatActivity {
     public void createDrawer() {
         drawerLayout = activity.findViewById(R.id.drawer_layout);
         navigationView = activity.findViewById(R.id.nav_view);
-        TextView textView = activity.findViewById(R.id.textView);
         Toolbar toolbar = activity.findViewById(R.id.toolbar);
 
         navigationView.bringToFront();
@@ -193,17 +196,13 @@ public class Navigation extends AppCompatActivity {
                 ActionBarDrawerToggle(activity, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
 
-        View hView = navigationView.inflateHeaderView(R.layout.header);
+        navigationView.inflateHeaderView(R.layout.header);
 
-        TextView fullName = hView.findViewById(R.id.text_view_profile_name);
-        TextView phone = hView.findViewById(R.id.text_view_profile_phone);
-        TextView email = hView.findViewById(R.id.text_view_profile_email);
 
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
         navigationView.setCheckedItem(this.activityId);
 
-        if (profileField) fillNavigationProfileFields(new TextView[] {fullName, email, phone});
     }
 
     private boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -227,14 +226,14 @@ public class Navigation extends AppCompatActivity {
                             this.activity);
                     finish();
                     break;
-                case R.id.nav_start_activity:
+                /*case R.id.nav_start_activity:
                     Navigation.startActivity(this.navigationView);
                     finish();
-                    break;
-                case R.id.nav_chat:
+                    break;*/
+               /*case R.id.nav_chat:
                     Navigation.goToChat(this.navigationView);
                     finish();
-                    break;
+                    break;*/
                 case R.id.nav_list_activities:
                     Navigation.goToListOfActivities(this.navigationView);
                     finish();

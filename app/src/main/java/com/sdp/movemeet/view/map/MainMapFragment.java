@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 
@@ -25,18 +24,16 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.models.Activity;
+import com.sdp.movemeet.utility.DistanceCalculator;
+import com.sdp.movemeet.utility.LocationFetcher;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivityUnregister;
-import com.sdp.movemeet.utility.DistanceCalculator;
-import com.sdp.movemeet.R;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
-import com.sdp.movemeet.utility.ActivitiesUpdater;
-import com.sdp.movemeet.utility.LocationFetcher;
 
 import java.util.ArrayList;
 
@@ -105,7 +102,9 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {
                 currentLocation = locationResult.getLastLocation();
-                supportMapFragment.getMapAsync(googleMap -> {displayMarkerOnMapReadyAndZoomInFirstCallback();});
+                supportMapFragment.getMapAsync(googleMap -> {
+                    displayMarkerOnMapReadyAndZoomInFirstCallback();
+                });
             }
         };
 
@@ -129,7 +128,8 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         }
 
         //In the case where the user didn't grant permission, we set a default location
-        if (!locationFetcher.isPermissionGranted()) currentLocation = locationFetcher.getDefaultLocation();
+        if (!locationFetcher.isPermissionGranted())
+            currentLocation = locationFetcher.getDefaultLocation();
 
     }
 
@@ -140,7 +140,8 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     public void displayMarkerOnMapReadyAndZoomInFirstCallback() {
         displayUserMarker();
         if (first_callback) {
-            if (googleMap != null) googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), ZOOM_VALUE));
+            if (googleMap != null)
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), ZOOM_VALUE));
             first_callback = false;
         }
     }
@@ -176,7 +177,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
             } else {
                 intent = new Intent(supportMapFragment.getActivity(), ActivityDescriptionActivity.class);
             }
-            intent.putExtra("activity", act);
+            intent.putExtra(ActivityDescriptionActivity.DESCRIPTION_ACTIVITY_KEY, act);
             startActivity(intent);
         }
 

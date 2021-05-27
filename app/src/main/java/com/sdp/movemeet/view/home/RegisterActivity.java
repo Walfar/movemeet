@@ -30,6 +30,8 @@ import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.main.MainActivity;
 
+import java.util.ArrayList;
+
 // First activity that the users is going to see when launching the app
 public class RegisterActivity extends AppCompatActivity {
 
@@ -43,6 +45,8 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseFirestore fStore;
     private BackendManager<User> userManager;
     private String userIDString, emailString, passwordString, fullNameString, phoneString;
+    private ArrayList<String> createdActivitiesId;
+    private ArrayList<String> registeredActivitiesId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +96,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        User user = new User(fullNameString, emailString, phoneString, "");
+        User user = new User(fullNameString, emailString, phoneString, "", createdActivitiesId, registeredActivitiesId);
 
         registeringUserToFirebase(user);
 
