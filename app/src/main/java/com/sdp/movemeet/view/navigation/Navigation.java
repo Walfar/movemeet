@@ -189,7 +189,6 @@ public class Navigation extends AppCompatActivity {
     public void createDrawer() {
         drawerLayout = activity.findViewById(R.id.drawer_layout);
         navigationView = activity.findViewById(R.id.nav_view);
-        //TextView textView = activity.findViewById(R.id.textView);
         Toolbar toolbar = activity.findViewById(R.id.toolbar);
 
         navigationView.bringToFront();
@@ -197,18 +196,13 @@ public class Navigation extends AppCompatActivity {
                 ActionBarDrawerToggle(activity, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
 
-        //View hView = navigationView.inflateHeaderView(R.layout.header);
         navigationView.inflateHeaderView(R.layout.header);
 
-        /*TextView fullName = hView.findViewById(R.id.text_view_profile_name);
-        TextView phone = hView.findViewById(R.id.text_view_profile_phone);
-        TextView email = hView.findViewById(R.id.text_view_profile_email);*/
 
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
         navigationView.setCheckedItem(this.activityId);
 
-        /*if (profileField) fillNavigationProfileFields(new TextView[] {fullName, email, phone});*/
     }
 
     private boolean onNavigationItemSelected(MenuItem menuItem) {
