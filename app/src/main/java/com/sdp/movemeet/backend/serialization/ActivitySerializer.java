@@ -1,13 +1,15 @@
 package com.sdp.movemeet.backend.serialization;
 
-import android.util.Log;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.google.firebase.Timestamp;
-import com.sdp.movemeet.models.Sport;
 import com.sdp.movemeet.models.Activity;
+import com.sdp.movemeet.models.GPSPath;
+import com.sdp.movemeet.models.Sport;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,6 +50,12 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
     // The key used to access the documentPath attribute of a serialized Activity
     public static final String DOCUMENT_PATH_KEY = "documentPath";
 
+    public static final String GPS_RECORDINGS_KEY = "gpsRecordings";
+    private static final String REC_TIME_KEY = "time";
+    private static final String REC_DIST_KEY = "distance";
+    private static final String REC_SPEED_KEY = "averageSpeed";
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public Activity deserialize(Map<String, Object> data) {
 
         Activity act = new Activity(
@@ -59,7 +67,7 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
                 (ArrayList<String>) data.get(PARTICIPANTS_KEY),
 
                 (double) data.get(LONGITUDE_KEY),
-                (double )data.get(LATITUDE_KEY),
+                (double) data.get(LATITUDE_KEY),
 
                 (String) data.get(DESC_KEY),
                 (String) data.get(DOCUMENT_PATH_KEY),
@@ -69,6 +77,19 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
                 (String) data.get(ADDRESS_KEY),
                 ((Timestamp) data.get(CREATION_KEY)).toDate()
         );
+
+        Map<String, Map<String, Object>> gpsMaps = (Map<String, Map<String, Object>>) data.getOrDefault(GPS_RECORDINGS_KEY, null);
+        if (gpsMaps != null) {
+            Map<String, GPSPath> recordings = new HashMap<String, GPSPath>();
+            for (String uid : gpsMaps.keySet()) {
+                GPSPath rec = new GPSPath();
+                rec.setTime(((Number) gpsMaps.get(uid).get(REC_TIME_KEY)).longValue());
+                rec.setDistance(((Number) gpsMaps.get(uid).get(REC_DIST_KEY)).floatValue());
+                rec.setAverageSpeed(((Number) gpsMaps.get(uid).get(REC_SPEED_KEY)).floatValue());
+                recordings.put(uid, rec);
+            }
+            act.setParticipantRecordings(recordings);
+        }
 
         return act;
     }
@@ -94,6 +115,9 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
         data.put(CREATION_KEY, activity.getCreatedAt());
 
         data.put(DOCUMENT_PATH_KEY, activity.getDocumentPath());
+
+        if (activity.getParticipantRecordings() != null)
+            data.put(GPS_RECORDINGS_KEY, activity.getParticipantRecordings());
 
         return data;
     }

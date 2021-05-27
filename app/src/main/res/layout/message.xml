@@ -53,7 +53,7 @@
                         android:layout_weight="1"
                         android:paddingStart="6dp"
                         android:paddingEnd="6dp"
-                        android:textColor="@color/amaranth_red"
+                        android:textColor="@color/primary"
                         android:text="@string/message_username"
                         android:textStyle="normal"/>
 
@@ -63,7 +63,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/amaranth_red"/>
+                    android:background="@color/primary"/>
 
                 <TextView
                     android:id="@+id/message_text"

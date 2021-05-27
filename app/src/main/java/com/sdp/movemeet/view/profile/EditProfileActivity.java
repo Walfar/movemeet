@@ -37,11 +37,12 @@ import com.sdp.movemeet.utility.ImageHandler;
 import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 
+import java.util.ArrayList;
+
 public class EditProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "TAG";
     private static final int REQUEST_IMAGE = 1000;
-
 
     private ImageView profileImage;
     private EditText profileFullName, profileEmail, profilePhone, profileDescription;
@@ -55,6 +56,9 @@ public class EditProfileActivity extends AppCompatActivity {
     private BackendManager<User> userManager;
     private FirebaseStorage fStorage;
 
+
+    private ArrayList<String> createdActivitiesId;
+    private ArrayList<String> registeredActivitiesId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +153,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE) // making this method always public for testing and private otherwise
     public void accessFirestoreUsersCollectionForUpdate() {
-        User user = new User(profileFullName.getText().toString(), profileEmail.getText().toString(), profilePhone.getText().toString(), profileDescription.getText().toString());
+        User user = new User(profileFullName.getText().toString(), profileEmail.getText().toString(), profilePhone.getText().toString(),
+                profileDescription.getText().toString(), createdActivitiesId, registeredActivitiesId);
         userManager.add(user, FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + userId).addOnSuccessListener(new OnSuccessListener() {
             @Override
             public void onSuccess(Object o) {

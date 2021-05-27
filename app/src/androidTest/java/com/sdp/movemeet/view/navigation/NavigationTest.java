@@ -4,6 +4,7 @@ import android.view.Gravity;
 
 import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
@@ -54,7 +55,9 @@ import static androidx.test.espresso.intent.matcher.ComponentNameMatchers.hasSho
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -142,7 +145,7 @@ public class NavigationTest {
             Thread.sleep(500);
         }catch(Exception e){}
 
-        onView(withId(R.id.nav_start_activity)).perform(click());
+        /*onView(withId(R.id.nav_start_activity)).perform(click());
 
         try{
             Thread.sleep(500);
@@ -154,7 +157,7 @@ public class NavigationTest {
 
         try{
             Thread.sleep(500);
-        }catch(Exception e){}
+        }catch(Exception e){}*/
 
         onView(withId(R.id.nav_list_activities)).perform(click());
 
@@ -170,7 +173,7 @@ public class NavigationTest {
             Thread.sleep(500);
         }catch(Exception e){}
 
-        onView(withId(R.id.nav_view)).perform(swipeUp());
+        /*onView(withId(R.id.nav_view)).perform(swipeUp());
         onView(withId(R.id.nav_chat)).perform(click());
 
         try{
@@ -184,7 +187,7 @@ public class NavigationTest {
 
         try{
             Thread.sleep(500);
-        }catch(Exception e){}
+        }catch(Exception e){}*/
 
         onView(withId(R.id.nav_view)).perform(swipeUp());
         onView(withId(R.id.nav_edit_profile)).perform(click());
@@ -210,6 +213,37 @@ public class NavigationTest {
         try{
             Thread.sleep(500);
         }catch(Exception e){}
+        Intents.release();
+
+    }
+
+    @Test
+    public void MainDialogBox() {
+
+        onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
+
+        try{
+            Thread.sleep(500);
+        }catch(Exception e){}
+
+        onView(withId(R.id.nav_home)).perform(click());
+
+        try{
+            Thread.sleep(500);
+        }catch(Exception e){}
+
+        Espresso.pressBack();
+
+        onView(withText("confirm exit ?")).check(matches(isDisplayed()));
+        onView(withText("No")).perform(click());
+        Intents.intended(allOf(hasComponent(MainActivity.class.getName())));
+
+
+        Espresso.pressBack();
+
+        onView(withText("confirm exit ?")).check(matches(isDisplayed()));
+        onView(withText("Yes")).perform(click());
+
         Intents.release();
 
     }

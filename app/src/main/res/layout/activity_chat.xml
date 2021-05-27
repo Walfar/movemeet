@@ -77,7 +77,7 @@
                 android:clickable="true"
                 android:layout_marginTop="3dp"
                 ads:fabSize="mini"
-                android:tint="@color/alice_blue"
+                android:tint="@color/accent"
                 android:src="@android:drawable/ic_menu_send"
                 android:focusable="true"
                 android:contentDescription="@string/activity_send_image_button"/>

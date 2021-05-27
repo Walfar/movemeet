@@ -1,8 +1,10 @@
 package com.sdp.movemeet.view.map;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -20,12 +22,24 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
+import com.sdp.movemeet.backend.serialization.ActivitySerializer;
+import com.sdp.movemeet.models.Activity;
+import com.sdp.movemeet.models.GPSPath;
 import com.sdp.movemeet.utility.LocationFetcher;
+import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
+import com.sdp.movemeet.view.home.LoginActivity;
+import com.sdp.movemeet.view.main.MainActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 import static com.sdp.movemeet.view.map.MainMapFragment.ZOOM_VALUE;
 
@@ -40,13 +54,24 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
         BTN_TEXT_RES.put(false, "Start");
     }
 
+    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    public static FirestoreActivityManager firestoreActivityManager = new FirestoreActivityManager(
+            FirestoreActivityManager.ACTIVITIES_COLLECTION,
+            new ActivitySerializer());
+
     public final static String MAP_NOT_READY_DESC = "Map isn't ready yet";
     public final static String MAP_READY_DESC = "Map is ready!";
 
     // ------------------ RECORDING VARIABLES -----------------------
+
+    private Activity activity;
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public boolean recording;
     private Button recButton;
+
+    private long time;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public ArrayList<LatLng> path;
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public SupportMapFragment supportMapFragment;
@@ -70,14 +95,20 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
         }
     };
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    public ArrayList<LatLng> path;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_g_p_s_recording);
+
+        Intent intent = getIntent();
+        activity = (Activity) intent.getSerializableExtra(ActivityDescriptionActivity.RECORDING_EXTRA_NAME);
+
+        if (AuthenticationInstanceProvider.getAuthenticationInstance().getCurrentUser() == null || activity == null) {
+            intent = new Intent(GPSRecordingActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         recording = false;
         recButton = findViewById(R.id.recordButton);
@@ -104,7 +135,30 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
         recording = !recording;
         recButton.setText(BTN_TEXT_RES.get(recording));
         if (recording) {
+            time = System.currentTimeMillis();
             path.clear();
+        } else {
+            time = System.currentTimeMillis() - time;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!recording) {
+            Intent intent = new Intent(GPSRecordingActivity.this, ActivityDescriptionActivity.class);
+
+            String id = AuthenticationInstanceProvider.getAuthenticationInstance().getCurrentUser().getUid();
+            activity.getParticipantRecordings().put(id, new GPSPath(path, time));
+            GPSRecordingActivity recordingActivity = this;
+            firestoreActivityManager.add(activity, null).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    recordingActivity.finish();
+                }
+            });
+
+            intent.putExtra(ActivityDescriptionActivity.DESCRIPTION_ACTIVITY_KEY, activity);
+            startActivity(intent);
         }
     }
 
