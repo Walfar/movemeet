@@ -57,6 +57,12 @@ public class EditProfileActivityDeleteAccountTest {
             fAuth.signOut();
         }
 
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+
         ActivityScenario scenario = ActivityScenario.launch(RegisterActivity.class);
 
         // Creating an account
@@ -103,8 +109,7 @@ public class EditProfileActivityDeleteAccountTest {
 
             clickDeleteAccountButton();
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.d("TAG", "deleteAccount Exception: " + e);
             e.printStackTrace();
         }

@@ -43,6 +43,12 @@ public class ProfileActivityTest {
             fAuth.signOut();
         }
 
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+
         // Logging in
         CountDownLatch latch = new CountDownLatch(1);
         fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
