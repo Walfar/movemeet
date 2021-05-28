@@ -45,8 +45,6 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseFirestore fStore;
     private BackendManager<User> userManager;
     private String userIDString, emailString, passwordString, fullNameString, phoneString;
-    private ArrayList<String> createdActivitiesId;
-    private ArrayList<String> registeredActivitiesId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        User user = new User(fullNameString, emailString, phoneString, "", createdActivitiesId, registeredActivitiesId);
+        User user = new User(fullNameString, emailString, phoneString, "", new ArrayList<>(), new ArrayList<>());
 
         registeringUserToFirebase(user);
 
@@ -124,8 +122,7 @@ public class RegisterActivity extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
                 } else {
-                    //Toast.makeText(RegisterActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    Toast.makeText(RegisterActivity.this, getString(R.string.register_toast_account_already_exists), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                 }
             }
