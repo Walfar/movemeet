@@ -44,7 +44,7 @@ public class ProfileActivityTest {
         }
 
         try {
-            Thread.sleep(1500);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             assert (false);
         }
@@ -65,7 +65,7 @@ public class ProfileActivityTest {
         });
 
         try {
-            Thread.sleep(1500);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             assert (false);
         }
