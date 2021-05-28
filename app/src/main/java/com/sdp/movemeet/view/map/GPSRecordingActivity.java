@@ -55,7 +55,7 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
     }
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
-    public static FirestoreActivityManager firestoreActivityManager = new FirestoreActivityManager(BackendInstanceProvider.getFirestoreInstance(),
+    public static FirestoreActivityManager firestoreActivityManager = new FirestoreActivityManager(
             FirestoreActivityManager.ACTIVITIES_COLLECTION,
             new ActivitySerializer());
 

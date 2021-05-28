@@ -14,6 +14,7 @@ import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.storage.StorageImageManager;
 import com.sdp.movemeet.models.Image;
+import com.sdp.movemeet.view.chat.ChatActivity;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -24,6 +25,10 @@ import com.squareup.picasso.Picasso;
 public class ImageHandler {
 
     private static final String TAG = "FirebaseInteraction";
+    public static final String USER_IMAGE_NAME = "profile.jpg";
+    public static final String ACTIVITY_IMAGE_NAME = "activityImage.jpg";
+    public static final String CHAT_IMAGE_NAME = "chatImage.jpg";
+    public static final String PATH_SEPARATOR = "/";
 
     private static BackendManager<Image> imageBackendManager;
 
@@ -84,4 +89,17 @@ public class ImageHandler {
         });
     }
 
+    /**
+     * Convert the Firebase Storage URL of the image into a path in Firebase Storage
+     *
+     * @param imageUrl URL of the image in Firebase Storage
+     * @return the converted image path
+     */
+    public static String convertURLtoPath(String imageUrl) {
+        int startIdx = imageUrl.indexOf(ChatActivity.CHATS_CHILD);
+        int endIdx = imageUrl.indexOf(ImageHandler.CHAT_IMAGE_NAME) + ImageHandler.CHAT_IMAGE_NAME.length();
+        String imagePath = imageUrl.substring(startIdx, endIdx);
+        imagePath = imagePath.replace("%2F", ImageHandler.PATH_SEPARATOR);
+        return imagePath;
+    }
 }

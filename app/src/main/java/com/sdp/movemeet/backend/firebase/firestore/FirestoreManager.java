@@ -1,11 +1,15 @@
 package com.sdp.movemeet.backend.firebase.firestore;
 
+import androidx.annotation.VisibleForTesting;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.FieldValue;
+import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.FirebaseObject;
 
@@ -18,22 +22,21 @@ import java.util.Map;
  */
 abstract class FirestoreManager<T extends FirebaseObject> implements BackendManager<T> {
 
-    private final BackendSerializer<T> serializer;
     private final FirebaseFirestore db;
+    private final BackendSerializer<T> serializer;
     private final String collection;
 
     /**
      * Creates a new FirestoreManager
      *
-     * @param db         the instance of Firebase Firestore to interact with.
      * @param collection the Firestore collection in which to perform operations
      * @param serializer a BackendSerializer capable of (de)serializing objects of type T
      */
-    public FirestoreManager(FirebaseFirestore db, String collection, BackendSerializer<T> serializer) {
-        if (db == null || collection == null || serializer == null)
+    public FirestoreManager(String collection, BackendSerializer<T> serializer) {
+        if (collection == null || serializer == null)
             throw new IllegalArgumentException();
 
-        this.db = db;
+        this.db = BackendInstanceProvider.getFirestoreInstance();
         this.serializer = serializer;
         this.collection = collection;
     }
@@ -71,10 +74,14 @@ abstract class FirestoreManager<T extends FirebaseObject> implements BackendMana
     }
 
     @Override
-    public Task<Void> update(String path, String field, String value) {
+    public Task<Void> update(String path, String field, String value, String method) {
         if (path == null || field == null || value == null) throw new IllegalArgumentException();
-
-        return db.document(path).update(field, FieldValue.arrayUnion(value));
+        switch (method) {
+            case "remove":
+                return db.document(path).update(field, FieldValue.arrayRemove(value));
+            default:
+                return db.document(path).update(field, FieldValue.arrayUnion(value));
+        }
     }
 
     @Override

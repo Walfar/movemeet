@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.models.Image;
 import com.sdp.movemeet.models.Message;
 import com.sdp.movemeet.utility.ImageHandler;
@@ -19,9 +20,10 @@ import java.text.SimpleDateFormat;
  */
 public class MessageViewHolder extends RecyclerView.ViewHolder {
 
+    private TextView messengerTextView;
     private TextView messageTextView;
     private ImageView messageImageView;
-    private TextView messengerTextView;
+    private ImageView userProfilePicture;
     private TextView messageTimeTextView;
 
     /**
@@ -31,9 +33,10 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
      */
     public MessageViewHolder(View v) {
         super(v);
+        messengerTextView = itemView.findViewById(R.id.message_user);
         messageTextView = itemView.findViewById(R.id.message_text);
         messageImageView = itemView.findViewById(R.id.messageImageView);
-        messengerTextView = itemView.findViewById(R.id.message_user);
+        userProfilePicture = itemView.findViewById(R.id.imageProfile);
         messageTimeTextView = itemView.findViewById(R.id.message_time);
     }
 
@@ -43,7 +46,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
      *
      * @param message Message object containing the message data
      */
-    public void bindMessage(Message message) {
+    public void bindMessage(Message message, ChatActivity chatActivity) {
         // Handling the view for the author of the message
         if (message.getMessageUser() != null) {
             messengerTextView.setText(message.getMessageUser());
@@ -61,11 +64,27 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             messageImageView.setVisibility(ImageView.VISIBLE);
             messageTextView.setVisibility(TextView.GONE);
         }
+        // Handling the ImageView of the user profile picture in any case
+        handlingUserProfilePicture(message);
         // Handling the date view of the message
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String messageTimeString = simpleDateFormat.format(Long.valueOf(message.getMessageTime()));
         messageTimeTextView.setText(messageTimeString);
         messageTimeTextView.setVisibility(TextView.VISIBLE);
+    }
+
+    /**
+     * Download user profile picture to be displayed in the {@link MessageViewHolder} from Firebase Storage
+     *
+     * @param message Message object containing the message data (in this case the message data of
+     *                interest is the URL of the image)
+     */
+    private void handlingUserProfilePicture(Message message) {
+        String userImagePath = FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR
+                + message.getMessageUserId() + ImageHandler.PATH_SEPARATOR + ImageHandler.USER_IMAGE_NAME;
+        Image image = new Image(null, userProfilePicture);
+        image.setDocumentPath(userImagePath);
+        ImageHandler.loadImage(image, null);
     }
 
     /**
@@ -83,11 +102,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
                     .load(message.getImageUrl())
                     .into(messageImageView);
         } else {
-            // Converting the URL of the image into a path in Firebase Storage
-            int startIdx = imageUrl.indexOf(ChatActivity.CHATS_CHILD);
-            int endIdx = imageUrl.indexOf(ChatActivity.CHAT_IMAGE_NAME) + ChatActivity.CHAT_IMAGE_NAME.length();
-            String imagePath = imageUrl.substring(startIdx, endIdx);
-            imagePath = imagePath.replace("%2F","/");
+            String imagePath = ImageHandler.convertURLtoPath(imageUrl);
             Image image = new Image(null, messageImageView);
             image.setDocumentPath(imagePath);
             ImageHandler.loadImage(image, null);

@@ -24,7 +24,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.R;
@@ -69,12 +68,13 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
 
-    public static final String ACTIVITY_IMAGE_NAME = "activityImage.jpg";
     private static final int REQUEST_IMAGE = 1000;
+
+    public static final String ACTIVITY_CHAT_ID = "ActivityChatId";
+    public static final String ACTIVITY_TITLE = "ActivityTitle";
 
     private TextView organizerView, numberParticipantsView, participantNamesView;
     private FirebaseAuth fAuth;
-    private FirebaseFirestore fStore;
     private FirebaseStorage fStorage;
     private StorageReference storageReference;
     private String userId, organizerId, imagePath;
@@ -101,9 +101,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             userId = fAuth.getCurrentUser().getUid();
             fStorage = BackendInstanceProvider.getStorageInstance();
             storageReference = fStorage.getReference();
-            fStore = BackendInstanceProvider.getFirestoreInstance();
-            userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
-            activityManager = new FirestoreActivityManager(fStore, FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
+            userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
+            activityManager = new FirestoreActivityManager(FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
         }
 
         if (enableNav) new Navigation(this, R.id.nav_home).createDrawer();
@@ -204,7 +203,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void createParticipantNumberView() {
         numberParticipantsView = (TextView) findViewById(R.id.activity_number_description);
         participantNamesView = (TextView) findViewById(R.id.activity_participants_description);
-        numberParticipantsView.setText(activity.getParticipantId().size() + "/" + activity.getNumberParticipant());
+        numberParticipantsView.setText(activity.getParticipantId().size() + ImageHandler.PATH_SEPARATOR + activity.getNumberParticipant());
         participantNamesView.setText(" participants");
     }
 
@@ -260,14 +259,14 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Syncing registered participant to Firebase Firestore (field array "participantId")
+     * Registering user to the activity document Firebase Firestore (field array "participantId")
      */
     public void registerToActivity(View v) {
-        if (userId != null) {
+        if (!activity.getParticipantId().contains(userId)) {
             try {
                 activity.addParticipantId(userId);
                 createParticipantNumberView();
-                activityManager.update(activity.getDocumentPath(), "participantId", userId).addOnSuccessListener(new OnSuccessListener() {
+                activityManager.update(activity.getDocumentPath(), "participantId", userId, "union").addOnSuccessListener(new OnSuccessListener() {
                     @Override
                     public void onSuccess(Object o) {
                         Log.d(TAG, "Participant registered in Firebase Firestore!");
@@ -281,6 +280,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                         //  Probable solution:
                         //  Implement a method in the OnResume of MainMapFragment to clear the list of activities
                         //  and then update them from Firebase Firestore (but this is not very optimal, because it takes time)
+                        //  --> OR: probably implement a kind of listener (as the one for the chat) that listens continuously to
+                        //  new entries in the database!
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -292,6 +293,41 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 Toast.makeText(ActivityDescriptionActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "An error occurred! Participant may be already registered in Firebase Firestore!");
             }
+        } else {
+            Toast.makeText(ActivityDescriptionActivity.this, "Already registered!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Unregistering user from the activity document on Firebase Firestore (field array "participantId")
+     */
+    public void unregisterFromActivity(View v) {
+        if (activity.getParticipantId().contains(userId)) {
+            if (!userId.equals(organizerId)) {
+                try {
+                    activity.removeParticipantId(userId);
+                    createParticipantNumberView();
+                    activityManager.update(activity.getDocumentPath(), "participantId", userId, "remove").addOnSuccessListener(new OnSuccessListener() {
+                        @Override
+                        public void onSuccess(Object o) {
+                            Log.d(TAG, "Participant unregistered from Firebase Firestore!");
+                            getParticipantNames();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "An error occurred! Participant may be already unregistered from Firebase Firestore! Exception: " + e.getMessage());
+                        }
+                    });
+                } catch (Exception e) {
+                    Toast.makeText(ActivityDescriptionActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "An error occurred! Participant may be already unregistered from Firebase Firestore!");
+                }
+            } else {
+                Toast.makeText(ActivityDescriptionActivity.this, "The organizer cannot unregister from his activity!", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(ActivityDescriptionActivity.this, "Not registered yet!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -302,10 +338,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (activity.getParticipantId().contains(userId)) {
             Intent intent = new Intent(ActivityDescriptionActivity.this, ChatActivity.class);
             String activityDocumentPath = activity.getDocumentPath();
-            activityDocumentPath = activityDocumentPath.replace("activities/", "");
-            intent.putExtra("ACTIVITY_CHAT_ID", activityDocumentPath);
+            activityDocumentPath = activityDocumentPath.replace(FirestoreActivityManager.ACTIVITIES_COLLECTION + ImageHandler.PATH_SEPARATOR, "");
+            intent.putExtra(ACTIVITY_CHAT_ID, activityDocumentPath);
             String activityTitle = activity.getTitle();
-            intent.putExtra("ACTIVITY_TITLE", activityTitle);
+            intent.putExtra(ACTIVITY_TITLE, activityTitle);
             startActivity(intent);
         } else {
             Toast.makeText(ActivityDescriptionActivity.this, "Please register if you want to access the chat!", Toast.LENGTH_SHORT).show();
@@ -346,7 +382,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      */
     private void getOrganizerName() {
         organizerId = activity.getOrganizerId();
-        Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + organizerId);
+        Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + organizerId);
         document.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -371,7 +407,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Fetch the name of a participant from Firebase Firestore using his userId
      */
     private void getCurrentParticipantName(String participantId) {
-        Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + participantId);
+        Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + participantId);
         document.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -398,7 +434,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private void loadActivityHeaderPicture() {
         activityImage = findViewById(R.id.activity_image_description);
         progressBar = findViewById(R.id.progress_bar_activity_description);
-        imagePath = activity.getDocumentPath() + "/" + ACTIVITY_IMAGE_NAME;
+        imagePath = activity.getDocumentPath() + ImageHandler.PATH_SEPARATOR + ImageHandler.ACTIVITY_IMAGE_NAME;
         Image image = new Image(null, activityImage);
         image.setDocumentPath(imagePath);
         ImageHandler.loadImage(image, progressBar);

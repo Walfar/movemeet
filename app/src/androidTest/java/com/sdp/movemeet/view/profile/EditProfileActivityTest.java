@@ -1,7 +1,5 @@
 package com.sdp.movemeet.view.profile;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -24,23 +22,32 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 
 public class EditProfileActivityTest {
 
-    public static final String TEST_FULL_NAME = "Anthony Guinchard";
-    public static final String TEST_EMAIL = "antho2@gmail.com";
-    public static final String TEST_PHONE = "000000000000";
-    public static final String TEST_DESCRIPTION = "";
+    private static final String TEST_FULL_NAME_INITIAL = "Antho1";
+    private static final String TEST_EMAIL_INITIAL = "antho1@gmail.com";
+    private static final String TEST_PASSWORD_INITIAL = "123456";
+    private static final String TEST_PHONE_INITIAL = "+41798841818";
+    private static final String TEST_DESCRIPTION_INITIAL = "Hi there!";
+
+    private static final String TEST_FULL_NAME = "Anthony Guinchard";
+    private static final String TEST_EMAIL = "antho2@gmail.com";
+    private static final String TEST_PHONE = "000000000000";
+    private static final String TEST_DESCRIPTION = "";
 
     private FirebaseAuth fAuth;
 
     @Before
     public void signIn(){
-        CountDownLatch latch = new CountDownLatch(1);
 
+        // Logging in
+        CountDownLatch latch = new CountDownLatch(1);
         fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
-        fAuth.signInWithEmailAndPassword("movemeet@gmail.com", "password").addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+        fAuth.signInWithEmailAndPassword(TEST_EMAIL_INITIAL, TEST_PASSWORD_INITIAL).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
                 latch.countDown();
@@ -53,12 +60,13 @@ public class EditProfileActivityTest {
         });
 
         try {
-            latch.await();
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
-            assert(false);
+            assert (false);
         }
 
         ActivityScenario scenario = ActivityScenario.launch(ProfileActivity.class);
+
     }
 
     @Test
@@ -67,8 +75,14 @@ public class EditProfileActivityTest {
         onView(withId(R.id.button_update_profile)).perform(click());
 
         try {
-            Thread.sleep(500);
+            Thread.sleep(1000);
         } catch(Exception e) {}
+
+        // TODO: but with an intent test between ProfileActivity and EditProfileActivity
+//        onView(withId(R.id.edit_text_edit_profile_full_name)).check(matches(withText(TEST_NAME_INITIAL)));
+//        onView(withId(R.id.edit_text_edit_profile_email)).check(matches(withText(TEST_EMAIL_INITIAL)));
+//        onView(withId(R.id.edit_text_edit_profile_phone)).check(matches(withText(String.valueOf(TEST_PHONE_INITIAL))));
+//        onView(withId(R.id.edit_text_edit_profile_description)).check(matches(withText(TEST_DESCRIPTION_INITIAL)));
 
         onView(ViewMatchers.withId(R.id.edit_text_edit_profile_full_name))
                 .perform(replaceText(TEST_FULL_NAME), closeSoftKeyboard()); // To solve the "Android :java.lang.SecurityException: Injecting to another application requires INJECT_EVENTS permission" issue --> cf.: "I solved using replaceText instead of TypeText action" (https://stackoverflow.com/questions/22163424/android-java-lang-securityexception-injecting-to-another-application-requires)
@@ -86,25 +100,25 @@ public class EditProfileActivityTest {
 
     }
 
-    @Test
-    public void testAccessFirestoreUsersCollectionForUpdate() {
-
-        try (ActivityScenario<EditProfileActivity> scenario = ActivityScenario.launch(EditProfileActivity.class)) {
-
-            scenario.onActivity(activity -> {
-                activity.accessFirestoreUsersCollectionForUpdate();
-            });
-
-        }
-        catch (Exception e) {
-            Log.d("TAG", "deleteAccount Exception: " + e);
-            e.printStackTrace();
-        }
-
-    }
 
     @After
-    public void SignOut() {
+    public void signOut() {
+
+        onView(ViewMatchers.withId(R.id.edit_text_edit_profile_full_name))
+                .perform(replaceText(TEST_FULL_NAME_INITIAL), closeSoftKeyboard()); // To solve the "Android :java.lang.SecurityException: Injecting to another application requires INJECT_EVENTS permission" issue --> cf.: "I solved using replaceText instead of TypeText action" (https://stackoverflow.com/questions/22163424/android-java-lang-securityexception-injecting-to-another-application-requires)
+
+        onView(ViewMatchers.withId(R.id.edit_text_edit_profile_email))
+                .perform(replaceText(TEST_EMAIL_INITIAL), closeSoftKeyboard());
+
+        onView(ViewMatchers.withId(R.id.edit_text_edit_profile_phone))
+                .perform(replaceText(TEST_PHONE_INITIAL), closeSoftKeyboard());
+
+        onView(ViewMatchers.withId(R.id.edit_text_edit_profile_description))
+                .perform(replaceText(TEST_DESCRIPTION_INITIAL), closeSoftKeyboard());
+
+        onView(withId(R.id.button_edit_profile_save_profile_data)).perform(click());
+
+
         fAuth.signOut();
     }
 
