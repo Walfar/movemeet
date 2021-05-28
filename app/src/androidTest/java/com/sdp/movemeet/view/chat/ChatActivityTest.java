@@ -50,6 +50,8 @@ public class ChatActivityTest {
 
     private FirebaseAuth fAuth;
     public static final String CHAT_MESSAGE = "my message";
+    private static final String TEST_EMAIL = "movemeet@gmail.com";
+    public static final String TEST_PASSWORD = "password";
 
     @Before
     public void signIn() {
@@ -57,7 +59,7 @@ public class ChatActivityTest {
 
         fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
 
-        fAuth.signInWithEmailAndPassword("movemeet@gmail.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        fAuth.signInWithEmailAndPassword(TEST_EMAIL, TEST_PASSWORD).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
@@ -160,6 +162,11 @@ public class ChatActivityTest {
 
     @After
     public void deleteAndSignOut() {
+
+        // TODO: delete the default_chat node in Firebase Realtime Database here
+        //ChatActivity.DEFAULT_CHAT_CHILD;
+
+
         fAuth.signOut();
     }
 }

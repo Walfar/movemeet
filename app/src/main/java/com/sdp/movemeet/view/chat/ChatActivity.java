@@ -29,7 +29,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -60,7 +59,7 @@ public class ChatActivity extends AppCompatActivity {
     private static final String TAG = "ChatActivity";
 
     public static final String CHATS_CHILD = "chats";
-    public static String GENERAL_CHAT_CHILD = "general_chat_new_format"; //"general_chat";
+    public static String DEFAULT_CHAT_CHILD = "default_chat";
     public static String CHAT_ROOM_ID;
 
     private static final int REQUEST_IMAGE = 2;
@@ -167,7 +166,7 @@ public class ChatActivity extends AppCompatActivity {
             // Database with the value of "activityChatId" in case it doesn't exist yet
             CHAT_ROOM_ID = activityChatId;
         } else {
-            CHAT_ROOM_ID = GENERAL_CHAT_CHILD; // default general chat room
+            CHAT_ROOM_ID = DEFAULT_CHAT_CHILD; // default general chat room
         }
         chatRoom = chatRef.child(CHAT_ROOM_ID);
         countMessagesInChatRoom();
