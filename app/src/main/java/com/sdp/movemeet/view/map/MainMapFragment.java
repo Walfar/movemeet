@@ -37,6 +37,7 @@ import com.sdp.movemeet.view.activity.UploadActivityActivity;
 
 import java.util.ArrayList;
 
+import static com.sdp.movemeet.utility.ActivitiesUpdater.activities;
 import static com.sdp.movemeet.utility.ActivitiesUpdater.getActivities;
 import static com.sdp.movemeet.utility.ActivitiesUpdater.updateListActivities;
 
@@ -69,6 +70,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
     private LocationFetcher locationFetcher;
 
+    //List of markers on the map. For the moment, used only for testing, but could be useful later (for specific markers ordering)
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public ArrayList<Marker> activitiesMarkers;
 
@@ -93,9 +95,6 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         first_callback = true;
         activitiesMarkers = new ArrayList<>();
 
-        //Update the local list of activities from the database. On success, we update the map by dispalying the activities markers
-        updateListActivities(o -> supportMapFragment.getMapAsync(googleMap -> displayNearbyMarkers()));
-
         user = fAuth.getCurrentUser();
 
         //When the location is updated, we change the current location value
@@ -108,9 +107,8 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
                 });
             }
         };
-        //Start fetching and updating the user's location in real time
+
         locationFetcher = new LocationFetcher(supportMapFragment, locationCallback);
-        locationFetcher.startLocationUpdates();
 
         //We also define the main OnMapReady callback for setting the map listeners
         supportMapFragment.getMapAsync(this);
@@ -207,10 +205,17 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onResume() {
         super.onResume();
-        //To avoid starting the updates two times in a row, we make sure this isn't the first launch of the view
+        //Everytime we resume the map, we clear the local list, because we will fetch it again. Obviously, it will need to be optimized later (if time).
+        activities.clear();
+        activitiesMarkers.clear();
+        //Fetch the updated list of activities from DB, and display the corresponding markers on map. This method is called on resume, so that the map is always updated
+        //TODO: if time, should be optimized (don't fetch whole, only outdated activities)
+        updateListActivities(o -> supportMapFragment.getMapAsync(googleMap -> displayNearbyMarkers()));
+
         locationFetcher.startLocationUpdates();
     }
 
@@ -234,6 +239,14 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         dc.setActivities(getActivities());
         dc.calculateDistances();
         dc.sort();
+
+        //We clear the map, because this method is called on resume (avoiding marker duplicates)
+        if (googleMap != null) {
+            googleMap.clear();
+            //To prevent the user marker from disappearing temporarly (until next location update), we instantly add it back to the map
+            if (positionMarker != null) googleMap.addMarker(new MarkerOptions().position(positionMarker.getPosition()));
+        }
+
         //For the moment, we get all activities as the distance calculator is not fully functional yet
         for (Activity act : dc.getTopActivities(getActivities().size())) {
             //We display all activities on the corresponding location and with the icon associated to the sport
