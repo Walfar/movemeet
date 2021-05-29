@@ -61,6 +61,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private static final String TAG = "ActDescActivity";
     public static final String DESCRIPTION_ACTIVITY_KEY = "activitykey";
 
+    public static final String PARTICIPANT_ID_FIELD = "participantId";
+    public static final String UPDATE_FIELD_UNION = "union";
+    public static final String UPDATE_FIELD_REMOVE = "remove";
+
     public static final String RECORDING_EXTRA_NAME = "gpsreckey";
     public static final String DISTANCE_UNIT = "m";
     public static final String SPEED_UNIT = "km/h";
@@ -266,7 +270,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             try {
                 activity.addParticipantId(userId);
                 createParticipantNumberView();
-                activityManager.update(activity.getDocumentPath(), "participantId", userId, "union").addOnSuccessListener(new OnSuccessListener() {
+                activityManager.update(activity.getDocumentPath(), PARTICIPANT_ID_FIELD, userId, UPDATE_FIELD_UNION).addOnSuccessListener(new OnSuccessListener() {
                     @Override
                     public void onSuccess(Object o) {
                         Log.d(TAG, "Participant registered in Firebase Firestore!");
@@ -307,7 +311,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 try {
                     activity.removeParticipantId(userId);
                     createParticipantNumberView();
-                    activityManager.update(activity.getDocumentPath(), "participantId", userId, "remove").addOnSuccessListener(new OnSuccessListener() {
+                    activityManager.update(activity.getDocumentPath(), PARTICIPANT_ID_FIELD, userId, UPDATE_FIELD_REMOVE).addOnSuccessListener(new OnSuccessListener() {
                         @Override
                         public void onSuccess(Object o) {
                             Log.d(TAG, "Participant unregistered from Firebase Firestore!");

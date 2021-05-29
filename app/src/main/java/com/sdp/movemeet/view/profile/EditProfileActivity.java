@@ -151,7 +151,6 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
 
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE) // making this method always public for testing and private otherwise
     public void accessFirestoreUsersCollectionForUpdate() {
         User user = new User(profileFullName.getText().toString(), profileEmail.getText().toString(), profilePhone.getText().toString(),
                 profileDescription.getText().toString(), createdActivitiesId, registeredActivitiesId);
@@ -172,7 +171,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
     public void deleteUserAccountCall(View view) {
+        //deleteOrganizedActivities();
         deleteUserAccount(userId, firebaseUser);
+    }
+
+    private void deleteOrganizedActivities() {
+
     }
 
 

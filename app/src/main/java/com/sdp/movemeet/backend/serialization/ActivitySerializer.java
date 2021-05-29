@@ -1,13 +1,21 @@
 package com.sdp.movemeet.backend.serialization;
 
 import android.os.Build;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
+import com.sdp.movemeet.backend.BackendManager;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.GPSPath;
 import com.sdp.movemeet.models.Sport;
+import com.sdp.movemeet.models.User;
+import com.sdp.movemeet.utility.ImageHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +25,9 @@ import java.util.Map;
  * A BackendSerializer capable of (de)serializing Activities
  */
 public class ActivitySerializer implements BackendSerializer<Activity> {
+
+    public static final String CREATED_ACTIVITY_FIELD = "createdActivity";
+    public static final String UPDATE_FIELD_UNION = "union";
 
     // The key used to access the activityId attribute of a serialized Activity
     public static final String ACTIVITY_KEY = "activityId";
@@ -118,6 +129,10 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
 
         if (activity.getParticipantRecordings() != null)
             data.put(GPS_RECORDINGS_KEY, activity.getParticipantRecordings());
+
+        // Intercepting the activity path to add it to the organizer Firebase Firestore document
+        BackendManager<User> userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
+        userManager.update(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + activity.getOrganizerId(), CREATED_ACTIVITY_FIELD, activity.getDocumentPath(), UPDATE_FIELD_UNION);
 
         return data;
     }
