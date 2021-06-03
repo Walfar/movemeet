@@ -42,10 +42,8 @@ public abstract class ActivityPictureCache {
         String fileName = directories[directories.length-1];
         String imagePath = path.substring(0, path.length() - fileName.length());
         Log.d(TAG, "saving image to cache");
-        Log.d(TAG, "filename is " + fileName);
-        Log.d(TAG, "imagePath is " + imagePath);
         String root = Environment.getExternalStorageDirectory().toString();
-        File imageDir = new File(root + "/" + imagePath);
+        File imageDir = new File(root + "/movemeet/" + imagePath);
         if (!imageDir.exists()) {
             imageDir.mkdirs();
         }

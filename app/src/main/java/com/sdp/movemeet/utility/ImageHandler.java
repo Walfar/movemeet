@@ -77,26 +77,25 @@ public abstract class ImageHandler {
             if (progressBar != null) {
                 progressBar.setVisibility(View.GONE);
             }
-        } else {
-            //Couldn't load from cache, try loading from Firebase
-            imageBackendManager = new StorageImageManager();
-            Task<Uri> document = (Task<Uri>) imageBackendManager.get(image.getDocumentPath());
-            document.addOnSuccessListener(uri -> {
-                Log.d(TAG, "Image successfully fetched from Firebase Storage!");
-                image.setImageUri(uri);
-                setImageBitMapAndSaveToCache(image, activity);
-                if (progressBar != null) {
-                    progressBar.setVisibility(View.GONE);
-                }
-            }).addOnFailureListener(exception -> {
-                Log.d(TAG, "Image could not be fetched from Firebase Storage! Don't panic!" +
-                        " It's probably because no images have been saved in Firebase Storage for" +
-                        " this document yet!");
-                if (progressBar != null) {
-                    progressBar.setVisibility(View.GONE);
-                }
-            });
         }
+        //Then load from database
+        imageBackendManager = new StorageImageManager();
+        Task<Uri> document = (Task<Uri>) imageBackendManager.get(image.getDocumentPath());
+        document.addOnSuccessListener(uri -> {
+            Log.d(TAG, "Image successfully fetched from Firebase Storage!");
+            image.setImageUri(uri);
+            setImageBitMapAndSaveToCache(image, activity);
+            if (progressBar != null) {
+                progressBar.setVisibility(View.GONE);
+            }
+        }).addOnFailureListener(exception -> {
+            Log.d(TAG, "Image could not be fetched from Firebase Storage! Don't panic!" +
+                    " It's probably because no images have been saved in Firebase Storage for" +
+                    " this document yet!");
+            if (progressBar != null) {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
     }
 
     /**
