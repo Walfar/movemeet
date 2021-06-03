@@ -1,5 +1,6 @@
 package com.sdp.movemeet.view.profile;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -184,36 +186,50 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
     public void deleteUserAccountCall(View view) {
-        deleteOrganizedActivities(createdActivitiesId, registeredActivitiesId, userId, firebaseUser);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete account");
+        builder.setMessage("Are you sure you want to delete your account?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                deleteOrganizedActivities();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+        builder.show();
     }
 
-    // TODO: check what happens when we try to delete an activity that doesn't exist!
-    //  --> if it works, the deleteAccountTest might work by specifying a "random" createdActivitiesId array!
 
     // 1) Delete organized activities and related chats
-    public void deleteOrganizedActivities(ArrayList<String> createdActivitiesId, ArrayList<String> registeredActivitiesId, String userId, FirebaseUser firebaseUser) {
+    public void deleteOrganizedActivities() {
         activityManager = new FirestoreActivityManager(FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
-        for (int i=0; i < createdActivitiesId.size(); i++) {
-            String createdActivityPath = createdActivitiesId.get(i);
-            // 1.1) Delete organized activities document in Firebase Firestore
-            activityManager.delete(createdActivityPath).addOnSuccessListener(new OnSuccessListener() {
-                @Override
-                public void onSuccess(Object o) {
-                    deleteActivitiesCounter += 1;
-                    Log.d(TAG, "deleteUserAccount - 1.1) ✅ Deleted organized activity n°: " + deleteActivitiesCounter);
-                    // 1.2) Delete chats related to organized activities
-                    deleteOrganizedActivityChat(createdActivityPath);
-                    if (deleteActivitiesCounter == createdActivitiesId.size()) {
-                        Log.d(TAG, "deleteUserAccount - 1) ✅ All the organized activities and related chats have been deleted! --> Going now to 'unregisterUserFromActivities'...");
-                        unregisterUserFromActivities(registeredActivitiesId, userId, firebaseUser);
+        if (createdActivitiesId.size() > 0) {
+            for (int i=0; i < createdActivitiesId.size(); i++) {
+                String createdActivityPath = createdActivitiesId.get(i);
+                // 1.1) Delete organized activities document in Firebase Firestore
+                activityManager.delete(createdActivityPath).addOnSuccessListener(new OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        deleteActivitiesCounter += 1;
+                        Log.d(TAG, "deleteUserAccount - 1.1) ✅ Deleted organized activity n°: " + deleteActivitiesCounter);
+                        // 1.2) Delete chats related to organized activities
+                        deleteOrganizedActivityChat(createdActivityPath);
+                        if (deleteActivitiesCounter == createdActivitiesId.size()) {
+                            Log.d(TAG, "deleteUserAccount - 1) ✅ All the organized activities and related chats have been deleted! --> Going now to 'unregisterUserFromActivities'...");
+                            unregisterUserFromActivities();
+                        }
                     }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d(TAG, "deleteUserAccount - 1) ❌ FAILED to delete organized activity n°: " + deleteActivitiesCounter);
-                }
-            });
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "deleteUserAccount - 1) ❌ FAILED to delete organized activity n°: " + deleteActivitiesCounter);
+                    }
+                });
+            }
+        } else {
+            unregisterUserFromActivities();
         }
     }
 
@@ -228,12 +244,14 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
     // 2) Remove user from activities he registered to (to free up his place for other participants)
-    public void unregisterUserFromActivities(ArrayList<String> registeredActivitiesId, String userId, FirebaseUser firebaseUser) {
-        for (int i=0; i<registeredActivitiesId.size(); i++) {
-            String registeredActivityPath = registeredActivitiesId.get(i);
-            activityManager.update(registeredActivityPath, ActivityDescriptionActivity.PARTICIPANT_ID_FIELD, userId, ActivityDescriptionActivity.UPDATE_FIELD_REMOVE);
+    public void unregisterUserFromActivities() {
+        if (registeredActivitiesId.size() > 0) {
+            for (int i=0; i<registeredActivitiesId.size(); i++) {
+                String registeredActivityPath = registeredActivitiesId.get(i);
+                activityManager.update(registeredActivityPath, ActivityDescriptionActivity.PARTICIPANT_ID_FIELD, userId, ActivityDescriptionActivity.UPDATE_FIELD_REMOVE);
+            }
+            Log.d(TAG, "✅ deleteUserAccount - 2) user successfully unregistered from all activities");
         }
-        Log.d(TAG, "✅ deleteUserAccount - 2) user successfully unregistered from all activities");
         deleteUserAccount(userId, firebaseUser);
     }
 
@@ -281,6 +299,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
     }
+
 
     // 3.2) Delete all the user data from Firebase Firestore
     public void deleteFirestoreData(String userId, FirebaseUser firebaseUser) {
