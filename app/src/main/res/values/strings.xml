@@ -27,7 +27,7 @@
     <string name="drawer_chat_group">Chat</string>
     <string name="drawer_chat">General Chat</string>
     <string name="drawer_settings_group">Settings</string>
-    <string name="drawer_edit_profile">Edit Profile</string>
+    <string name="drawer_edit_profile">Profile</string>
     <string name="drawer_logout_group">Logout</string>
     <string name="drawer_logout">Logout</string>
     <string name="drawer_home_group">Home</string>
