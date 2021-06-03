@@ -113,12 +113,12 @@ public class Navigation extends AppCompatActivity {
      * Starts ActivityList activity
      * @param view the View in which to start the activity
      */
-    public static void goToListOfActivities(View view) {
+    /*public static void goToListOfActivities(View view) {
         Context context = view.getContext();
         Intent intent = new Intent(context, ActivityListActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         context.startActivity(intent);
-    }
+    }*/
 
 
     /**
@@ -234,10 +234,10 @@ public class Navigation extends AppCompatActivity {
                     Navigation.goToChat(this.navigationView);
                     finish();
                     break;*/
-                case R.id.nav_list_activities:
+                /*case R.id.nav_list_activities:
                     Navigation.goToListOfActivities(this.navigationView);
                     finish();
-                    break;
+                    break;*/
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START);
