@@ -208,7 +208,7 @@ public class GPSRecordingActivityTest {
             locationFetcher.stopLocationUpdates();
         });
 
-        GPSRecordingActivity.firestoreActivityManager = new FirestoreActivityManager(BackendInstanceProvider.getFirestoreInstance(),
+        GPSRecordingActivity.firestoreActivityManager = new FirestoreActivityManager(
                 FirestoreActivityManager.ACTIVITIES_COLLECTION,
                 new ActivitySerializer());
         AuthenticationInstanceProvider.fAuth = FirebaseAuth.getInstance();

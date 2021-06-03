@@ -144,44 +144,6 @@ public class Navigation extends AppCompatActivity {
         }
     }
 
-    /*
-    /**
-     * Fills in the navigation bar's text fields with the user's information
-     * 0 = fullName
-     * 1 = email
-     * 2 = phone number
-     * 3 = description (optional)
-     * @param fields the fields to fill in, following the above order
-     * @return the array of updated TextViews
-     */
-    /*public static TextView[] fillNavigationProfileFields(TextView[] fields) {
-        FirebaseUser firebaseUser = AuthenticationInstanceProvider.getAuthenticationInstance().getCurrentUser();
-        if (firebaseUser != null) {
-            String userId = firebaseUser.getUid();
-            UserSerializer serializer = new UserSerializer();
-            FirestoreUserManager backendUserManager =
-                    new FirestoreUserManager(BackendInstanceProvider.getFirestoreInstance(),
-                            FirestoreUserManager.USERS_COLLECTION,
-                            serializer);
-            backendUserManager.getUserFromUid(userId).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        User user = serializer.deserialize(task.getResult().getData());
-
-                        fields[0].setText(user.getFullName());
-                        fields[1].setText(user.getEmail());
-                        fields[2].setText(user.getPhoneNumber());
-                        if (fields.length > 3 && user.getDescription() != null && !user.getDescription().isEmpty())
-                            fields[3].setText(user.getDescription());
-                    }
-                }
-            });
-        }
-
-        return fields;
-    }*/
-
     /**
      * Initializes a Navigation drawer, filling in all fields and setting up associated functions,
      * inside the activity passed to this object's constructor.

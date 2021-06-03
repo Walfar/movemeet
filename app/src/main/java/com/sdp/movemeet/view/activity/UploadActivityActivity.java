@@ -92,7 +92,6 @@ public class UploadActivityActivity extends AppCompatActivity {
         if (enableNav) new Navigation(this, R.id.nav_add_activity).createDrawer();
 
         activityBackendManager = new FirestoreActivityManager(
-                BackendInstanceProvider.getFirestoreInstance(),
                 FirestoreActivityManager.ACTIVITIES_COLLECTION,
                 new ActivitySerializer());
 

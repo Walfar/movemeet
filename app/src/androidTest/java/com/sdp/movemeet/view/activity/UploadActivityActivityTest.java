@@ -124,7 +124,6 @@ public class UploadActivityActivityTest {
         Task addTask = mock(Task.class);
 
         BackendManager<Activity> activityBackendManager = new FirestoreActivityManager(
-                BackendInstanceProvider.getFirestoreInstance(),
                 FirestoreActivityManager.ACTIVITIES_COLLECTION,
                 new ActivitySerializer()
         );
@@ -165,7 +164,6 @@ public class UploadActivityActivityTest {
         Task addTask = mock(Task.class);
 
         BackendManager<Activity> activityBackendManager = new FirestoreActivityManager(
-                BackendInstanceProvider.getFirestoreInstance(),
                 FirestoreActivityManager.ACTIVITIES_COLLECTION,
                 new ActivitySerializer()
         );
@@ -294,7 +292,6 @@ public class UploadActivityActivityTest {
         Task addTask = mock(Task.class);
 
         BackendManager<Activity> activityBackendManager = new FirestoreActivityManager(
-                BackendInstanceProvider.getFirestoreInstance(),
                 FirestoreActivityManager.ACTIVITIES_COLLECTION,
                 new ActivitySerializer()
         );

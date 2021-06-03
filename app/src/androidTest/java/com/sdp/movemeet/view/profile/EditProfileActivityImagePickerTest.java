@@ -121,7 +121,7 @@ public class EditProfileActivityImagePickerTest {
     }
 
     @After
-    public void SignOut() {
+    public void signOut() {
         fAuth.signOut();
     }
 

@@ -1,5 +1,6 @@
 package com.sdp.movemeet.view.profile;
 
+import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -15,16 +16,22 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 
-@RunWith(AndroidJUnit4.class)
-public class ProfileEditProfileIntentTest {
-
-    public static final String TEST_FULL_NAME = "Your Name";
-    public static final String TEST_EMAIL = "Your Email Address";
-    public static final String TEST_PHONE = "Phone Number";
-    public static final String TEST_DESCRIPTION = "Description";
-
-    @Rule
-    public ActivityScenarioRule<HomeScreenActivity> testRule = new ActivityScenarioRule<>(HomeScreenActivity.class);
+//@RunWith(AndroidJUnit4.class)
+//public class ProfileEditProfileIntentTest {
+//
+//    public static final String TEST_FULL_NAME = "Jules Dagon";
+//    public static final String TEST_EMAIL = "email.address@gmail.com";
+//    public static final String TEST_PHONE = "000111222";
+//    public static final String TEST_DESCRIPTION = "My description";
+//
+//    @Rule
+//    public ActivityScenarioRule<ProfileActivity> testRule = new ActivityScenarioRule<>(ProfileActivity.class);
+//
+//    @Test
+//    public void intentsIsFiredWhenUserClicksUpdateButton() {
+//        Intents.init();
+//
+//    }
 
 //    @Before
 //    public void signIn(){
@@ -52,8 +59,8 @@ public class ProfileEditProfileIntentTest {
 //    }
 
 
-    @Test
-    public void editProfileActivity_getsCorrectData() {
+//    @Test
+//    public void editProfileActivity_getsCorrectData() {
 //        Context context = ApplicationProvider.getApplicationContext();
 //        Intent intent = new Intent(context, EditProfileActivity.class);
 //        intent.putExtra(ProfileActivity.EXTRA_MESSAGE_FULL_NAME, TEST_FULL_NAME);
@@ -89,6 +96,6 @@ public class ProfileEditProfileIntentTest {
 //        }catch(Exception e){}
 //
 //        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
-    }
-
-}
+//    }
+//
+//}

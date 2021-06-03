@@ -10,13 +10,10 @@ import com.google.firebase.auth.FirebaseAuth;
  */
 public class AuthenticationInstanceProvider {
 
-    // The single instance to serve to all requests
-    public static final AuthenticationInstanceProvider instance = new AuthenticationInstanceProvider();
-
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static FirebaseAuth fAuth;
 
-    private AuthenticationInstanceProvider() {
+    private AuthenticationInstanceProvider () {
         fAuth = FirebaseAuth.getInstance();
     }
 
@@ -26,6 +23,9 @@ public class AuthenticationInstanceProvider {
      * @return a singleton FirebaseAuth instance
      */
     public static FirebaseAuth getAuthenticationInstance() {
-        return instance.fAuth;
+        if (fAuth == null) {
+            fAuth = FirebaseAuth.getInstance();
+        }
+        return fAuth;
     }
 }

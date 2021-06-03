@@ -32,7 +32,7 @@ public interface BackendManager<T> {
      * @param field the field to which the array corresponds in the backend.
      * @return a Task, the success of which determines the success of the operation.
      */
-    Task<?> update(String path, String field, String value);
+    Task<?> update(String path, String field, String value, String method);
 
     /**
      * Deletes an entry of T located at the specified path in the backend.

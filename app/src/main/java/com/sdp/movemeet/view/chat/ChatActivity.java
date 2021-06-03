@@ -45,6 +45,8 @@ import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Image;
 import com.sdp.movemeet.models.Message;
 import com.sdp.movemeet.models.User;
+import com.sdp.movemeet.utility.ImageHandler;
+import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.navigation.Navigation;
 
@@ -56,22 +58,20 @@ public class ChatActivity extends AppCompatActivity {
     public static boolean enableNav = true;
 
     private static final String TAG = "ChatActivity";
-    public static final String CHATS_CHILD = "chats";
 
+    public static final String CHATS_CHILD = "chats";
     public static String GENERAL_CHAT_CHILD = "general_chat_new_format"; //"general_chat";
     public static String CHAT_ROOM_ID;
 
     private static final int REQUEST_IMAGE = 2;
 
     public static final String LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif";
-    public static final String CHAT_IMAGE_NAME = "chatImage.jpg";
 
     public static final String noMessageText = "no messageText";
     public static final String noImageUrl = "no imageUrl";
 
     // Firebase instance variables
     private FirebaseAuth fAuth;
-    private FirebaseFirestore fStore;
     private FirebaseStorage fStorage;
     private StorageReference storageReference;
     private BackendManager<Image> imageBackendManager;
@@ -104,7 +104,7 @@ public class ChatActivity extends AppCompatActivity {
         fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         // The aim is to block any direct access to this page if the user is not logged in
         if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             finish();
         } else {
             userId = fAuth.getCurrentUser().getUid();
@@ -122,18 +122,14 @@ public class ChatActivity extends AppCompatActivity {
         btnSend = findViewById(R.id.button_send_message);
         initialChatWelcomeMessage = findViewById(R.id.initial_chat_welcome_message);
 
-        messageManager = new FirebaseDBMessageManager(database, new MessageSerializer());
+        messageManager = new FirebaseDBMessageManager(new MessageSerializer());
 
         fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         fStorage = BackendInstanceProvider.getStorageInstance();
-        fStore = BackendInstanceProvider.getFirestoreInstance();
+        storageReference = fStorage.getReference();
 
-        if (fAuth.getCurrentUser() != null) {
-            userId = fAuth.getCurrentUser().getUid();
-            storageReference = fStorage.getReference();
-            userManager = new FirestoreUserManager(fStore, FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
-            getRegisteredUserData();
-        }
+        userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
+        getRegisteredUserData();
 
         Intent data = getIntent();
         settingUpChatRoom(data);
@@ -164,8 +160,8 @@ public class ChatActivity extends AppCompatActivity {
 
     private void settingUpChatRoom(Intent data) {
         // Create a new chat room for the sport activity in case it deosn't yet exist
-        receivedActivityChatId = data.getStringExtra("ACTIVITY_CHAT_ID");
-        receivedActivityTitle = data.getStringExtra("ACTIVITY_TITLE");
+        receivedActivityChatId = data.getStringExtra(ActivityDescriptionActivity.ACTIVITY_CHAT_ID);
+        receivedActivityTitle = data.getStringExtra(ActivityDescriptionActivity.ACTIVITY_TITLE);
         if (receivedActivityChatId != null) {
             activityChatId = receivedActivityChatId;
             // Dynamically creating a new child under the branch "chats" in Firebase Realtime
@@ -248,7 +244,7 @@ public class ChatActivity extends AppCompatActivity {
         Message message = new Message(userName, messageText, userId, noImageUrl, Long.toString(new Date().getTime()));
         if (messageText.length() > 0) {
             Log.d(TAG, "message.getImageUrl(): " + message.getImageUrl());
-            messageManager.add(message, chatRoom.toString().split("/", 4)[3]);
+            messageManager.add(message, chatRoom.toString().split(ImageHandler.PATH_SEPARATOR, 4)[3]);
             messageInput.setText("");
         } else {
             Toast.makeText(getApplicationContext(), "Empty message.", Toast.LENGTH_SHORT).show();
@@ -292,7 +288,8 @@ public class ChatActivity extends AppCompatActivity {
                 }
                 String key = databaseReference.getKey();
                 imageBackendManager = new StorageImageManager();
-                imagePath = CHATS_CHILD + "/" + CHAT_ROOM_ID + "/" + key + "/" + CHAT_IMAGE_NAME;
+                imagePath = CHATS_CHILD + ImageHandler.PATH_SEPARATOR + CHAT_ROOM_ID + ImageHandler.PATH_SEPARATOR
+                        + key + ImageHandler.PATH_SEPARATOR + ImageHandler.CHAT_IMAGE_NAME;
                 Image image = new Image(uri, null);
                 image.setDocumentPath(imagePath); // probably useless
                 UploadTask uploadTask = (UploadTask) imageBackendManager.add(image, imagePath);
@@ -314,7 +311,7 @@ public class ChatActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Uri uri) {
                             Message imageMessage = new Message(fullNameString, noMessageText, userId, uri.toString(), Long.toString(new Date().getTime()));
-                            messageManager.set(imageMessage, chatRoom.toString().split("/", 4)[3] + "/" + key);
+                            messageManager.set(imageMessage, chatRoom.toString().split(ImageHandler.PATH_SEPARATOR, 4)[3] + ImageHandler.PATH_SEPARATOR + key);
                         }
                     });
             }
