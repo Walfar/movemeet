@@ -78,7 +78,7 @@ public class ChatActivityTest {
         ActivityScenario scenario = ActivityScenario.launch(ChatActivity.class);
     }
 
-    @Test
+    /*@Test
     public void chatActivityTest() {
         ChatActivity.enableNav = false;
 
@@ -90,7 +90,7 @@ public class ChatActivityTest {
 
         onView(withId(R.id.message_input_text)).perform(replaceText(CHAT_MESSAGE), closeSoftKeyboard());
 
-        onView(withId(R.id.button_send_message)).perform(click()); //.perform(click()); //.perform(forceDoubleClick());
+        onView(withId(R.id.button_send_message)).perform(forceDoubleClick()); //.perform(click()); //.perform(forceDoubleClick());
 
         try {
             Thread.sleep(1500);
@@ -121,7 +121,7 @@ public class ChatActivityTest {
         });
 
 
-    }
+    }*/
 
     public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
         return new TypeSafeMatcher<View>() {
