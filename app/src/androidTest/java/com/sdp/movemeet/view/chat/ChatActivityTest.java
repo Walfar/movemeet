@@ -34,6 +34,7 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.CountDownLatch;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -89,7 +90,7 @@ public class ChatActivityTest {
 
         onView(withId(R.id.message_input_text)).perform(replaceText(CHAT_MESSAGE), closeSoftKeyboard());
 
-        onView(withId(R.id.button_send_message)).perform(forceDoubleClick()); //.perform(click()); //.perform(forceDoubleClick());
+        onView(withId(R.id.button_send_message)).perform(click()); //.perform(click()); //.perform(forceDoubleClick());
 
         try {
             Thread.sleep(1500);
