@@ -81,21 +81,21 @@ public class ListViewAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 //code later
-                if (modellist.get(position).getTitle().equals("Abs Workout")){
+                if (modellist.get(position).getTitle().equals("Workout #1: Abs")){
                     //start NewActivity with title for actionbar and text for textview
                     Intent intent = new Intent(mContext, TextWorkoutActivity.class);
                     //intent.putExtra("actionBarTitle", "Battery");
                     intent.putExtra("contentTv", "15 Leg crunches\n6 Leg Raises\n");
                     mContext.startActivity(intent);
                 }
-                if (modellist.get(position).getTitle().equals("Leg Workout")){
+                if (modellist.get(position).getTitle().equals("Workout #2: Legs")){
                     //start NewActivity with title for actionbar and text for textview
                     Intent intent = new Intent(mContext, TextWorkoutActivity.class);
                     //intent.putExtra("actionBarTitle", "Cpu");
                     intent.putExtra("contentTv", "15 Leg crunches\n6 Leg Raises\n");
                     mContext.startActivity(intent);
                 }
-                if (modellist.get(position).getTitle().equals("Upper Body Workout")) {
+                if (modellist.get(position).getTitle().equals("Workout #3: Upper Body")) {
                     //start NewActivity with title for actionbar and text for textview
                     Intent intent = new Intent(mContext, TextWorkoutActivity.class);
                     //intent.putExtra("actionBarTitle", "Display");

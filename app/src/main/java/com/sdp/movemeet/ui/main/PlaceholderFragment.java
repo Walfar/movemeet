@@ -79,9 +79,9 @@ public class PlaceholderFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        title = new String[]{"Abs Workout", "Leg Workout", "Upper Body Workout"};
-        description = new String[]{"desc 1", "desc 2", "desc 3"};
-        icon = new int[]{R.drawable.icon_gym, R.drawable.icon_gym, R.drawable.icon_gym};
+        title = new String[]{"Workout #1: Abs", "Workout #2: Legs", "Workout #3: Upper Body"};
+        description = new String[]{"Get in shape for the summer!", "Pump your legs!", "Build some muscle!"};
+        icon = new int[]{R.drawable.ic_baseline_fitness_center_24, R.drawable.ic_baseline_fitness_center_24, R.drawable.ic_baseline_fitness_center_24};
 
         listView = view.findViewById(R.id.listView);
 
