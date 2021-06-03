@@ -62,6 +62,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     public static final String DESCRIPTION_ACTIVITY_KEY = "activitykey";
 
     public static final String PARTICIPANT_ID_FIELD = "participantId";
+    public static final String REGISTERED_ACTIVITY_FIELD = "registeredActivity";
     public static final String UPDATE_FIELD_UNION = "union";
     public static final String UPDATE_FIELD_REMOVE = "remove";
 
@@ -270,6 +271,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             try {
                 activity.addParticipantId(userId);
                 createParticipantNumberView();
+                // TODO: add activity ID to user in Firebase Firestore here
+                userManager.update(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + userId, REGISTERED_ACTIVITY_FIELD, activity.getDocumentPath(), UPDATE_FIELD_UNION);
                 activityManager.update(activity.getDocumentPath(), PARTICIPANT_ID_FIELD, userId, UPDATE_FIELD_UNION).addOnSuccessListener(new OnSuccessListener() {
                     @Override
                     public void onSuccess(Object o) {
@@ -311,6 +314,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 try {
                     activity.removeParticipantId(userId);
                     createParticipantNumberView();
+                    // TODO: remove activity ID from user in Firebase Firestore here
+                    userManager.update(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + userId, REGISTERED_ACTIVITY_FIELD, activity.getDocumentPath(), UPDATE_FIELD_REMOVE);
                     activityManager.update(activity.getDocumentPath(), PARTICIPANT_ID_FIELD, userId, UPDATE_FIELD_REMOVE).addOnSuccessListener(new OnSuccessListener() {
                         @Override
                         public void onSuccess(Object o) {

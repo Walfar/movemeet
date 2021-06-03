@@ -16,6 +16,7 @@ import com.sdp.movemeet.models.GPSPath;
 import com.sdp.movemeet.models.Sport;
 import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.utility.ImageHandler;
+import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +28,6 @@ import java.util.Map;
 public class ActivitySerializer implements BackendSerializer<Activity> {
 
     public static final String CREATED_ACTIVITY_FIELD = "createdActivity";
-    public static final String UPDATE_FIELD_UNION = "union";
 
     // The key used to access the activityId attribute of a serialized Activity
     public static final String ACTIVITY_KEY = "activityId";
@@ -132,7 +132,7 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
 
         // Intercepting the activity path to add it to the organizer Firebase Firestore document
         BackendManager<User> userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
-        userManager.update(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + activity.getOrganizerId(), CREATED_ACTIVITY_FIELD, activity.getDocumentPath(), UPDATE_FIELD_UNION);
+        userManager.update(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + activity.getOrganizerId(), CREATED_ACTIVITY_FIELD, activity.getDocumentPath(), ActivityDescriptionActivity.UPDATE_FIELD_UNION);
 
         return data;
     }

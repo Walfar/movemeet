@@ -1,39 +1,31 @@
 package com.sdp.movemeet.view.profile;
 
 import android.content.Intent;
-import android.net.Uri;
+
+import java.util.ArrayList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
-import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Image;
 import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.utility.ImageHandler;
-import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.navigation.Navigation;
 
@@ -41,15 +33,17 @@ public class ProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "ProfileActivity";
 
-    public static final String EXTRA_MESSAGE_FULL_NAME = "fullName";
-    public static final String EXTRA_MESSAGE_EMAIL = "email";
-    public static final String EXTRA_MESSAGE_PHONE = "phone";
-    public static final String EXTRA_MESSAGE_DESCRIPTION = "description";
+    public static final String EXTRA_FULL_NAME = "fullName";
+    public static final String EXTRA_EMAIL = "email";
+    public static final String EXTRA_PHONE = "phone";
+    public static final String EXTRA_DESCRIPTION = "description";
+    public static final String EXTRA_CREATED_ACTIVITIES = "createdActivities";
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
 
     private TextView fullName, email, phone, description;
+    private ArrayList<String> createdActivities;
 
     private String userId, userImagePath;
     private User user;
@@ -107,6 +101,7 @@ public class ProfileActivity extends AppCompatActivity {
                         email.setText(user.getEmail());
                         phone.setText(user.getPhoneNumber());
                         description.setText(user.getDescription());
+                        createdActivities = user.getCreatedActivitiesId();
                     } else {
                         Log.d(TAG, "No such document!");
                     }
@@ -120,10 +115,11 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void goToEditProfileActivity(View view) {
         Intent i = new Intent(ProfileActivity.this, EditProfileActivity.class);
-        i.putExtra(EXTRA_MESSAGE_FULL_NAME, fullName.getText().toString()); // key, value
-        i.putExtra(EXTRA_MESSAGE_EMAIL, email.getText().toString());
-        i.putExtra(EXTRA_MESSAGE_PHONE, phone.getText().toString());
-        i.putExtra(EXTRA_MESSAGE_DESCRIPTION, description.getText().toString());
+        i.putExtra(EXTRA_FULL_NAME, fullName.getText().toString()); // key, value
+        i.putExtra(EXTRA_EMAIL, email.getText().toString());
+        i.putExtra(EXTRA_PHONE, phone.getText().toString());
+        i.putExtra(EXTRA_DESCRIPTION, description.getText().toString());
+        i.putExtra(EXTRA_CREATED_ACTIVITIES, createdActivities);
         startActivity(i);
     }
 

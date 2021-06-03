@@ -1,6 +1,5 @@
 package com.sdp.movemeet.view.profile;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,13 +26,20 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
+import com.sdp.movemeet.backend.firebase.firebaseDB.FirebaseDBMessageManager;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
+import com.sdp.movemeet.backend.serialization.ActivitySerializer;
+import com.sdp.movemeet.backend.serialization.MessageSerializer;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Image;
+import com.sdp.movemeet.models.Message;
 import com.sdp.movemeet.models.User;
+import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.utility.ImageHandler;
+import com.sdp.movemeet.view.chat.ChatActivity;
 import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 
@@ -49,16 +55,18 @@ public class EditProfileActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private ImageButton saveBtn;
 
-    private String userId, fullNameString, emailString, phoneString, descriptionString, userImagePath;
+    private String userId, fullNameString, emailString, phoneString, descriptionString, userImagePath, createdActivityPath;
 
     private FirebaseAuth fAuth;
     private FirebaseUser firebaseUser;
     private BackendManager<User> userManager;
+    private BackendManager<Activity> activityManager;
+    private BackendManager<Message> chatManager;
     private FirebaseStorage fStorage;
-
 
     private ArrayList<String> createdActivitiesId;
     private ArrayList<String> registeredActivitiesId;
+    private int counter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,10 +83,11 @@ public class EditProfileActivity extends AppCompatActivity {
         }
 
         Intent data = getIntent();
-        fullNameString = data.getStringExtra(ProfileActivity.EXTRA_MESSAGE_FULL_NAME);
-        emailString = data.getStringExtra(ProfileActivity.EXTRA_MESSAGE_EMAIL);
-        phoneString = data.getStringExtra(ProfileActivity.EXTRA_MESSAGE_PHONE);
-        descriptionString = data.getStringExtra(ProfileActivity.EXTRA_MESSAGE_DESCRIPTION);
+        fullNameString = data.getStringExtra(ProfileActivity.EXTRA_FULL_NAME);
+        emailString = data.getStringExtra(ProfileActivity.EXTRA_EMAIL);
+        phoneString = data.getStringExtra(ProfileActivity.EXTRA_PHONE);
+        descriptionString = data.getStringExtra(ProfileActivity.EXTRA_DESCRIPTION);
+        createdActivitiesId = data.getStringArrayListExtra(ProfileActivity.EXTRA_CREATED_ACTIVITIES);
         assignViewsAndAdjustData();
 
         fStorage = BackendInstanceProvider.getStorageInstance();
@@ -118,7 +127,7 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE) {
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == android.app.Activity.RESULT_OK) {
                 Uri imageUri = data.getData();
                 Image image = new Image(imageUri, profileImage);
                 image.setDocumentPath(userImagePath);
@@ -171,12 +180,43 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
     public void deleteUserAccountCall(View view) {
-        //deleteOrganizedActivities();
-        deleteUserAccount(userId, firebaseUser);
+        deleteOrganizedActivities();
+        //deleteUserAccount(userId, firebaseUser);
     }
 
-    private void deleteOrganizedActivities() {
+    // TODO: check what happens when we try to delete an activity that doesn't exist!
+    //  --> if it works, the deleteAccountTest might work by specifying a "random" createdActivitiesId array!
 
+    // THIS WORKS ✅✅✅
+    private void deleteOrganizedActivities() {
+        activityManager = new FirestoreActivityManager(FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
+        for (int i=0; i < createdActivitiesId.size(); i++) {
+            createdActivityPath = createdActivitiesId.get(i);
+            activityManager.delete(createdActivityPath).addOnSuccessListener(new OnSuccessListener() {
+                @Override
+                public void onSuccess(Object o) {
+                    counter += 1;
+                    Log.d(TAG, "✅ deleteUserAccount - delete organized activity n°: " + counter);
+                    deleteOrganizedActivityChat(createdActivityPath);
+                    if (counter == createdActivitiesId.size()) {
+                        Log.d(TAG, "deleteUserAccount - All the organized activities have been deleted! --> going now to deleteUserAccount...");
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d(TAG, "❌ deleteUserAccount - FAIL to delete organized activity n°: " + counter);
+                }
+            });
+        }
+    }
+
+
+    // SEEMS TO WORK AS WELL!!! ✅✅✅
+    private void deleteOrganizedActivityChat(String activityPath) {
+        chatManager = new FirebaseDBMessageManager(new MessageSerializer());
+        String activityChatPath = activityPath.replace(FirestoreActivityManager.ACTIVITIES_COLLECTION, ChatActivity.CHATS_CHILD);
+        chatManager.delete(activityChatPath);
     }
 
 
@@ -203,6 +243,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
     public void deleteProfilePicture(StorageReference profileRef, String userId, FirebaseUser firebaseUser) {
+        // TODO: use Firebase Storage abstraction here!!!
         profileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
