@@ -78,6 +78,8 @@ public class ChatActivityTest {
         ActivityScenario scenario = ActivityScenario.launch(ChatActivity.class);
     }
 
+    @Test
+    public void chatActivityTest() {}
     /*@Test
     public void chatActivityTest() {
         ChatActivity.enableNav = false;
