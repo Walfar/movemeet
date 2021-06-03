@@ -38,12 +38,14 @@ public class ProfileActivity extends AppCompatActivity {
     public static final String EXTRA_PHONE = "phone";
     public static final String EXTRA_DESCRIPTION = "description";
     public static final String EXTRA_CREATED_ACTIVITIES = "createdActivities";
+    public static final String EXTRA_REGISTERED_ACTIVITIES = "registeredActivities";
 
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
 
     private TextView fullName, email, phone, description;
     private ArrayList<String> createdActivities;
+    private ArrayList<String> registeredActivities;
 
     private String userId, userImagePath;
     private User user;
@@ -102,6 +104,7 @@ public class ProfileActivity extends AppCompatActivity {
                         phone.setText(user.getPhoneNumber());
                         description.setText(user.getDescription());
                         createdActivities = user.getCreatedActivitiesId();
+                        registeredActivities = user.getRegisteredActivitiesId();
                     } else {
                         Log.d(TAG, "No such document!");
                     }
@@ -120,6 +123,7 @@ public class ProfileActivity extends AppCompatActivity {
         i.putExtra(EXTRA_PHONE, phone.getText().toString());
         i.putExtra(EXTRA_DESCRIPTION, description.getText().toString());
         i.putExtra(EXTRA_CREATED_ACTIVITIES, createdActivities);
+        i.putExtra(EXTRA_REGISTERED_ACTIVITIES, registeredActivities);
         startActivity(i);
     }
 

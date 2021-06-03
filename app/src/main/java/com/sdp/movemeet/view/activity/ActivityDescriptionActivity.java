@@ -271,8 +271,11 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             try {
                 activity.addParticipantId(userId);
                 createParticipantNumberView();
-                // TODO: add activity ID to user in Firebase Firestore here
+                // Adding the activity path to the array field "registeredActivity" of the Firebase
+                // Firestore user document
                 userManager.update(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + userId, REGISTERED_ACTIVITY_FIELD, activity.getDocumentPath(), UPDATE_FIELD_UNION);
+                // Adding the user ID to the array field "participantId" of the Firebase Firestore
+                // activity document
                 activityManager.update(activity.getDocumentPath(), PARTICIPANT_ID_FIELD, userId, UPDATE_FIELD_UNION).addOnSuccessListener(new OnSuccessListener() {
                     @Override
                     public void onSuccess(Object o) {
@@ -314,8 +317,11 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 try {
                     activity.removeParticipantId(userId);
                     createParticipantNumberView();
-                    // TODO: remove activity ID from user in Firebase Firestore here
+                    // Removing the activity path from the array field "registeredActivity" of the
+                    // Firebase Firestore user document
                     userManager.update(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + userId, REGISTERED_ACTIVITY_FIELD, activity.getDocumentPath(), UPDATE_FIELD_REMOVE);
+                    // Removing the user ID from the array field "participantId" of the Firebase
+                    // Firestore activity document
                     activityManager.update(activity.getDocumentPath(), PARTICIPANT_ID_FIELD, userId, UPDATE_FIELD_REMOVE).addOnSuccessListener(new OnSuccessListener() {
                         @Override
                         public void onSuccess(Object o) {
