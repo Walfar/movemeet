@@ -22,11 +22,6 @@
                     android:icon="@drawable/add"
                     android:title="@string/drawer_add_activity">
                 </item>
-                <item
-                    android:id="@+id/nav_list_activities"
-                    android:icon="@drawable/menu"
-                    android:title="@string/drawer_list_activities">
-                </item>
             </group>
         </menu>
     </item>
