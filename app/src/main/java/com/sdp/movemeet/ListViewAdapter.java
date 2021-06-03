@@ -84,22 +84,19 @@ public class ListViewAdapter extends BaseAdapter {
                 if (modellist.get(position).getTitle().equals("Workout #1: Abs")){
                     //start NewActivity with title for actionbar and text for textview
                     Intent intent = new Intent(mContext, TextWorkoutActivity.class);
-                    //intent.putExtra("actionBarTitle", "Battery");
-                    intent.putExtra("contentTv", "15 Leg crunches\n6 Leg Raises\n");
+                    intent.putExtra("contentTv", "\n• 15 Leg crunches\n• 6 Leg Raises\n");
                     mContext.startActivity(intent);
                 }
                 if (modellist.get(position).getTitle().equals("Workout #2: Legs")){
                     //start NewActivity with title for actionbar and text for textview
                     Intent intent = new Intent(mContext, TextWorkoutActivity.class);
-                    //intent.putExtra("actionBarTitle", "Cpu");
-                    intent.putExtra("contentTv", "15 Leg crunches\n6 Leg Raises\n");
+                    intent.putExtra("contentTv", "\n• 15 Leg crunches\n• 6 Leg Raises\n");
                     mContext.startActivity(intent);
                 }
                 if (modellist.get(position).getTitle().equals("Workout #3: Upper Body")) {
                     //start NewActivity with title for actionbar and text for textview
                     Intent intent = new Intent(mContext, TextWorkoutActivity.class);
-                    //intent.putExtra("actionBarTitle", "Display");
-                    intent.putExtra("contentTv", "15 Leg crunches\n6 Leg Raises\n");
+                    intent.putExtra("contentTv", "\n• 15 Leg crunches\n• 6 Leg Raises\n");
                     mContext.startActivity(intent);
                 }
             }
@@ -108,23 +105,4 @@ public class ListViewAdapter extends BaseAdapter {
 
         return view;
     }
-
-    //filter
-    public void filter(String charText){
-        charText = charText.toLowerCase(Locale.getDefault());
-        modellist.clear();
-        if (charText.length()==0){
-            modellist.addAll(arrayList);
-        }
-        else {
-            for (Model model : arrayList){
-                if (model.getTitle().toLowerCase(Locale.getDefault())
-                        .contains(charText)){
-                    modellist.add(model);
-                }
-            }
-        }
-        notifyDataSetChanged();
-    }
-
 }
