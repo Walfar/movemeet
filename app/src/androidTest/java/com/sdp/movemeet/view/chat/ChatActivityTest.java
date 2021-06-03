@@ -20,8 +20,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.BackendManager;
+import com.sdp.movemeet.backend.firebase.firebaseDB.FirebaseDBMessageManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
+import com.sdp.movemeet.backend.serialization.MessageSerializer;
+import com.sdp.movemeet.models.Message;
+import com.sdp.movemeet.utility.ImageHandler;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -53,6 +58,8 @@ public class ChatActivityTest {
     private static final String TEST_EMAIL = "movemeet@gmail.com";
     public static final String TEST_PASSWORD = "password";
 
+    private BackendManager<Message> messageManager;
+
     @Before
     public void signIn() {
         CountDownLatch latch = new CountDownLatch(1);
@@ -75,6 +82,16 @@ public class ChatActivityTest {
         } catch (InterruptedException e) {
             assert (false);
         }
+
+        // Removing all messages in "default_chat"
+        messageManager = new FirebaseDBMessageManager(new MessageSerializer());
+        messageManager.delete(ChatActivity.CHATS_CHILD + ImageHandler.PATH_SEPARATOR + ChatActivity.DEFAULT_CHAT_CHILD);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+
 
         ActivityScenario scenario = ActivityScenario.launch(ChatActivity.class);
     }

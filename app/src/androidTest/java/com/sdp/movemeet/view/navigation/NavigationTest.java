@@ -234,14 +234,14 @@ public class NavigationTest {
 
         Espresso.pressBack();
 
-        onView(withText("confirm exit ?")).check(matches(isDisplayed()));
+        onView(withText("Confirm exit ?")).check(matches(isDisplayed()));
         onView(withText("No")).perform(click());
         Intents.intended(allOf(hasComponent(MainActivity.class.getName())));
 
 
         Espresso.pressBack();
 
-        onView(withText("confirm exit ?")).check(matches(isDisplayed()));
+        onView(withText("Confirm exit ?")).check(matches(isDisplayed()));
         onView(withText("Yes")).perform(click());
 
         Intents.release();
