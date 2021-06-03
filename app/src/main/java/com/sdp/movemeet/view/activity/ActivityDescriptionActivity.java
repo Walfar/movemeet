@@ -142,7 +142,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         if (activity.getParticipantId().contains(userId)) {
             findViewById(R.id.activityRegisterDescription).setVisibility(View.GONE);
             findViewById(R.id.activityChatDescription).setVisibility(View.VISIBLE);
-           if (activity.getSport() == Sport.Running) {
+            findViewById(R.id.activityUnregisterDescription).setVisibility(View.VISIBLE);
+           if (activity.getSport() == Sport.Running || activity.getSport() == Sport.Trekking) {
             recButton.setVisibility(View.VISIBLE);
             recButton.setEnabled(true);
             if (userId != null && activity.getParticipantRecordings().containsKey(userId)) {
@@ -150,15 +151,17 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             } else {
                 findViewById(R.id.activity_description_stats_layout).setVisibility(View.GONE);
                 findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
+                recButton.setVisibility(View.GONE);
             }
         } else {
-            recButton.setVisibility(View.INVISIBLE);
+            recButton.setVisibility(View.GONE);
             recButton.setEnabled(false);
             findViewById(R.id.activity_description_stats_layout).setVisibility(View.GONE);
             findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
            }
         } else {
-            recButton.setVisibility(View.INVISIBLE);
+            recButton.setVisibility(View.GONE);
+            findViewById(R.id.activityUnregisterDescription).setVisibility(View.GONE);
             recButton.setEnabled(false);
             findViewById(R.id.activity_description_stats_layout).setVisibility(View.GONE);
             findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
@@ -212,7 +215,12 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      */
     private void createDescriptionView() {
         TextView descriptionView = (TextView) findViewById(R.id.activity_description_description);
-        descriptionView.setText(activity.getDescription());
+        if(activity.getDescription() == null || activity.getDescription().isEmpty()){
+            findViewById(R.id.activity_description_description).setVisibility(View.GONE);
+            findViewById(R.id.activity_description_text).setVisibility(View.GONE);
+        } else {
+            descriptionView.setText(activity.getDescription());
+        }
     }
 
     /**
