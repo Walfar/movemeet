@@ -37,6 +37,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -79,8 +80,6 @@ public class ChatActivityTest {
     }
 
     @Test
-    public void chatActivityTest() {}
-    /*@Test
     public void chatActivityTest() {
         ChatActivity.enableNav = false;
 
@@ -123,7 +122,7 @@ public class ChatActivityTest {
         });
 
 
-    }*/
+    }
 
     public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
         return new TypeSafeMatcher<View>() {
