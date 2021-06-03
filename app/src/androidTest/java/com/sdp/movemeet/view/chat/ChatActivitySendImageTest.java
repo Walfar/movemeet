@@ -1,37 +1,43 @@
-package com.sdp.movemeet.view.chat;
-
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.sdp.movemeet.R;
-import com.sdp.movemeet.view.profile.EditProfileActivity;
-
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import static junit.framework.Assert.assertTrue;
-
-public class ChatActivitySendImageTest {
-
-//    private StorageReference storageReference;
+//package com.sdp.movemeet.view.chat;
+//
+//import android.graphics.Bitmap;
+//import android.graphics.BitmapFactory;
+//import android.net.Uri;
+//
+//import androidx.test.espresso.intent.rule.IntentsTestRule;
+//
+//import com.google.firebase.storage.FirebaseStorage;
+//import com.google.firebase.storage.StorageReference;
+//import com.sdp.movemeet.R;
+//import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
+//import com.sdp.movemeet.view.profile.EditProfileActivity;
+//
+//import org.junit.Before;
+//import org.junit.Rule;
+//import org.junit.Test;
+//
+//import java.io.File;
+//import java.io.FileNotFoundException;
+//import java.io.FileOutputStream;
+//import java.io.IOException;
+//
+//import static junit.framework.Assert.assertTrue;
+//import static org.mockito.Mockito.mock;
+//
+//public class ChatActivitySendImageTest {
+//
+//    //private StorageReference storageReference;
+//
+//    private Uri DUMMY_IMAGE_URI = mock(Uri.class);
+//
+//
 //    @Rule
 //    public IntentsTestRule<ChatActivity> activityRule = new IntentsTestRule<>(ChatActivity.class);
 //
 //    @Before
 //    public void setUp() {
 //        // Setting up Firebase Storage
-//        storageReference = FirebaseStorage.getInstance().getReference();
+//        //storageReference = BackendInstanceProvider.getStorageInstance().getReference();
 //
 //        // Saving the mocked picked image
 //        savePickedImage();
@@ -45,9 +51,9 @@ public class ChatActivitySendImageTest {
 //        String fullNameString = "Anthony";
 //        String userId = "xzkBeYkTY7ccFIYY6F9OHDuup8I2";
 //        activityRule.getActivity().createTempMessage(imageUri, fullNameString, userId);
+//
+//
 //    }
-//
-//
 //
 //    private void savePickedImage() {
 //        Bitmap bm = BitmapFactory.decodeResource(activityRule.getActivity().getResources(), R.drawable.run_man);
@@ -67,5 +73,5 @@ public class ChatActivitySendImageTest {
 //            e.printStackTrace();
 //        }
 //    }
-
-}
+//
+//}

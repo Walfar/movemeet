@@ -289,7 +289,6 @@ public class ChatActivity extends AppCompatActivity {
                 imagePath = CHATS_CHILD + ImageHandler.PATH_SEPARATOR + CHAT_ROOM_ID + ImageHandler.PATH_SEPARATOR
                         + key + ImageHandler.PATH_SEPARATOR + ImageHandler.CHAT_IMAGE_NAME;
                 Image image = new Image(uri, null);
-                image.setDocumentPath(imagePath); // probably useless
                 UploadTask uploadTask = (UploadTask) imageBackendManager.add(image, imagePath);
                 putImageInStorage(uploadTask, key);
             }
