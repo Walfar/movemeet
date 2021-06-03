@@ -17,10 +17,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.movemeet.noActionBar">
+        <activity android:name=".view.TextWorkoutActivity"></activity>
         <activity
             android:name=".WorkoutActivity"
             android:label="@string/title_activity_workout"
-            android:theme="@style/Theme.movemeet.noActionBar.NoActionBar"></activity>
+            android:theme="@style/Theme.movemeet.noActionBar.NoActionBar" />
         <activity android:name=".view.activity.ActivityListActivity" />
         <activity android:name=".view.map.GPSRecordingActivity" />
         <activity
