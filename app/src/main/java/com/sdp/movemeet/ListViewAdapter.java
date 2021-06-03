@@ -81,39 +81,25 @@ public class ListViewAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 //code later
-                if (modellist.get(position).getTitle().equals("Battery")){
+                if (modellist.get(position).getTitle().equals("Abs Workout")){
                     //start NewActivity with title for actionbar and text for textview
                     Intent intent = new Intent(mContext, TextWorkoutActivity.class);
-                    intent.putExtra("actionBarTitle", "Battery");
-                    intent.putExtra("contentTv", "This is Battery detail...");
+                    //intent.putExtra("actionBarTitle", "Battery");
+                    intent.putExtra("contentTv", "15 Leg crunches\n6 Leg Raises\n");
                     mContext.startActivity(intent);
                 }
-                if (modellist.get(position).getTitle().equals("Cpu")){
+                if (modellist.get(position).getTitle().equals("Leg Workout")){
                     //start NewActivity with title for actionbar and text for textview
                     Intent intent = new Intent(mContext, TextWorkoutActivity.class);
-                    intent.putExtra("actionBarTitle", "Cpu");
-                    intent.putExtra("contentTv", "This is Cpu detail...");
+                    //intent.putExtra("actionBarTitle", "Cpu");
+                    intent.putExtra("contentTv", "15 Leg crunches\n6 Leg Raises\n");
                     mContext.startActivity(intent);
                 }
-                if (modellist.get(position).getTitle().equals("Display")){
+                if (modellist.get(position).getTitle().equals("Upper Body Workout")) {
                     //start NewActivity with title for actionbar and text for textview
                     Intent intent = new Intent(mContext, TextWorkoutActivity.class);
-                    intent.putExtra("actionBarTitle", "Display");
-                    intent.putExtra("contentTv", "This is Display detail...");
-                    mContext.startActivity(intent);
-                }
-                if (modellist.get(position).getTitle().equals("Memory")){
-                    //start NewActivity with title for actionbar and text for textview
-                    Intent intent = new Intent(mContext, TextWorkoutActivity.class);
-                    intent.putExtra("actionBarTitle", "Memory");
-                    intent.putExtra("contentTv", "This is Memory detail...");
-                    mContext.startActivity(intent);
-                }
-                if (modellist.get(position).getTitle().equals("Sensor")){
-                    //start NewActivity with title for actionbar and text for textview
-                    Intent intent = new Intent(mContext, TextWorkoutActivity.class);
-                    intent.putExtra("actionBarTitle", "Sensor");
-                    intent.putExtra("contentTv", "This is Sensor detail...");
+                    //intent.putExtra("actionBarTitle", "Display");
+                    intent.putExtra("contentTv", "15 Leg crunches\n6 Leg Raises\n");
                     mContext.startActivity(intent);
                 }
             }
