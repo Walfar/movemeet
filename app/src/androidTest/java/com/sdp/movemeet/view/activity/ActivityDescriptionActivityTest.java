@@ -145,7 +145,7 @@ public class ActivityDescriptionActivityTest {
     }
 
     @After
-    public void deleteAndSignOut() {
+    public void signOut() {
         fAuth.signOut();
     }
 

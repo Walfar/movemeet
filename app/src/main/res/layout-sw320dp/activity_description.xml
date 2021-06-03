@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".view.activity.ActivityDescriptionActivity"
-    tools:openDrawer="start">
+    tools:openDrawer="start"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -376,6 +377,15 @@
                             tools:ignore="ButtonStyle"
                             android:visibility="invisible" />
                     </LinearLayout>
+
+                    <Button
+                        android:id="@+id/activityUnregisterDescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/armata"
+                        android:onClick="unregisterFromActivity"
+                        android:text="@string/activity_description_unregister_button"
+                        tools:ignore="ButtonStyle" />
 
                 </LinearLayout>
             </ScrollView>

@@ -9,10 +9,9 @@ public class FirebaseDBMessageManager extends FirebaseDBManager<Message> {
     /**
      * Creates a new FirebaseDBManager.
      *
-     * @param db         the instance of FirebaseDatabase to interact with.
      * @param serializer a BackendSerializer capable of de(serializing) objects of type T
      */
-    public <T> FirebaseDBMessageManager(FirebaseDatabase db, BackendSerializer serializer) {
-        super(db, serializer);
+    public <T> FirebaseDBMessageManager(BackendSerializer serializer) {
+        super(serializer);
     }
 }
