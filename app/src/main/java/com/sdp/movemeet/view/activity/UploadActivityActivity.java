@@ -377,8 +377,8 @@ public class UploadActivityActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Activity successfully uploaded!",
                         Toast.LENGTH_SHORT).show();
                 //-----------Test
-                BackendManager<User> userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
-                userManager.update(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + toUpload.getOrganizerId(), CREATED_ACTIVITY_FIELD, toUpload.getDocumentPath(), ActivityDescriptionActivity.UPDATE_FIELD_UNION);
+                //BackendManager<User> userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
+                //userManager.update(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + toUpload.getOrganizerId(), CREATED_ACTIVITY_FIELD, toUpload.getDocumentPath(), ActivityDescriptionActivity.UPDATE_FIELD_UNION);
                 //---------------
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
