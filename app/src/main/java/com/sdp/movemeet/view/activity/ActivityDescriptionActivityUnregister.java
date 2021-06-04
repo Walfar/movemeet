@@ -64,6 +64,10 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
         createDurationView();
     }
 
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
+
     public void goToLogin(View v) {
         startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
         finish();
@@ -126,7 +130,7 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
         imagePath = activity.getDocumentPath() + ImageHandler.PATH_SEPARATOR + ImageHandler.ACTIVITY_IMAGE_NAME;
         Image image = new Image(null, activityImage);
         image.setDocumentPath(imagePath);
-        ImageHandler.loadImage(image, progressBar);
+        ImageHandler.loadImage(image, this);
     }
 
 }
