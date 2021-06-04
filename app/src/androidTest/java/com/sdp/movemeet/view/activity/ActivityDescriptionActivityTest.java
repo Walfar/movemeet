@@ -1,6 +1,7 @@
 package com.sdp.movemeet.view.activity;
 
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
@@ -11,12 +12,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.Sport;
+import com.sdp.movemeet.view.profile.EditProfileActivity;
 
 import org.junit.After;
 import org.junit.Before;
@@ -150,9 +153,29 @@ public class ActivityDescriptionActivityTest {
     @Test
     public void registerAndUnregisterFromActivity() {
 
+        try (ActivityScenario<ActivityDescriptionActivity> scenario = ActivityScenario.launch(ActivityDescriptionActivity.class)) {
+
+            scenario.onActivity(activityDescriptionActivity -> {
+                activity.setDocumentPath("activities/lTGOJB8PbU0Dx3SnntOs"); // Tricking with Antho3
+                String organizerId = "jOUwVmwQVFgYKdH35jYm50l9TJx1";
+                String userId = "fake_user_id";
+
+                // Register to activity
+                activityDescriptionActivity.registerToActivityImplementation(activity, userId);
+                // TODO: assert user successfully registered
+
+                // Unregister from activity
+                activityDescriptionActivity.unregisterFromActivityImplementation(activity, userId, organizerId);
+                // TODO: assert user successfully unregistered
+            });
+
+        } catch (Exception e) {
+            Log.d("TAG", "deleteAccount Exception: " + e);
+            e.printStackTrace();
+        }
+
     }
     //-------------Test
-
 
 
     @After

@@ -267,6 +267,11 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Registering user to the activity document Firebase Firestore (field array "participantId")
      */
     public void registerToActivity(View v) {
+        registerToActivityImplementation(activity, userId);
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public void registerToActivityImplementation(Activity activity, String userId) {
         if (!activity.getParticipantId().contains(userId)) {
             try {
                 activity.addParticipantId(userId);
@@ -312,6 +317,11 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Unregistering user from the activity document on Firebase Firestore (field array "participantId")
      */
     public void unregisterFromActivity(View v) {
+        unregisterFromActivityImplementation(activity, userId, organizerId);
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public void unregisterFromActivityImplementation(Activity activity, String userId, String organizerId) {
         if (activity.getParticipantId().contains(userId)) {
             if (!userId.equals(organizerId)) {
                 try {

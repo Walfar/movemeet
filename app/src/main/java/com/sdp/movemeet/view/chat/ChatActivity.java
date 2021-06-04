@@ -272,7 +272,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    // making this method always public for testing and private otherwise
+    // Making this method always public for testing and private otherwise
     public void createTempMessage(Uri uri, String fullNameString, String userId) {
         Message tempMessage = new Message(fullNameString, "Image loading...", userId, LOADING_IMAGE_URL, Long.toString(new Date().getTime()));
         // TODO: Make abstraction for this part of code below (Firebase Realtime Database abstraction) --> difficult!
