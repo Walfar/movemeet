@@ -7,12 +7,11 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager.widget.ViewPager;
 
 import com.sdp.movemeet.R;
 
@@ -24,15 +23,13 @@ import java.util.ArrayList;
 public class PlaceholderFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
-
-    private PageViewModel pageViewModel;
-
     ListView listView;
     ListViewAdapter adapter;
     String[] title;
     String[] description;
-    int [] icon;
+    int[] icon;
     ArrayList<Model> arrayList = new ArrayList<Model>();
+    private PageViewModel pageViewModel;
 
     public static PlaceholderFragment newInstance(int index) {
         PlaceholderFragment fragment = new PlaceholderFragment();
@@ -54,7 +51,6 @@ public class PlaceholderFragment extends Fragment {
     }
 
 
-
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
@@ -67,7 +63,6 @@ public class PlaceholderFragment extends Fragment {
                 textView.setText(s);
             }
         });
-
 
 
         return root;
@@ -88,7 +83,6 @@ public class PlaceholderFragment extends Fragment {
             Model model = new Model(title[i], description[i], icon[i]);
             arrayList.add(model);
         }
-
 
 
         listView = view.findViewById(R.id.listView);

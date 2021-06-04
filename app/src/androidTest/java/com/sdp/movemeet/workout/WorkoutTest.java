@@ -8,16 +8,13 @@ import com.sdp.movemeet.R;
 import com.sdp.movemeet.ui.workout.Model;
 import com.sdp.movemeet.ui.workout.TextWorkoutActivity;
 import com.sdp.movemeet.ui.workout.WorkoutActivity;
-import com.sdp.movemeet.view.profile.ProfileActivity;
+
+import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
 
 
 public class WorkoutTest {
@@ -43,8 +40,7 @@ public class WorkoutTest {
             onView(withId(R.id.tabs)).perform(click());
             onView(withId(R.id.listView)).perform(click());
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.d("TAG", "Error message: " + e);
             e.printStackTrace();
         }
@@ -62,8 +58,7 @@ public class WorkoutTest {
 
             //onView(withId(R.id.textView)).check(matches(withText(TEST_NAME)));
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.d("TAG", "Error message: " + e);
             e.printStackTrace();
         }

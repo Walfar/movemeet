@@ -31,11 +31,6 @@ public class ListViewAdapter extends BaseAdapter {
         this.arrayList.addAll(modellist);
     }
 
-    public class ViewHolder{
-        TextView mTitleTv, mDescTv;
-        ImageView mIconIv;
-    }
-
     @Override
     public int getCount() {
         return modellist.size();
@@ -54,7 +49,7 @@ public class ListViewAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View view, ViewGroup parent) {
         ViewHolder holder;
-        if (view==null){
+        if (view == null) {
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.row, null);
 
@@ -65,9 +60,8 @@ public class ListViewAdapter extends BaseAdapter {
 
             view.setTag(holder);
 
-        }
-        else {
-            holder = (ViewHolder)view.getTag();
+        } else {
+            holder = (ViewHolder) view.getTag();
         }
         //set the results into textviews
         holder.mTitleTv.setText(modellist.get(position).getTitle());
@@ -80,13 +74,13 @@ public class ListViewAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 //code later
-                if (modellist.get(position).getTitle().equals("Workout #1: Abs")){
+                if (modellist.get(position).getTitle().equals("Workout #1: Abs")) {
                     //start NewActivity with title for actionbar and text for textview
                     Intent intent = new Intent(mContext, TextWorkoutActivity.class);
-                        intent.putExtra("contentTv", "\n• 3x15 Leg crunches\n• 3x10 Dumbbell Crunches\n• 3x6 Leg Raises\n• 3x15 Hanging Knee Raises\n");
+                    intent.putExtra("contentTv", "\n• 3x15 Leg crunches\n• 3x10 Dumbbell Crunches\n• 3x6 Leg Raises\n• 3x15 Hanging Knee Raises\n");
                     mContext.startActivity(intent);
                 }
-                if (modellist.get(position).getTitle().equals("Workout #2: Legs")){
+                if (modellist.get(position).getTitle().equals("Workout #2: Legs")) {
                     //start NewActivity with title for actionbar and text for textview
                     Intent intent = new Intent(mContext, TextWorkoutActivity.class);
                     intent.putExtra("contentTv", "\n• 4x5 Barbell Squats\n• 4x25 Barbell Hip Thrust\n• 4x15 Leg Extension\n• 4x20 Standing Calf Raises\n");
@@ -103,5 +97,10 @@ public class ListViewAdapter extends BaseAdapter {
 
 
         return view;
+    }
+
+    public class ViewHolder {
+        TextView mTitleTv, mDescTv;
+        ImageView mIconIv;
     }
 }

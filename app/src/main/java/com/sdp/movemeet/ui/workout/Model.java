@@ -13,8 +13,6 @@ public class Model {
     }
 
     //getters
-
-
     public String getTitle() {
         return this.title;
     }

@@ -1,18 +1,15 @@
 package com.sdp.movemeet.ui.workout;
 
 import android.os.Bundle;
+import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
-
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.View;
-
 import com.sdp.movemeet.R;
-import com.sdp.movemeet.ui.workout.SectionsPagerAdapter;
 
 public class WorkoutActivity extends AppCompatActivity {
 
@@ -27,16 +24,10 @@ public class WorkoutActivity extends AppCompatActivity {
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
 
-        //ActionBar actionBar = getSupportActionBar();
-        //actionBar.setTitle("Items List");
-
         // add download here
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("Downloading");
-
-                // System.out.println()
 
                 switch (viewPager.getCurrentItem()) {
                     case 0: // text-based workouts
