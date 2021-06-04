@@ -26,7 +26,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.models.Activity;
@@ -36,16 +35,10 @@ import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivityUnregister;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
 
-import java.lang.annotation.Documented;
 import java.util.ArrayList;
-import java.util.EventListener;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
 
 import static com.sdp.movemeet.utility.ActivitiesUpdater.activities;
 import static com.sdp.movemeet.utility.ActivitiesUpdater.getActivities;
-import static com.sdp.movemeet.utility.ActivitiesUpdater.serializer;
 import static com.sdp.movemeet.utility.ActivitiesUpdater.updateListActivities;
 import static com.sdp.movemeet.utility.PermissionChecker.isLocationPermissionGranted;
 
@@ -78,9 +71,9 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
     private LocationFetcher locationFetcher;
 
-    //Map associating an activity to its marker on the map. Used for testing, and updating information smoothly when activity updated in db
+    //List of markers on the map. For the moment, used only for testing, but could be useful later (for specific markers ordering)
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    public Map<Activity, Marker> activitiesMarkerMap;
+    public ArrayList<Marker> activitiesMarkers;
 
     private static final String TAG = "Maps TAG";
 
@@ -102,7 +95,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
         //At creation, we haven't called the locationCallback yet
         first_callback = true;
-        activitiesMarkerMap = new HashMap<>();
+        activitiesMarkers = new ArrayList<>();
 
         user = fAuth.getCurrentUser();
 
@@ -119,17 +112,8 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
         locationFetcher = new LocationFetcher(supportMapFragment, locationCallback);
 
-
-        //Update the local list of activities from the database. On success, we update the map by displaying the activities markers.
-        updateListActivities(o -> displayNearbyMarkers(),(s, err) -> {
-            //When an activity is updated in the db, we "reset" the marker on the map (to have the correct updated tag)
-            Activity act = serializer.deserialize(s.getData());
-            if (activitiesMarkerMap.containsKey(act)) {
-                Marker marker = activitiesMarkerMap.get(act);
-                marker.remove();
-                addActivityMarkerToMap(act);
-            }
-        });
+        //Update the local list of activities from the database. On success, we update the map by dispalying the activities markers
+        updateListActivities(o -> displayNearbyMarkers());
 
         return view;
     }
@@ -225,25 +209,18 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         }
     }
 
-    private void addActivityMarkerToMap(Activity act) {
-        LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
-        MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
-        if (googleMap != null) {
-            Log.d(TAG, markerOpt.getTitle());
-            markerOpt.icon(BitmapDescriptorFactory.fromResource(chooseIcon(act)));
-            Log.d(TAG, markerOpt.getIcon().toString());
-            Marker marker = googleMap.addMarker(markerOpt);
-            //We store all the activity information inside the tag
-            marker.setTag(act);
-            activitiesMarkerMap.put(act, marker);
-        }
-    }
-
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onResume() {
         super.onResume();
+        //Everytime we resume the map, we clear the local list, because we will fetch it again. Obviously, it will need to be optimized later (if time).
+        activities.clear();
+        activitiesMarkers.clear();
+        //Fetch the updated list of activities from DB, and display the corresponding markers on map. This method is called on resume, so that the map is always updated
+        //TODO: if time, should be optimized (don't fetch whole, only outdated activities)
+        updateListActivities(o -> supportMapFragment.getMapAsync(googleMap -> displayNearbyMarkers()));
+
         locationFetcher.startLocationUpdates();
     }
 
@@ -288,7 +265,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
                 Log.d(TAG, markerOpt.getIcon().toString());
                 Marker marker = googleMap.addMarker(markerOpt);
                 marker.setTag(act);
-                activitiesMarkerMap.put(act, marker);
+                activitiesMarkers.add(marker);
             }
         }
     }
