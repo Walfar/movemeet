@@ -137,7 +137,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             findViewById(R.id.activityRegisterDescription).setVisibility(View.GONE);
             findViewById(R.id.activityChatDescription).setVisibility(View.VISIBLE);
             findViewById(R.id.activityUnregisterDescription).setVisibility(View.VISIBLE);
-            if (activity.getSport() == Sport.Running || activity.getSport() == Sport.Trekking) {
+            if (activity.getSport() == Sport.Running) {
                 recButton.setVisibility(View.VISIBLE);
                 recButton.setEnabled(true);
                 if (userId != null && activity.getParticipantRecordings().containsKey(userId)) {
@@ -145,7 +145,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 } else {
                     findViewById(R.id.activity_description_stats_layout).setVisibility(View.GONE);
                     findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
-                    recButton.setVisibility(View.GONE);
+                    recButton.setVisibility(View.VISIBLE);
                 }
             } else {
                 recButton.setVisibility(View.GONE);

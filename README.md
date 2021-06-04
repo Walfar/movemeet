@@ -26,3 +26,37 @@ This app was created for the CS-306 Software Development Project course.
 * Jean-Luc Stoupy
 * Mark Tropin
 * Kepler Warrington-Arroyo
+
+### The application
+Welcome to Movemeet !
+<img src="Application_screenshots/home.jpg"/>
+The application is very easy to use with a drop-down panel
+<img src="Application_screenshots/navigation_view.jpg"/>
+As you can see, there are a lot of activities in the world !
+<img src="Application_screenshots/main_world.jpg"/>
+But don't worry, there are also activities near you !
+<img src="Application_screenshots/main_zoom.jpg"/>
+You can add new activities everywhere :
+<img src="Application_screenshots/addActivity.jpg"/>
+Add a new activity is very easy
+<img src="Application_screenshots/new_activity.jpg"/>
+To enter the time of your choice, there is a very easy to use clock
+<img src="Application_screenshots/time.jpg"/>
+You can see beautiful activities :
+<img src="Application_screenshots/windsurf.jpg"/>
+If you like this activity, you can register
+<img src="Application_screenshots/register.jpg"/>
+But don't worry, you can unregister
+<img src="Application_screenshots/unregister_and_description.jpg"/>
+Let's see the chat !
+<img src="Application_screenshots/chat.jpg"/>
+Also for running activity, you can record your run :
+<img src="Application_screenshots/before_record.jpg"/>
+<img src="Application_screenshots/after_record.jpg"/>
+Now after this good run, we can check our profile 
+<img src="Application_screenshots/profile.jpg"/>
+We can modify this profile
+<img src="Application_screenshots/modify_profile.jpg"/>
+   
+   
+We hope you will like this application, and see you soon for an activity !
