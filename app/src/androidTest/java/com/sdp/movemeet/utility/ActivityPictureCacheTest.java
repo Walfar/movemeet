@@ -31,7 +31,7 @@ public class ActivityPictureCacheTest {
     public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
     @Test
-    public void cacheLoadsSamePictureAsSavedForSamePath()  {
+    public void cacheLoadsSamePictureAsSavedForSamePath() {
         activityRule.getScenario().onActivity(activity -> {
             Bitmap bitmap = BitmapFactory.decodeResource(activity.getResources(), R.drawable.ic_add_black_24dp);
             ActivityPictureCache.saveToCache(bitmap, "imagePath");

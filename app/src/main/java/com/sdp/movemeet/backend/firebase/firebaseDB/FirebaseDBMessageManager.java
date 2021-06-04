@@ -1,6 +1,5 @@
 package com.sdp.movemeet.backend.firebase.firebaseDB;
 
-import com.google.firebase.database.FirebaseDatabase;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.Message;
 

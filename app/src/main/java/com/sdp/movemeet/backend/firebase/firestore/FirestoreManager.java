@@ -1,13 +1,10 @@
 package com.sdp.movemeet.backend.firebase.firestore;
 
-import androidx.annotation.VisibleForTesting;
-
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.FieldValue;
-import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
@@ -18,6 +15,7 @@ import java.util.Map;
 /**
  * A class capable of interacting with a Firebase Firestore backend to perform storage operations
  * for objects of type T
+ *
  * @param <T> The type of object handled by this FirestoreManager
  */
 abstract class FirestoreManager<T extends FirebaseObject> implements BackendManager<T> {

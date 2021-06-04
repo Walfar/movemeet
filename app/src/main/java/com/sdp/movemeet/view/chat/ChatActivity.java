@@ -11,15 +11,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -109,7 +106,7 @@ public class ChatActivity extends AppCompatActivity {
             userId = fAuth.getCurrentUser().getUid();
         }
 
-        if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
+        if (enableNav) new Navigation(this, R.id.nav_home).createDrawer();
 
         // Initializing Firebase Realtime Database
         database = BackendInstanceProvider.getDatabaseInstance();
@@ -191,6 +188,7 @@ public class ChatActivity extends AppCompatActivity {
                     initialChatWelcomeMessage.setVisibility(View.VISIBLE);
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.v(TAG, "databaseError: " + databaseError);
@@ -273,9 +271,6 @@ public class ChatActivity extends AppCompatActivity {
     // Making this method always public for testing and private otherwise
     public void createTempMessage(Uri uri, String fullNameString, String userId) {
         Message tempMessage = new Message(fullNameString, "Image loading...", userId, LOADING_IMAGE_URL, Long.toString(new Date().getTime()));
-        // TODO: Make abstraction for this part of code below (Firebase Realtime Database abstraction) --> difficult!
-        //  Probably add another ".addTemp" method that can deal with "DatabaseReference.CompletionListener" ? --> ask Kepler for advice
-        //  Tried, but too difficult...
         chatRoom.push().setValue(tempMessage, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -303,10 +298,10 @@ public class ChatActivity extends AppCompatActivity {
                 // After the image loads, get a URI for the image
                 // and add it to the message.
                 taskSnapshot.getMetadata().getReference().getDownloadUrl()
-                    .addOnSuccessListener(uri -> {
-                        Message imageMessage = new Message(fullNameString, noMessageText, userId, uri.toString(), Long.toString(new Date().getTime()));
-                        messageManager.set(imageMessage, chatRoom.toString().split(ImageHandler.PATH_SEPARATOR, 4)[3] + ImageHandler.PATH_SEPARATOR + key);
-                    });
+                        .addOnSuccessListener(uri -> {
+                            Message imageMessage = new Message(fullNameString, noMessageText, userId, uri.toString(), Long.toString(new Date().getTime()));
+                            messageManager.set(imageMessage, chatRoom.toString().split(ImageHandler.PATH_SEPARATOR, 4)[3] + ImageHandler.PATH_SEPARATOR + key);
+                        });
             }
         }).addOnFailureListener(this, e -> Log.w(TAG, "Image upload task was not successful.", e));
 

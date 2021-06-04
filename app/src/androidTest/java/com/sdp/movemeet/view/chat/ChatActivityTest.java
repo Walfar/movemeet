@@ -39,10 +39,8 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.CountDownLatch;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -161,15 +159,18 @@ public class ChatActivityTest {
 
     public static ViewAction forceDoubleClick() {
         return new ViewAction() {
-            @Override public Matcher<View> getConstraints() {
+            @Override
+            public Matcher<View> getConstraints() {
                 return allOf(isClickable(), isEnabled(), isDisplayed());
             }
 
-            @Override public String getDescription() {
+            @Override
+            public String getDescription() {
                 return "force click";
             }
 
-            @Override public void perform(UiController uiController, View view) {
+            @Override
+            public void perform(UiController uiController, View view) {
                 view.performClick(); // perform click without checking view coordinates.
                 view.performClick();
                 uiController.loopMainThreadUntilIdle();

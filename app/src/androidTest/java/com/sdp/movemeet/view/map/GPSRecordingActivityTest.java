@@ -25,7 +25,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
-import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.Sport;
@@ -79,9 +78,6 @@ public class GPSRecordingActivityTest {
     public GrantPermissionRule CoarseLocationPermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_COARSE_LOCATION);
 
     Activity activity;
-
-    /*@Rule
-    public ActivityScenarioRule<GPSRecordingActivity> testRule = new ActivityScenarioRule<>(GPSRecordingActivity.class);*/
 
     private UiDevice device;
 

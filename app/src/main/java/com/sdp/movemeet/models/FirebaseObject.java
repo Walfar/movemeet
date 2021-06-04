@@ -12,6 +12,7 @@ public interface FirebaseObject {
 
     /**
      * Sets the path of the document in the backend.
+     *
      * @param path the path to attempt to set for the object.
      * @return the path of the object in the backend.
      */

@@ -5,14 +5,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
-import com.sdp.movemeet.models.FirebaseObject;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
+import com.sdp.movemeet.models.FirebaseObject;
 
 import java.util.Map;
 
 /**
  * A class capable of interacting with the Firebase Realtime Database to handle storage
  * operations on objects of type T
+ *
  * @param <T> The type of object handled by this FirebaseDBManager
  */
 abstract class FirebaseDBManager<T extends FirebaseObject> implements BackendManager<T> {
@@ -22,8 +23,9 @@ abstract class FirebaseDBManager<T extends FirebaseObject> implements BackendMan
 
     /**
      * Creates a new FirebaseDBManager.
+     *
      * @param serializer a BackendSerializer capable of de(serializing) objects of type T
-     * @param <T> the type of object handled by this FirebaseDBManager
+     * @param <T>        the type of object handled by this FirebaseDBManager
      */
     public <T> FirebaseDBManager(BackendSerializer serializer) {
         if (serializer == null) throw new IllegalArgumentException();
@@ -52,7 +54,9 @@ abstract class FirebaseDBManager<T extends FirebaseObject> implements BackendMan
     }
 
     @Override
-    public Task<?> update(String path, String field, String value, String method) { throw new UnsupportedOperationException(); }
+    public Task<?> update(String path, String field, String value, String method) {
+        throw new UnsupportedOperationException();
+    }
 
     @Override
     public Task<?> delete(String path) {

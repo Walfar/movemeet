@@ -16,7 +16,6 @@ import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.Sport;
 import com.sdp.movemeet.view.chat.ChatActivity;
-import com.sdp.movemeet.view.main.MainActivity;
 
 import org.junit.After;
 import org.junit.Before;
@@ -48,7 +47,9 @@ public class ActivityDescriptionActivityTest {
     private final static String DUMMY_ORGANISATOR_NAME = "Antho3";
     private final static String DUMMY_TITLE = "dummy_title";
     private final static int DUMMY_NUMBER_PARTICIPANT = 23;
-    private final static ArrayList<String> DUMMY_PARTICIPANTS_ID = new ArrayList<String>() {{add("jOUwVmwQVFgYKdH35jYm50l9TJx1");}}; // Antho3
+    private final static ArrayList<String> DUMMY_PARTICIPANTS_ID = new ArrayList<String>() {{
+        add("jOUwVmwQVFgYKdH35jYm50l9TJx1");
+    }}; // Antho3
     private final static double DUMMY_LONGITUDE = 2.45;
     private final static double DUMMY_LATITUDE = 3.697;
     private final static String DUMMY_DESCRIPTION = "description";
@@ -119,7 +120,6 @@ public class ActivityDescriptionActivityTest {
             assert (false);
         }
 
-        //intent_2 = new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra(ActivityDescriptionActivity.DESCRIPTION_ACTIVITY_KEY, activity_2);
     }
 
     @Test
@@ -129,7 +129,7 @@ public class ActivityDescriptionActivityTest {
     }
 
     @Test
-    public void testValue(){
+    public void testValue() {
         Intents.init();
         Intent intent = new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra(ActivityDescriptionActivity.DESCRIPTION_ACTIVITY_KEY, activity);
         ActivityScenario testRule = ActivityScenario.launch(intent);
@@ -141,14 +141,9 @@ public class ActivityDescriptionActivityTest {
         }
 
         onView(withId(R.id.activity_title_description)).check(matches(withText(DUMMY_TITLE)));
-        //onView(withId(R.id.activity_date_description)).check(matches(withText(String.valueOf(DUMMY_DATE))));
         onView(withId(R.id.activity_address_description)).check(matches(withText(DUMMY_ADDRESS)));
         onView(withId(R.id.activity_sport_description)).check(matches(withText(String.valueOf(DUMMY_SPORT))));
-        //onView(withId(R.id.activity_duration_description)).check(matches(withText(String.valueOf(DUMMY_DURATION))));
-
         onView(withId(R.id.activity_organisator_description)).check(matches(withText(DUMMY_ORGANISATOR_NAME))); // DUMMY_ORGANISATOR_ID
-        //onView(withId(R.id.activity_number_description)).check(matches(withText(String.valueOf(DUMMY_NUMBER_PARTICIPANT))));
-        //onView(withId(R.id.activity_participants_description)).check(matches(withText(String.valueOf(DUMMY_PARTICIPANTS_ID.size()))));
 
         try {
             Thread.sleep(1500);
@@ -165,8 +160,6 @@ public class ActivityDescriptionActivityTest {
         activity.addParticipantId(fAuth.getUid());
         Intent intent = new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra(ActivityDescriptionActivity.DESCRIPTION_ACTIVITY_KEY, activity);
         ActivityScenario testRule = ActivityScenario.launch(intent);
-
-        //onView(withId(R.id.activityRegisterDescription)).perform(scrollTo(), click());
 
         try {
             Thread.sleep(1500);

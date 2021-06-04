@@ -45,9 +45,6 @@ public class NavigationTest {
     private FirebaseDatabase mDatabase;
     private FirebaseAuth fAuth;
 
-    //@Rule
-    //public ActivityScenarioRule<MainActivity> testRule = new ActivityScenarioRule<>(MainActivity.class)
-
 
     @Before
     public void signIn() {
@@ -128,50 +125,6 @@ public class NavigationTest {
         } catch (Exception e) {
         }
 
-        /*onView(withId(R.id.nav_start_activity)).perform(click());
-
-        try{
-            Thread.sleep(500);
-        }catch(Exception e){}
-        intended(hasComponent(ActivityDescriptionActivity.class.getName()));
-
-        // Open Drawer to click on navigation.
-        onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
-
-        try{
-            Thread.sleep(500);
-        }catch(Exception e){}*/
-
-        /*onView(withId(R.id.nav_list_activities)).perform(click());
-
-        try{
-            Thread.sleep(500);
-        }catch(Exception e){}
-        intended(hasComponent(ActivityListActivity.class.getName()));
-
-        // Open Drawer to click on navigation.
-        onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
-
-        try{
-            Thread.sleep(500);
-        }catch(Exception e){}*/
-
-        /*onView(withId(R.id.nav_view)).perform(swipeUp());
-        onView(withId(R.id.nav_chat)).perform(click());
-
-        try{
-            Thread.sleep(500);
-        }catch(Exception e){}
-
-        intended(hasComponent(ChatActivity.class.getName()));
-
-        // Open Drawer to click on navigation.
-        onView(withId(R.id.drawer_layout)).check(matches(isClosed(Gravity.LEFT))).perform(DrawerActions.open());
-
-        try{
-            Thread.sleep(500);
-        }catch(Exception e){}*/
-
         onView(withId(R.id.nav_view)).perform(swipeUp());
         onView(withId(R.id.nav_edit_profile)).perform(click());
 
@@ -236,10 +189,5 @@ public class NavigationTest {
         Intents.release();
 
     }
-
-    /*@After
-    public void signOut() {
-        fAuth.signOut();
-    }*/
 }
 

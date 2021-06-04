@@ -1,12 +1,13 @@
 package com.sdp.movemeet.backend.firebase.storage;
 
 import android.net.Uri;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
-import com.sdp.movemeet.models.Image;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
+import com.sdp.movemeet.models.Image;
 
 public class StorageImageManager implements BackendManager<Image> {
 

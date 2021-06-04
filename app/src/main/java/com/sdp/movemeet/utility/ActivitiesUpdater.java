@@ -8,7 +8,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
@@ -22,7 +21,7 @@ import java.util.ArrayList;
  */
 public abstract class ActivitiesUpdater {
 
-    public static final BackendSerializer<Activity> serializer =new ActivitySerializer();
+    public static final BackendSerializer<Activity> serializer = new ActivitySerializer();
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static ArrayList<Activity> activities = new ArrayList<>();
@@ -45,7 +44,7 @@ public abstract class ActivitiesUpdater {
      * should happen (use onCompleteListener). If an activity is changed in the db, this change should also happen in local (use eventListener)
      *
      * @param onCompletelistener used as a callback when the activities are fetched from db
-     * @param eventListener used as a callback when an activitiy is updated in the db
+     * @param eventListener      used as a callback when an activitiy is updated in the db
      */
     public static void updateListActivities(OnCompleteListener onCompletelistener, EventListener<DocumentSnapshot> eventListener) {
         if (onCompletelistener == null || eventListener == null) {
@@ -62,10 +61,10 @@ public abstract class ActivitiesUpdater {
                 clearLocalActivities();
                 updateListActivities(onCompletelistener, eventListener);
                 return;
-            }
-            else if (size == 0) allDocTask.addOnCompleteListener(onCompletelistener);
-            //Either way, when updating the list, we update the map as well
-            else addActivitiesOnSuccess(firestoreActivityManager.getRecentlyAddedActivities(size), eventListener).addOnCompleteListener(onCompletelistener);
+            } else if (size == 0) allDocTask.addOnCompleteListener(onCompletelistener);
+                //Either way, when updating the list, we update the map as well
+            else
+                addActivitiesOnSuccess(firestoreActivityManager.getRecentlyAddedActivities(size), eventListener).addOnCompleteListener(onCompletelistener);
         });
     }
 

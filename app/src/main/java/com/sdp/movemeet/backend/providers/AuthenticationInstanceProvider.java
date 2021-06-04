@@ -13,7 +13,7 @@ public class AuthenticationInstanceProvider {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static FirebaseAuth fAuth;
 
-    private AuthenticationInstanceProvider () {
+    private AuthenticationInstanceProvider() {
         fAuth = FirebaseAuth.getInstance();
     }
 

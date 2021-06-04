@@ -10,10 +10,11 @@ import androidx.core.app.ActivityCompat;
 
 public abstract class PermissionChecker {
 
-    private static String TAG = "permission checker tag";
+    private static final String TAG = "permission checker tag";
 
     /**
      * Checks that permission for accessing GPS location is granted
+     *
      * @return true if permission is granted, false otherwise
      */
     public static boolean isLocationPermissionGranted(Activity activity) {
@@ -29,7 +30,7 @@ public abstract class PermissionChecker {
                 return true;
             } else {
                 Log.v(TAG, "Write permission is revoked");
-                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                 return false;
             }
         } else { //permission is automatically granted on sdk<23 upon installation

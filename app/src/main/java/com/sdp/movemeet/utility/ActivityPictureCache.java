@@ -1,29 +1,9 @@
 package com.sdp.movemeet.utility;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-
-import androidx.core.app.ActivityCompat;
-
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.storage.StorageTask;
-import com.sdp.movemeet.backend.firebase.storage.StorageImageManager;
-import com.sdp.movemeet.models.Image;
-import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,12 +14,13 @@ public abstract class ActivityPictureCache {
 
     /**
      * Saves a bitmap to the local cache, for the given path
+     *
      * @param bitmap bitmap to cache
-     * @param path path where we save the bitmap
+     * @param path   path where we save the bitmap
      */
     public static void saveToCache(Bitmap bitmap, String path) {
         String[] directories = path.split("/");
-        String fileName = directories[directories.length-1];
+        String fileName = directories[directories.length - 1];
         String imagePath = path.substring(0, path.length() - fileName.length());
         Log.d(TAG, "saving image to cache");
         String root = Environment.getExternalStorageDirectory().toString();
@@ -66,6 +47,7 @@ public abstract class ActivityPictureCache {
 
     /**
      * Loads a bitmap from the local cache, at the given path, or null if no such bitmap exists
+     *
      * @param path path in which the bitmap is stored
      * @return the bitmap loaded from cache, or null if failed to load
      */

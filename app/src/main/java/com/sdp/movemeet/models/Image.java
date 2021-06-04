@@ -4,9 +4,7 @@ import android.net.Uri;
 import android.widget.ImageView;
 
 /**
- *
  * This class represents a message
- *
  */
 public class Image implements FirebaseObject {
     private Uri imageUri;
