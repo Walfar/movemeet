@@ -64,7 +64,7 @@ public class ActivityDescriptionActivityTest {
     private FirebaseFirestore fStore;
     private StorageReference storageReference;
 
-    private Activity activity = new Activity(
+    private final Activity activity = new Activity(
             DUMMY_ACTIVITY_ID,
             DUMMY_ORGANISATOR_ID,
             DUMMY_TITLE,
@@ -81,7 +81,7 @@ public class ActivityDescriptionActivityTest {
             DUMMY_DATE
     );
 
-    private Activity activity_2 = new Activity(
+    private final Activity activity_2 = new Activity(
             DUMMY_ACTIVITY_ID,
             DUMMY_ORGANISATOR_ID,
             DUMMY_TITLE,
@@ -163,11 +163,11 @@ public class ActivityDescriptionActivityTest {
 
         //onView(withId(R.id.activityRegisterDescription)).perform(scrollTo(), click());
 
-        /*try {
+        try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
             assert (false);
-        }*/
+        }
 
         onView(withId(R.id.activityChatDescription)).perform(scrollTo(), click());
         Intents.intended(allOf(hasComponent(ChatActivity.class.getName())));

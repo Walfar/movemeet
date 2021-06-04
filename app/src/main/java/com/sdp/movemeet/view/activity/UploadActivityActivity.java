@@ -129,7 +129,7 @@ public class UploadActivityActivity extends AppCompatActivity {
 
     // Sport selection
     private void setupSportSpinner(Context context) {
-        spinner = (Spinner) findViewById(R.id.spinnerSportType);
+        spinner = findViewById(R.id.spinnerSportType);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter adapter = new ArrayAdapter(context,
                 android.R.layout.simple_spinner_dropdown_item, Sport.values());
@@ -153,7 +153,7 @@ public class UploadActivityActivity extends AppCompatActivity {
         showDate(year, month + 1, day);
     }
 
-    private DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
+    private final DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
             calendar.set(Calendar.YEAR, year);
@@ -175,7 +175,7 @@ public class UploadActivityActivity extends AppCompatActivity {
 
     // Start + end times selection
 
-    private TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener() {
+    private final TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -196,7 +196,7 @@ public class UploadActivityActivity extends AppCompatActivity {
 
     // End time picker
     // TODO: change to end time
-    private TimePickerDialog.OnTimeSetListener durationListener = new TimePickerDialog.OnTimeSetListener() {
+    private final TimePickerDialog.OnTimeSetListener durationListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             showDuration(hourOfDay, minute);

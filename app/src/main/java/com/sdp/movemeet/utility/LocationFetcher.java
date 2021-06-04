@@ -30,8 +30,8 @@ public class LocationFetcher {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public FusedLocationProviderClient fusedLocationProviderClient;
 
-    private SupportMapFragment supportMapFragment;
-    private LocationCallback locationCallback;
+    private final SupportMapFragment supportMapFragment;
+    private final LocationCallback locationCallback;
 
     //Boolean that indicates if the location is being periodically updated
     private boolean updatingLocation;

@@ -37,8 +37,8 @@ import com.sdp.movemeet.view.profile.ProfileActivity;
 
 public class Navigation extends AppCompatActivity {
 
-    private Activity activity;
-    private int activityId;
+    private final Activity activity;
+    private final int activityId;
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public static boolean profileField = true;
 
