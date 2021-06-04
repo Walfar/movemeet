@@ -50,6 +50,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import static com.sdp.movemeet.utility.ActivityPictureCache.loadFromCache;
+import static com.sdp.movemeet.utility.PermissionChecker.isStorageReadPermissionGranted;
 
 /***
  * Activity for show the description of an activity. Informations about an activity are : sport, date and time, time estimate, organizer,
@@ -461,7 +462,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Launch the Gallery to select a header picture for the activity
      */
     public void changeActivityPicture(View view) {
-        if (userId.equals(organizerId)) {
+        if (userId.equals(organizerId) && isStorageReadPermissionGranted(this)) {
             Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(openGalleryIntent, REQUEST_IMAGE);
         } else {

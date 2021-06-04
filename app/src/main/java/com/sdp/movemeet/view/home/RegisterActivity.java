@@ -113,12 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onSuccess(Object o) {
                             Log.d(TAG, "onSuccess: user profile is created for " + userIDString);
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d(TAG, "onFailure: " + e.toString());
-                        }
-                    });
+                    }).addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e.toString()));
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
                 } else {

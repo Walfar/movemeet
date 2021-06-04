@@ -49,6 +49,8 @@ import com.sdp.movemeet.view.home.LoginActivity;
 
 import java.util.ArrayList;
 
+import static com.sdp.movemeet.utility.PermissionChecker.isStorageReadPermissionGranted;
+
 public class EditProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "EditProfileActivity";
@@ -125,8 +127,10 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
     public void changeProfilePicture(View view) {
-        Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(openGalleryIntent, REQUEST_IMAGE);
+        if (isStorageReadPermissionGranted(this)) {
+            Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(openGalleryIntent, REQUEST_IMAGE);
+        }
     }
 
     public ProgressBar getProgressBar() {

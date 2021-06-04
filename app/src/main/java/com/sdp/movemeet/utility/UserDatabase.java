@@ -24,56 +24,23 @@ public class UserDatabase {
             readFromFile();
         } else {
             Files.createFile(new File(filename).toPath());
-            /*
-            try {
-                Files.createFile(new File(filename).toPath());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-             */
         }
     }
 
     public void readFromFile() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         users = mapper.readValue(new File(filename), Map.class);
-        /*
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            users = mapper.readValue(new File(filename), Map.class);
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found. Change filename.");
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-         */
     }
 
     public void writeToFile() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(new File(filename), users);
-        /*
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.writeValue(new File(filename), users);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-         */
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void cleanFile() throws IOException {
         File db = new File(filename);
         Files.deleteIfExists(db.toPath());
-        /*
-        try {
-            Files.deleteIfExists(db.toPath());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-         */
     }
 
     public void addUser(String email, String password) throws IOException {

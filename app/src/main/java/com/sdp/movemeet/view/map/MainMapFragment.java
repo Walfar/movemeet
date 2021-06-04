@@ -35,10 +35,12 @@ import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivityUnregister;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.sdp.movemeet.utility.ActivitiesUpdater.activities;
 import static com.sdp.movemeet.utility.ActivitiesUpdater.getActivities;
+import static com.sdp.movemeet.utility.ActivitiesUpdater.serializer;
 import static com.sdp.movemeet.utility.ActivitiesUpdater.updateListActivities;
 import static com.sdp.movemeet.utility.PermissionChecker.isLocationPermissionGranted;
 
@@ -71,16 +73,16 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
     private LocationFetcher locationFetcher;
 
-    //List of markers on the map. For the moment, used only for testing, but could be useful later (for specific markers ordering)
+    //Map associating an activity id to its marker on the map. Used for testing, and updating information smoothly when activity updated in db
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    public ArrayList<Marker> activitiesMarkers;
+    public Map<String, Marker> activitiesMarkerMap;
 
     private static final String TAG = "Maps TAG";
 
     //Zoom value to animate camera on user at launch of the map
     public static final float ZOOM_VALUE = 15.0f;
 
-    //Boolean used to check if the callback is called for the first time. Useful, to avoid repeating certain actions (e.g zooming on user's location)
+    //Boolean used to check if the callback is called for the first time. Useful to avoid repeating certain actions (e.g zooming on user's location)
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public boolean first_callback;
 
@@ -95,7 +97,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
         //At creation, we haven't called the locationCallback yet
         first_callback = true;
-        activitiesMarkers = new ArrayList<>();
+        activitiesMarkerMap = new HashMap<>();
 
         user = fAuth.getCurrentUser();
 
@@ -112,8 +114,18 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
         locationFetcher = new LocationFetcher(supportMapFragment, locationCallback);
 
-        //Update the local list of activities from the database. On success, we update the map by dispalying the activities markers
-        updateListActivities(o -> displayNearbyMarkers());
+
+        //Update the local list of activities from the database. On success, we update the map by displaying the activities markers.
+        updateListActivities(o -> displayNearbyMarkers(),(s, err) -> {
+            //When an activity is updated in the db, we "reset" the marker on the map (to have the correct updated tag)
+            Activity act = serializer.deserialize(s.getData());
+            String activityId = act.getActivityId();
+            if (activitiesMarkerMap.containsKey(activityId)) {
+                Marker marker = activitiesMarkerMap.get(activityId);
+                if (marker != null) marker.remove();
+                supportMapFragment.getMapAsync(o -> addActivityMarkerToMap(act));
+            }
+        });
 
         return view;
     }
@@ -122,16 +134,13 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "map is ready");
         this.googleMap = googleMap;
-
         if (googleMap != null) {
             googleMap.setOnMarkerClickListener(this);
             googleMap.setOnInfoWindowClickListener(this);
             googleMap.setOnMapClickListener(this::onMapClick);
         }
-
         //In the case where the user didn't grant permission, we set a default location
         if (!isLocationPermissionGranted(getActivity())) currentLocation = locationFetcher.getDefaultLocation();
-
     }
 
     /**
@@ -214,13 +223,6 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     @Override
     public void onResume() {
         super.onResume();
-        //Everytime we resume the map, we clear the local list, because we will fetch it again. Obviously, it will need to be optimized later (if time).
-        activities.clear();
-        activitiesMarkers.clear();
-        //Fetch the updated list of activities from DB, and display the corresponding markers on map. This method is called on resume, so that the map is always updated
-        //TODO: if time, should be optimized (don't fetch whole, only outdated activities)
-        updateListActivities(o -> supportMapFragment.getMapAsync(googleMap -> displayNearbyMarkers()));
-
         locationFetcher.startLocationUpdates();
     }
 
@@ -252,21 +254,24 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
             //To prevent the user marker from disappearing temporarly (until next location update), we instantly add it back to the map
             if (positionMarker != null) googleMap.addMarker(new MarkerOptions().position(positionMarker.getPosition()));
         }
-
         //For the moment, we get all activities as the distance calculator is not fully functional yet
         for (Activity act : dc.getTopActivities(getActivities().size())) {
-            //We display all activities on the corresponding location and with the icon associated to the sport
-            LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
+            addActivityMarkerToMap(act);
+        }
+    }
 
-            MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
-            if (googleMap != null) {
-                Log.d(TAG, markerOpt.getTitle());
-                markerOpt.icon(BitmapDescriptorFactory.fromResource(chooseIcon(act)));
-                Log.d(TAG, markerOpt.getIcon().toString());
-                Marker marker = googleMap.addMarker(markerOpt);
-                marker.setTag(act);
-                activitiesMarkers.add(marker);
-            }
+    private void addActivityMarkerToMap(Activity act) {
+        LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
+        MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
+        if (googleMap != null) {
+            Log.d(TAG, markerOpt.getTitle());
+            markerOpt.icon(BitmapDescriptorFactory.fromResource(chooseIcon(act)));
+            Log.d(TAG, markerOpt.getIcon().toString());
+            Marker marker = googleMap.addMarker(markerOpt);
+            Log.d(TAG, "marker was added with number of registered " + act.getParticipantId());
+            //We store all the activity information inside the tag
+            marker.setTag(act);
+            activitiesMarkerMap.put(act.getActivityId(), marker);
         }
     }
 
