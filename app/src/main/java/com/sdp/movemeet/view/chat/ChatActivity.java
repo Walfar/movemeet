@@ -29,7 +29,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -60,7 +59,7 @@ public class ChatActivity extends AppCompatActivity {
     private static final String TAG = "ChatActivity";
 
     public static final String CHATS_CHILD = "chats";
-    public static String GENERAL_CHAT_CHILD = "general_chat_new_format"; //"general_chat";
+    public static String DEFAULT_CHAT_CHILD = "default_chat";
     public static String CHAT_ROOM_ID;
 
     private static final int REQUEST_IMAGE = 2;
@@ -168,7 +167,7 @@ public class ChatActivity extends AppCompatActivity {
             // Database with the value of "activityChatId" in case it doesn't exist yet
             CHAT_ROOM_ID = activityChatId;
         } else {
-            CHAT_ROOM_ID = GENERAL_CHAT_CHILD; // default general chat room
+            CHAT_ROOM_ID = DEFAULT_CHAT_CHILD; // default general chat room
         }
         chatRoom = chatRef.child(CHAT_ROOM_ID);
         countMessagesInChatRoom();
@@ -271,11 +270,12 @@ public class ChatActivity extends AppCompatActivity {
 
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    // making this method always public for testing and private otherwise
+    // Making this method always public for testing and private otherwise
     public void createTempMessage(Uri uri, String fullNameString, String userId) {
         Message tempMessage = new Message(fullNameString, "Image loading...", userId, LOADING_IMAGE_URL, Long.toString(new Date().getTime()));
         // TODO: Make abstraction for this part of code below (Firebase Realtime Database abstraction) --> difficult!
-        //  Probably add another .add method that can deal with "DatabaseReference.CompletionListener" ? --> ask Kepler for advice
+        //  Probably add another ".addTemp" method that can deal with "DatabaseReference.CompletionListener" ? --> ask Kepler for advice
+        //  Tried, but too difficult...
         chatRoom.push().setValue(tempMessage, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -288,7 +288,6 @@ public class ChatActivity extends AppCompatActivity {
                 imagePath = CHATS_CHILD + ImageHandler.PATH_SEPARATOR + CHAT_ROOM_ID + ImageHandler.PATH_SEPARATOR
                         + key + ImageHandler.PATH_SEPARATOR + ImageHandler.CHAT_IMAGE_NAME;
                 Image image = new Image(uri, null);
-                image.setDocumentPath(imagePath); // probably useless
                 UploadTask uploadTask = (UploadTask) imageBackendManager.add(image, imagePath);
                 putImageInStorage(uploadTask, key);
             }
@@ -298,7 +297,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void putImageInStorage(UploadTask uploadTask, String key) {
         // Upload the image to Firebase Storage
-        uploadTask.addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        uploadTask.addOnSuccessListener(ChatActivity.this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // After the image loads, get a URI for the image

@@ -114,18 +114,6 @@ public class RegisterActivityTest {
 
         onView(withId(R.id.button_register)).perform(click());
 
-        // TODO: check why the test cannot intercept the toast when we attempt to create an account
-        //  with an already used email address
-        //---
-        //RegisterActivity activity = RegisterTestRule.getActivity();
-        //onView(withText(R.string.register_toast_account_already_exists)).
-        //        inRoot(withDecorView(not(is(activity.getWindow().getDecorView())))).
-        //        check(matches(isDisplayed()));
-        //---
-
-        // Checking that we are still on the RegisterActivity (i.e. that we have not been redirected
-        // to the MainActivity)
-
         try{
             Thread.sleep(1000);
         } catch (Exception e){}

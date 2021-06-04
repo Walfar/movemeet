@@ -53,6 +53,10 @@ public class UserSerializer implements BackendSerializer<User> {
 
         data.put(DESCRIPTION_KEY, user.getDescription());
 
+        data.put(CREATED_ACTIVITIES_KEY, user.getCreatedActivitiesId());
+
+        data.put(REGISTERED_ACTIVITIES_KEY, user.getRegisteredActivitiesId());
+
         return data;
     }
 
