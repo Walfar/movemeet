@@ -1,18 +1,23 @@
 package com.sdp.movemeet.view.activity;
 
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.sdp.movemeet.R;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.StorageReference;
+import com.sdp.movemeet.backend.BackendManager;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
+import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.Sport;
 
@@ -26,22 +31,17 @@ import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 
 @RunWith(AndroidJUnit4.class)
-public class ActivityDescriptionActivityTest {
+public class ActivityDescriptionActivityUnregisterFromActivityTest {
 
     private static final String TAG = "ActDescActTest";
 
     private final static String DUMMY_ACTIVITY_ID = "12345";
     private final static String DUMMY_ORGANISATOR_ID = "jOUwVmwQVFgYKdH35jYm50l9TJx1"; // Antho3
-    private final static String DUMMY_ORGANISATOR_NAME = "Antho3";
     private final static String DUMMY_TITLE = "dummy_title";
     private final static int DUMMY_NUMBER_PARTICIPANT = 23;
     private final static ArrayList<String> DUMMY_PARTICIPANTS_ID = new ArrayList<String>() {{add("jOUwVmwQVFgYKdH35jYm50l9TJx1");}}; // Antho3
@@ -54,6 +54,10 @@ public class ActivityDescriptionActivityTest {
     private final static Sport DUMMY_SPORT = Sport.Running;
     private final static String DUMMY_ADDRESS = "dummy_address";
     public FirebaseAuth fAuth;
+    private BackendManager<Activity> activityManager;
+
+    private final static String ORGANIZER_ID = "jOUwVmwQVFgYKdH35jYm50l9TJx1"; // Antho3
+    private final static String USER_ID = "kNJiyA3rF4boRYhPVGp1YQabXlh2"; // Antho4
 
     private Activity activity = new Activity(
             DUMMY_ACTIVITY_ID,
@@ -71,6 +75,7 @@ public class ActivityDescriptionActivityTest {
             DUMMY_ADDRESS,
             DUMMY_DATE
     );
+
 
     @Before
     public void signIn() {
@@ -101,51 +106,67 @@ public class ActivityDescriptionActivityTest {
         ActivityScenario testRule = ActivityScenario.launch(intent);
 
         try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
-
-        onView(withId(R.id.activity_title_description)).check(matches(withText(DUMMY_TITLE)));
-        //onView(withId(R.id.activity_date_description)).check(matches(withText(String.valueOf(DUMMY_DATE))));
-        onView(withId(R.id.activity_address_description)).check(matches(withText(DUMMY_ADDRESS)));
-        onView(withId(R.id.activity_sport_description)).check(matches(withText(String.valueOf(DUMMY_SPORT))));
-        //onView(withId(R.id.activity_duration_description)).check(matches(withText(String.valueOf(DUMMY_DURATION))));
-
-        onView(withId(R.id.activity_organisator_description)).check(matches(withText(DUMMY_ORGANISATOR_NAME))); // DUMMY_ORGANISATOR_ID
-        //onView(withId(R.id.activity_number_description)).check(matches(withText(String.valueOf(DUMMY_NUMBER_PARTICIPANT))));
-        //onView(withId(R.id.activity_participants_description)).check(matches(withText(String.valueOf(DUMMY_PARTICIPANTS_ID.size()))));
-
-        try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
             assert (false);
         }
     }
 
-    @Test
-    public void create() {
-        Intents.init();
-        Intents.release();
-    }
 
     @Test
-    public void chatButtonIsCorrect() {
-        Intents.init();
-        activity.addParticipantId(fAuth.getUid());
+    public void unregisterFromActivity() {
 
-        onView(withId(R.id.activityRegisterDescription)).perform(scrollTo(), click());
+        try (ActivityScenario<ActivityDescriptionActivity> scenario = ActivityScenario.launch(ActivityDescriptionActivity.class)) {
 
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            assert (false);
+            scenario.onActivity(activityDescriptionActivity -> {
+
+                activityManager = new FirestoreActivityManager(FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
+
+                // Register to activity
+                activityDescriptionActivity.registerToActivityImplementation(activity, USER_ID);
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    assert (false);
+                }
+
+                // Unregister from activity
+                activityDescriptionActivity.unregisterFromActivityImplementation(activity, USER_ID, ORGANIZER_ID);
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    assert (false);
+                }
+                // Assert user successfully registered to activity
+                Task<DocumentSnapshot> documentUnregister = (Task<DocumentSnapshot>) activityManager.get(activity.getDocumentPath());
+                documentUnregister.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot documentUnregister = task.getResult();
+                            if (documentUnregister.exists()) {
+                                ActivitySerializer activitySerializer = new ActivitySerializer();
+                                Activity updatedActivity = activitySerializer.deserialize(documentUnregister.getData());
+                                Log.d(TAG, "activity.getParticipantId(): " + updatedActivity.getParticipantId());
+                                assertThat(updatedActivity.getParticipantId().contains(USER_ID), is(false));
+                                Log.d(TAG, "User successfully unregistered from activity!");
+                            } else {
+                                Log.d(TAG, "No such document!");
+                            }
+                        } else {
+                            Log.d(TAG, "Get failed with: ", task.getException());
+                        }
+                    }
+                });
+
+            });
+
+        } catch (Exception e) {
+            Log.d("TAG", "deleteAccount Exception: " + e);
+            e.printStackTrace();
         }
-
-        //onView(withId(R.id.activityChatDescription)).perform(scrollTo(), click());
-        //intended(hasComponent(ChatActivity.class.getName()));
-        Intents.release();
     }
+
 
     @After
     public void signOut() {
