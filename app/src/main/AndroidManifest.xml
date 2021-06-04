@@ -97,10 +97,6 @@
             android:name=".view.activity.UploadActivityActivity"
             android:windowSoftInputMode="adjustNothing">
         </activity>
-        <!-- List activity activity -->
-        <activity
-            android:name=".view.activity.ActivityListActivity">
-        </activity>
         <!-- Chat activity -->
         <activity
             android:name=".view.chat.ChatActivity"
