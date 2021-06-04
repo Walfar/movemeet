@@ -87,7 +87,7 @@ public class EditProfileActivityImagePickerTest {
         ImageView profileImage = activityRule.getActivity().findViewById(R.id.image_view_edit_profile_image);
         Image image = new Image(imageUri, profileImage);
         image.setDocumentPath(USER_IMAGE_PATH);
-        ImageHandler.uploadImage(image, progressBar);
+        ImageHandler.uploadImage(image,activityRule.getActivity());
 
         try {
             Thread.sleep(4000);

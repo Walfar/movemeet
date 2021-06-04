@@ -1,13 +1,11 @@
 package com.sdp.movemeet.view.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -15,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,8 +21,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
@@ -51,6 +48,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
+import static com.sdp.movemeet.utility.ActivityPictureCache.loadFromCache;
+
 /***
  * Activity for show the description of an activity. Informations about an activity are : sport, date and time, time estimate, organizer,
  * a list of participants, a picture, address, and description. A user can register to an activity, and access to the chat.
@@ -59,29 +58,21 @@ import java.util.TimeZone;
 public class ActivityDescriptionActivity extends AppCompatActivity {
 
     private static final String TAG = "ActDescActivity";
-    public static final String DESCRIPTION_ACTIVITY_KEY = "activitykey";
-
     public static final String PARTICIPANT_ID_FIELD = "participantId";
     public static final String REGISTERED_ACTIVITY_FIELD = "registeredActivity";
     public static final String UPDATE_FIELD_UNION = "union";
     public static final String UPDATE_FIELD_REMOVE = "remove";
-
+    public static final String DESCRIPTION_ACTIVITY_KEY = "activitykey";
     public static final String RECORDING_EXTRA_NAME = "gpsreckey";
     public static final String DISTANCE_UNIT = "m";
     public static final String SPEED_UNIT = "km/h";
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    public static boolean enableNav = true;
-
-    private static final int REQUEST_IMAGE = 1000;
-
     public static final String ACTIVITY_CHAT_ID = "ActivityChatId";
     public static final String ACTIVITY_TITLE = "ActivityTitle";
-
+    private static final int REQUEST_IMAGE = 1000;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public static boolean enableNav = true;
     private TextView organizerView, numberParticipantsView, participantNamesView;
     private FirebaseAuth fAuth;
-    private FirebaseStorage fStorage;
-    private StorageReference storageReference;
     private String userId, organizerId, imagePath;
     private StringBuilder participantNamesString = new StringBuilder();
 
@@ -104,13 +95,13 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             finish();
         } else {
             userId = fAuth.getCurrentUser().getUid();
-            fStorage = BackendInstanceProvider.getStorageInstance();
-            storageReference = fStorage.getReference();
+
             userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
             activityManager = new FirestoreActivityManager(FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
+
         }
 
-        if (enableNav) new Navigation(this, R.id.nav_home).createDrawer();
+        if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
 
         Intent intent = getIntent();
 
@@ -143,27 +134,30 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Modify the visibility of buttons in the layout
      */
     private void setButton(Activity activity) {
-  View recButton = findViewById(R.id.activityGPSRecDescription);
+        View recButton = findViewById(R.id.activityGPSRecDescription);
         if (activity.getParticipantId().contains(userId)) {
             findViewById(R.id.activityRegisterDescription).setVisibility(View.GONE);
             findViewById(R.id.activityChatDescription).setVisibility(View.VISIBLE);
-           if (activity.getSport() == Sport.Running) {
-            recButton.setVisibility(View.VISIBLE);
-            recButton.setEnabled(true);
-            if (userId != null && activity.getParticipantRecordings().containsKey(userId)) {
-                displayParticipantStats();
+            findViewById(R.id.activityUnregisterDescription).setVisibility(View.VISIBLE);
+            if (activity.getSport() == Sport.Running || activity.getSport() == Sport.Trekking) {
+                recButton.setVisibility(View.VISIBLE);
+                recButton.setEnabled(true);
+                if (userId != null && activity.getParticipantRecordings().containsKey(userId)) {
+                    displayParticipantStats();
+                } else {
+                    findViewById(R.id.activity_description_stats_layout).setVisibility(View.GONE);
+                    findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
+                    recButton.setVisibility(View.GONE);
+                }
             } else {
+                recButton.setVisibility(View.GONE);
+                recButton.setEnabled(false);
                 findViewById(R.id.activity_description_stats_layout).setVisibility(View.GONE);
                 findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
             }
         } else {
-            recButton.setVisibility(View.INVISIBLE);
-            recButton.setEnabled(false);
-            findViewById(R.id.activity_description_stats_layout).setVisibility(View.GONE);
-            findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
-           }
-        } else {
-            recButton.setVisibility(View.INVISIBLE);
+            recButton.setVisibility(View.GONE);
+            findViewById(R.id.activityUnregisterDescription).setVisibility(View.GONE);
             recButton.setEnabled(false);
             findViewById(R.id.activity_description_stats_layout).setVisibility(View.GONE);
             findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
@@ -196,7 +190,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Title of the activity
      */
     private void createTitleView() {
-        TextView activityTitle = (TextView) findViewById(R.id.activity_title_description);
+        TextView activityTitle = findViewById(R.id.activity_title_description);
         activityTitle.setText(activity.getTitle());
     }
 
@@ -204,8 +198,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Number of participants of the activity
      */
     private void createParticipantNumberView(Activity activity) {
-        numberParticipantsView = (TextView) findViewById(R.id.activity_number_description);
-        participantNamesView = (TextView) findViewById(R.id.activity_participants_description);
+        numberParticipantsView = findViewById(R.id.activity_number_description);
+        participantNamesView = findViewById(R.id.activity_participants_description);
         numberParticipantsView.setText(activity.getParticipantId().size() + ImageHandler.PATH_SEPARATOR + activity.getNumberParticipant());
         participantNamesView.setText(" participants");
     }
@@ -214,15 +208,20 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Description of the activity
      */
     private void createDescriptionView() {
-        TextView descriptionView = (TextView) findViewById(R.id.activity_description_description);
-        descriptionView.setText(activity.getDescription());
+        TextView descriptionView = findViewById(R.id.activity_description_description);
+        if (activity.getDescription() == null || activity.getDescription().isEmpty()) {
+            findViewById(R.id.activity_description_description).setVisibility(View.GONE);
+            findViewById(R.id.activity_description_text).setVisibility(View.GONE);
+        } else {
+            descriptionView.setText(activity.getDescription());
+        }
     }
 
     /**
      * Date fof the activity
      */
     private void createDateView() {
-        TextView dateView = (TextView) findViewById(R.id.activity_date_description);
+        TextView dateView = findViewById(R.id.activity_date_description);
         String pattern = "MM/dd/yyyy HH:mm";
         DateFormat df = new SimpleDateFormat(pattern);
         String todayAsString = df.format(activity.getDate());
@@ -233,7 +232,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Sport of the activity
      */
     private void createSportView() {
-        TextView sportView = (TextView) findViewById(R.id.activity_sport_description);
+        TextView sportView = findViewById(R.id.activity_sport_description);
         sportView.setText(activity.getSport().toString());
     }
 
@@ -241,7 +240,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Duration of the activity
      */
     private void createDurationView() {
-        TextView durationView = (TextView) findViewById(R.id.activity_duration_description);
+        TextView durationView = findViewById(R.id.activity_duration_description);
         durationView.setText(String.valueOf((int) activity.getDuration()));
     }
 
@@ -249,7 +248,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Organizer of the activity
      */
     private void createOrganizerView() {
-        organizerView = (TextView) findViewById(R.id.activity_organisator_description);
+        organizerView = findViewById(R.id.activity_organisator_description);
         organizerView.setText(activity.getOrganizerId());
     }
 
@@ -257,7 +256,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Address of the activity
      */
     private void createAddressView() {
-        TextView addressView = (TextView) findViewById(R.id.activity_address_description);
+        TextView addressView = findViewById(R.id.activity_address_description);
         addressView.setText(activity.getAddress());
     }
 
@@ -368,7 +367,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         Intent intent = new Intent(ActivityDescriptionActivity.this, GPSRecordingActivity.class);
         intent.putExtra(RECORDING_EXTRA_NAME, activity);
         startActivity(intent);
-        //finish();
     }
 
     /**
@@ -450,8 +448,13 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         imagePath = activity.getDocumentPath() + ImageHandler.PATH_SEPARATOR + ImageHandler.ACTIVITY_IMAGE_NAME;
         Image image = new Image(null, activityImage);
         image.setDocumentPath(imagePath);
-        ImageHandler.loadImage(image, progressBar);
+        ImageHandler.loadImage(image, this);
     }
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
+
 
     /**
      * Launch the Gallery to select a header picture for the activity
@@ -473,7 +476,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 Uri imageUri = data.getData();
                 Image image = new Image(imageUri, activityImage);
                 image.setDocumentPath(imagePath);
-                ImageHandler.uploadImage(image, progressBar);
+                ImageHandler.uploadImage(image, this);
             }
         }
     }

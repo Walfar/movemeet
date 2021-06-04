@@ -123,6 +123,7 @@ public class ChatActivity extends AppCompatActivity {
 
         messageManager = new FirebaseDBMessageManager(new MessageSerializer());
 
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         fStorage = BackendInstanceProvider.getStorageInstance();
         storageReference = fStorage.getReference();
 

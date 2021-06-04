@@ -20,11 +20,11 @@ import java.text.SimpleDateFormat;
  */
 public class MessageViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView messengerTextView;
-    private TextView messageTextView;
-    private ImageView messageImageView;
-    private ImageView userProfilePicture;
-    private TextView messageTimeTextView;
+    private final TextView messengerTextView;
+    private final TextView messageTextView;
+    private final ImageView messageImageView;
+    private final ImageView userProfilePicture;
+    private final TextView messageTimeTextView;
 
     /**
      * Reference the message data in UI elements (TextViews and ImageView)
@@ -60,12 +60,12 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         }
         // Handling the ImageView of the image message
         if (message.getImageUrl() != null && message.getImageUrl().contains("http")) {
-            handlingImageMessage(message);
+            handlingImageMessage(message, chatActivity);
             messageImageView.setVisibility(ImageView.VISIBLE);
             messageTextView.setVisibility(TextView.GONE);
         }
         // Handling the ImageView of the user profile picture in any case
-        handlingUserProfilePicture(message);
+        handlingUserProfilePicture(message, chatActivity);
         // Handling the date view of the message
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String messageTimeString = simpleDateFormat.format(Long.valueOf(message.getMessageTime()));
@@ -79,12 +79,12 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
      * @param message Message object containing the message data (in this case the message data of
      *                interest is the URL of the image)
      */
-    private void handlingUserProfilePicture(Message message) {
+    private void handlingUserProfilePicture(Message message, ChatActivity chatActivity) {
         String userImagePath = FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR
                 + message.getMessageUserId() + ImageHandler.PATH_SEPARATOR + ImageHandler.USER_IMAGE_NAME;
         Image image = new Image(null, userProfilePicture);
         image.setDocumentPath(userImagePath);
-        ImageHandler.loadImage(image, null);
+        ImageHandler.loadImage(image, chatActivity);
     }
 
     /**
@@ -93,7 +93,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
      * @param message Message object containing the message data (in this case the message data of
      *                interest is the URL of the image)
      */
-    private void handlingImageMessage(Message message) {
+    private void handlingImageMessage(Message message, ChatActivity chatActivity) {
         String imageUrl = message.getImageUrl();
 
         if (imageUrl.equals(ChatActivity.LOADING_IMAGE_URL)) {
@@ -105,7 +105,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             String imagePath = ImageHandler.convertURLtoPath(imageUrl);
             Image image = new Image(null, messageImageView);
             image.setDocumentPath(imagePath);
-            ImageHandler.loadImage(image, null);
+            ImageHandler.loadImage(image, chatActivity);
         }
     }
 

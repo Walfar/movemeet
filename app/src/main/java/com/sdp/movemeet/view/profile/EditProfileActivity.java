@@ -102,7 +102,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 + ImageHandler.PATH_SEPARATOR + ImageHandler.USER_IMAGE_NAME;
         Image image = new Image(null, profileImage);
         image.setDocumentPath(userImagePath);
-        ImageHandler.loadImage(image, progressBar);
+        ImageHandler.loadImage(image, this);
 
         userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
     }
@@ -129,6 +129,10 @@ public class EditProfileActivity extends AppCompatActivity {
         startActivityForResult(openGalleryIntent, REQUEST_IMAGE);
     }
 
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
@@ -138,7 +142,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 Uri imageUri = data.getData();
                 Image image = new Image(imageUri, profileImage);
                 image.setDocumentPath(userImagePath);
-                ImageHandler.uploadImage(image, progressBar);
+                ImageHandler.uploadImage(image, this);
             }
         }
     }

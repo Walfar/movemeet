@@ -1,6 +1,6 @@
 package com.sdp.movemeet.view.map;
 
-import android.Manifest;;
+import android.Manifest;
 import android.location.Location;
 import android.util.Log;
 
@@ -88,9 +88,9 @@ import static org.mockito.Mockito.mock;
 @RunWith(AndroidJUnit4.class)
 public class MainMapFragmentTest {
 
-    private UiDevice uiDevice = UiDevice.getInstance(getInstrumentation());
+    private final UiDevice uiDevice = UiDevice.getInstance(getInstrumentation());
     private FirebaseAuth fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
-    private String TAG = "Main Map Fragment Test";
+    private final String TAG = "Main Map Fragment Test";
 
     @Rule
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -101,7 +101,6 @@ public class MainMapFragmentTest {
 
     @Before
     public void setUp() {
-        Navigation.profileField = false;
         fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         fAuth.signInWithEmailAndPassword("test@test.com", "password");
         Intents.init();
@@ -165,7 +164,7 @@ public class MainMapFragmentTest {
     public void clickingOnActivityMakesCorrectIntentWhenLogged() {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
         Activity act = new Activity("activity id", "organizer id", "my title", 4, new ArrayList<>(), 0, 0,
-                    "desc", null, new Date(), 1, Soccer, "Dubai UAE", new Date());
+                    "desc", "activities/test", new Date(), 1, Soccer, "Dubai UAE", new Date());
         ActivitiesUpdater.activities.add(act);
         mapFragment.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -185,7 +184,7 @@ public class MainMapFragmentTest {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
         mapFragment.user = null;
         Activity act = new Activity("activity id", "organizer id", "my title", 4, new ArrayList<>(), 0, 0,
-                    "desc", null, new Date(), 1, Soccer, "Dubai UAE", new Date());
+                    "desc", "activities/test", new Date(), 1, Soccer, "Dubai UAE", new Date());
         ActivitiesUpdater.activities.add(act);
         mapFragment.getActivity().runOnUiThread(new Runnable() {
             @Override

@@ -16,7 +16,8 @@ public class DistanceCalculator {
 
     // This constant is more ~canonical~
     private final static Double EARTH_RADIUS = 6.371 * Math.pow(10, 3);
-    private Double userLatitude, userLongitude;
+    private final Double userLatitude;
+    private final Double userLongitude;
     private ArrayList<Pair> activityDistanceMap;
     private boolean sorted;
 
@@ -161,7 +162,7 @@ public class DistanceCalculator {
      * Allows for sorting activities by their distances relative to the user.
      */
     public class Pair {
-        private Activity key;
+        private final Activity key;
         private Double value;
 
         public Pair(Activity key, Double value) {

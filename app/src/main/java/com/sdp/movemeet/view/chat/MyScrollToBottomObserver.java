@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class MyScrollToBottomObserver extends RecyclerView.AdapterDataObserver {
 
-    private RecyclerView recyclerViiew;
-    private RecyclerView.Adapter<?> adapter;
-    private LinearLayoutManager manager;
+    private final RecyclerView recyclerViiew;
+    private final RecyclerView.Adapter<?> adapter;
+    private final LinearLayoutManager manager;
 
     public MyScrollToBottomObserver(
             RecyclerView recycler,

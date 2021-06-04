@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,31 +13,21 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.sdp.movemeet.R;
-import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
-import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
-import com.sdp.movemeet.backend.serialization.UserSerializer;
-import com.sdp.movemeet.models.User;
-import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
-import com.sdp.movemeet.view.activity.ActivityListActivity;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
-import com.sdp.movemeet.view.chat.ChatActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.main.MainActivity;
 import com.sdp.movemeet.view.profile.ProfileActivity;
 
 public class Navigation extends AppCompatActivity {
 
-    private Activity activity;
-    private int activityId;
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    private final Activity activity;
+    private final int activityId;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static boolean profileField = true;
 
     private NavigationView navigationView;
@@ -48,7 +36,8 @@ public class Navigation extends AppCompatActivity {
     /**
      * A Navigation object capable of creating a Navigation drawer for a
      * specified Android Activity
-     * @param activity the Android activity to work with
+     *
+     * @param activity   the Android activity to work with
      * @param activityId the R.id integer referring to this activity
      */
     public Navigation(Activity activity, int activityId) {
@@ -68,6 +57,7 @@ public class Navigation extends AppCompatActivity {
 
     /**
      * Starts the ActivityUpload activity
+     *
      * @param view the View in which to start the activity
      */
     public static void goToActivityUpload(View view) {
@@ -79,6 +69,7 @@ public class Navigation extends AppCompatActivity {
 
     /**
      * Starts the User Profile activity
+     *
      * @param view the View in which to start the activity
      */
     public static void goToUserProfileActivity(View view) {
@@ -90,6 +81,7 @@ public class Navigation extends AppCompatActivity {
 
     /**
      * Starts the MainActivity activity
+     *
      * @param view the View in which to start the activity
      */
     public static void goToHome(View view) {
@@ -113,18 +105,19 @@ public class Navigation extends AppCompatActivity {
      * Starts ActivityList activity
      * @param view the View in which to start the activity
      */
-    public static void goToListOfActivities(View view) {
+    /*public static void goToListOfActivities(View view) {
         Context context = view.getContext();
         Intent intent = new Intent(context, ActivityListActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         context.startActivity(intent);
-    }
+    }*/
 
 
     /**
      * Sign out the user in case it is not null (i.e. in case the Firebase Authentication service
      * is able to retrieve the user object).
-     * @param fAuth The Firebase Authentication reference that allows to access to the user object
+     *
+     * @param fAuth    The Firebase Authentication reference that allows to access to the user object
      * @param activity The activity from which this function is called
      */
     public static void logoutIfUserNonNull(FirebaseAuth fAuth, Activity activity) {
@@ -143,44 +136,6 @@ public class Navigation extends AppCompatActivity {
             activity.finish();
         }
     }
-
-    /*
-    /**
-     * Fills in the navigation bar's text fields with the user's information
-     * 0 = fullName
-     * 1 = email
-     * 2 = phone number
-     * 3 = description (optional)
-     * @param fields the fields to fill in, following the above order
-     * @return the array of updated TextViews
-     */
-    /*public static TextView[] fillNavigationProfileFields(TextView[] fields) {
-        FirebaseUser firebaseUser = AuthenticationInstanceProvider.getAuthenticationInstance().getCurrentUser();
-        if (firebaseUser != null) {
-            String userId = firebaseUser.getUid();
-            UserSerializer serializer = new UserSerializer();
-            FirestoreUserManager backendUserManager =
-                    new FirestoreUserManager(
-                            FirestoreUserManager.USERS_COLLECTION,
-                            serializer);
-            backendUserManager.getUserFromUid(userId).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        User user = serializer.deserialize(task.getResult().getData());
-
-                        fields[0].setText(user.getFullName());
-                        fields[1].setText(user.getEmail());
-                        fields[2].setText(user.getPhoneNumber());
-                        if (fields.length > 3 && user.getDescription() != null && !user.getDescription().isEmpty())
-                            fields[3].setText(user.getDescription());
-                    }
-                }
-            });
-        }
-
-        return fields;
-    }*/
 
     /**
      * Initializes a Navigation drawer, filling in all fields and setting up associated functions,
@@ -234,14 +189,14 @@ public class Navigation extends AppCompatActivity {
                     Navigation.goToChat(this.navigationView);
                     finish();
                     break;*/
-                case R.id.nav_list_activities:
+                /*case R.id.nav_list_activities:
                     Navigation.goToListOfActivities(this.navigationView);
                     finish();
-                    break;
+                    break;*/
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }
+

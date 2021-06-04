@@ -23,6 +23,7 @@ import com.sdp.movemeet.R;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
 import com.sdp.movemeet.utility.LocationFetcher;
 
+import static com.sdp.movemeet.utility.PermissionChecker.isLocationPermissionGranted;
 import static com.sdp.movemeet.view.map.MainMapFragment.ZOOM_VALUE;
 
 public class MiniMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
@@ -66,7 +67,7 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
         this.googleMap = googleMap;
         if (googleMap != null) googleMap.setOnMapClickListener(this::onMapClick);
 
-        if (!locationFetcher.isPermissionGranted()) {
+        if (!isLocationPermissionGranted(getActivity())) {
             currentLocation = locationFetcher.getDefaultLocation();
             zoomOnAddressLocation();
         }
