@@ -132,9 +132,9 @@ public class ActivityDescriptionActivityTest {
 
     @Test
     public void testValue(){
+        Intents.init();
         Intent intent = new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra(ActivityDescriptionActivity.DESCRIPTION_ACTIVITY_KEY, activity);
         ActivityScenario testRule = ActivityScenario.launch(intent);
-        Intents.init();
         onView(withId(R.id.activity_title_description)).check(matches(withText(DUMMY_TITLE)));
         //onView(withId(R.id.activity_date_description)).check(matches(withText(String.valueOf(DUMMY_DATE))));
         onView(withId(R.id.activity_address_description)).check(matches(withText(DUMMY_ADDRESS)));
@@ -150,16 +150,16 @@ public class ActivityDescriptionActivityTest {
         } catch (InterruptedException e) {
             assert (false);
         }
-        Intents.release();
         testRule.close();
+        Intents.release();
     }
 
     @Test
     public void chatButtonIsCorrect() {
+        Intents.init();
         activity.addParticipantId(fAuth.getUid());
         Intent intent = new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra(ActivityDescriptionActivity.DESCRIPTION_ACTIVITY_KEY, activity);
         ActivityScenario testRule = ActivityScenario.launch(intent);
-        Intents.init();
 
         //onView(withId(R.id.activityRegisterDescription)).perform(scrollTo(), click());
 
@@ -178,8 +178,8 @@ public class ActivityDescriptionActivityTest {
             assert (false);
         }
 
-        Intents.release();
         testRule.close();
+        Intents.release();
     }
 
     @After
