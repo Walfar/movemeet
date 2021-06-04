@@ -1,8 +1,6 @@
 package com.sdp.movemeet.view.profile;
 
 import android.content.Intent;
-
-import java.util.ArrayList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +27,8 @@ import com.sdp.movemeet.utility.ImageHandler;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.navigation.Navigation;
 
+import java.util.ArrayList;
+
 public class ProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "ProfileActivity";
@@ -40,7 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
     public static final String EXTRA_CREATED_ACTIVITIES = "createdActivities";
     public static final String EXTRA_REGISTERED_ACTIVITIES = "registeredActivities";
 
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
 
     private TextView fullName, email, phone, description;
@@ -69,7 +69,7 @@ public class ProfileActivity extends AppCompatActivity {
             userId = fAuth.getCurrentUser().getUid();
         }
 
-        if(enableNav) new Navigation(this, R.id.nav_edit_profile).createDrawer();
+        if (enableNav) new Navigation(this, R.id.nav_edit_profile).createDrawer();
 
         ImageView profileImage = findViewById(R.id.image_view_profile_image);
         progressBar = findViewById(R.id.progress_bar_profile);
@@ -80,8 +80,6 @@ public class ProfileActivity extends AppCompatActivity {
         description = findViewById(R.id.text_view_activity_profile_description);
 
         userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
-//        FirebaseStorage fStorage = BackendInstanceProvider.getStorageInstance();
-//        storageReference = fStorage.getReference();
         displayRegisteredUserData();
         userImagePath = FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + userId
                 + ImageHandler.PATH_SEPARATOR + ImageHandler.USER_IMAGE_NAME;

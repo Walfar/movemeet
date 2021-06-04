@@ -191,11 +191,11 @@ public class User implements Serializable, FirebaseObject {
     /**
      * @param activityId add a created activity
      */
-    public void addCreatedActivityId(String activityId){
-        if(activityId == null){
+    public void addCreatedActivityId(String activityId) {
+        if (activityId == null) {
             throw new IllegalArgumentException();
         }
-        if(createdActivitiesId.contains(activityId)){
+        if (createdActivitiesId.contains(activityId)) {
             throw new IllegalArgumentException();
         }
         this.createdActivitiesId.add(activityId);
@@ -204,8 +204,8 @@ public class User implements Serializable, FirebaseObject {
     /**
      * @param activityId remove a created activity
      */
-    public void removeCreatedActivityId(String activityId){
-        if(activityId == null){
+    public void removeCreatedActivityId(String activityId) {
+        if (activityId == null) {
             throw new IllegalArgumentException();
         }
         this.createdActivitiesId.remove(activityId);
@@ -215,11 +215,11 @@ public class User implements Serializable, FirebaseObject {
     /**
      * @param activityId add a registered activity
      */
-    public void addRegisteredActivityId(String activityId){
-        if(activityId == null){
+    public void addRegisteredActivityId(String activityId) {
+        if (activityId == null) {
             throw new IllegalArgumentException();
         }
-        if(registeredActivitiesId.contains(activityId)){
+        if (registeredActivitiesId.contains(activityId)) {
             throw new IllegalArgumentException();
         }
         this.registeredActivitiesId.add(activityId);
@@ -228,13 +228,12 @@ public class User implements Serializable, FirebaseObject {
     /**
      * @param activityId remove a registered activity
      */
-    public void removeRegisteredActivityId(String activityId){
-        if(activityId == null){
+    public void removeRegisteredActivityId(String activityId) {
+        if (activityId == null) {
             throw new IllegalArgumentException();
         }
         this.registeredActivitiesId.remove(activityId);
     }
-
 
 
     @Override

@@ -1,9 +1,7 @@
 package com.sdp.movemeet.models;
 
 /**
- *
  * This class represents a message
- *
  */
 public class Message implements FirebaseObject {
     private String messageUser;

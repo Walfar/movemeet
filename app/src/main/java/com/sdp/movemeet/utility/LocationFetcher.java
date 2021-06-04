@@ -1,19 +1,15 @@
 package com.sdp.movemeet.utility;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Looper;
 
 import androidx.annotation.VisibleForTesting;
-import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
-
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.SupportMapFragment;
 
@@ -41,8 +37,9 @@ public class LocationFetcher {
 
     /**
      * Constructor for the Location fetcher, using a personalized LocationCallback
+     *
      * @param supportMapFragment supportMapFragment used to update the map set the fusedLocationProviderClient used to request the updates on location
-     * @param locationCallback personalized LocationCallback
+     * @param locationCallback   personalized LocationCallback
      */
     public LocationFetcher(SupportMapFragment supportMapFragment, LocationCallback locationCallback) {
         this.fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(supportMapFragment.getActivity());
@@ -69,7 +66,7 @@ public class LocationFetcher {
                 fusedLocationProviderClient.requestLocationUpdates(locationRequest,
                         locationCallback,
                         Looper.getMainLooper());
-            //If permissions are not granted, we can simply stop updating (as it would be useless calculations)
+                //If permissions are not granted, we can simply stop updating (as it would be useless calculations)
             } else stopLocationUpdates();
         }
         //Indicate that the location is being periodically updated
@@ -86,6 +83,7 @@ public class LocationFetcher {
 
     /**
      * Getter for the default location, i.e (0, 0)
+     *
      * @return the default location
      */
     public Location getDefaultLocation() {

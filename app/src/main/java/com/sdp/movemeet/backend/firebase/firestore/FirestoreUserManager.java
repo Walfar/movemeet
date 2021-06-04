@@ -19,6 +19,7 @@ public class FirestoreUserManager extends FirestoreManager<User> {
     /**
      * Creates a new FirestoreManager capable of performing backend storage operations
      * on the User class.
+     *
      * @param collection the Firestore collection in which to operate
      * @param serializer a BackendSerializer capable of (de)serializing Users
      */
@@ -29,6 +30,7 @@ public class FirestoreUserManager extends FirestoreManager<User> {
 
     /**
      * Retrieve a User from the backend using their uid
+     *
      * @param uid the uid of the User
      * @return a Task<DocumentSnapshot> whose result can be deserialized into a User object
      */

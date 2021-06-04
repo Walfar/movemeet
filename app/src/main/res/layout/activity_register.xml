@@ -38,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:autofillHints=""
         android:background="@color/black"
         android:ems="10"
         android:fontFamily="@font/armata"
@@ -51,8 +52,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.100000024"
-        android:autofillHints="" />
+        app:layout_constraintVertical_bias="0.100000024" />
 
     <EditText
         android:id="@+id/edit_text_email"
@@ -61,6 +61,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:autofillHints=""
         android:background="@color/black"
         android:ems="10"
         android:fontFamily="@font/armata"
@@ -72,8 +73,7 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_full_name"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_full_name" />
 
     <EditText
         android:id="@+id/edit_text_password"
@@ -82,6 +82,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:autofillHints=""
         android:background="@color/black"
         android:ems="10"
         android:fontFamily="@font/armata"
@@ -93,8 +94,7 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_email"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_email" />
 
     <EditText
         android:id="@+id/edit_text_phone"
@@ -103,6 +103,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:autofillHints=""
         android:background="@color/black"
         android:ems="10"
         android:fontFamily="@font/armata"
@@ -114,19 +115,18 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_password"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_password" />
 
     <Button
         android:id="@+id/button_register"
         android:layout_width="0dp"
-        android:onClick="registerUser"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:backgroundTint="@android:color/white"
         android:fontFamily="@font/armata"
+        android:onClick="registerUser"
         android:text="@string/register_register_button"
         android:textColor="@color/black"
         android:textSize="13sp"
@@ -136,11 +136,11 @@
 
     <TextView
         android:id="@+id/text_view_login_here"
-        android:onClick="loginOnClick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/armata"
+        android:onClick="loginOnClick"
         android:text="@string/register_loggin_button"
         android:textColor="@color/primary_text"
         app:layout_constraintEnd_toEndOf="parent"

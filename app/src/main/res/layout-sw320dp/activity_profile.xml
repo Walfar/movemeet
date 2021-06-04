@@ -7,8 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".view.profile.ProfileActivity"
-    tools:openDrawer="start"
-    >
+    tools:openDrawer="start">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -23,7 +22,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/menu"/>
+            app:navigationIcon="@drawable/menu" />
 
         <LinearLayout
             android:id="@+id/linearLayout4"
@@ -332,10 +331,11 @@
             app:layout_constraintVertical_bias="0.83" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
-        android:layout_gravity="start"
-        android:layout_height="match_parent"
         android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
         app:menu="@menu/main_menu" />
 </androidx.drawerlayout.widget.DrawerLayout>

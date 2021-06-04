@@ -29,14 +29,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
-import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
-import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.Sport;
-import com.sdp.movemeet.models.User;
-import com.sdp.movemeet.utility.ImageHandler;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.main.MainActivity;
 import com.sdp.movemeet.view.navigation.Navigation;
@@ -380,10 +376,6 @@ public class UploadActivityActivity extends AppCompatActivity {
             public void onSuccess(Void aVoid) {
                 Toast.makeText(getApplicationContext(), "Activity successfully uploaded!",
                         Toast.LENGTH_SHORT).show();
-                //-----------Test
-                //BackendManager<User> userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
-                //userManager.update(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + toUpload.getOrganizerId(), CREATED_ACTIVITY_FIELD, toUpload.getDocumentPath(), ActivityDescriptionActivity.UPDATE_FIELD_UNION);
-                //---------------
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         }).addOnFailureListener(new OnFailureListener() {

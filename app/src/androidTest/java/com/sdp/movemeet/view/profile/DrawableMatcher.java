@@ -14,8 +14,9 @@ import org.hamcrest.TypeSafeMatcher;
  * This class allows to check whether two ImageViews (more precisely their contents) are matching or not.
  * It has as field the id {@link DrawableMatcher#expectedId} of the expected drawable. This class is
  * directly taken from the Medium article "Android UI Test - Espresso Matcher for ImageView".
+ *
  * @see <a href="https://medium.com/@dbottillo/android-ui-test-espresso-matcher-for-imageview-1a28c832626f">
- *     Android UI Test - Espresso Matcher for ImageView</a> for more information.
+ * Android UI Test - Espresso Matcher for ImageView</a> for more information.
  */
 public class DrawableMatcher extends TypeSafeMatcher<View> {
 

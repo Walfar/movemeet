@@ -12,8 +12,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
-import com.sdp.movemeet.models.Sport;
 import com.sdp.movemeet.models.Activity;
+import com.sdp.movemeet.models.Sport;
 
 import org.junit.After;
 import org.junit.Before;

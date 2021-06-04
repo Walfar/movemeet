@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFFF">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="0dp"
@@ -19,16 +20,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/menu"/>
+            app:navigationIcon="@drawable/menu" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="60dp"
             android:background="@android:color/white"
             android:orientation="vertical"
-            android:weightSum="100"
-            android:layout_marginTop="60dp">
+            android:weightSum="100">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -100,27 +101,28 @@
                             android:id="@+id/spinnerSportType"
                             android:layout_width="150dp"
                             android:layout_height="46dp"
-                            app:layout_constraintEnd_toEndOf="parent"/>
+                            app:layout_constraintEnd_toEndOf="parent" />
 
                     </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:orientation="horizontal">
 
-                    <EditText
-                        android:id="@+id/editTextDate"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autofillHints="@string/activity_upload_edit_text_date_hint"
-                        android:ems="10"
-                        android:focusable="true"
-                        android:hint="@string/activity_upload_edit_text_date_hint"
-                        android:inputType="date"
-                        android:onClick="setDate"
-                        app:layout_constraintTop_toBottomOf="@+id/editTextNParticipants" />
-                </LinearLayout>
+                        android:layout_gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/editTextDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:autofillHints="@string/activity_upload_edit_text_date_hint"
+                            android:ems="10"
+                            android:focusable="true"
+                            android:hint="@string/activity_upload_edit_text_date_hint"
+                            android:inputType="date"
+                            android:onClick="setDate"
+                            app:layout_constraintTop_toBottomOf="@+id/editTextNParticipants" />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -150,7 +152,7 @@
                             android:hint="@string/activity_upload_edit_text_time_hint"
                             android:inputType="time"
                             android:onClick="setDuration"
-                            app:layout_constraintStart_toEndOf="@+id/editTextStartTime"/>
+                            app:layout_constraintStart_toEndOf="@+id/editTextStartTime" />
 
                     </LinearLayout>
 
@@ -170,7 +172,7 @@
                             android:inputType="textPersonName"
                             android:paddingBottom="40dp"
                             android:textAlignment="textStart"
-                            app:layout_constraintStart_toEndOf="@+id/editTextStartTime"/>
+                            app:layout_constraintStart_toEndOf="@+id/editTextStartTime" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -182,10 +184,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"
-            android:paddingTop="20dp"
-            android:padding="10dp"
             android:isScrollContainer="false"
             android:orientation="vertical"
+            android:padding="10dp"
+            android:paddingTop="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayout">
 
             <EditText
@@ -195,19 +197,20 @@
                 android:autofillHints="@string/activity_upload_edit_text_location_hint"
                 android:ems="10"
                 android:hint="@string/activity_upload_edit_text_location_hint"
-                android:inputType="textPostalAddress"/>
+                android:inputType="textPostalAddress" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                app:layout_constraintHeight_percent="0.7"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.7"
                 app:layout_constraintStart_toStartOf="parent">
+
                 <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/fragment_container_view"
                     android:name="com.sdp.movemeet.view.map.MiniMapFragment"
@@ -228,10 +231,11 @@
                 android:textAlignment="center" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
-        android:layout_gravity="start"
-        android:layout_height="match_parent"
         android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
         app:menu="@menu/main_menu" />
 </androidx.drawerlayout.widget.DrawerLayout>

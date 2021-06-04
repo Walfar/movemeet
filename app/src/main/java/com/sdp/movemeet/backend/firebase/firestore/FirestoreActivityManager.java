@@ -1,7 +1,5 @@
 package com.sdp.movemeet.backend.firebase.firestore;
 
-import android.util.Log;
-
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -46,7 +44,8 @@ public class FirestoreActivityManager extends FirestoreManager<Activity> {
 
     /**
      * When the given activity is updated in the db, the event listener should trigger the given callback
-     * @param activity activity that is listened on
+     *
+     * @param activity      activity that is listened on
      * @param eventListener used to trigger a callback when activity changes in db
      */
     public void setActivitiesUpdateListener(Activity activity, EventListener<DocumentSnapshot> eventListener) {

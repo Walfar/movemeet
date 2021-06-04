@@ -4,43 +4,43 @@ import android.Manifest;
 import android.location.Location;
 import android.util.Log;
 
-import androidx.fragment.app.Fragment;
-import com.android21buttons.fragmenttestrule.FragmentTestRule;
-
 import androidx.test.espresso.intent.Intents;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
-import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.models.Activity;
-import com.sdp.movemeet.R;
 import com.sdp.movemeet.models.Sport;
 import com.sdp.movemeet.utility.ActivitiesUpdater;
-import com.sdp.movemeet.utility.LocationFetcher;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivityUnregister;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
-import com.sdp.movemeet.view.home.LoginActivity;
-import com.sdp.movemeet.view.main.MainActivity;
 import com.sdp.movemeet.view.navigation.Navigation;
 
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
+import org.jetbrains.annotations.NotNull;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
+import java.util.Date;
+
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasCategories;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.sdp.movemeet.models.Sport.Badminton;
 import static com.sdp.movemeet.models.Sport.Boxing;
@@ -61,29 +61,9 @@ import static com.sdp.movemeet.models.Sport.Tricking;
 import static com.sdp.movemeet.models.Sport.VolleyBall;
 import static com.sdp.movemeet.models.Sport.Windsurfing;
 import static com.sdp.movemeet.models.Sport.Yoga;
-import static com.sdp.movemeet.utility.ActivitiesUpdater.getActivities;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
-
-import org.jetbrains.annotations.NotNull;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
+import static org.junit.Assert.assertNull;
 
 @RunWith(AndroidJUnit4.class)
 public class MainMapFragmentTest {
@@ -159,12 +139,11 @@ public class MainMapFragmentTest {
     }
 
 
-
     @Test
     public void clickingOnActivityMakesCorrectIntentWhenLogged() {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
         Activity act = new Activity("activity id", "organizer id", "my title", 4, new ArrayList<>(), 0, 0,
-                    "desc", "activities/test", new Date(), 1, Soccer, "Dubai UAE", new Date());
+                "desc", "activities/test", new Date(), 1, Soccer, "Dubai UAE", new Date());
         ActivitiesUpdater.activities.add(act);
         mapFragment.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -176,7 +155,8 @@ public class MainMapFragmentTest {
             }
         });
         assertNotNull(fAuth.getCurrentUser());
-        if (mapFragment.googleMap != null) intended(hasComponent(ActivityDescriptionActivity.class.getName()));
+        if (mapFragment.googleMap != null)
+            intended(hasComponent(ActivityDescriptionActivity.class.getName()));
     }
 
     @Test
@@ -184,7 +164,7 @@ public class MainMapFragmentTest {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
         mapFragment.user = null;
         Activity act = new Activity("activity id", "organizer id", "my title", 4, new ArrayList<>(), 0, 0,
-                    "desc", "activities/test", new Date(), 1, Soccer, "Dubai UAE", new Date());
+                "desc", "activities/test", new Date(), 1, Soccer, "Dubai UAE", new Date());
         ActivitiesUpdater.activities.add(act);
         mapFragment.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -195,7 +175,8 @@ public class MainMapFragmentTest {
                 }
             }
         });
-        if (mapFragment.googleMap != null) intended(hasComponent(ActivityDescriptionActivityUnregister.class.getName()));
+        if (mapFragment.googleMap != null)
+            intended(hasComponent(ActivityDescriptionActivityUnregister.class.getName()));
     }
 
     @Test
@@ -240,7 +221,7 @@ public class MainMapFragmentTest {
 
     private int setSportIcon(Sport sport, @NotNull MainMapFragment mapFragment) {
         Activity activity = new Activity("activity id", "organizer id", "title", 2, new ArrayList<>(), 0, 0,
-                "description", "documentPath", new Date(), 1, sport,"here", new Date());
+                "description", "documentPath", new Date(), 1, sport, "here", new Date());
         return mapFragment.chooseIcon(activity);
     }
 
@@ -264,7 +245,8 @@ public class MainMapFragmentTest {
                 }
             }
         });
-        if (mapFragment.googleMap != null) intended(hasComponent(UploadActivityActivity.class.getName()));
+        if (mapFragment.googleMap != null)
+            intended(hasComponent(UploadActivityActivity.class.getName()));
     }
 
     @After
@@ -273,7 +255,7 @@ public class MainMapFragmentTest {
         Intents.release();
     }
 
-    private void waitFor(int duration)  {
+    private void waitFor(int duration) {
         try {
             Thread.sleep(duration);
         } catch (Exception e) {

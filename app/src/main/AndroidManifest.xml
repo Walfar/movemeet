@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.sdp.movemeet">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -11,8 +10,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:hardwareAccelerated="true"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -27,8 +26,8 @@
             You can define the keys for the debug and release targets in src/debug/ and src/release/.
        -->
         <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="@string/map_key" />
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/map_key" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
@@ -37,10 +36,11 @@
         <activity
             android:name=".view.home.HomeScreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/Theme.movemeet.noActionBar"
-            android:hardwareAccelerated="false">
+            android:hardwareAccelerated="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.movemeet.noActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/> <!--this activity is the entry point of the application-->
+                <action android:name="android.intent.action.MAIN" /> <!--this activity is the entry point of the application-->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -48,6 +48,7 @@
         <activity
             android:name=".view.home.RegisterActivity"
             android:parentActivityName=".view.home.HomeScreenActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.movemeet">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -57,6 +58,7 @@
         <activity
             android:name=".view.home.LoginActivity"
             android:parentActivityName=".view.home.HomeScreenActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.movemeet">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -66,6 +68,7 @@
         <activity
             android:name=".view.main.MainUnregisterActivity"
             android:parentActivityName=".view.home.HomeScreenActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.movemeet">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -75,6 +78,7 @@
         <activity
             android:name=".view.activity.ActivityDescriptionActivityUnregister"
             android:parentActivityName=".view.main.MainUnregisterActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.movemeet">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -83,10 +87,12 @@
 
         <!-- Main activity -->
         <activity
-            android:name=".view.main.MainActivity">
-        </activity>
+            android:name=".view.main.MainActivity"
+            android:screenOrientation="portrait"></activity>
         <!-- activity description activity -->
-        <activity android:name=".view.activity.ActivityDescriptionActivity"
+        <activity
+            android:name=".view.activity.ActivityDescriptionActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.movemeet">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -95,30 +101,31 @@
         <!-- upload activity activity -->
         <activity
             android:name=".view.activity.UploadActivityActivity"
-            android:windowSoftInputMode="adjustNothing">
-        </activity>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing"></activity>
         <!-- Chat activity -->
         <activity
             android:name=".view.chat.ChatActivity"
-            android:label="@string/title_activity_chat">
-        </activity>
+            android:label="@string/title_activity_chat"
+            android:screenOrientation="portrait"></activity>
         <!-- Profile activity -->
         <activity
-            android:name=".view.profile.ProfileActivity">
-        </activity>
+            android:name=".view.profile.ProfileActivity"
+            android:screenOrientation="portrait"></activity>
         <!-- Edit Profile activity -->
         <activity
             android:name=".view.profile.EditProfileActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/Theme.movemeet">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.movemeet"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sdp.movemeet.view.profile.ProfileActivity" />
         </activity>
         <!-- GPS Recording activity -->
         <activity
-            android:name=".view.map.GPSRecordingActivity">
-        </activity>
+            android:name=".view.map.GPSRecordingActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
