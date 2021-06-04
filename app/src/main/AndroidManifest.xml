@@ -10,8 +10,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:allowBackup="true"
         android:hardwareAccelerated="true"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -26,12 +26,16 @@
             You can define the keys for the debug and release targets in src/debug/ and src/release/.
        -->
         <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/map_key" />
+        android:name="com.google.android.geo.API_KEY"
+        android:value="@string/map_key" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
+        <activity android:name=".ui.workout.TextWorkoutActivity"></activity>
+        <activity
+            android:name=".ui.workout.WorkoutActivity"
+            android:label="@string/title_activity_workout"
+            android:theme="@style/Theme.movemeet.noActionBar.NoActionBar" />
         <!-- Homescreen activity -->
         <activity
             android:name=".view.home.HomeScreenActivity"

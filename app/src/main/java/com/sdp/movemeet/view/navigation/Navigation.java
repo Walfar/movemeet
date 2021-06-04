@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.VisibleForTesting;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -17,11 +18,13 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.ui.workout.WorkoutActivity;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.main.MainActivity;
 import com.sdp.movemeet.view.profile.ProfileActivity;
+
 
 public class Navigation extends AppCompatActivity {
 
@@ -91,6 +94,16 @@ public class Navigation extends AppCompatActivity {
         context.startActivity(intent);
     }*/
 
+    /**
+     * Starts the Workout activity
+     * @param view the View in which to start the activity
+     */
+    public static void goToWorkoutActivity(View view) {
+        Context context = view.getContext();
+        Intent intent = new Intent(context, WorkoutActivity.class);
+        context.startActivity(intent);
+    }
+
 
     /**
      * Sign out the user in case it is not null (i.e. in case the Firebase Authentication service
@@ -158,6 +171,10 @@ public class Navigation extends AppCompatActivity {
                     logoutIfUserNonNull(
                             AuthenticationInstanceProvider.getAuthenticationInstance(),
                             this.activity);
+                    finish();
+                    break;
+                case R.id.nav_workouts:
+                    Navigation.goToWorkoutActivity(this.navigationView);
                     finish();
                     break;
             }
