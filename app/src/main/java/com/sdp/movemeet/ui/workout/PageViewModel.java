@@ -1,4 +1,4 @@
-package com.sdp.movemeet.ui.main;
+package com.sdp.movemeet.ui.workout;
 
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;

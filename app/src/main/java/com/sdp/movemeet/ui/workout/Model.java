@@ -1,4 +1,4 @@
-package com.sdp.movemeet;
+package com.sdp.movemeet.ui.workout;
 
 public class Model {
     String title;

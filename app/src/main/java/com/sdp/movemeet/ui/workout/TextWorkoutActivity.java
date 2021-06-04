@@ -1,4 +1,4 @@
-package com.sdp.movemeet.view;
+package com.sdp.movemeet.ui.workout;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;

@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -21,14 +20,11 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.sdp.movemeet.R;
-import com.sdp.movemeet.WorkoutActivity;
-import com.sdp.movemeet.backend.BackendManager;
+import com.sdp.movemeet.ui.workout.WorkoutActivity;
 import com.sdp.movemeet.backend.FirebaseInteraction;
-import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
-import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.User;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
@@ -37,8 +33,6 @@ import com.sdp.movemeet.view.main.MainActivity;
 import com.sdp.movemeet.view.profile.ProfileActivity;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
 import com.sdp.movemeet.view.chat.ChatActivity;
-
-import java.util.Map;
 
 public class Navigation extends AppCompatActivity {
 

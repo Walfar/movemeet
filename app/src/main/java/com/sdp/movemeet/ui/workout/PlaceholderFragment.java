@@ -1,6 +1,5 @@
-package com.sdp.movemeet.ui.main;
+package com.sdp.movemeet.ui.workout;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager.widget.ViewPager;
 
-import com.sdp.movemeet.ListViewAdapter;
-import com.sdp.movemeet.Model;
 import com.sdp.movemeet.R;
 
 import java.util.ArrayList;
@@ -79,16 +77,21 @@ public class PlaceholderFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        arrayList.clear();
+
         title = new String[]{"Workout #1: Abs", "Workout #2: Legs", "Workout #3: Upper Body"};
         description = new String[]{"Get in shape for the summer!", "Pump your legs!", "Build some muscle!"};
         icon = new int[]{R.drawable.ic_baseline_fitness_center_24, R.drawable.ic_baseline_fitness_center_24, R.drawable.ic_baseline_fitness_center_24};
 
-        listView = view.findViewById(R.id.listView);
 
         for (int i = 0; i < title.length; i++) {
             Model model = new Model(title[i], description[i], icon[i]);
             arrayList.add(model);
         }
+
+
+
+        listView = view.findViewById(R.id.listView);
 
         adapter = new ListViewAdapter(getActivity(), arrayList);
 

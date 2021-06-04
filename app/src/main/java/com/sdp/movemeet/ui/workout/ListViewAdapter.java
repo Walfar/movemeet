@@ -1,4 +1,4 @@
-package com.sdp.movemeet;
+package com.sdp.movemeet.ui.workout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,11 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sdp.movemeet.view.TextWorkoutActivity;
+import com.sdp.movemeet.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class ListViewAdapter extends BaseAdapter {
 
@@ -84,19 +83,19 @@ public class ListViewAdapter extends BaseAdapter {
                 if (modellist.get(position).getTitle().equals("Workout #1: Abs")){
                     //start NewActivity with title for actionbar and text for textview
                     Intent intent = new Intent(mContext, TextWorkoutActivity.class);
-                    intent.putExtra("contentTv", "\n• 15 Leg crunches\n• 6 Leg Raises\n");
+                        intent.putExtra("contentTv", "\n• 3x15 Leg crunches\n• 3x10 Dumbbell Crunches\n• 3x6 Leg Raises\n• 3x15 Hanging Knee Raises\n");
                     mContext.startActivity(intent);
                 }
                 if (modellist.get(position).getTitle().equals("Workout #2: Legs")){
                     //start NewActivity with title for actionbar and text for textview
                     Intent intent = new Intent(mContext, TextWorkoutActivity.class);
-                    intent.putExtra("contentTv", "\n• 15 Leg crunches\n• 6 Leg Raises\n");
+                    intent.putExtra("contentTv", "\n• 4x5 Barbell Squats\n• 4x25 Barbell Hip Thrust\n• 4x15 Leg Extension\n• 4x20 Standing Calf Raises\n");
                     mContext.startActivity(intent);
                 }
                 if (modellist.get(position).getTitle().equals("Workout #3: Upper Body")) {
                     //start NewActivity with title for actionbar and text for textview
                     Intent intent = new Intent(mContext, TextWorkoutActivity.class);
-                    intent.putExtra("contentTv", "\n• 15 Leg crunches\n• 6 Leg Raises\n");
+                    intent.putExtra("contentTv", "\n• 4x15 Bench Presses\n• 4x25 Overhead Presses\n• 4x15 Barbell Split Squats\n• 4x20 Back Squats\n");
                     mContext.startActivity(intent);
                 }
             }
