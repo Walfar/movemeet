@@ -29,34 +29,81 @@ This app was created for the CS-306 Software Development Project course.
 
 ### The application
 Welcome to Movemeet !
-<img src="Application_screenshots/home.jpg"/>
+
+<img src="Application_screenshots/home.jpg"
+width="200"/>
+
 The application is very easy to use with a drop-down panel
-<img src="Application_screenshots/navigation_view.jpg"/>
+
+<img src="Application_screenshots/navigation_view.jpg"
+width="200"/>
+
 As you can see, there are a lot of activities in the world !
-<img src="Application_screenshots/main_world.jpg"/>
+
+<img src="Application_screenshots/main_world.jpg"
+width="200"/>
+
 But don't worry, there are also activities near you !
-<img src="Application_screenshots/main_zoom.jpg"/>
+
+<img src="Application_screenshots/main_zoom.jpg"
+width="200"/>
+
 You can add new activities everywhere :
-<img src="Application_screenshots/addActivity.jpg"/>
+
+<img src="Application_screenshots/addActivity.jpg"
+width="200"/>
+
 Add a new activity is very easy
-<img src="Application_screenshots/new_activity.jpg"/>
+
+<img src="Application_screenshots/new_activity.jpg"
+width="200"/>
+
 To enter the time of your choice, there is a very easy to use clock
-<img src="Application_screenshots/time.jpg"/>
+
+<img src="Application_screenshots/time.jpg"
+width="200"/>
+
 You can see beautiful activities :
-<img src="Application_screenshots/windsurf.jpg"/>
+
+<img src="Application_screenshots/windsurf.jpg"
+width="200"/>
+
 If you like this activity, you can register
-<img src="Application_screenshots/register.jpg"/>
+
+<img src="Application_screenshots/register.jpg"
+width="200"/>
+
 But don't worry, you can unregister
-<img src="Application_screenshots/unregister_and_description.jpg"/>
+
+<img src="Application_screenshots/unregister_and_description.jpg"
+width="200"/>
+
 Let's see the chat !
-<img src="Application_screenshots/chat.jpg"/>
+
+<img src="Application_screenshots/chat.jpg"
+width="200"/>
+
 Also for running activity, you can record your run :
-<img src="Application_screenshots/before_record.jpg"/>
-<img src="Application_screenshots/after_record.jpg"/>
+
+<img src="Application_screenshots/before_record.jpg"
+width="200"/>
+
+<img src="Application_screenshots/after_record.jpg"
+width="200"/>
+
 Now after this good run, we can check our profile 
-<img src="Application_screenshots/profile.jpg"/>
+
+<img src="Application_screenshots/profile.jpg"
+width="200"/>
+
 We can modify this profile
-<img src="Application_screenshots/modify_profile.jpg"/>
+
+<img src="Application_screenshots/modify_profile.jpg"
+width="200"/>
+
+
+
+
    
    
 We hope you will like this application, and see you soon for an activity !
