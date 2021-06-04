@@ -41,7 +41,7 @@ import static junit.framework.Assert.assertTrue;
 // an integral part of the first one.
 public class EditProfileActivityImagePickerTest {
 
-    private String userImagePath = "users/B6PwbuQT3rRIyOemWtNQu7xfXmq2/profile.jpg"; // Antho1
+    private final String userImagePath = "users/B6PwbuQT3rRIyOemWtNQu7xfXmq2/profile.jpg"; // Antho1
 
     private FirebaseAuth fAuth;
 

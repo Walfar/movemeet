@@ -18,10 +18,10 @@ import java.util.ArrayList;
 
 public abstract class ActivitiesUpdater {
 
-    private static BackendSerializer<Activity> serializer =new ActivitySerializer();
+    private static final BackendSerializer<Activity> serializer =new ActivitySerializer();
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static ArrayList<Activity> activities = new ArrayList<>();
-    private static FirestoreActivityManager firestoreActivityManager = new FirestoreActivityManager(FirestoreActivityManager.ACTIVITIES_COLLECTION, serializer);
+    private static final FirestoreActivityManager firestoreActivityManager = new FirestoreActivityManager(FirestoreActivityManager.ACTIVITIES_COLLECTION, serializer);
 
     private static final String TAG = "Activities updater TAG";
 
@@ -61,7 +61,7 @@ public abstract class ActivitiesUpdater {
             }
             //Either way, when updating the list, we update the map as well
             else if (size == 0) allDocTask.addOnCompleteListener(listener);
-            else addActivitiesOnSuccess(firestoreActivityManager.getRecentlyAddedActivities(size)).addOnCompleteListener(listener);;
+            else addActivitiesOnSuccess(firestoreActivityManager.getRecentlyAddedActivities(size)).addOnCompleteListener(listener);
         });
     }
 

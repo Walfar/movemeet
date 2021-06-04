@@ -16,7 +16,7 @@ public class Activity implements Serializable, FirebaseObject {
     private final String organizerId;
     private String title;
     private int numberParticipant;
-    private ArrayList<String> participantsId;
+    private final ArrayList<String> participantsId;
 
     private double longitude;
     private double latitude;

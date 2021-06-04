@@ -16,8 +16,8 @@ public class User implements Serializable, FirebaseObject {
     private String idUser;
     private String imageId;
     private String documentPath;
-    private ArrayList<String> createdActivitiesId;
-    private ArrayList<String> registeredActivitiesId;
+    private final ArrayList<String> createdActivitiesId;
+    private final ArrayList<String> registeredActivitiesId;
 
 
     /**

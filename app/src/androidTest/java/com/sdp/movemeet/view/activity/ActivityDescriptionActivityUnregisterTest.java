@@ -45,7 +45,7 @@ public class ActivityDescriptionActivityUnregisterTest {
     private final static String DUMMY_ADDRESS = "address";
     public FirebaseAuth fAuth;
 
-    private Activity activity = new Activity(
+    private final Activity activity = new Activity(
             DUMMY_ACTIVITY_ID,
             DUMMY_ORGANISATOR_ID,
             DUMMY_TITLE,
