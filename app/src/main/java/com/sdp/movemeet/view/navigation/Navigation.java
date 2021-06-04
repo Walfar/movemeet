@@ -19,21 +19,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.ui.workout.WorkoutActivity;
-import com.sdp.movemeet.backend.FirebaseInteraction;
-import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
-import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
-import com.sdp.movemeet.backend.serialization.UserSerializer;
-import com.sdp.movemeet.models.User;
-import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
-import com.sdp.movemeet.view.activity.ActivityListActivity;
 import com.sdp.movemeet.view.main.MainActivity;
 import com.sdp.movemeet.view.profile.ProfileActivity;
 
-import com.sdp.movemeet.view.activity.UploadActivityActivity;
-import com.sdp.movemeet.view.chat.ChatActivity;
 
 public class Navigation extends AppCompatActivity {
 

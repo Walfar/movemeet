@@ -1,136 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.sdp.movemeet">
+xmlns:tools="http://schemas.android.com/tools"
+package="com.sdp.movemeet">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <application
-        android:hardwareAccelerated="true"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.movemeet.noActionBar">
-        <activity android:name=".ui.workout.TextWorkoutActivity"></activity>
-        <activity
-            android:name=".ui.workout.WorkoutActivity"
-            android:label="@string/title_activity_workout"
-            android:theme="@style/Theme.movemeet.noActionBar.NoActionBar" />
-        <activity android:name=".view.activity.ActivityListActivity" />
-        <activity android:name=".view.map.GPSRecordingActivity" />
-        <activity
-            android:name=".view.profile.EditProfileActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".view.profile.ProfileActivity" />
-        <activity android:name=".view.activity.UploadActivityActivity" />
-        <!--
-            The API key for Google Maps-based APIs is defined as a string resource.
-            (See the file "res/values/google_maps_api.xml").
-            Note that the API key is linked to the encryption key used to sign the APK.
-            You need a different API key for each encryption key, including the release key that is used to
-            sign the APK for publishing.
-            You can define the keys for the debug and release targets in src/debug/ and src/release/.
-       -->
-        <meta-data
+<application
+    android:hardwareAccelerated="true"
+    android:allowBackup="true"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name"
+    android:roundIcon="@mipmap/ic_launcher_round"
+    android:supportsRtl="true"
+    android:theme="@style/Theme.movemeet.noActionBar">
+    <!--
+        The API key for Google Maps-based APIs is defined as a string resource.
+        (See the file "res/values/google_maps_api.xml").
+        Note that the API key is linked to the encryption key used to sign the APK.
+        You need a different API key for each encryption key, including the release key that is used to
+        sign the APK for publishing.
+        You can define the keys for the debug and release targets in src/debug/ and src/release/.
+   -->
+    <meta-data
         android:name="com.google.android.geo.API_KEY"
         android:value="@string/map_key" />
+    <meta-data
+        android:name="preloaded_fonts"
+        android:resource="@array/preloaded_fonts" />
+
+
+    <activity android:name=".ui.workout.TextWorkoutActivity"></activity>
+    <activity
+        android:name=".ui.workout.WorkoutActivity"
+        android:label="@string/title_activity_workout"
+        android:theme="@style/Theme.movemeet.noActionBar.NoActionBar" />
+    <!-- Homescreen activity -->
+    <activity
+        android:name=".view.home.HomeScreenActivity"
+        android:configChanges="orientation|keyboardHidden|screenSize"
+        android:theme="@style/Theme.movemeet.noActionBar"
+        android:hardwareAccelerated="false">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN"/> <!--this activity is the entry point of the application-->
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+    <!-- Register activity -->
+    <activity
+        android:name=".view.home.RegisterActivity"
+        android:parentActivityName=".view.home.HomeScreenActivity"
+        android:theme="@style/Theme.movemeet">
         <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.sdp.movemeet.view.home.HomeScreenActivity" />
+    </activity>
+    <!-- Login activity -->
+    <activity
+        android:name=".view.home.LoginActivity"
+        android:parentActivityName=".view.home.HomeScreenActivity"
+        android:theme="@style/Theme.movemeet">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.sdp.movemeet.view.home.HomeScreenActivity" />
+    </activity>
+    <!-- Main unregister activity -->
+    <activity
+        android:name=".view.main.MainUnregisterActivity"
+        android:parentActivityName=".view.home.HomeScreenActivity"
+        android:theme="@style/Theme.movemeet">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.sdp.movemeet.view.home.HomeScreenActivity" />
+    </activity>
+    <!-- activity description unregister activity -->
+    <activity
+        android:name=".view.activity.ActivityDescriptionActivityUnregister"
+        android:parentActivityName=".view.main.MainUnregisterActivity"
+        android:theme="@style/Theme.movemeet">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.sdp.movemeet.view.main.MainUnregisterActivity" />
+    </activity>
 
-        <!-- Homescreen activity -->
-        <activity
-            android:name=".view.home.HomeScreenActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/Theme.movemeet.noActionBar"
-            android:hardwareAccelerated="false">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/> <!--this activity is the entry point of the application-->
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <!-- Register activity -->
-        <activity
-            android:name=".view.home.RegisterActivity"
-            android:parentActivityName=".view.home.HomeScreenActivity"
-            android:theme="@style/Theme.movemeet">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sdp.movemeet.view.home.HomeScreenActivity" />
-        </activity>
-        <!-- Login activity -->
-        <activity
-            android:name=".view.home.LoginActivity"
-            android:parentActivityName=".view.home.HomeScreenActivity"
-            android:theme="@style/Theme.movemeet">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sdp.movemeet.view.home.HomeScreenActivity" />
-        </activity>
-        <!-- Main unregister activity -->
-        <activity
-            android:name=".view.main.MainUnregisterActivity"
-            android:parentActivityName=".view.home.HomeScreenActivity"
-            android:theme="@style/Theme.movemeet">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sdp.movemeet.view.home.HomeScreenActivity" />
-        </activity>
-        <!-- activity description unregister activity -->
-        <activity
-            android:name=".view.activity.ActivityDescriptionActivityUnregister"
-            android:parentActivityName=".view.main.MainUnregisterActivity"
-            android:theme="@style/Theme.movemeet">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sdp.movemeet.view.main.MainUnregisterActivity" />
-        </activity>
-
-        <!-- Main activity -->
-        <activity
-            android:name=".view.main.MainActivity">
-        </activity>
-        <!-- activity description activity -->
-        <activity android:name=".view.activity.ActivityDescriptionActivity"
-            android:theme="@style/Theme.movemeet">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sdp.movemeet.view.main.MainActivity" />
-        </activity>
-        <!-- upload activity activity -->
-        <activity
-            android:name=".view.activity.UploadActivityActivity"
-            android:windowSoftInputMode="adjustNothing">
-        </activity>
-        <!-- Chat activity -->
-        <activity
-            android:name=".view.chat.ChatActivity"
-            android:label="@string/title_activity_chat">
-        </activity>
-        <!-- Profile activity -->
-        <activity
-            android:name=".view.profile.ProfileActivity">
-        </activity>
-        <!-- Edit Profile activity -->
-        <activity
-            android:name=".view.profile.EditProfileActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/Theme.movemeet">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sdp.movemeet.view.profile.ProfileActivity" />
-        </activity>
-        <!-- GPS Recording activity -->
-        <activity
-            android:name=".view.map.GPSRecordingActivity">
-        </activity>
-    </application>
+    <!-- Main activity -->
+    <activity
+        android:name=".view.main.MainActivity">
+    </activity>
+    <!-- activity description activity -->
+    <activity android:name=".view.activity.ActivityDescriptionActivity"
+        android:theme="@style/Theme.movemeet">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.sdp.movemeet.view.main.MainActivity" />
+    </activity>
+    <!-- upload activity activity -->
+    <activity
+        android:name=".view.activity.UploadActivityActivity"
+        android:windowSoftInputMode="adjustNothing">
+    </activity>
+    <!-- Chat activity -->
+    <activity
+        android:name=".view.chat.ChatActivity"
+        android:label="@string/title_activity_chat">
+    </activity>
+    <!-- Profile activity -->
+    <activity
+        android:name=".view.profile.ProfileActivity">
+    </activity>
+    <!-- Edit Profile activity -->
+    <activity
+        android:name=".view.profile.EditProfileActivity"
+        android:windowSoftInputMode="adjustPan"
+        android:theme="@style/Theme.movemeet">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.sdp.movemeet.view.profile.ProfileActivity" />
+    </activity>
+    <!-- GPS Recording activity -->
+    <activity
+        android:name=".view.map.GPSRecordingActivity">
+    </activity>
+</application>
 
 </manifest>
