@@ -102,6 +102,7 @@ public class EditProfileActivityDeleteAccountTest {
             public void onSuccess(AuthResult authResult) {
                 Log.d(TAG, "Login successful!");
                 latch.countDown();
+                assert(false);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

@@ -22,8 +22,8 @@ public class ActivitiesUpdaterTest {
             ActivitiesUpdater.updateListActivities(task1 -> {
                 assertThat(activities, is(ActivitiesUpdater.getActivities()));
                 Log.d("updater test","second assert");
-            });
-        });
+            }, (s, err) -> {});
+        }, (s, err) -> {});
         Thread.sleep(3000);
     }
 }

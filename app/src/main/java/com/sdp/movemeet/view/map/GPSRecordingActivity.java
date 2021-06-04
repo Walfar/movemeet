@@ -150,12 +150,7 @@ public class GPSRecordingActivity extends FragmentActivity implements OnMapReady
             String id = AuthenticationInstanceProvider.getAuthenticationInstance().getCurrentUser().getUid();
             activity.getParticipantRecordings().put(id, new GPSPath(path, time));
             GPSRecordingActivity recordingActivity = this;
-            firestoreActivityManager.add(activity, null).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    recordingActivity.finish();
-                }
-            });
+            firestoreActivityManager.add(activity, null).addOnCompleteListener(task -> recordingActivity.finish());
 
             intent.putExtra(ActivityDescriptionActivity.DESCRIPTION_ACTIVITY_KEY, activity);
             startActivity(intent);

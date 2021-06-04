@@ -33,7 +33,7 @@ public class StorageImageManager implements BackendManager<Image> {
 
     @Override
     public Task<?> delete(String path) {
-        throw new UnsupportedOperationException();
+        return storageReference.child(path).delete();
     }
 
     @Override

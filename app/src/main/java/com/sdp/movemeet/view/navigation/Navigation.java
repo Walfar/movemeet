@@ -46,16 +46,6 @@ public class Navigation extends AppCompatActivity {
     }
 
     /**
-     * Starts the default ActivityDescription activity
-     * @param view the View in which to start the activity
-     */
-    /*public static void startActivity(View view) {
-        Context context = view.getContext();
-        Intent intent = new Intent(context, ActivityDescriptionActivity.class);
-        context.startActivity(intent);
-    }*/
-
-    /**
      * Starts the ActivityUpload activity
      *
      * @param view the View in which to start the activity
@@ -89,17 +79,6 @@ public class Navigation extends AppCompatActivity {
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
     }
-
-    /**
-     * Starts the chat activity
-     * @param view the View in which to start the activity
-     */
-    /*public static void goToChat(View view) {
-        Context context = view.getContext();
-        Intent intent = new Intent(context, ChatActivity.class);
-        intent.putExtra("ACTIVITY_CHAT_ID", "general_chat_new_format"); // general_chat"
-        context.startActivity(intent);
-    }*/
 
     /**
      * Starts ActivityList activity
@@ -181,18 +160,6 @@ public class Navigation extends AppCompatActivity {
                             this.activity);
                     finish();
                     break;
-                /*case R.id.nav_start_activity:
-                    Navigation.startActivity(this.navigationView);
-                    finish();
-                    break;*/
-               /*case R.id.nav_chat:
-                    Navigation.goToChat(this.navigationView);
-                    finish();
-                    break;*/
-                /*case R.id.nav_list_activities:
-                    Navigation.goToListOfActivities(this.navigationView);
-                    finish();
-                    break;*/
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START);

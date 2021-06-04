@@ -43,12 +43,14 @@ import com.sdp.movemeet.view.map.GPSRecordingActivity;
 import com.sdp.movemeet.view.navigation.Navigation;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
 import static com.sdp.movemeet.utility.ActivityPictureCache.loadFromCache;
+import static com.sdp.movemeet.utility.PermissionChecker.isStorageReadPermissionGranted;
 
 /***
  * Activity for show the description of an activity. Informations about an activity are : sport, date and time, time estimate, organizer,
@@ -57,13 +59,17 @@ import static com.sdp.movemeet.utility.ActivityPictureCache.loadFromCache;
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 public class ActivityDescriptionActivity extends AppCompatActivity {
 
+    private static final String TAG = "ActDescActivity";
+    public static final String PARTICIPANT_ID_FIELD = "participantId";
+    public static final String REGISTERED_ACTIVITY_FIELD = "registeredActivity";
+    public static final String UPDATE_FIELD_UNION = "union";
+    public static final String UPDATE_FIELD_REMOVE = "remove";
     public static final String DESCRIPTION_ACTIVITY_KEY = "activitykey";
     public static final String RECORDING_EXTRA_NAME = "gpsreckey";
-    public static final String DISTANCE_UNIT = "m";
+    public static final String DISTANCE_UNIT = "km";
     public static final String SPEED_UNIT = "km/h";
     public static final String ACTIVITY_CHAT_ID = "ActivityChatId";
     public static final String ACTIVITY_TITLE = "ActivityTitle";
-    private static final String TAG = "ActDescActivity";
     private static final int REQUEST_IMAGE = 1000;
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
@@ -120,16 +126,16 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         createDurationView();
         createOrganizerView();
         getOrganizerName();
-        createParticipantNumberView();
-        getParticipantNames();
+        createParticipantNumberView(activity);
+        getParticipantNames(activity);
         loadActivityHeaderPicture();
-        setButton();
+        setButton(activity);
     }
 
     /**
      * Modify the visibility of buttons in the layout
      */
-    private void setButton() {
+    private void setButton(Activity activity) {
         View recButton = findViewById(R.id.activityGPSRecDescription);
         if (activity.getParticipantId().contains(userId)) {
             findViewById(R.id.activityRegisterDescription).setVisibility(View.GONE);
@@ -171,10 +177,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         }
     }
 
-    private void getParticipantNames() {
+    private void getParticipantNames(Activity activity) {
         ArrayList<String> participantIds = activity.getParticipantId();
-        Log.i(TAG, "activity.getParticipantId(): " + activity.getParticipantId());
-        Log.i(TAG, "activity.getDocumentPath(): " + activity.getDocumentPath());
         participantNamesString = new StringBuilder();
         for (int i = 0; i < participantIds.size(); i++) {
             String currentParticipantId = participantIds.get(i);
@@ -195,7 +199,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     /**
      * Number of participants of the activity
      */
-    private void createParticipantNumberView() {
+    private void createParticipantNumberView(Activity activity) {
         numberParticipantsView = findViewById(R.id.activity_number_description);
         participantNamesView = findViewById(R.id.activity_participants_description);
         numberParticipantsView.setText(activity.getParticipantId().size() + ImageHandler.PATH_SEPARATOR + activity.getNumberParticipant());
@@ -262,26 +266,26 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Registering user to the activity document Firebase Firestore (field array "participantId")
      */
     public void registerToActivity(View v) {
+        registerToActivityImplementation(activity, userId);
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public void registerToActivityImplementation(Activity activity, String userId) {
         if (!activity.getParticipantId().contains(userId)) {
             try {
                 activity.addParticipantId(userId);
-                createParticipantNumberView();
-                activityManager.update(activity.getDocumentPath(), "participantId", userId, "union").addOnSuccessListener(new OnSuccessListener() {
+                createParticipantNumberView(activity);
+                // Adding the activity path to the array field "registeredActivity" of the Firebase
+                // Firestore user document
+                userManager.update(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + userId, REGISTERED_ACTIVITY_FIELD, activity.getDocumentPath(), UPDATE_FIELD_UNION);
+                // Adding the user ID to the array field "participantId" of the Firebase Firestore
+                // activity document
+                activityManager.update(activity.getDocumentPath(), PARTICIPANT_ID_FIELD, userId, UPDATE_FIELD_UNION).addOnSuccessListener(new OnSuccessListener() {
                     @Override
                     public void onSuccess(Object o) {
                         Log.d(TAG, "Participant registered in Firebase Firestore!");
-                        getParticipantNames();
-                        setButton();
-                        // TODO: (By Victor) here --> get activity from the MainMapFragment and update it!
-                        //  (in order to sync the Firebase Firestore new updates with the local sport activities and their views)
-                        //  (because if we register, exit ActivityDescriptionActivity and then re-enter ActivityDescriptionActivity,
-                        //  then the Firebase Firestore backend works and is updated, but the local activity is not updated according
-                        //  to this version of the backend)
-                        //  Probable solution:
-                        //  Implement a method in the OnResume of MainMapFragment to clear the list of activities
-                        //  and then update them from Firebase Firestore (but this is not very optimal, because it takes time)
-                        //  --> OR: probably implement a kind of listener (as the one for the chat) that listens continuously to
-                        //  new entries in the database!
+                        getParticipantNames(activity);
+                        setButton(activity);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -302,16 +306,26 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Unregistering user from the activity document on Firebase Firestore (field array "participantId")
      */
     public void unregisterFromActivity(View v) {
+        unregisterFromActivityImplementation(activity, userId, organizerId);
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public void unregisterFromActivityImplementation(Activity activity, String userId, String organizerId) {
         if (activity.getParticipantId().contains(userId)) {
             if (!userId.equals(organizerId)) {
                 try {
                     activity.removeParticipantId(userId);
-                    createParticipantNumberView();
-                    activityManager.update(activity.getDocumentPath(), "participantId", userId, "remove").addOnSuccessListener(new OnSuccessListener() {
+                    createParticipantNumberView(activity);
+                    // Removing the activity path from the array field "registeredActivity" of the
+                    // Firebase Firestore user document
+                    userManager.update(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + userId, REGISTERED_ACTIVITY_FIELD, activity.getDocumentPath(), UPDATE_FIELD_REMOVE);
+                    // Removing the user ID from the array field "participantId" of the Firebase
+                    // Firestore activity document
+                    activityManager.update(activity.getDocumentPath(), PARTICIPANT_ID_FIELD, userId, UPDATE_FIELD_REMOVE).addOnSuccessListener(new OnSuccessListener() {
                         @Override
                         public void onSuccess(Object o) {
                             Log.d(TAG, "Participant unregistered from Firebase Firestore!");
-                            getParticipantNames();
+                            getParticipantNames(activity);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -355,7 +369,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         Intent intent = new Intent(ActivityDescriptionActivity.this, GPSRecordingActivity.class);
         intent.putExtra(RECORDING_EXTRA_NAME, activity);
         startActivity(intent);
-        //finish();
     }
 
     /**
@@ -364,10 +377,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     public void displayParticipantStats() {
         GPSPath stats = activity.getParticipantRecordings().get(userId);
         TextView distText = findViewById(R.id.activity_description_dist_data);
-        distText.setText(stats.getDistance() + DISTANCE_UNIT);
+        distText.setText(new DecimalFormat("#.##").format(stats.getDistance()) + DISTANCE_UNIT);
 
         TextView avgSpeedText = findViewById(R.id.activity_description_avgSpeed_data);
-        avgSpeedText.setText(stats.getAverageSpeed() + SPEED_UNIT);
+        avgSpeedText.setText(new DecimalFormat("#.##").format(stats.getAverageSpeed()) + SPEED_UNIT);
 
         TextView timeText = findViewById(R.id.activity_description_time_data);
 
@@ -449,7 +462,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Launch the Gallery to select a header picture for the activity
      */
     public void changeActivityPicture(View view) {
-        if (userId.equals(organizerId)) {
+        if (userId.equals(organizerId) && isStorageReadPermissionGranted(this)) {
             Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(openGalleryIntent, REQUEST_IMAGE);
         } else {

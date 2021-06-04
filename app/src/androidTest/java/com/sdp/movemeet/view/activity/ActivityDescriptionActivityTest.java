@@ -11,8 +11,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.models.Activity;
@@ -43,15 +41,18 @@ import static org.hamcrest.Matchers.allOf;
 @RunWith(AndroidJUnit4.class)
 public class ActivityDescriptionActivityTest {
 
+    private static final String TAG = "ActDescActTest";
+
     private final static String DUMMY_ACTIVITY_ID = "12345";
-    private final static String DUMMY_ORGANISATOR_ID = "1";
+    private final static String DUMMY_ORGANISATOR_ID = "jOUwVmwQVFgYKdH35jYm50l9TJx1"; // Antho3
+    private final static String DUMMY_ORGANISATOR_NAME = "Antho3";
     private final static String DUMMY_TITLE = "dummy_title";
-    private final static int DUMMY_NUMBER_PARTICIPANT = 2;
-    private final static ArrayList<String> DUMMY_PARTICIPANTS_ID = new ArrayList<>();
+    private final static int DUMMY_NUMBER_PARTICIPANT = 23;
+    private final static ArrayList<String> DUMMY_PARTICIPANTS_ID = new ArrayList<String>() {{add("jOUwVmwQVFgYKdH35jYm50l9TJx1");}}; // Antho3
     private final static double DUMMY_LONGITUDE = 2.45;
     private final static double DUMMY_LATITUDE = 3.697;
     private final static String DUMMY_DESCRIPTION = "description";
-    private final static String DUMMY_DOCUMENT_PATH = "documentPath";
+    private final static String DUMMY_DOCUMENT_PATH = "activities/lTGOJB8PbU0Dx3SnntOs"; // Tricking with Antho3
     private final static Date DUMMY_DATE = new Date(2021, 11, 10, 1, 10);
     private final static double DUMMY_DURATION = 10.4;
     private final static Sport DUMMY_SPORT = Sport.Running;
@@ -60,9 +61,6 @@ public class ActivityDescriptionActivityTest {
     private String user;
     private Intent intent;
     private Intent intent_2;
-
-    private FirebaseFirestore fStore;
-    private StorageReference storageReference;
 
     private final Activity activity = new Activity(
             DUMMY_ACTIVITY_ID,
@@ -135,13 +133,20 @@ public class ActivityDescriptionActivityTest {
         Intents.init();
         Intent intent = new Intent(getApplicationContext(), ActivityDescriptionActivity.class).putExtra(ActivityDescriptionActivity.DESCRIPTION_ACTIVITY_KEY, activity);
         ActivityScenario testRule = ActivityScenario.launch(intent);
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+
         onView(withId(R.id.activity_title_description)).check(matches(withText(DUMMY_TITLE)));
         //onView(withId(R.id.activity_date_description)).check(matches(withText(String.valueOf(DUMMY_DATE))));
         onView(withId(R.id.activity_address_description)).check(matches(withText(DUMMY_ADDRESS)));
         onView(withId(R.id.activity_sport_description)).check(matches(withText(String.valueOf(DUMMY_SPORT))));
         //onView(withId(R.id.activity_duration_description)).check(matches(withText(String.valueOf(DUMMY_DURATION))));
 
-        onView(withId(R.id.activity_organisator_description)).check(matches(withText(DUMMY_ORGANISATOR_ID)));
+        onView(withId(R.id.activity_organisator_description)).check(matches(withText(DUMMY_ORGANISATOR_NAME))); // DUMMY_ORGANISATOR_ID
         //onView(withId(R.id.activity_number_description)).check(matches(withText(String.valueOf(DUMMY_NUMBER_PARTICIPANT))));
         //onView(withId(R.id.activity_participants_description)).check(matches(withText(String.valueOf(DUMMY_PARTICIPANTS_ID.size()))));
 
@@ -196,4 +201,5 @@ public class ActivityDescriptionActivityTest {
             return false;
         }
     }
+
 }

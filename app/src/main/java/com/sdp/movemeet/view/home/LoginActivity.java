@@ -41,55 +41,47 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.button_login);
         createBtn = findViewById(R.id.text_view_create_account);
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        loginBtn.setOnClickListener(v -> {
 
-                // When the user clicks on the "LOGIN" button, we first validate his data
-                String email = emailEditText.getText().toString().trim();
-                String password = passwordEditText.getText().toString().trim();
+            // When the user clicks on the "LOGIN" button, we first validate his data
+            String email = emailEditText.getText().toString().trim();
+            String password = passwordEditText.getText().toString().trim();
 
-                if (TextUtils.isEmpty(email)) { // checking that the email address is not empty
-                    emailEditText.setError("Email is required.");
-                    return;
-                }
-
-                if (TextUtils.isEmpty(password)) { // checking that the password is not empty
-                    passwordEditText.setError("Password is required.");
-                    return;
-                }
-
-                if (password.length() < 6) { // checking that the password is at least 6 characters long
-                    passwordEditText.setError("Password must be >= 6 characters.");
-                    return;
-                }
-
-                progressBar.setVisibility(View.VISIBLE);
-
-                // Then we authenticate the user using his email and password
-                fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "Logged in successfully.", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);// we redirect the user to the "MainActivity"
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.addCategory(Intent.CATEGORY_HOME);
-                            startActivity(intent);
-                            finish();
-
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    }
-
-                });
-
+            if (TextUtils.isEmpty(email)) { // checking that the email address is not empty
+                emailEditText.setError("Email is required.");
+                return;
             }
+
+            if (TextUtils.isEmpty(password)) { // checking that the password is not empty
+                passwordEditText.setError("Password is required.");
+                return;
+            }
+
+            if (password.length() < 6) { // checking that the password is at least 6 characters long
+                passwordEditText.setError("Password must be >= 6 characters.");
+                return;
+            }
+
+            progressBar.setVisibility(View.VISIBLE);
+
+            // Then we authenticate the user using his email and password
+            fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(LoginActivity.this, "Logged in successfully.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);// we redirect the user to the "MainActivity"
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    startActivity(intent);
+                    finish();
+
+                } else {
+                    Toast.makeText(LoginActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                }
+            });
 
         });
 
