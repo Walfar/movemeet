@@ -130,11 +130,12 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
         if (activity.getParticipantRecordings() != null)
             data.put(GPS_RECORDINGS_KEY, activity.getParticipantRecordings());
 
-        if (!activity.getActivityId().equals("12345")) { // ActivityTest.DUMMY_ACTIVITY_ID
-            // Intercepting the activity path to add it to the organizer Firebase Firestore document
-            BackendManager<User> userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
-            userManager.update(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + activity.getOrganizerId(), CREATED_ACTIVITY_FIELD, activity.getDocumentPath(), ActivityDescriptionActivity.UPDATE_FIELD_UNION);
-        }
+        // TODO: eventually remove those lines if code works at end of UploadActivityActivity
+//        if (!activity.getActivityId().equals("12345")) { // ActivityTest.DUMMY_ACTIVITY_ID
+//            // Intercepting the activity path to add it to the organizer Firebase Firestore document
+//            BackendManager<User> userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
+//            userManager.update(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + activity.getOrganizerId(), CREATED_ACTIVITY_FIELD, activity.getDocumentPath(), ActivityDescriptionActivity.UPDATE_FIELD_UNION);
+//        }
 
         return data;
     }
