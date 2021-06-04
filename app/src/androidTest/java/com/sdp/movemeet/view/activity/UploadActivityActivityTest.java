@@ -331,10 +331,6 @@ public class UploadActivityActivityTest {
         AuthenticationInstanceProvider.fAuth = FirebaseAuth.getInstance();
     }
 
-    @AfterClass
-    public static void after() {
-
-    }
 
     public static ViewAction forceDoubleClick() {
         return new ViewAction() {

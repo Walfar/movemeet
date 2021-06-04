@@ -95,8 +95,8 @@ public class DistanceCalculatorTest {
 
 
         DistanceCalculator dc = new DistanceCalculator(0., 0.);
-        assertEquals(493.1, dc.calculateDistance(0., 0., 2.45, 3.697), 0.1);
-        assertEquals(959.2, dc.calculateDistance(0., 0., 2.45 + 3, 3.697 + 3), 0.1);
+        assertEquals(493.1, DistanceCalculator.calculateDistance(0., 0., 2.45, 3.697), 0.1);
+        assertEquals(959.2, DistanceCalculator.calculateDistance(0., 0., 2.45 + 3, 3.697 + 3), 0.1);
     }
 
     @Test

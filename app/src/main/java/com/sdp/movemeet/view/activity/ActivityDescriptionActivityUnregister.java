@@ -64,6 +64,10 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
         createDurationView();
     }
 
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
+
     public void goToLogin(View v) {
         startActivity(new Intent(getApplicationContext(), LoginActivity.class)); // sending the user to the "Login" activity
         finish();
@@ -73,7 +77,7 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
      * Title from the activity
      */
     private void createTitleView() {
-        TextView activityTitle = (TextView) findViewById(R.id.activity_title_description);
+        TextView activityTitle = findViewById(R.id.activity_title_description);
         activityTitle.setText(activity.getTitle());
     }
 
@@ -81,7 +85,7 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
      * Number of participants from the activity
      */
     private void createParticipantNumberView() {
-        TextView numberParticipantsView = (TextView) findViewById(R.id.activity_number_description);
+        TextView numberParticipantsView = findViewById(R.id.activity_number_description);
         numberParticipantsView.setText(activity.getParticipantId().size() + ImageHandler.PATH_SEPARATOR + activity.getNumberParticipant());
     }
 
@@ -89,7 +93,7 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
      * Description from the activity
      */
     private void createDescriptionView() {
-        TextView descriptionView = (TextView) findViewById(R.id.activity_description_description);
+        TextView descriptionView = findViewById(R.id.activity_description_description);
         descriptionView.setText(activity.getDescription());
     }
 
@@ -97,7 +101,7 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
      * Sport of the activity
      */
     private void createSportView() {
-        TextView sportView = (TextView) findViewById(R.id.activity_sport_description);
+        TextView sportView = findViewById(R.id.activity_sport_description);
         sportView.setText(activity.getSport().toString());
     }
 
@@ -105,7 +109,7 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
      * Duration of the activity
      */
     private void createDurationView() {
-        TextView durationView = (TextView) findViewById(R.id.activity_duration_description);
+        TextView durationView = findViewById(R.id.activity_duration_description);
         durationView.setText(String.valueOf((int) activity.getDuration()));
     }
 
@@ -113,7 +117,7 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
      * Address of the activity
      */
     private void createAddressView() {
-        TextView addressView = (TextView) findViewById(R.id.activity_address_description);
+        TextView addressView = findViewById(R.id.activity_address_description);
         addressView.setText(activity.getAddress());
     }
 
@@ -126,7 +130,7 @@ public class ActivityDescriptionActivityUnregister extends AppCompatActivity {
         imagePath = activity.getDocumentPath() + ImageHandler.PATH_SEPARATOR + ImageHandler.ACTIVITY_IMAGE_NAME;
         Image image = new Image(null, activityImage);
         image.setDocumentPath(imagePath);
-        ImageHandler.loadImage(image, progressBar);
+        ImageHandler.loadImage(image, this);
     }
 
 }
