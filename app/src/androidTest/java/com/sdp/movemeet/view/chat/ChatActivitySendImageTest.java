@@ -3,6 +3,7 @@ package com.sdp.movemeet.view.chat;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -13,15 +14,19 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
+import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firebaseDB.FirebaseDBMessageManager;
+import com.sdp.movemeet.backend.firebase.storage.StorageImageManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.backend.serialization.MessageSerializer;
+import com.sdp.movemeet.models.Image;
 import com.sdp.movemeet.models.Message;
 import com.sdp.movemeet.utility.ImageHandler;
 import com.sdp.movemeet.view.profile.DrawableMatcher;
-import com.sdp.movemeet.view.profile.ProfileActivity;
 
 import org.hamcrest.Matcher;
 import org.junit.After;
@@ -43,9 +48,7 @@ import static org.mockito.Mockito.mock;
 
 public class ChatActivitySendImageTest {
 
-    //private StorageReference storageReference;
-
-    private Uri DUMMY_IMAGE_URI = mock(Uri.class);
+    private static final String TAG = "ChatActivitySendImageTest";
 
     private static final String TEST_FULL_NAME = "Antho1";
     private static final String TEST_EMAIL = "antho1@gmail.com";
@@ -53,16 +56,13 @@ public class ChatActivitySendImageTest {
     private static final String TEST_USER_ID = "B6PwbuQT3rRIyOemWtNQu7xfXmq2";
     private FirebaseAuth fAuth;
     private BackendManager<Message> messageManager;
-
+    private BackendManager<Image> imageBackendManager;
 
     @Rule
     public IntentsTestRule<ChatActivity> activityRule = new IntentsTestRule<>(ChatActivity.class);
 
     @Before
     public void setUp() {
-        // Setting up Firebase Storage
-        //storageReference = BackendInstanceProvider.getStorageInstance().getReference();
-
         // Saving the mocked picked image
         savePickedImage();
 
@@ -87,9 +87,38 @@ public class ChatActivitySendImageTest {
             assert (false);
         }
 
-        // Removing all messages in "default_chat"
+        // Removing all messages in "default_chat" (to avoid overloading our database with test text messages)
         messageManager = new FirebaseDBMessageManager(new MessageSerializer());
         messageManager.delete(ChatActivity.CHATS_CHILD + ImageHandler.PATH_SEPARATOR + ChatActivity.DEFAULT_CHAT_CHILD);
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            assert (false);
+        }
+
+        // Deleting one by one all images in Firebase Storage "default_chat" directory
+        // (to avoid overloading our database with test image messages)
+        imageBackendManager = new StorageImageManager();
+        StorageReference listRef = FirebaseStorage.getInstance().getReference().child(ChatActivity.CHATS_CHILD + ImageHandler.PATH_SEPARATOR + ChatActivity.DEFAULT_CHAT_CHILD);
+        listRef.listAll()
+                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
+                    @Override
+                    public void onSuccess(ListResult listResult) {
+                        Log.w(TAG, "List of images in Firebase Storage could successfully be accessed!");
+                        for (StorageReference prefix : listResult.getPrefixes()) {
+                            String chatImagePath = prefix.toString().split(ImageHandler.PATH_SEPARATOR,4)[3]+ImageHandler.PATH_SEPARATOR+ImageHandler.CHAT_IMAGE_NAME;
+                            imageBackendManager.delete(chatImagePath);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "List of images in Firebase Storage could not be accessed. Error message: " + e.getMessage());
+                    }
+                });
+
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -97,7 +126,6 @@ public class ChatActivitySendImageTest {
         }
 
         ActivityScenario scenario = ActivityScenario.launch(ChatActivity.class);
-
     }
 
     @Test

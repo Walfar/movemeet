@@ -144,6 +144,17 @@ public class ActivityDescriptionActivityTest {
         Intents.release();
     }
 
+
+
+    //-------------Test
+    @Test
+    public void registerAndUnregisterFromActivity() {
+
+    }
+    //-------------Test
+
+
+
     @After
     public void signOut() {
         fAuth.signOut();

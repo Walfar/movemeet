@@ -92,7 +92,6 @@ public class ChatActivityTest {
             assert (false);
         }
 
-
         ActivityScenario scenario = ActivityScenario.launch(ChatActivity.class);
     }
 
@@ -137,7 +136,6 @@ public class ChatActivityTest {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
 
     }
 
