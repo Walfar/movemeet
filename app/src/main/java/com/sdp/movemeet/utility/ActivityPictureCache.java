@@ -28,6 +28,9 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.FileOutputStream;
 
+/**
+ * This utility class is used to load/save the activities header pictures from/to cache
+ */
 public abstract class ActivityPictureCache {
 
     public static String TAG = "Cache TAG";
