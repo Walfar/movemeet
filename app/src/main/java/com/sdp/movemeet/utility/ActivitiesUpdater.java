@@ -22,10 +22,11 @@ import java.util.ArrayList;
  */
 public abstract class ActivitiesUpdater {
 
-    public static BackendSerializer<Activity> serializer =new ActivitySerializer();
+    public static final BackendSerializer<Activity> serializer =new ActivitySerializer();
+
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static ArrayList<Activity> activities = new ArrayList<>();
-    private static FirestoreActivityManager firestoreActivityManager = new FirestoreActivityManager(FirestoreActivityManager.ACTIVITIES_COLLECTION, serializer);
+    private static final FirestoreActivityManager firestoreActivityManager = new FirestoreActivityManager(FirestoreActivityManager.ACTIVITIES_COLLECTION, serializer);
 
     private static final String TAG = "Activities updater TAG";
 
@@ -64,7 +65,7 @@ public abstract class ActivitiesUpdater {
             }
             else if (size == 0) allDocTask.addOnCompleteListener(onCompletelistener);
             //Either way, when updating the list, we update the map as well
-            else addActivitiesOnSuccess(firestoreActivityManager.getRecentlyAddedActivities(size), eventListener).addOnCompleteListener(onCompletelistener);;
+            else addActivitiesOnSuccess(firestoreActivityManager.getRecentlyAddedActivities(size), eventListener).addOnCompleteListener(onCompletelistener);
         });
     }
 

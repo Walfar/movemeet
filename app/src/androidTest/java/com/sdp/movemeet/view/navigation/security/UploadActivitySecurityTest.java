@@ -1,4 +1,4 @@
-package com.sdp.movemeet.view.navigation.security;;
+package com.sdp.movemeet.view.navigation.security;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;

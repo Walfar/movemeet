@@ -1,6 +1,6 @@
 package com.sdp.movemeet.view.map;
 
-import android.Manifest;;
+import android.Manifest;
 import android.location.Location;
 import android.util.Log;
 
@@ -88,9 +88,9 @@ import static org.mockito.Mockito.mock;
 @RunWith(AndroidJUnit4.class)
 public class MainMapFragmentTest {
 
-    private UiDevice uiDevice = UiDevice.getInstance(getInstrumentation());
+    private final UiDevice uiDevice = UiDevice.getInstance(getInstrumentation());
     private FirebaseAuth fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
-    private String TAG = "Main Map Fragment Test";
+    private final String TAG = "Main Map Fragment Test";
 
     @Rule
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);

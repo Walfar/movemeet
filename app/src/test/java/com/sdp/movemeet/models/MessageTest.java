@@ -9,9 +9,9 @@ import static org.junit.Assert.assertEquals;
 
 public class MessageTest {
 
-    private String DUMMY_USER = "user";
-    private String DUMMY_TEXT = "text";
-    private String DUMMY_USERID = "userId";
+    private final String DUMMY_USER = "user";
+    private final String DUMMY_TEXT = "text";
+    private final String DUMMY_USERID = "userId";
 
     @Test(expected = IllegalArgumentException.class)
     public void messageConstructorFailUserNull(){
