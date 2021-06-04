@@ -276,7 +276,8 @@ public class ChatActivity extends AppCompatActivity {
     public void createTempMessage(Uri uri, String fullNameString, String userId) {
         Message tempMessage = new Message(fullNameString, "Image loading...", userId, LOADING_IMAGE_URL, Long.toString(new Date().getTime()));
         // TODO: Make abstraction for this part of code below (Firebase Realtime Database abstraction) --> difficult!
-        //  Probably add another .add method that can deal with "DatabaseReference.CompletionListener" ? --> ask Kepler for advice
+        //  Probably add another ".addTemp" method that can deal with "DatabaseReference.CompletionListener" ? --> ask Kepler for advice
+        //  Tried, but too difficult...
         chatRoom.push().setValue(tempMessage, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -298,7 +299,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void putImageInStorage(UploadTask uploadTask, String key) {
         // Upload the image to Firebase Storage
-        uploadTask.addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        uploadTask.addOnSuccessListener(ChatActivity.this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // After the image loads, get a URI for the image

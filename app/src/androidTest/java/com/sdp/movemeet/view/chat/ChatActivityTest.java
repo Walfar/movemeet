@@ -180,10 +180,6 @@ public class ChatActivityTest {
     @After
     public void deleteAndSignOut() {
 
-        // TODO: delete the default_chat node in Firebase Realtime Database here
-        //ChatActivity.DEFAULT_CHAT_CHILD;
-
-
         fAuth.signOut();
     }
 }
