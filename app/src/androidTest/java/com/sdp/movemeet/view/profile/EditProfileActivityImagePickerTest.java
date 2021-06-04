@@ -41,7 +41,7 @@ import static junit.framework.Assert.assertTrue;
 // an integral part of the first one.
 public class EditProfileActivityImagePickerTest {
 
-    private final String userImagePath = "users/B6PwbuQT3rRIyOemWtNQu7xfXmq2/profile.jpg"; // Antho1
+    private static final String USER_IMAGE_PATH = "users/B6PwbuQT3rRIyOemWtNQu7xfXmq2/profile.jpg"; // Antho1
 
     private FirebaseAuth fAuth;
 
@@ -86,7 +86,7 @@ public class EditProfileActivityImagePickerTest {
         ProgressBar progressBar = activityRule.getActivity().findViewById(R.id.progress_bar_edit_profile);
         ImageView profileImage = activityRule.getActivity().findViewById(R.id.image_view_edit_profile_image);
         Image image = new Image(imageUri, profileImage);
-        image.setDocumentPath(userImagePath);
+        image.setDocumentPath(USER_IMAGE_PATH);
         ImageHandler.uploadImage(image,activityRule.getActivity());
 
         try {

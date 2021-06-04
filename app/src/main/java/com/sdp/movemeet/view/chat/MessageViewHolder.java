@@ -60,7 +60,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         }
         // Handling the ImageView of the image message
         if (message.getImageUrl() != null && message.getImageUrl().contains("http")) {
-            handlingImageMessage(message);
+            handlingImageMessage(message, chatActivity);
             messageImageView.setVisibility(ImageView.VISIBLE);
             messageTextView.setVisibility(TextView.GONE);
         }
@@ -93,7 +93,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
      * @param message Message object containing the message data (in this case the message data of
      *                interest is the URL of the image)
      */
-    private void handlingImageMessage(Message message) {
+    private void handlingImageMessage(Message message, ChatActivity chatActivity) {
         String imageUrl = message.getImageUrl();
 
         if (imageUrl.equals(ChatActivity.LOADING_IMAGE_URL)) {
@@ -105,7 +105,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             String imagePath = ImageHandler.convertURLtoPath(imageUrl);
             Image image = new Image(null, messageImageView);
             image.setDocumentPath(imagePath);
-            ImageHandler.loadImage(image, null);
+            ImageHandler.loadImage(image, chatActivity);
         }
     }
 

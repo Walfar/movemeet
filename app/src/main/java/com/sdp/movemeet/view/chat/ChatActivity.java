@@ -59,7 +59,7 @@ public class ChatActivity extends AppCompatActivity {
     private static final String TAG = "ChatActivity";
 
     public static final String CHATS_CHILD = "chats";
-    public static String GENERAL_CHAT_CHILD = "general_chat_new_format"; //"general_chat";
+    public static String DEFAULT_CHAT_CHILD = "default_chat";
     public static String CHAT_ROOM_ID;
 
     private static final int REQUEST_IMAGE = 2;
@@ -109,7 +109,7 @@ public class ChatActivity extends AppCompatActivity {
             userId = fAuth.getCurrentUser().getUid();
         }
 
-        if (enableNav) new Navigation(this, R.id.nav_home).createDrawer();
+        if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
 
         // Initializing Firebase Realtime Database
         database = BackendInstanceProvider.getDatabaseInstance();
@@ -167,7 +167,7 @@ public class ChatActivity extends AppCompatActivity {
             // Database with the value of "activityChatId" in case it doesn't exist yet
             CHAT_ROOM_ID = activityChatId;
         } else {
-            CHAT_ROOM_ID = GENERAL_CHAT_CHILD; // default general chat room
+            CHAT_ROOM_ID = DEFAULT_CHAT_CHILD; // default general chat room
         }
         chatRoom = chatRef.child(CHAT_ROOM_ID);
         countMessagesInChatRoom();
@@ -191,7 +191,6 @@ public class ChatActivity extends AppCompatActivity {
                     initialChatWelcomeMessage.setVisibility(View.VISIBLE);
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.v(TAG, "databaseError: " + databaseError);
@@ -202,21 +201,18 @@ public class ChatActivity extends AppCompatActivity {
 
     public void getRegisteredUserData() {
         Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + userId);
-        document.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        UserSerializer userSerializer = new UserSerializer();
-                        user = userSerializer.deserialize(document.getData());
-                        fullNameString = user.getFullName();
-                    } else {
-                        Log.d(TAG, "No such document!");
-                    }
+        document.addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document1 = task.getResult();
+                if (document1.exists()) {
+                    UserSerializer userSerializer = new UserSerializer();
+                    user = userSerializer.deserialize(document1.getData());
+                    fullNameString = user.getFullName();
                 } else {
-                    Log.d(TAG, "Get failed with: ", task.getException());
+                    Log.d(TAG, "No such document!");
                 }
+            } else {
+                Log.d(TAG, "Get failed with: ", task.getException());
             }
         });
     }
@@ -274,9 +270,12 @@ public class ChatActivity extends AppCompatActivity {
 
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    // making this method always public for testing and private otherwise
+    // Making this method always public for testing and private otherwise
     public void createTempMessage(Uri uri, String fullNameString, String userId) {
         Message tempMessage = new Message(fullNameString, "Image loading...", userId, LOADING_IMAGE_URL, Long.toString(new Date().getTime()));
+        // TODO: Make abstraction for this part of code below (Firebase Realtime Database abstraction) --> difficult!
+        //  Probably add another ".addTemp" method that can deal with "DatabaseReference.CompletionListener" ? --> ask Kepler for advice
+        //  Tried, but too difficult...
         chatRoom.push().setValue(tempMessage, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -289,7 +288,6 @@ public class ChatActivity extends AppCompatActivity {
                 imagePath = CHATS_CHILD + ImageHandler.PATH_SEPARATOR + CHAT_ROOM_ID + ImageHandler.PATH_SEPARATOR
                         + key + ImageHandler.PATH_SEPARATOR + ImageHandler.CHAT_IMAGE_NAME;
                 Image image = new Image(uri, null);
-                image.setDocumentPath(imagePath); // probably useless
                 UploadTask uploadTask = (UploadTask) imageBackendManager.add(image, imagePath);
                 putImageInStorage(uploadTask, key);
             }
@@ -299,26 +297,18 @@ public class ChatActivity extends AppCompatActivity {
 
     private void putImageInStorage(UploadTask uploadTask, String key) {
         // Upload the image to Firebase Storage
-        uploadTask.addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        uploadTask.addOnSuccessListener(ChatActivity.this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // After the image loads, get a URI for the image
                 // and add it to the message.
                 taskSnapshot.getMetadata().getReference().getDownloadUrl()
-                        .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                Message imageMessage = new Message(fullNameString, noMessageText, userId, uri.toString(), Long.toString(new Date().getTime()));
-                                messageManager.set(imageMessage, chatRoom.toString().split(ImageHandler.PATH_SEPARATOR, 4)[3] + ImageHandler.PATH_SEPARATOR + key);
-                            }
-                        });
+                    .addOnSuccessListener(uri -> {
+                        Message imageMessage = new Message(fullNameString, noMessageText, userId, uri.toString(), Long.toString(new Date().getTime()));
+                        messageManager.set(imageMessage, chatRoom.toString().split(ImageHandler.PATH_SEPARATOR, 4)[3] + ImageHandler.PATH_SEPARATOR + key);
+                    });
             }
-        }).addOnFailureListener(this, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Image upload task was not successful.", e);
-            }
-        });
+        }).addOnFailureListener(this, e -> Log.w(TAG, "Image upload task was not successful.", e));
 
     }
 

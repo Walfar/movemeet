@@ -171,7 +171,7 @@ public class MainMapFragmentTest {
             public void run() {
                 mapFragment.displayNearbyMarkers();
                 if (mapFragment.googleMap != null) {
-                    mapFragment.onMarkerClick(mapFragment.activitiesMarkers.get(0));
+                    mapFragment.onMarkerClick(mapFragment.activitiesMarkerMap.get(act));
                 }
             }
         });
@@ -191,7 +191,7 @@ public class MainMapFragmentTest {
             public void run() {
                 mapFragment.displayNearbyMarkers();
                 if (mapFragment.googleMap != null) {
-                    mapFragment.onMarkerClick(mapFragment.activitiesMarkers.get(0));
+                    mapFragment.onMarkerClick(mapFragment.activitiesMarkerMap.get(act));
                 }
             }
         });
