@@ -8,12 +8,12 @@ public interface FirebaseObject {
     /**
      * @return The path of the document in the backend.
      */
-    public String getDocumentPath();
+    String getDocumentPath();
 
     /**
      * Sets the path of the document in the backend.
      * @param path the path to attempt to set for the object.
      * @return the path of the object in the backend.
      */
-    public String setDocumentPath(String path);
+    String setDocumentPath(String path);
 }

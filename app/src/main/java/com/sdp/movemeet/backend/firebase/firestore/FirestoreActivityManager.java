@@ -21,7 +21,7 @@ public class FirestoreActivityManager extends FirestoreManager<Activity> {
 
     public FirestoreActivityManager(String collection, BackendSerializer<Activity> serializer) {
         super(collection, serializer);
-        this.db = BackendInstanceProvider.getFirestoreInstance();;
+        this.db = BackendInstanceProvider.getFirestoreInstance();
         this.collection = collection;
     }
 

@@ -80,9 +80,15 @@ public class ProfileActivityTest {
         // Launching directly ProfileActivity
         try (ActivityScenario<ProfileActivity> scenario = ActivityScenario.launch(ProfileActivity.class)) {
 
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                assert (false);
+            }
+
             onView(withId(R.id.text_view_activity_profile_name)).check(matches(withText(TEST_NAME)));
             onView(withId(R.id.text_view_activity_profile_email)).check(matches(withText(TEST_EMAIL)));
-            onView(withId(R.id.text_view_activity_profile_phone)).check(matches(withText(String.valueOf(TEST_PHONE))));
+            onView(withId(R.id.text_view_activity_profile_phone)).check(matches(withText(TEST_PHONE)));
             onView(withId(R.id.text_view_activity_profile_description)).check(matches(withText(TEST_DESCRIPTION)));
 
             onView(withId(R.id.button_update_profile)).perform(click());

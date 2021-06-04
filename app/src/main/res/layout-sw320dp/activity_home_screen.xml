@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context=".view.home.HomeScreenActivity">
 
     <TextView
@@ -30,33 +31,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appName" />
 
-    <ImageView
-        android:id="@+id/manRunning"
-        android:layout_width="80dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="40dp"
-        android:contentDescription="@string/homeScreenImageDescription"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/run_man" />
-
-    <ImageView
-        android:id="@+id/womanRunning"
-        android:layout_width="80dp"
-        android:layout_height="120dp"
-        android:layout_marginEnd="160dp"
-        android:contentDescription="@string/homeScreenImageDescription"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/run_woman" />
-
     <Button
         android:id="@+id/signInButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/primary"
         android:onClick="signIn"
         android:text="@string/signInButton"
-        android:backgroundTint="@color/primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
@@ -69,8 +50,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="@string/noAccount"
         android:onClick="noAccount"
+        android:text="@string/noAccount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"

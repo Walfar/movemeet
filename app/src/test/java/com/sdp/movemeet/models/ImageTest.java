@@ -10,9 +10,9 @@ import static org.mockito.Mockito.mock;
 
 public class ImageTest {
 
-    private Uri DUMMY_IMAGE_URI = mock(Uri.class);
-    private ImageView DUMMY_IMAGE_IMAGE_VIEW = mock(ImageView.class);
-    private String DUMMY_DOCUMENT_PATH = "documentPath";
+    private final Uri DUMMY_IMAGE_URI = mock(Uri.class);
+    private final ImageView DUMMY_IMAGE_IMAGE_VIEW = mock(ImageView.class);
+    private final String DUMMY_DOCUMENT_PATH = "documentPath";
 
 
     @Test(expected = IllegalArgumentException.class)

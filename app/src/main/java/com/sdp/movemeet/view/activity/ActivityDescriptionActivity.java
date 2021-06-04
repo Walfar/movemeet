@@ -58,21 +58,16 @@ import static com.sdp.movemeet.utility.ActivityPictureCache.loadFromCache;
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 public class ActivityDescriptionActivity extends AppCompatActivity {
 
-    private static final String TAG = "ActDescActivity";
     public static final String DESCRIPTION_ACTIVITY_KEY = "activitykey";
-
     public static final String RECORDING_EXTRA_NAME = "gpsreckey";
     public static final String DISTANCE_UNIT = "km";
     public static final String SPEED_UNIT = "km/h";
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    public static boolean enableNav = true;
-
-    private static final int REQUEST_IMAGE = 1000;
-
     public static final String ACTIVITY_CHAT_ID = "ActivityChatId";
     public static final String ACTIVITY_TITLE = "ActivityTitle";
-
+    private static final String TAG = "ActDescActivity";
+    private static final int REQUEST_IMAGE = 1000;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public static boolean enableNav = true;
     private TextView organizerView, numberParticipantsView, participantNamesView;
     private FirebaseAuth fAuth;
     private String userId, organizerId, imagePath;
@@ -136,27 +131,30 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Modify the visibility of buttons in the layout
      */
     private void setButton() {
-  View recButton = findViewById(R.id.activityGPSRecDescription);
+        View recButton = findViewById(R.id.activityGPSRecDescription);
         if (activity.getParticipantId().contains(userId)) {
             findViewById(R.id.activityRegisterDescription).setVisibility(View.GONE);
             findViewById(R.id.activityChatDescription).setVisibility(View.VISIBLE);
-           if (activity.getSport() == Sport.Running) {
-            recButton.setVisibility(View.VISIBLE);
-            recButton.setEnabled(true);
-            if (userId != null && activity.getParticipantRecordings().containsKey(userId)) {
-                displayParticipantStats();
+            findViewById(R.id.activityUnregisterDescription).setVisibility(View.VISIBLE);
+            if (activity.getSport() == Sport.Running || activity.getSport() == Sport.Trekking) {
+                recButton.setVisibility(View.VISIBLE);
+                recButton.setEnabled(true);
+                if (userId != null && activity.getParticipantRecordings().containsKey(userId)) {
+                    displayParticipantStats();
+                } else {
+                    findViewById(R.id.activity_description_stats_layout).setVisibility(View.GONE);
+                    findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
+                    recButton.setVisibility(View.GONE);
+                }
             } else {
+                recButton.setVisibility(View.GONE);
+                recButton.setEnabled(false);
                 findViewById(R.id.activity_description_stats_layout).setVisibility(View.GONE);
                 findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
             }
         } else {
-            recButton.setVisibility(View.INVISIBLE);
-            recButton.setEnabled(false);
-            findViewById(R.id.activity_description_stats_layout).setVisibility(View.GONE);
-            findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
-           }
-        } else {
-            recButton.setVisibility(View.INVISIBLE);
+            recButton.setVisibility(View.GONE);
+            findViewById(R.id.activityUnregisterDescription).setVisibility(View.GONE);
             recButton.setEnabled(false);
             findViewById(R.id.activity_description_stats_layout).setVisibility(View.GONE);
             findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
@@ -191,7 +189,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Title of the activity
      */
     private void createTitleView() {
-        TextView activityTitle = (TextView) findViewById(R.id.activity_title_description);
+        TextView activityTitle = findViewById(R.id.activity_title_description);
         activityTitle.setText(activity.getTitle());
     }
 
@@ -199,8 +197,8 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Number of participants of the activity
      */
     private void createParticipantNumberView() {
-        numberParticipantsView = (TextView) findViewById(R.id.activity_number_description);
-        participantNamesView = (TextView) findViewById(R.id.activity_participants_description);
+        numberParticipantsView = findViewById(R.id.activity_number_description);
+        participantNamesView = findViewById(R.id.activity_participants_description);
         numberParticipantsView.setText(activity.getParticipantId().size() + ImageHandler.PATH_SEPARATOR + activity.getNumberParticipant());
         participantNamesView.setText(" participants");
     }
@@ -209,15 +207,20 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Description of the activity
      */
     private void createDescriptionView() {
-        TextView descriptionView = (TextView) findViewById(R.id.activity_description_description);
-        descriptionView.setText(activity.getDescription());
+        TextView descriptionView = findViewById(R.id.activity_description_description);
+        if (activity.getDescription() == null || activity.getDescription().isEmpty()) {
+            findViewById(R.id.activity_description_description).setVisibility(View.GONE);
+            findViewById(R.id.activity_description_text).setVisibility(View.GONE);
+        } else {
+            descriptionView.setText(activity.getDescription());
+        }
     }
 
     /**
      * Date fof the activity
      */
     private void createDateView() {
-        TextView dateView = (TextView) findViewById(R.id.activity_date_description);
+        TextView dateView = findViewById(R.id.activity_date_description);
         String pattern = "MM/dd/yyyy HH:mm";
         DateFormat df = new SimpleDateFormat(pattern);
         String todayAsString = df.format(activity.getDate());
@@ -228,7 +231,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Sport of the activity
      */
     private void createSportView() {
-        TextView sportView = (TextView) findViewById(R.id.activity_sport_description);
+        TextView sportView = findViewById(R.id.activity_sport_description);
         sportView.setText(activity.getSport().toString());
     }
 
@@ -236,7 +239,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Duration of the activity
      */
     private void createDurationView() {
-        TextView durationView = (TextView) findViewById(R.id.activity_duration_description);
+        TextView durationView = findViewById(R.id.activity_duration_description);
         durationView.setText(String.valueOf((int) activity.getDuration()));
     }
 
@@ -244,7 +247,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Organizer of the activity
      */
     private void createOrganizerView() {
-        organizerView = (TextView) findViewById(R.id.activity_organisator_description);
+        organizerView = findViewById(R.id.activity_organisator_description);
         organizerView.setText(activity.getOrganizerId());
     }
 
@@ -252,7 +255,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Address of the activity
      */
     private void createAddressView() {
-        TextView addressView = (TextView) findViewById(R.id.activity_address_description);
+        TextView addressView = findViewById(R.id.activity_address_description);
         addressView.setText(activity.getAddress());
     }
 

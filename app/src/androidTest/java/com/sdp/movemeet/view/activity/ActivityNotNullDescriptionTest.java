@@ -20,7 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-;import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 
@@ -44,7 +44,7 @@ public class ActivityNotNullDescriptionTest {
     private final static String DUMMY_ADDRESS = "address";
     public FirebaseAuth fAuth;
 
-    private Activity activity = new Activity(
+    private final Activity activity = new Activity(
             DUMMY_ACTIVITY_ID,
             DUMMY_ORGANISATOR_ID,
             DUMMY_TITLE,
