@@ -51,8 +51,8 @@ public class HomeScreenActivity extends AppCompatActivity {
             intent.addCategory(Intent.CATEGORY_HOME);
             startActivity(intent);
             finish();
-        }
-        else startActivity(new Intent(this, LoginActivity.class)); // redirecting the user to the "Login" activity
+        } else
+            startActivity(new Intent(this, LoginActivity.class)); // redirecting the user to the "Login" activity
 
     }
 

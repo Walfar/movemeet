@@ -60,7 +60,7 @@ public class ProfileActivityTest {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                assert(false);
+                assert (false);
             }
         });
 
@@ -93,8 +93,7 @@ public class ProfileActivityTest {
 
             onView(withId(R.id.button_update_profile)).perform(click());
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.d("TAG", "Error message: " + e);
             e.printStackTrace();
         }

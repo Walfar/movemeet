@@ -11,8 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="25dp"
-        android:text="@string/edit_profile_title"
         android:fontFamily="@font/armata"
+        android:text="@string/edit_profile_title"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/image_view_edit_profile_image"
@@ -21,16 +21,16 @@
 
     <ImageView
         android:id="@+id/image_view_edit_profile_image"
-        android:onClick="changeProfilePicture"
         android:layout_width="130dp"
         android:layout_height="145dp"
+        android:contentDescription="@string/edit_profile_picture"
+        android:onClick="changeProfilePicture"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.19"
-        app:srcCompat="@drawable/ic_person_black_24dp"
-        android:contentDescription="@string/edit_profile_picture" />
+        app:srcCompat="@drawable/ic_person_black_24dp" />
 
     <EditText
         android:id="@+id/edit_text_edit_profile_full_name"
@@ -39,13 +39,13 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/edit_profile_full_name"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_view_edit_profile_image"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/image_view_edit_profile_image" />
 
     <EditText
         android:id="@+id/edit_text_edit_profile_email"
@@ -54,13 +54,13 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/edit_profile_email"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_edit_profile_full_name"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_edit_profile_full_name" />
 
     <EditText
         android:id="@+id/edit_text_edit_profile_phone"
@@ -69,33 +69,33 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
+        android:autofillHints=""
         android:ems="10"
-        android:inputType="phone"
         android:hint="@string/edit_profile_phone"
+        android:inputType="phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_edit_profile_email"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_edit_profile_email" />
 
     <EditText
         android:id="@+id/edit_text_edit_profile_description"
-        android:hint="@string/edit_profile_description"
-        android:inputType="textMultiLine"
-        android:imeOptions="flagNoExtractUi"
-        android:gravity="top|start"
-        android:lines="2"
-        android:minLines="2"
-        android:maxLines="10"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
+        android:autofillHints=""
         android:ems="10"
+        android:gravity="top|start"
+        android:hint="@string/edit_profile_description"
+        android:imeOptions="flagNoExtractUi"
+        android:inputType="textMultiLine"
+        android:lines="2"
+        android:maxLines="10"
+        android:minLines="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_edit_profile_phone"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_edit_profile_phone" />
 
     <Button
         android:id="@+id/button_delete_account"
@@ -121,15 +121,15 @@
 
     <ImageButton
         android:id="@+id/button_edit_profile_save_profile_data"
-        android:onClick="saveUserData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:contentDescription="@string/edit_profile_save_profile_data"
+        android:onClick="saveUserData"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.94"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/baseline_save_black_18dp"
-        android:contentDescription="@string/edit_profile_save_profile_data" />
+        app:srcCompat="@drawable/baseline_save_black_18dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

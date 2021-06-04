@@ -8,13 +8,13 @@ import com.google.firebase.storage.FirebaseStorage;
 
 public class BackendInstanceProvider {
 
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static FirebaseFirestore firestore;
 
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static FirebaseStorage storage;
 
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static FirebaseDatabase database;
 
     public static FirebaseFirestore getFirestoreInstance() {

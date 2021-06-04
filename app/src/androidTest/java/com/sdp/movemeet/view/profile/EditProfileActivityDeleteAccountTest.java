@@ -102,13 +102,13 @@ public class EditProfileActivityDeleteAccountTest {
             public void onSuccess(AuthResult authResult) {
                 Log.d(TAG, "Login successful!");
                 latch.countDown();
-                assert(false);
+                assert (false);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d(TAG, "Login failed. User account doesn't exist anymore!");
-                assert(true);
+                assert (true);
             }
         });
 

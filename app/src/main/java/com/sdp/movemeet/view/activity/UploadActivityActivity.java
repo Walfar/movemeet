@@ -22,7 +22,6 @@ import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -30,15 +29,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
-import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
-import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
-import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.Sport;
-import com.sdp.movemeet.models.User;
-import com.sdp.movemeet.utility.ImageHandler;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.main.MainActivity;
 import com.sdp.movemeet.view.navigation.Navigation;
@@ -55,10 +49,10 @@ public class UploadActivityActivity extends AppCompatActivity {
     public static final String CREATED_ACTIVITY_FIELD = "createdActivity";
 
     private FirebaseAuth fAuth;
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public BackendManager<Activity> activityBackendManager;
 
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
 
     private Spinner spinner;
@@ -171,6 +165,7 @@ public class UploadActivityActivity extends AppCompatActivity {
 
     /**
      * Displays the Date Picker so the user can choose a date
+     *
      * @param view the View to display the Date Picker in
      */
     @SuppressWarnings("deprecation")
@@ -192,6 +187,7 @@ public class UploadActivityActivity extends AppCompatActivity {
 
     /**
      * Displays a Time Picker so the user can select the start time
+     *
      * @param view the View to display the Time Picker in
      */
     @SuppressWarnings("deprecation")
@@ -201,7 +197,6 @@ public class UploadActivityActivity extends AppCompatActivity {
 
 
     // End time picker
-    // TODO: change to end time
     private final TimePickerDialog.OnTimeSetListener durationListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -219,6 +214,7 @@ public class UploadActivityActivity extends AppCompatActivity {
 
     /**
      * Displays a Time Picker so the user can select the end time
+     *
      * @param view the View to display the Time Picker in
      */
     @SuppressWarnings("deprecation")
@@ -250,6 +246,7 @@ public class UploadActivityActivity extends AppCompatActivity {
 
     /**
      * Returns the address location if set by user, or null otherwise
+     *
      * @return a LatLng containing the address's coordinates, or null if none could be inferred
      */
     public LatLng getAddressLocation() {
@@ -278,6 +275,7 @@ public class UploadActivityActivity extends AppCompatActivity {
     /**
      * Attempts to resolve a LatLng into an Address. If successful, stores the result
      * in this class's address EditText
+     *
      * @param pos the LatLng to convert to an address.
      */
     public void retrieveAddress(LatLng pos) {
@@ -305,9 +303,10 @@ public class UploadActivityActivity extends AppCompatActivity {
     /**
      * Retrieve all activity information from the forms on the screen
      * and parse them. If a valid Activity can be created, creates it, else null
+     *
      * @return an Activity if the information is valid, else null
      */
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public Activity validateActivity() {
         String organizerId = fAuth.getCurrentUser().getUid();
 
@@ -353,7 +352,7 @@ public class UploadActivityActivity extends AppCompatActivity {
         Date date = calendar.getTime();
 
         Activity activity = new Activity(
-                organizerId + " || " +  date, organizerId, title, nParticipants,
+                organizerId + " || " + date, organizerId, title, nParticipants,
                 participantsId, longitude, latitude, description, null, date, duration,
                 sport, address, new Date()
         );
@@ -364,6 +363,7 @@ public class UploadActivityActivity extends AppCompatActivity {
     /**
      * Creates a new Activity from the information in the forms and uploads if it the Activity
      * is valid.
+     *
      * @param view the View whose forms to retrieve information in
      */
     public void confirmActivityUpload(View view) {
@@ -376,10 +376,6 @@ public class UploadActivityActivity extends AppCompatActivity {
             public void onSuccess(Void aVoid) {
                 Toast.makeText(getApplicationContext(), "Activity successfully uploaded!",
                         Toast.LENGTH_SHORT).show();
-                //-----------Test
-                //BackendManager<User> userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
-                //userManager.update(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + toUpload.getOrganizerId(), CREATED_ACTIVITY_FIELD, toUpload.getDocumentPath(), ActivityDescriptionActivity.UPDATE_FIELD_UNION);
-                //---------------
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         }).addOnFailureListener(new OnFailureListener() {

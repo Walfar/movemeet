@@ -25,7 +25,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firebaseDB.FirebaseDBMessageManager;
@@ -37,10 +36,10 @@ import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 import com.sdp.movemeet.backend.serialization.MessageSerializer;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
+import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.Image;
 import com.sdp.movemeet.models.Message;
 import com.sdp.movemeet.models.User;
-import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.utility.ImageHandler;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.view.chat.ChatActivity;
@@ -219,7 +218,7 @@ public class EditProfileActivity extends AppCompatActivity {
         if (createdActivitiesId != null) {
             if (createdActivitiesId.size() > 0) {
                 Log.d(TAG, "Entering if");
-                for (int i=0; i < createdActivitiesId.size(); i++) {
+                for (int i = 0; i < createdActivitiesId.size(); i++) {
                     createdActivityPath = createdActivitiesId.get(i);
                     // 1.1) Delete organized activities document in Firebase Firestore
                     activityManager.delete(createdActivityPath).addOnSuccessListener(new OnSuccessListener() {
@@ -258,7 +257,7 @@ public class EditProfileActivity extends AppCompatActivity {
         Log.d(TAG, "Entering unregisterUserFromActivities");
         if (registeredActivitiesId != null) {
             if (registeredActivitiesId.size() > 0) {
-                for (int i=0; i<registeredActivitiesId.size(); i++) {
+                for (int i = 0; i < registeredActivitiesId.size(); i++) {
                     registeredActivityPath = registeredActivitiesId.get(i);
                     activityManager.update(registeredActivityPath, ActivityDescriptionActivity.PARTICIPANT_ID_FIELD, userId, ActivityDescriptionActivity.UPDATE_FIELD_REMOVE);
                 }
@@ -270,7 +269,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
     // 3) Delete user information
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public void deleteUserAccount(String userId, FirebaseUser firebaseUser) {
         // 3.1) Delete the profile picture of the user from Firebase Storage (in case it exists)
         Log.d(TAG, "deleteUserAccount - 3.1) Firebase Storage user profile picture deletion");

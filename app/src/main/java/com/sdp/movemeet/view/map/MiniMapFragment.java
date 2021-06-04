@@ -10,18 +10,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.sdp.movemeet.R;
-import com.sdp.movemeet.view.activity.UploadActivityActivity;
 import com.sdp.movemeet.utility.LocationFetcher;
+import com.sdp.movemeet.view.activity.UploadActivityActivity;
 
 import static com.sdp.movemeet.utility.PermissionChecker.isLocationPermissionGranted;
 import static com.sdp.movemeet.view.map.MainMapFragment.ZOOM_VALUE;
@@ -80,8 +78,10 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
      */
     public LatLng zoomOnAddressLocation() {
         LatLng location = ((UploadActivityActivity) getActivity()).getAddressLocation();
-        if (location == null) location = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        if (googleMap != null) googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, ZOOM_VALUE));
+        if (location == null)
+            location = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+        if (googleMap != null)
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, ZOOM_VALUE));
         return location;
     }
 
@@ -100,6 +100,7 @@ public class MiniMapFragment extends Fragment implements OnMapReadyCallback, Goo
     @Override
     public void onMapClick(LatLng latLng) {
         ((UploadActivityActivity) getActivity()).retrieveAddress(latLng);
-        if (googleMap != null) googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_VALUE));
+        if (googleMap != null)
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_VALUE));
     }
 }

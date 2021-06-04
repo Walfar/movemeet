@@ -33,7 +33,6 @@ import com.sdp.movemeet.view.main.MainActivity;
 
 import org.hamcrest.Matcher;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -227,7 +226,6 @@ public class UploadActivityActivityTest {
         assert (sleep(1000));
 
         onView(withText("OK")).perform(click());
-        //onView(withId(R.id.buttonConfirmUpload)).perform(click());
 
         assertValidationFails(scenario, resultCaptor, latch);
 

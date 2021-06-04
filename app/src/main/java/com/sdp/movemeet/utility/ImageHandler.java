@@ -16,7 +16,6 @@ import androidx.annotation.Nullable;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
-
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.UploadTask;
 import com.sdp.movemeet.backend.BackendManager;
@@ -54,7 +53,7 @@ public abstract class ImageHandler {
     /**
      * Fetch an image (user profile picture, activity header picture or chat image) from Firebase Storage.
      *
-     * @param image Image object to be loaded from Firebase Storage or from the local cache.
+     * @param image    Image object to be loaded from Firebase Storage or from the local cache.
      * @param activity Activity on which we want to fetch the image
      */
     public static void loadImage(Image image, Activity activity) {
@@ -100,7 +99,8 @@ public abstract class ImageHandler {
 
     /**
      * For a given image, sets the corresponding bitmap and saves it to cache (if permission)
-     * @param image Image we want to store in the cache
+     *
+     * @param image    Image we want to store in the cache
      * @param activity Activity from which we want to save the image
      */
     private static void setImageBitMapAndSaveToCache(Image image, Activity activity) {
@@ -112,7 +112,8 @@ public abstract class ImageHandler {
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         image.getImageView().setImageBitmap(resource);
                         Log.d(TAG, "storage write permissions " + isStorageWritePermissionGranted(activity));
-                        if (isStorageWritePermissionGranted(activity)) saveToCache(resource, image.getDocumentPath());
+                        if (isStorageWritePermissionGranted(activity))
+                            saveToCache(resource, image.getDocumentPath());
                     }
 
                     @Override
@@ -125,7 +126,7 @@ public abstract class ImageHandler {
     /**
      * Upload an image (user profile picture, activity header picture or chat image) to Firebase Storage.
      *
-     * @param image Image object to be uploaded to Firebase Storage or saved to the local cache.
+     * @param image    Image object to be uploaded to Firebase Storage or saved to the local cache.
      * @param activity Activity from which we want to upload the image
      */
     public static void uploadImage(Image image, Activity activity) {
@@ -142,20 +143,25 @@ public abstract class ImageHandler {
 
     /**
      * Get the progress bar from an Activity
+     *
      * @param activity Activity from which we get the progress bar
      * @return the progress bar of the activity
      */
     private static ProgressBar getProgressBar(Activity activity) {
         ProgressBar progressBar = null;
-        if (activity instanceof ActivityDescriptionActivity) progressBar = ((ActivityDescriptionActivity) activity).getProgressBar();
-        else if (activity instanceof ActivityDescriptionActivityUnregister) progressBar = ((ActivityDescriptionActivityUnregister) activity).getProgressBar();
-        else if (activity instanceof EditProfileActivity) progressBar = ((EditProfileActivity) activity).getProgressBar();
-        else if (activity instanceof ProfileActivity) progressBar = ((ProfileActivity) activity).getProgressBar();
+        if (activity instanceof ActivityDescriptionActivity)
+            progressBar = ((ActivityDescriptionActivity) activity).getProgressBar();
+        else if (activity instanceof ActivityDescriptionActivityUnregister)
+            progressBar = ((ActivityDescriptionActivityUnregister) activity).getProgressBar();
+        else if (activity instanceof EditProfileActivity)
+            progressBar = ((EditProfileActivity) activity).getProgressBar();
+        else if (activity instanceof ProfileActivity)
+            progressBar = ((ProfileActivity) activity).getProgressBar();
         return progressBar;
     }
 
 
-     /* Convert the Firebase Storage URL of the image into a path in Firebase Storage
+    /* Convert the Firebase Storage URL of the image into a path in Firebase Storage
      *
      * @param imageUrl URL of the image in Firebase Storage
      * @return the converted image path

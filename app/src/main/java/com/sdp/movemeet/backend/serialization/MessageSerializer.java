@@ -21,7 +21,7 @@ public class MessageSerializer implements BackendSerializer<Message> {
     @Override
     public Message deserialize(Map<String, Object> data) {
 
-        Message message = new Message (
+        Message message = new Message(
                 (String) data.get(MESSAGE_USER_KEY),
 
                 (String) data.get(MESSAGE_TEXT_KEY),

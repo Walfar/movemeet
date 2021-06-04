@@ -64,14 +64,14 @@ public class EditProfileActivityImagePickerTest {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                assert(false);
+                assert (false);
             }
         });
 
         try {
             latch.await();
         } catch (InterruptedException e) {
-            assert(false);
+            assert (false);
         }
 
         ActivityScenario scenario = ActivityScenario.launch(EditProfileActivity.class);
@@ -87,11 +87,12 @@ public class EditProfileActivityImagePickerTest {
         ImageView profileImage = activityRule.getActivity().findViewById(R.id.image_view_edit_profile_image);
         Image image = new Image(imageUri, profileImage);
         image.setDocumentPath(USER_IMAGE_PATH);
-        ImageHandler.uploadImage(image,activityRule.getActivity());
+        ImageHandler.uploadImage(image, activityRule.getActivity());
 
         try {
             Thread.sleep(4000);
-        } catch(Exception e) {}
+        } catch (Exception e) {
+        }
 
         // Check that image matches
         onView(withId(R.id.image_view_edit_profile_image)).check(matches(withDrawable(R.drawable.icon_tricking)));

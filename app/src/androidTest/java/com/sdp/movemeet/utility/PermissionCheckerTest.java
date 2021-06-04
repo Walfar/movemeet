@@ -33,7 +33,7 @@ public class PermissionCheckerTest {
     @Test
     public void locationPermissionsShouldBeGranted() {
         activityRule.getScenario().onActivity(activity -> {
-           assertThat(PermissionChecker.isLocationPermissionGranted(activity), is(true));
+            assertThat(PermissionChecker.isLocationPermissionGranted(activity), is(true));
         });
     }
 

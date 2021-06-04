@@ -35,12 +35,12 @@
         android:layout_height="80dp"
         android:layout_marginTop="60dp"
         android:layout_marginEnd="16dp"
+        android:contentDescription="@string/run_man"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textViewUnregister"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/run_man"
-        android:contentDescription="@string/run_man" />
+        app:srcCompat="@drawable/run_man" />
 
     <ImageView
         android:id="@+id/imageView2_unregister"
@@ -48,24 +48,25 @@
         android:layout_height="80dp"
         android:layout_marginStart="56dp"
         android:layout_marginTop="60dp"
+        android:contentDescription="@string/run_woman"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textViewUnregister"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/run_woman"
-        android:contentDescription="@string/run_woman" />
+        app:srcCompat="@drawable/run_woman" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.7"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.7"
         app:layout_constraintStart_toStartOf="parent">
+
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_container_view"
             android:name="com.sdp.movemeet.view.map.MainMapFragment"

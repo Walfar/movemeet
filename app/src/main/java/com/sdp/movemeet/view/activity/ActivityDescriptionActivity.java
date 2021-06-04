@@ -21,14 +21,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
-import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Activity;
@@ -49,7 +46,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
-import static com.sdp.movemeet.utility.ActivityPictureCache.loadFromCache;
 import static com.sdp.movemeet.utility.PermissionChecker.isStorageReadPermissionGranted;
 
 /***
@@ -103,7 +99,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
         }
 
-        if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
+        if (enableNav) new Navigation(this, R.id.nav_home).createDrawer();
 
         Intent intent = getIntent();
 
@@ -141,7 +137,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             findViewById(R.id.activityRegisterDescription).setVisibility(View.GONE);
             findViewById(R.id.activityChatDescription).setVisibility(View.VISIBLE);
             findViewById(R.id.activityUnregisterDescription).setVisibility(View.VISIBLE);
-            if (activity.getSport() == Sport.Running || activity.getSport() == Sport.Trekking) {
+            if (activity.getSport() == Sport.Running) {
                 recButton.setVisibility(View.VISIBLE);
                 recButton.setEnabled(true);
                 if (userId != null && activity.getParticipantRecordings().containsKey(userId)) {
@@ -149,7 +145,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 } else {
                     findViewById(R.id.activity_description_stats_layout).setVisibility(View.GONE);
                     findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
-                    recButton.setVisibility(View.GONE);
+                    recButton.setVisibility(View.VISIBLE);
                 }
             } else {
                 recButton.setVisibility(View.GONE);

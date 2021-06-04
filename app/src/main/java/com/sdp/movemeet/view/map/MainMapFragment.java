@@ -116,7 +116,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
 
         //Update the local list of activities from the database. On success, we update the map by displaying the activities markers.
-        updateListActivities(o -> displayNearbyMarkers(),(s, err) -> {
+        updateListActivities(o -> displayNearbyMarkers(), (s, err) -> {
             //When an activity is updated in the db, we "reset" the marker on the map (to have the correct updated tag)
             Activity act = serializer.deserialize(s.getData());
             String activityId = act.getActivityId();
@@ -140,7 +140,8 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
             googleMap.setOnMapClickListener(this::onMapClick);
         }
         //In the case where the user didn't grant permission, we set a default location
-        if (!isLocationPermissionGranted(getActivity())) currentLocation = locationFetcher.getDefaultLocation();
+        if (!isLocationPermissionGranted(getActivity()))
+            currentLocation = locationFetcher.getDefaultLocation();
     }
 
     /**
@@ -252,7 +253,8 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         if (googleMap != null) {
             googleMap.clear();
             //To prevent the user marker from disappearing temporarly (until next location update), we instantly add it back to the map
-            if (positionMarker != null) googleMap.addMarker(new MarkerOptions().position(positionMarker.getPosition()));
+            if (positionMarker != null)
+                googleMap.addMarker(new MarkerOptions().position(positionMarker.getPosition()));
         }
         //For the moment, we get all activities as the distance calculator is not fully functional yet
         for (Activity act : dc.getTopActivities(getActivities().size())) {

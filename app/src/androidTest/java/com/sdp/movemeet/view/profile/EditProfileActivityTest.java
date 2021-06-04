@@ -23,8 +23,6 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 
 public class EditProfileActivityTest {
@@ -43,7 +41,7 @@ public class EditProfileActivityTest {
     private FirebaseAuth fAuth;
 
     @Before
-    public void signIn(){
+    public void signIn() {
 
         // Logging in
         CountDownLatch latch = new CountDownLatch(1);
@@ -56,7 +54,7 @@ public class EditProfileActivityTest {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                assert(false);
+                assert (false);
             }
         });
 
@@ -73,17 +71,12 @@ public class EditProfileActivityTest {
     @Test
     public void updateProfileByEnteringFieldsAndClickingSaveButton() {
 
-        onView(withId(R.id.button_update_profile)).perform(scrollTo(),click());
+        onView(withId(R.id.button_update_profile)).perform(scrollTo(), click());
 
         try {
             Thread.sleep(1000);
-        } catch(Exception e) {}
-
-        // TODO: but with an intent test between ProfileActivity and EditProfileActivity
-//        onView(withId(R.id.edit_text_edit_profile_full_name)).check(matches(withText(TEST_NAME_INITIAL)));
-//        onView(withId(R.id.edit_text_edit_profile_email)).check(matches(withText(TEST_EMAIL_INITIAL)));
-//        onView(withId(R.id.edit_text_edit_profile_phone)).check(matches(withText(String.valueOf(TEST_PHONE_INITIAL))));
-//        onView(withId(R.id.edit_text_edit_profile_description)).check(matches(withText(TEST_DESCRIPTION_INITIAL)));
+        } catch (Exception e) {
+        }
 
         onView(ViewMatchers.withId(R.id.edit_text_edit_profile_full_name))
                 .perform(replaceText(TEST_FULL_NAME), closeSoftKeyboard()); // To solve the "Android :java.lang.SecurityException: Injecting to another application requires INJECT_EVENTS permission" issue --> cf.: "I solved using replaceText instead of TypeText action" (https://stackoverflow.com/questions/22163424/android-java-lang-securityexception-injecting-to-another-application-requires)

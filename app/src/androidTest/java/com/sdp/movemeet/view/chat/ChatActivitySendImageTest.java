@@ -44,7 +44,6 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static junit.framework.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
 
 public class ChatActivitySendImageTest {
 
@@ -77,7 +76,7 @@ public class ChatActivitySendImageTest {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                assert(false);
+                assert (false);
             }
         });
 
@@ -107,7 +106,7 @@ public class ChatActivitySendImageTest {
                     public void onSuccess(ListResult listResult) {
                         Log.w(TAG, "List of images in Firebase Storage could successfully be accessed!");
                         for (StorageReference prefix : listResult.getPrefixes()) {
-                            String chatImagePath = prefix.toString().split(ImageHandler.PATH_SEPARATOR,4)[3]+ImageHandler.PATH_SEPARATOR+ImageHandler.CHAT_IMAGE_NAME;
+                            String chatImagePath = prefix.toString().split(ImageHandler.PATH_SEPARATOR, 4)[3] + ImageHandler.PATH_SEPARATOR + ImageHandler.CHAT_IMAGE_NAME;
                             imageBackendManager.delete(chatImagePath);
                         }
                     }

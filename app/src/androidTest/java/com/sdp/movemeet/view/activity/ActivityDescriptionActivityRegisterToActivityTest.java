@@ -12,8 +12,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
@@ -44,7 +42,9 @@ public class ActivityDescriptionActivityRegisterToActivityTest {
     private final static String DUMMY_ORGANISATOR_ID = "jOUwVmwQVFgYKdH35jYm50l9TJx1"; // Antho3
     private final static String DUMMY_TITLE = "dummy_title";
     private final static int DUMMY_NUMBER_PARTICIPANT = 23;
-    private final static ArrayList<String> DUMMY_PARTICIPANTS_ID = new ArrayList<String>() {{add("jOUwVmwQVFgYKdH35jYm50l9TJx1");}}; // Antho3
+    private final static ArrayList<String> DUMMY_PARTICIPANTS_ID = new ArrayList<String>() {{
+        add("jOUwVmwQVFgYKdH35jYm50l9TJx1");
+    }}; // Antho3
     private final static double DUMMY_LONGITUDE = 2.45;
     private final static double DUMMY_LATITUDE = 3.697;
     private final static String DUMMY_DESCRIPTION = "description";
@@ -58,7 +58,7 @@ public class ActivityDescriptionActivityRegisterToActivityTest {
 
     private final static String USER_ID = "kNJiyA3rF4boRYhPVGp1YQabXlh2"; // Antho4
 
-    private Activity activity = new Activity(
+    private final Activity activity = new Activity(
             DUMMY_ACTIVITY_ID,
             DUMMY_ORGANISATOR_ID,
             DUMMY_TITLE,
