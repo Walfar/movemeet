@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 
@@ -25,22 +24,25 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.models.Activity;
+import com.sdp.movemeet.utility.DistanceCalculator;
+import com.sdp.movemeet.utility.LocationFetcher;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 import com.sdp.movemeet.view.activity.ActivityDescriptionActivityUnregister;
-import com.sdp.movemeet.utility.DistanceCalculator;
-import com.sdp.movemeet.R;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
-import com.sdp.movemeet.utility.ActivitiesUpdater;
-import com.sdp.movemeet.utility.LocationFetcher;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import static com.sdp.movemeet.utility.ActivitiesUpdater.activities;
 import static com.sdp.movemeet.utility.ActivitiesUpdater.getActivities;
+import static com.sdp.movemeet.utility.ActivitiesUpdater.serializer;
 import static com.sdp.movemeet.utility.ActivitiesUpdater.updateListActivities;
+import static com.sdp.movemeet.utility.PermissionChecker.isLocationPermissionGranted;
 
 
 /**
@@ -52,7 +54,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public Location currentLocation;
 
-    private final FirebaseAuth fAuth = FirebaseAuth.getInstance();
+    private final FirebaseAuth fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public FirebaseUser user;
 
@@ -71,15 +73,16 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
 
     private LocationFetcher locationFetcher;
 
+    //Map associating an activity id to its marker on the map. Used for testing, and updating information smoothly when activity updated in db
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    public ArrayList<Marker> activitiesMarkers;
+    public Map<String, Marker> activitiesMarkerMap;
 
     private static final String TAG = "Maps TAG";
 
     //Zoom value to animate camera on user at launch of the map
     public static final float ZOOM_VALUE = 15.0f;
 
-    //Boolean used to check if the callback is called for the first time. Useful, to avoid repeating certain actions (e.g zooming on user's location)
+    //Boolean used to check if the callback is called for the first time. Useful to avoid repeating certain actions (e.g zooming on user's location)
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public boolean first_callback;
 
@@ -90,13 +93,11 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
+        supportMapFragment.getMapAsync(this);
 
         //At creation, we haven't called the locationCallback yet
         first_callback = true;
-        activitiesMarkers = new ArrayList<>();
-
-        //Update the local list of activities from the database. On success, we update the map by dispalying the activities markers
-        updateListActivities(o -> supportMapFragment.getMapAsync(googleMap -> displayNearbyMarkers()));
+        activitiesMarkerMap = new HashMap<>();
 
         user = fAuth.getCurrentUser();
 
@@ -105,15 +106,26 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {
                 currentLocation = locationResult.getLastLocation();
-                supportMapFragment.getMapAsync(googleMap -> {displayMarkerOnMapReadyAndZoomInFirstCallback();});
+                supportMapFragment.getMapAsync(googleMap -> {
+                    displayMarkerOnMapReadyAndZoomInFirstCallback();
+                });
             }
         };
-        //Start fetching and updating the user's location in real time
-        locationFetcher = new LocationFetcher(supportMapFragment, locationCallback);
-        locationFetcher.startLocationUpdates();
 
-        //We also define the main OnMapReady callback for setting the map listeners
-        supportMapFragment.getMapAsync(this);
+        locationFetcher = new LocationFetcher(supportMapFragment, locationCallback);
+
+
+        //Update the local list of activities from the database. On success, we update the map by displaying the activities markers.
+        updateListActivities(o -> displayNearbyMarkers(),(s, err) -> {
+            //When an activity is updated in the db, we "reset" the marker on the map (to have the correct updated tag)
+            Activity act = serializer.deserialize(s.getData());
+            String activityId = act.getActivityId();
+            if (activitiesMarkerMap.containsKey(activityId)) {
+                Marker marker = activitiesMarkerMap.get(activityId);
+                if (marker != null) marker.remove();
+                supportMapFragment.getMapAsync(o -> addActivityMarkerToMap(act));
+            }
+        });
 
         return view;
     }
@@ -122,16 +134,13 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "map is ready");
         this.googleMap = googleMap;
-
         if (googleMap != null) {
             googleMap.setOnMarkerClickListener(this);
             googleMap.setOnInfoWindowClickListener(this);
             googleMap.setOnMapClickListener(this::onMapClick);
         }
-
         //In the case where the user didn't grant permission, we set a default location
-        if (!locationFetcher.isPermissionGranted()) currentLocation = locationFetcher.getDefaultLocation();
-
+        if (!isLocationPermissionGranted(getActivity())) currentLocation = locationFetcher.getDefaultLocation();
     }
 
     /**
@@ -141,7 +150,8 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     public void displayMarkerOnMapReadyAndZoomInFirstCallback() {
         displayUserMarker();
         if (first_callback) {
-            if (googleMap != null) googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), ZOOM_VALUE));
+            if (googleMap != null)
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), ZOOM_VALUE));
             first_callback = false;
         }
     }
@@ -173,11 +183,15 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
             Intent intent;
             // Different activity if user unregistered
             if (user == null) {
-                intent = new Intent(supportMapFragment.getActivity(), ActivityDescriptionActivityUnregister.class);
+                intent = new Intent(getActivity(), ActivityDescriptionActivityUnregister.class);
             } else {
-                intent = new Intent(supportMapFragment.getActivity(), ActivityDescriptionActivity.class);
+                intent = new Intent(getActivity(), ActivityDescriptionActivity.class);
             }
-            intent.putExtra("activity", act);
+            intent.putExtra(ActivityDescriptionActivity.DESCRIPTION_ACTIVITY_KEY, act);
+            if (newActivityMarker != null) {
+                newActivityMarker.remove();
+                newActivityMarker = null;
+            }
             startActivity(intent);
         }
 
@@ -205,10 +219,10 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onResume() {
         super.onResume();
-        //To avoid starting the updates two times in a row, we make sure this isn't the first launch of the view
         locationFetcher.startLocationUpdates();
     }
 
@@ -225,6 +239,7 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void displayNearbyMarkers() {
         Log.d(TAG, "displaying act markers");
+        Log.d(TAG, "activities size is " + activities.size());
         if (currentLocation == null) currentLocation = locationFetcher.getDefaultLocation();
 
         DistanceCalculator dc = new DistanceCalculator(currentLocation.getLatitude(), currentLocation.getLongitude());
@@ -232,18 +247,31 @@ public class MainMapFragment extends Fragment implements GoogleMap.OnMarkerClick
         dc.setActivities(getActivities());
         dc.calculateDistances();
         dc.sort();
+
+        //We clear the map, because this method is called on resume (avoiding marker duplicates)
+        if (googleMap != null) {
+            googleMap.clear();
+            //To prevent the user marker from disappearing temporarly (until next location update), we instantly add it back to the map
+            if (positionMarker != null) googleMap.addMarker(new MarkerOptions().position(positionMarker.getPosition()));
+        }
         //For the moment, we get all activities as the distance calculator is not fully functional yet
         for (Activity act : dc.getTopActivities(getActivities().size())) {
-            //We display all activities on the corresponding location and with the icon associated to the sport
-            LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
+            addActivityMarkerToMap(act);
+        }
+    }
 
-            MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
-            if (googleMap != null) {
-                markerOpt.icon(BitmapDescriptorFactory.fromResource(chooseIcon(act)));
-                Marker marker = googleMap.addMarker(markerOpt);
-                marker.setTag(act);
-                activitiesMarkers.add(marker);
-            }
+    private void addActivityMarkerToMap(Activity act) {
+        LatLng actLatLng = new LatLng(act.getLatitude(), act.getLongitude());
+        MarkerOptions markerOpt = new MarkerOptions().position(actLatLng).title(act.getTitle());
+        if (googleMap != null) {
+            Log.d(TAG, markerOpt.getTitle());
+            markerOpt.icon(BitmapDescriptorFactory.fromResource(chooseIcon(act)));
+            Log.d(TAG, markerOpt.getIcon().toString());
+            Marker marker = googleMap.addMarker(markerOpt);
+            Log.d(TAG, "marker was added with number of registered " + act.getParticipantId());
+            //We store all the activity information inside the tag
+            marker.setTag(act);
+            activitiesMarkerMap.put(act.getActivityId(), marker);
         }
     }
 

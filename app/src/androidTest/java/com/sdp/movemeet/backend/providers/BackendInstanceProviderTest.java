@@ -8,6 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.sdp.movemeet.view.home.HomeScreenActivity;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,5 +39,12 @@ public class BackendInstanceProviderTest {
         assertEquals(mockFirestore, BackendInstanceProvider.getFirestoreInstance());
         assertEquals(mockDatabase, BackendInstanceProvider.getDatabaseInstance());
         assertEquals(mockStorage, BackendInstanceProvider.getStorageInstance());
+    }
+
+    @After
+    public void tearDown() {
+        BackendInstanceProvider.database = FirebaseDatabase.getInstance();
+        BackendInstanceProvider.storage = FirebaseStorage.getInstance();
+        BackendInstanceProvider.firestore = FirebaseFirestore.getInstance();
     }
 }

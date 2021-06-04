@@ -7,6 +7,7 @@ import androidx.annotation.VisibleForTesting;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
@@ -16,12 +17,16 @@ import com.sdp.movemeet.models.Activity;
 
 import java.util.ArrayList;
 
+/**
+ * This utility class is used to fetch the activities from the database into local
+ */
 public abstract class ActivitiesUpdater {
 
-    private static BackendSerializer<Activity> serializer =new ActivitySerializer();
+    public static final BackendSerializer<Activity> serializer =new ActivitySerializer();
+
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static ArrayList<Activity> activities = new ArrayList<>();
-    private static FirestoreActivityManager firestoreActivityManager = new FirestoreActivityManager(FirebaseFirestore.getInstance(), "activities", serializer);
+    private static final FirestoreActivityManager firestoreActivityManager = new FirestoreActivityManager(FirestoreActivityManager.ACTIVITIES_COLLECTION, serializer);
 
     private static final String TAG = "Activities updater TAG";
 
@@ -36,13 +41,15 @@ public abstract class ActivitiesUpdater {
     }
 
     /**
-     * Updates the local list of activities, by retrieving only newly added activities in db collection
+     * Updates the local list of activities, by retrieving only newly added activities in db collection. When complete, something
+     * should happen (use onCompleteListener). If an activity is changed in the db, this change should also happen in local (use eventListener)
      *
-     * @param listener used as a callback when updating the list, e.g to update the map markers
+     * @param onCompletelistener used as a callback when the activities are fetched from db
+     * @param eventListener used as a callback when an activitiy is updated in the db
      */
-    public static void updateListActivities(OnCompleteListener listener) {
-        if (listener == null) {
-            Log.d(TAG, "listener is null");
+    public static void updateListActivities(OnCompleteListener onCompletelistener, EventListener<DocumentSnapshot> eventListener) {
+        if (onCompletelistener == null || eventListener == null) {
+            Log.d(TAG, "listeners shouldn't be null");
             return;
         }
         Task<QuerySnapshot> allDocTask = firestoreActivityManager.getAll();
@@ -50,18 +57,15 @@ public abstract class ActivitiesUpdater {
         allDocTask.addOnSuccessListener(queryDocumentSnapshots -> {
             // Calculate the number of newly added activities in the collection
             int size = queryDocumentSnapshots.getDocuments().size() - activities.size();
-
-            Log.d(TAG, "diff number of activities is " + size);
             //In case there is more activities in local than db (e.g if activities were deleted from db), than we clear the list and refetch
-            //TODO: not an optimized way to do, might be interesting to rethink it
             if (size < 0) {
                 clearLocalActivities();
-                updateListActivities(listener);
+                updateListActivities(onCompletelistener, eventListener);
                 return;
             }
+            else if (size == 0) allDocTask.addOnCompleteListener(onCompletelistener);
             //Either way, when updating the list, we update the map as well
-            else if (size == 0) allDocTask.addOnCompleteListener(listener);
-            else addActivitiesOnSuccess(firestoreActivityManager.getRecentlyAddedActivities(size)).addOnCompleteListener(listener);;
+            else addActivitiesOnSuccess(firestoreActivityManager.getRecentlyAddedActivities(size), eventListener).addOnCompleteListener(onCompletelistener);
         });
     }
 
@@ -70,11 +74,13 @@ public abstract class ActivitiesUpdater {
      *
      * @param task task containing the requested snapshots, that would then be deserialized into activities
      */
-    private static Task addActivitiesOnSuccess(Task<QuerySnapshot> task) {
+    private static Task addActivitiesOnSuccess(Task<QuerySnapshot> task, EventListener<DocumentSnapshot> eventListener) {
         return task.addOnSuccessListener(queryDocumentSnapshots -> {
             for (DocumentSnapshot docSnap : queryDocumentSnapshots.getDocuments()) {
-                activities.add(serializer.deserialize(docSnap.getData()));
-                Log.d(TAG, "activities size is " + activities.size());
+                Activity act = serializer.deserialize(docSnap.getData());
+                activities.add(act);
+                //for the given activity, we make sure that it will always be updated on map
+                firestoreActivityManager.setActivitiesUpdateListener(act, eventListener);
             }
         }).addOnFailureListener(e -> Log.d(TAG, e.toString()));
     }

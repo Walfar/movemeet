@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.models.Sport;
 import com.sdp.movemeet.models.Activity;
 
@@ -19,7 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-;import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 
@@ -41,9 +42,9 @@ public class ActivityNotNullDescriptionTest {
     private final static double DUMMY_DURATION = 10.4;
     private final static Sport DUMMY_SPORT = Sport.Running;
     private final static String DUMMY_ADDRESS = "address";
-    public FirebaseAuth mAuth;
+    public FirebaseAuth fAuth;
 
-    private Activity activity = new Activity(
+    private final Activity activity = new Activity(
             DUMMY_ACTIVITY_ID,
             DUMMY_ORGANISATOR_ID,
             DUMMY_TITLE,
@@ -64,9 +65,9 @@ public class ActivityNotNullDescriptionTest {
     public void signIn() {
         CountDownLatch latch = new CountDownLatch(1);
 
-        mAuth = FirebaseAuth.getInstance();
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
 
-        mAuth.signInWithEmailAndPassword("movemeet@gmail.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        fAuth.signInWithEmailAndPassword("movemeet@gmail.com", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
@@ -93,8 +94,8 @@ public class ActivityNotNullDescriptionTest {
     }
 
     @After
-    public void deleteAndSignOut() {
-        mAuth.signOut();
+    public void signOut() {
+        fAuth.signOut();
     }
 
     public boolean sleep(int millis) {

@@ -17,8 +17,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
@@ -27,12 +29,11 @@ import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.Activity;
-import com.sdp.movemeet.view.activity.UploadActivityActivity;
 import com.sdp.movemeet.view.main.MainActivity;
-import com.sdp.movemeet.view.navigation.security.MainActivitySecurityTest;
 
 import org.hamcrest.Matcher;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -123,7 +124,6 @@ public class UploadActivityActivityTest {
         Task addTask = mock(Task.class);
 
         BackendManager<Activity> activityBackendManager = new FirestoreActivityManager(
-                BackendInstanceProvider.getFirestoreInstance(),
                 FirestoreActivityManager.ACTIVITIES_COLLECTION,
                 new ActivitySerializer()
         );
@@ -164,7 +164,6 @@ public class UploadActivityActivityTest {
         Task addTask = mock(Task.class);
 
         BackendManager<Activity> activityBackendManager = new FirestoreActivityManager(
-                BackendInstanceProvider.getFirestoreInstance(),
                 FirestoreActivityManager.ACTIVITIES_COLLECTION,
                 new ActivitySerializer()
         );
@@ -293,7 +292,6 @@ public class UploadActivityActivityTest {
         Task addTask = mock(Task.class);
 
         BackendManager<Activity> activityBackendManager = new FirestoreActivityManager(
-                BackendInstanceProvider.getFirestoreInstance(),
                 FirestoreActivityManager.ACTIVITIES_COLLECTION,
                 new ActivitySerializer()
         );
@@ -326,7 +324,13 @@ public class UploadActivityActivityTest {
     @After
     public void tearDown() {
         Intents.release();
+        BackendInstanceProvider.database = FirebaseDatabase.getInstance();
+        BackendInstanceProvider.storage = FirebaseStorage.getInstance();
+        BackendInstanceProvider.firestore = FirebaseFirestore.getInstance();
+
+        AuthenticationInstanceProvider.fAuth = FirebaseAuth.getInstance();
     }
+
 
     public static ViewAction forceDoubleClick() {
         return new ViewAction() {

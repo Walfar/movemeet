@@ -1,6 +1,6 @@
 package com.sdp.movemeet.view.map;
 
-import android.Manifest;;
+import android.Manifest;
 import android.location.Location;
 import android.util.Log;
 
@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.models.Sport;
@@ -32,6 +33,7 @@ import com.sdp.movemeet.view.activity.ActivityDescriptionActivityUnregister;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.main.MainActivity;
+import com.sdp.movemeet.view.navigation.Navigation;
 
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
@@ -86,9 +88,9 @@ import static org.mockito.Mockito.mock;
 @RunWith(AndroidJUnit4.class)
 public class MainMapFragmentTest {
 
-    private UiDevice uiDevice = UiDevice.getInstance(getInstrumentation());
-    private FirebaseAuth fAuth = FirebaseAuth.getInstance();
-    private String TAG = "Main Map Fragment Test";
+    private final UiDevice uiDevice = UiDevice.getInstance(getInstrumentation());
+    private FirebaseAuth fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+    private final String TAG = "Main Map Fragment Test";
 
     @Rule
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -99,7 +101,7 @@ public class MainMapFragmentTest {
 
     @Before
     public void setUp() {
-        fAuth = FirebaseAuth.getInstance();
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         fAuth.signInWithEmailAndPassword("test@test.com", "password");
         Intents.init();
     }
@@ -162,14 +164,14 @@ public class MainMapFragmentTest {
     public void clickingOnActivityMakesCorrectIntentWhenLogged() {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
         Activity act = new Activity("activity id", "organizer id", "my title", 4, new ArrayList<>(), 0, 0,
-                    "desc", null, new Date(), 1, Soccer, "Dubai UAE", new Date());
+                    "desc", "activities/test", new Date(), 1, Soccer, "Dubai UAE", new Date());
         ActivitiesUpdater.activities.add(act);
         mapFragment.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mapFragment.displayNearbyMarkers();
                 if (mapFragment.googleMap != null) {
-                    mapFragment.onMarkerClick(mapFragment.activitiesMarkers.get(0));
+                    mapFragment.onMarkerClick(mapFragment.activitiesMarkerMap.get(act));
                 }
             }
         });
@@ -182,14 +184,14 @@ public class MainMapFragmentTest {
         MainMapFragment mapFragment = fragmentTestRule.getFragment();
         mapFragment.user = null;
         Activity act = new Activity("activity id", "organizer id", "my title", 4, new ArrayList<>(), 0, 0,
-                    "desc", null, new Date(), 1, Soccer, "Dubai UAE", new Date());
+                    "desc", "activities/test", new Date(), 1, Soccer, "Dubai UAE", new Date());
         ActivitiesUpdater.activities.add(act);
         mapFragment.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mapFragment.displayNearbyMarkers();
                 if (mapFragment.googleMap != null) {
-                    mapFragment.onMarkerClick(mapFragment.activitiesMarkers.get(0));
+                    mapFragment.onMarkerClick(mapFragment.activitiesMarkerMap.get(act));
                 }
             }
         });
@@ -267,6 +269,7 @@ public class MainMapFragmentTest {
 
     @After
     public void after() {
+        Navigation.profileField = false;
         Intents.release();
     }
 

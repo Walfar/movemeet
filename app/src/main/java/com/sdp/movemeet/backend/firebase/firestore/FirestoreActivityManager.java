@@ -1,17 +1,19 @@
 package com.sdp.movemeet.backend.firebase.firestore;
 
+import android.util.Log;
+
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.sdp.movemeet.models.Activity;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
+import com.sdp.movemeet.models.Activity;
 
 /**
- * A class capable of handling Activity storage operations with a FirebaseFirestore backend
+ * A class capable of handling Activity storage operations with a Firebase Firestore backend
  */
 public class FirestoreActivityManager extends FirestoreManager<Activity> {
 
@@ -21,15 +23,14 @@ public class FirestoreActivityManager extends FirestoreManager<Activity> {
     private final FirebaseFirestore db;
     private final String collection;
 
-    public FirestoreActivityManager(FirebaseFirestore db, String collection, BackendSerializer<Activity> serializer) {
-        super(db, collection, serializer);
-        this.db = db;
+    public FirestoreActivityManager(String collection, BackendSerializer<Activity> serializer) {
+        super(collection, serializer);
+        this.db = BackendInstanceProvider.getFirestoreInstance();
         this.collection = collection;
     }
 
     @Override
     public Task<QuerySnapshot> search(String field, Object value) {
-        // TODO: return 50 closest activities and execute query on those
         return super.search(field, value);
     }
 
@@ -40,6 +41,15 @@ public class FirestoreActivityManager extends FirestoreManager<Activity> {
      */
     public Task<QuerySnapshot> getRecentlyAddedActivities(int size) {
         return db.collection(collection).orderBy("createdAt", Query.Direction.DESCENDING).limit(size).get();
+    }
+
+    /**
+     * When the given activity is updated in the db, the event listener should trigger the given callback
+     * @param activity activity that is listened on
+     * @param eventListener used to trigger a callback when activity changes in db
+     */
+    public void setActivitiesUpdateListener(Activity activity, EventListener<DocumentSnapshot> eventListener) {
+        db.document(activity.getDocumentPath()).addSnapshotListener(eventListener);
     }
 
 

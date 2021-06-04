@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".view.activity.ActivityDescriptionActivity"
-    tools:openDrawer="start">
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -25,11 +25,12 @@
             app:navigationIcon="@drawable/menu" />
 
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="60dp"
             android:background="@android:color/white"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:layout_editor_absoluteY="60dp">
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -91,8 +92,7 @@
                             android:layout_gravity="center_horizontal"
                             android:onClick="changeActivityPicture"
                             android:padding="10dp"
-                            android:src="@drawable/run_woman"
-                            tools:ignore="MissingClass" />
+                            android:src="@drawable/run_woman" />
 
                     </LinearLayout>
 
@@ -263,12 +263,96 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/activity_description_stats_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/activity_description_stats"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/armata"
+                            android:paddingTop="20dp"
+                            android:paddingBottom="5dp"
+                            android:text="@string/activity_description_stats"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/activity_description_stats_data_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/activity_description_distance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/armata"
+                            android:text="@string/activity_description_dist"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/activity_description_dist_data"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/armata"
+                            android:paddingBottom="5dp" />
+
+                        <TextView
+                            android:id="@+id/activity_description_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/armata"
+                            android:text="@string/activity_description_time"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/activity_description_time_data"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/armata"
+                            android:paddingBottom="5dp" />
+
+                        <TextView
+                            android:id="@+id/activity_description_avgSpeed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/armata"
+                            android:text="@string/activity_description_avgSpeed"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/activity_description_avgSpeed_data"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/armata" />
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal"
+                        android:orientation="horizontal"
                         android:paddingTop="20dp"
-                        android:paddingBottom="5dp"
-                        android:orientation="horizontal">
+                        android:paddingBottom="5dp">
+
+                        <Button
+                            android:id="@+id/activityUnregisterDescription"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/armata"
+                            android:onClick="unregisterFromActivity"
+                            android:text="@string/activity_description_unregister_button"
+                            tools:ignore="ButtonStyle" />
 
                         <Button
                             android:id="@+id/activityRegisterDescription"
@@ -277,16 +361,17 @@
                             android:fontFamily="@font/armata"
                             android:onClick="registerToActivity"
                             android:text="@string/activity_description_register_button"
-                            tools:ignore="ButtonStyle" />
+                            tools:ignore="ButtonStyle"
+                            android:visibility="invisible" />
 
                         <Button
-                            android:id="@+id/activityGoDescription"
+                            android:id="@+id/activityGPSRecDescription"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/armata"
                             android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:text="@string/activity_description_how_to_go_button"
+                            android:fontFamily="@font/armata"
+                            android:onClick="goToGPSRecording"
+                            android:text="@string/activity_description_GPS_recording_button"
                             tools:ignore="ButtonStyle" />
 
                         <Button
@@ -294,23 +379,31 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/armata"
+                            android:layout_marginLeft="10dp"
                             android:onClick="goToIndividualChat"
                             android:text="@string/activity_description_chat_button"
-                            tools:ignore="ButtonStyle" />
+                            tools:ignore="ButtonStyle"
+                            android:visibility="invisible" />
                     </LinearLayout>
-
-                    <ProgressBar
-                        android:id="@+id/progress_bar_activity_description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:backgroundTint="#F31505"
-                        android:paddingTop="10dp"
-                        android:visibility="invisible" />
 
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_bar_activity_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="#F31505"
+            android:paddingTop="10dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/toolbar"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintVertical_bias="0.17000002" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView

@@ -1,12 +1,11 @@
 package com.sdp.movemeet.models;
 
-import java.io.Serializable;
-import java.util.Date;
-
 /**
+ *
  * This class represents a message
+ *
  */
-public class Message extends FirebaseObject {
+public class Message implements FirebaseObject {
     private String messageUser;
     private String messageText;
     private String messageUserId;
@@ -79,6 +78,13 @@ public class Message extends FirebaseObject {
     }
 
     /**
+     * @return the document path of the message
+     */
+    public String getDocumentPath() {
+        return this.documentPath;
+    }
+
+    /**
      * @param messageUser set the user's full name
      */
     public void setMessageUser(String messageUser) {
@@ -99,13 +105,13 @@ public class Message extends FirebaseObject {
         this.messageUserId = messageUserId;
     }
 
-
-    public String getDocumentPath() {
-        return super.documentPath;
-    }
-
+    /**
+     * @param path change activity's document path
+     */
     public String setDocumentPath(String path) {
-        return super.setDocumentPath(path);
+        if (documentPath == null) documentPath = path;
+        return documentPath;
     }
+
 
 }

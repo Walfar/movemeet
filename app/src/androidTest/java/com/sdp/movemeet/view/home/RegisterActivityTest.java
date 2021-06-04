@@ -8,7 +8,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.R;
-import com.sdp.movemeet.view.home.RegisterActivity;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -34,7 +34,7 @@ public class RegisterActivityTest {
     public static final String password = "password";
     public static final String shortPassword = "pass";
 
-    public static final String Email = "movemeet@gmail.com";
+    public static final String email = "movemeet@gmail.com";
 
     @Rule
     //public ActivityScenarioRule<RegisterActivity> RegisterTestRule = new ActivityScenarioRule<>(RegisterActivity.class);
@@ -65,7 +65,7 @@ public class RegisterActivityTest {
     @Test
     public void Empty_Password(){
         onView(withId(R.id.edit_text_email))
-                .perform(replaceText(Email), closeSoftKeyboard());
+                .perform(replaceText(email), closeSoftKeyboard());
         onView(withId(R.id.button_register)).perform(click());
 
         onView(withId(R.id.edit_text_password)).check(matches(withError(RegisterTestRule.getActivity().getString(R.string.register_password_required_message))));
@@ -74,7 +74,7 @@ public class RegisterActivityTest {
     @Test
     public void Short_Password(){
         onView(withId(R.id.edit_text_email))
-                .perform(replaceText(Email), closeSoftKeyboard());
+                .perform(replaceText(email), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password))
                 .perform(replaceText(shortPassword), closeSoftKeyboard());
         onView(withId(R.id.button_register)).perform(click());
@@ -85,7 +85,7 @@ public class RegisterActivityTest {
     @Test
     public void Right_AlreadyRegister(){
         onView(withId(R.id.edit_text_email))
-                .perform(replaceText(Email), closeSoftKeyboard());
+                .perform(replaceText(email), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password))
                 .perform(replaceText(password), closeSoftKeyboard());
         onView(withId(R.id.button_register)).perform(click());
@@ -94,7 +94,7 @@ public class RegisterActivityTest {
     @Test
     public void Right_NewRegister(){
         onView(withId(R.id.edit_text_email))
-                .perform(replaceText(Email), closeSoftKeyboard());
+                .perform(replaceText(email), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password))
                 .perform(replaceText(password), closeSoftKeyboard());
         onView(withId(R.id.button_register)).perform(click());
@@ -113,18 +113,6 @@ public class RegisterActivityTest {
                 .perform(replaceText("0244341964"), closeSoftKeyboard());
 
         onView(withId(R.id.button_register)).perform(click());
-
-        // TODO: check why the test cannot intercept the toast when we attempt to create an account
-        //  with an already used email address
-        //---
-        //RegisterActivity activity = RegisterTestRule.getActivity();
-        //onView(withText(R.string.register_toast_account_already_exists)).
-        //        inRoot(withDecorView(not(is(activity.getWindow().getDecorView())))).
-        //        check(matches(isDisplayed()));
-        //---
-
-        // Checking that we are still on the RegisterActivity (i.e. that we have not been redirected
-        // to the MainActivity)
 
         try{
             Thread.sleep(1000);
@@ -156,6 +144,7 @@ public class RegisterActivityTest {
 
     @Test
     public void logOut() {
-        FirebaseAuth.getInstance().signOut();
+        FirebaseAuth fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
+        fAuth.signOut();
     }
 }

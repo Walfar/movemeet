@@ -23,7 +23,16 @@ public interface BackendManager<T> {
      * @param path the path of the instance in the backend.
      * @return a Task, the success of which determines the success of the operation.
      */
-    Task<?> set(T object, String path, String field, String value);
+    Task<?> set(T object, String path);
+
+    /**
+     * Update (i.e. add) a String value to a Firebase Firestore array field of a document.
+     * @param value the String value to update in the array.
+     * @param path the path of the instance in the backend.
+     * @param field the field to which the array corresponds in the backend.
+     * @return a Task, the success of which determines the success of the operation.
+     */
+    Task<?> update(String path, String field, String value, String method);
 
     /**
      * Deletes an entry of T located at the specified path in the backend.

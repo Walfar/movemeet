@@ -30,11 +30,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
+import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.Sport;
+import com.sdp.movemeet.models.User;
+import com.sdp.movemeet.utility.ImageHandler;
 import com.sdp.movemeet.view.home.LoginActivity;
 import com.sdp.movemeet.view.main.MainActivity;
 import com.sdp.movemeet.view.navigation.Navigation;
@@ -47,6 +51,8 @@ import java.util.List;
 
 
 public class UploadActivityActivity extends AppCompatActivity {
+
+    public static final String CREATED_ACTIVITY_FIELD = "createdActivity";
 
     private FirebaseAuth fAuth;
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
@@ -84,16 +90,18 @@ public class UploadActivityActivity extends AppCompatActivity {
 
         // Setup Firebase services
         fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
-        activityBackendManager = new FirestoreActivityManager(
-                BackendInstanceProvider.getFirestoreInstance(),
-                FirestoreActivityManager.ACTIVITIES_COLLECTION,
-                new ActivitySerializer());
-
-        //The aim is to block any direct access to this page if the user is not logged
         if (fAuth.getCurrentUser() == null) {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             finish();
         }
+
+        if (enableNav) new Navigation(this, R.id.nav_add_activity).createDrawer();
+
+        activityBackendManager = new FirestoreActivityManager(
+                FirestoreActivityManager.ACTIVITIES_COLLECTION,
+                new ActivitySerializer());
+
+        //The aim is to block any direct access to this page if the user is not logged
 
         // Setup activity creation form inputs
         setupSportSpinner(this);
@@ -120,10 +128,6 @@ public class UploadActivityActivity extends AppCompatActivity {
             }
         }
 
-        if (enableNav) new Navigation(this, R.id.nav_add_activity).createDrawer();
-        /*Navigation nav = new Navigation(this, R.id.nav_add_activity);
-        nav.createDrawer();*/
-
     }
 
 
@@ -131,7 +135,7 @@ public class UploadActivityActivity extends AppCompatActivity {
 
     // Sport selection
     private void setupSportSpinner(Context context) {
-        spinner = (Spinner) findViewById(R.id.spinnerSportType);
+        spinner = findViewById(R.id.spinnerSportType);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter adapter = new ArrayAdapter(context,
                 android.R.layout.simple_spinner_dropdown_item, Sport.values());
@@ -155,7 +159,7 @@ public class UploadActivityActivity extends AppCompatActivity {
         showDate(year, month + 1, day);
     }
 
-    private DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
+    private final DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
             calendar.set(Calendar.YEAR, year);
@@ -177,7 +181,7 @@ public class UploadActivityActivity extends AppCompatActivity {
 
     // Start + end times selection
 
-    private TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener() {
+    private final TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -198,7 +202,7 @@ public class UploadActivityActivity extends AppCompatActivity {
 
     // End time picker
     // TODO: change to end time
-    private TimePickerDialog.OnTimeSetListener durationListener = new TimePickerDialog.OnTimeSetListener() {
+    private final TimePickerDialog.OnTimeSetListener durationListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             showDuration(hourOfDay, minute);
@@ -372,6 +376,10 @@ public class UploadActivityActivity extends AppCompatActivity {
             public void onSuccess(Void aVoid) {
                 Toast.makeText(getApplicationContext(), "Activity successfully uploaded!",
                         Toast.LENGTH_SHORT).show();
+                //-----------Test
+                //BackendManager<User> userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
+                //userManager.update(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + toUpload.getOrganizerId(), CREATED_ACTIVITY_FIELD, toUpload.getDocumentPath(), ActivityDescriptionActivity.UPDATE_FIELD_UNION);
+                //---------------
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -383,5 +391,4 @@ public class UploadActivityActivity extends AppCompatActivity {
             }
         });
     }
-
 }

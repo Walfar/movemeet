@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -14,11 +15,13 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import com.sdp.movemeet.backend.BackendManager;
+import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 import com.sdp.movemeet.backend.serialization.BackendSerializer;
 import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.models.ActivityTest;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -146,23 +149,22 @@ public class FirestoreActivityManagerTest {
         // Add
         when(docRef.set(any())).thenReturn(addTask);
 
-        activityManager = new FirestoreActivityManager(db,
+        BackendInstanceProvider.firestore = db;
+
+        activityManager = new FirestoreActivityManager(
                 FirestoreActivityManager.ACTIVITIES_COLLECTION,
                 serializer);
     }
 
     @Test
     public void constructorThrowsIllegalArgumentExceptionOnNullParameter() {
+
         assertThrows(IllegalArgumentException.class, () -> {
-            new FirestoreActivityManager(null, FirestoreActivityManager.ACTIVITIES_COLLECTION, serializer);
+            new FirestoreActivityManager(null, serializer);
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            new FirestoreActivityManager(db, null, serializer);
-        });
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            new FirestoreActivityManager(db, FirestoreActivityManager.ACTIVITIES_COLLECTION, null);
+            new FirestoreActivityManager(FirestoreActivityManager.ACTIVITIES_COLLECTION, null);
         });
     }
 
@@ -224,5 +226,10 @@ public class FirestoreActivityManagerTest {
     @Test
     public void getReturnsCorrectTask() {
         assertEquals(getTask, activityManager.get("path"));
+    }
+
+    @After
+    public void tearDown() {
+        //BackendInstanceProvider.firestore = FirebaseFirestore.getInstance();
     }
 }

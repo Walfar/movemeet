@@ -13,12 +13,12 @@ public interface BackendSerializer<T> {
      * @param object the object to serialize
      * @return the newly constructed Map
      */
-    public Map<String, Object> serialize(T object);
+    Map<String, Object> serialize(T object);
 
     /**
      * Deserializes an object from a <key, value> map into an instance of T.
      * @param data the map of <key, value> entries to deserialize
      * @return a newly created instance of T
      */
-    public T deserialize(Map<String, Object> data);
+    T deserialize(Map<String, Object> data);
 }

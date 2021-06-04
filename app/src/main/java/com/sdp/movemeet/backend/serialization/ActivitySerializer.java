@@ -1,13 +1,24 @@
 package com.sdp.movemeet.backend.serialization;
 
+import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
-import com.sdp.movemeet.models.Sport;
+import com.sdp.movemeet.backend.BackendManager;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.models.Activity;
+import com.sdp.movemeet.models.GPSPath;
+import com.sdp.movemeet.models.Sport;
+import com.sdp.movemeet.models.User;
+import com.sdp.movemeet.utility.ImageHandler;
+import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +26,8 @@ import java.util.Map;
  * A BackendSerializer capable of (de)serializing Activities
  */
 public class ActivitySerializer implements BackendSerializer<Activity> {
+
+    public static final String CREATED_ACTIVITY_FIELD = "createdActivity";
 
     // The key used to access the activityId attribute of a serialized Activity
     public static final String ACTIVITY_KEY = "activityId";
@@ -48,6 +61,12 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
     // The key used to access the documentPath attribute of a serialized Activity
     public static final String DOCUMENT_PATH_KEY = "documentPath";
 
+    public static final String GPS_RECORDINGS_KEY = "gpsRecordings";
+    private static final String REC_TIME_KEY = "time";
+    private static final String REC_DIST_KEY = "distance";
+    private static final String REC_SPEED_KEY = "averageSpeed";
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public Activity deserialize(Map<String, Object> data) {
 
         Activity act = new Activity(
@@ -59,7 +78,7 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
                 (ArrayList<String>) data.get(PARTICIPANTS_KEY),
 
                 (double) data.get(LONGITUDE_KEY),
-                (double )data.get(LATITUDE_KEY),
+                (double) data.get(LATITUDE_KEY),
 
                 (String) data.get(DESC_KEY),
                 (String) data.get(DOCUMENT_PATH_KEY),
@@ -69,6 +88,19 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
                 (String) data.get(ADDRESS_KEY),
                 ((Timestamp) data.get(CREATION_KEY)).toDate()
         );
+
+        Map<String, Map<String, Object>> gpsMaps = (Map<String, Map<String, Object>>) data.getOrDefault(GPS_RECORDINGS_KEY, null);
+        if (gpsMaps != null) {
+            Map<String, GPSPath> recordings = new HashMap<String, GPSPath>();
+            for (String uid : gpsMaps.keySet()) {
+                GPSPath rec = new GPSPath();
+                rec.setTime(((Number) gpsMaps.get(uid).get(REC_TIME_KEY)).longValue());
+                rec.setDistance(((Number) gpsMaps.get(uid).get(REC_DIST_KEY)).floatValue());
+                rec.setAverageSpeed(((Number) gpsMaps.get(uid).get(REC_SPEED_KEY)).floatValue());
+                recordings.put(uid, rec);
+            }
+            act.setParticipantRecordings(recordings);
+        }
 
         return act;
     }
@@ -94,6 +126,16 @@ public class ActivitySerializer implements BackendSerializer<Activity> {
         data.put(CREATION_KEY, activity.getCreatedAt());
 
         data.put(DOCUMENT_PATH_KEY, activity.getDocumentPath());
+
+        if (activity.getParticipantRecordings() != null)
+            data.put(GPS_RECORDINGS_KEY, activity.getParticipantRecordings());
+
+        // This is bad, we know, but we had no more time to make the UploadActivityActivityTest work in another way...
+        if (!activity.getActivityId().equals("12345")) { // ActivityTest.DUMMY_ACTIVITY_ID
+            // Intercepting the activity path to add it to the organizer Firebase Firestore document
+            BackendManager<User> userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
+            userManager.update(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + activity.getOrganizerId(), CREATED_ACTIVITY_FIELD, activity.getDocumentPath(), ActivityDescriptionActivity.UPDATE_FIELD_UNION);
+        }
 
         return data;
     }

@@ -18,15 +18,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.view.main.MainActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText emailEditText, passwordEditText;
-    Button loginBtn;
-    TextView createBtn;
-    ProgressBar progressBar;
-    FirebaseAuth fAuth;
+    private EditText emailEditText, passwordEditText;
+    private Button loginBtn;
+    private TextView createBtn;
+    private ProgressBar progressBar;
+    private FirebaseAuth fAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,52 +37,51 @@ public class LoginActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.edit_text_email);
         passwordEditText = findViewById(R.id.edit_text_password);
         progressBar = findViewById(R.id.activity_login_progress_bar);
-        fAuth = FirebaseAuth.getInstance();
+        fAuth = AuthenticationInstanceProvider.getAuthenticationInstance();
         loginBtn = findViewById(R.id.button_login);
         createBtn = findViewById(R.id.text_view_create_account);
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        loginBtn.setOnClickListener(v -> {
 
-                // When the user clicks on the "LOGIN" button, we first validate his data
-                String email = emailEditText.getText().toString().trim();
-                String password = passwordEditText.getText().toString().trim();
+            // When the user clicks on the "LOGIN" button, we first validate his data
+            String email = emailEditText.getText().toString().trim();
+            String password = passwordEditText.getText().toString().trim();
 
-                if (TextUtils.isEmpty(email)) { // checking that the email address is not empty
-                    emailEditText.setError("Email is required.");
-                    return;
-                }
-
-                if (TextUtils.isEmpty(password)) { // checking that the password is not empty
-                    passwordEditText.setError("Password is required.");
-                    return;
-                }
-
-                if (password.length() < 6) { // checking that the password is at least 6 characters long
-                    passwordEditText.setError("Password must be >= 6 characters.");
-                    return;
-                }
-
-                progressBar.setVisibility(View.VISIBLE);
-
-                // Then we authenticate the user using his email and password
-                fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "Logged in successfully.", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class)); // we redirect the user to the "MainActivity"
-
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    }
-
-                });
-
+            if (TextUtils.isEmpty(email)) { // checking that the email address is not empty
+                emailEditText.setError("Email is required.");
+                return;
             }
+
+            if (TextUtils.isEmpty(password)) { // checking that the password is not empty
+                passwordEditText.setError("Password is required.");
+                return;
+            }
+
+            if (password.length() < 6) { // checking that the password is at least 6 characters long
+                passwordEditText.setError("Password must be >= 6 characters.");
+                return;
+            }
+
+            progressBar.setVisibility(View.VISIBLE);
+
+            // Then we authenticate the user using his email and password
+            fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(LoginActivity.this, "Logged in successfully.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);// we redirect the user to the "MainActivity"
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    startActivity(intent);
+                    finish();
+
+                } else {
+                    Toast.makeText(LoginActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                }
+            });
 
         });
 

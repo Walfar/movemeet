@@ -30,8 +30,8 @@ public class MessageAdapter extends FirebaseRecyclerAdapter<Message, MessageView
     private final int MESSAGE_IN_VIEW_TYPE = 1;
     private final int MESSAGE_OUT_VIEW_TYPE = 2;
 
-    Activity chatActivity;
-    String userId;
+    private final Activity chatActivity;
+    private final String userId;
 
     /**
      * Constructor that creates a MessageAdapter object.
@@ -65,7 +65,7 @@ public class MessageAdapter extends FirebaseRecyclerAdapter<Message, MessageView
         chatLoader.setVisibility(ProgressBar.INVISIBLE);
         TextView initialChatWelcomeMessage = (chatActivity).findViewById(R.id.initial_chat_welcome_message);
         initialChatWelcomeMessage.setVisibility(ProgressBar.INVISIBLE);
-        vh.bindMessage(message);
+        vh.bindMessage(message, (ChatActivity) chatActivity);
     }
 
     /**
