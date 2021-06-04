@@ -43,6 +43,7 @@ import com.sdp.movemeet.view.map.GPSRecordingActivity;
 import com.sdp.movemeet.view.navigation.Navigation;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -64,7 +65,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     public static final String UPDATE_FIELD_REMOVE = "remove";
     public static final String DESCRIPTION_ACTIVITY_KEY = "activitykey";
     public static final String RECORDING_EXTRA_NAME = "gpsreckey";
-    public static final String DISTANCE_UNIT = "m";
+    public static final String DISTANCE_UNIT = "km";
     public static final String SPEED_UNIT = "km/h";
     public static final String ACTIVITY_CHAT_ID = "ActivityChatId";
     public static final String ACTIVITY_TITLE = "ActivityTitle";
@@ -375,10 +376,10 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     public void displayParticipantStats() {
         GPSPath stats = activity.getParticipantRecordings().get(userId);
         TextView distText = findViewById(R.id.activity_description_dist_data);
-        distText.setText(stats.getDistance() + DISTANCE_UNIT);
+        distText.setText(new DecimalFormat("#.##").format(stats.getDistance()) + DISTANCE_UNIT);
 
         TextView avgSpeedText = findViewById(R.id.activity_description_avgSpeed_data);
-        avgSpeedText.setText(stats.getAverageSpeed() + SPEED_UNIT);
+        avgSpeedText.setText(new DecimalFormat("#.##").format(stats.getAverageSpeed()) + SPEED_UNIT);
 
         TextView timeText = findViewById(R.id.activity_description_time_data);
 
