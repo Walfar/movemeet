@@ -49,7 +49,15 @@ public class User implements Serializable, FirebaseObject {
      * @param documentPath : the document path of the activity in Firebase Firestore
      */
 
-    public User(String fullName, String email, String phone, String description, String idUser, String imageId, String documentPath, ArrayList<String> createdActivitiesId, ArrayList<String> registeredActivitiesId) {
+    public User(String fullName,
+                String email,
+                String phone,
+                String description,
+                String idUser,
+                String imageId,
+                String documentPath,
+                ArrayList<String> createdActivitiesId,
+                ArrayList<String> registeredActivitiesId) {
         if (fullName == null || email == null || idUser == null || phone == null) {
             throw new IllegalArgumentException();
         }

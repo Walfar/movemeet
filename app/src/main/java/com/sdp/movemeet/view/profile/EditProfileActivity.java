@@ -1,6 +1,6 @@
 package com.sdp.movemeet.view.profile;
 
-import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,13 +28,22 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
+import com.sdp.movemeet.backend.firebase.firebaseDB.FirebaseDBMessageManager;
+import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
+import com.sdp.movemeet.backend.firebase.storage.StorageImageManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
+import com.sdp.movemeet.backend.serialization.ActivitySerializer;
+import com.sdp.movemeet.backend.serialization.MessageSerializer;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Image;
+import com.sdp.movemeet.models.Message;
 import com.sdp.movemeet.models.User;
+import com.sdp.movemeet.models.Activity;
 import com.sdp.movemeet.utility.ImageHandler;
+import com.sdp.movemeet.view.activity.ActivityDescriptionActivity;
+import com.sdp.movemeet.view.chat.ChatActivity;
 import com.sdp.movemeet.view.home.HomeScreenActivity;
 import com.sdp.movemeet.view.home.LoginActivity;
 
@@ -41,7 +51,7 @@ import java.util.ArrayList;
 
 public class EditProfileActivity extends AppCompatActivity {
 
-    private static final String TAG = "TAG";
+    private static final String TAG = "EditProfileActivity";
     private static final int REQUEST_IMAGE = 1000;
 
     private ImageView profileImage;
@@ -49,15 +59,20 @@ public class EditProfileActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private ImageButton saveBtn;
 
-    private String userId, fullNameString, emailString, phoneString, descriptionString, userImagePath;
+    private String userId, fullNameString, emailString, phoneString, descriptionString, userImagePath,
+            createdActivityPath, registeredActivityPath;
 
     private FirebaseAuth fAuth;
     private FirebaseUser firebaseUser;
     private BackendManager<User> userManager;
+    private BackendManager<Activity> activityManager;
+    private BackendManager<Message> chatManager;
     private FirebaseStorage fStorage;
+    private BackendManager<Image> imageBackendManager;
 
     private ArrayList<String> createdActivitiesId;
     private ArrayList<String> registeredActivitiesId;
+    private int deleteActivitiesCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,14 +89,15 @@ public class EditProfileActivity extends AppCompatActivity {
         }
 
         Intent data = getIntent();
-        fullNameString = data.getStringExtra(ProfileActivity.EXTRA_MESSAGE_FULL_NAME);
-        emailString = data.getStringExtra(ProfileActivity.EXTRA_MESSAGE_EMAIL);
-        phoneString = data.getStringExtra(ProfileActivity.EXTRA_MESSAGE_PHONE);
-        descriptionString = data.getStringExtra(ProfileActivity.EXTRA_MESSAGE_DESCRIPTION);
+        fullNameString = data.getStringExtra(ProfileActivity.EXTRA_FULL_NAME);
+        emailString = data.getStringExtra(ProfileActivity.EXTRA_EMAIL);
+        phoneString = data.getStringExtra(ProfileActivity.EXTRA_PHONE);
+        descriptionString = data.getStringExtra(ProfileActivity.EXTRA_DESCRIPTION);
+        createdActivitiesId = data.getStringArrayListExtra(ProfileActivity.EXTRA_CREATED_ACTIVITIES);
+        registeredActivitiesId = data.getStringArrayListExtra(ProfileActivity.EXTRA_REGISTERED_ACTIVITIES);
         assignViewsAndAdjustData();
 
         fStorage = BackendInstanceProvider.getStorageInstance();
-
         userImagePath = FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + userId
                 + ImageHandler.PATH_SEPARATOR + ImageHandler.USER_IMAGE_NAME;
         Image image = new Image(null, profileImage);
@@ -122,7 +138,7 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE) {
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == android.app.Activity.RESULT_OK) {
                 Uri imageUri = data.getData();
                 Image image = new Image(imageUri, profileImage);
                 image.setDocumentPath(userImagePath);
@@ -155,7 +171,6 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
 
-    @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE) // making this method always public for testing and private otherwise
     public void accessFirestoreUsersCollectionForUpdate() {
         User user = new User(profileFullName.getText().toString(), profileEmail.getText().toString(), profilePhone.getText().toString(),
                 profileDescription.getText().toString(), createdActivitiesId, registeredActivitiesId);
@@ -176,77 +191,110 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
     public void deleteUserAccountCall(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete account");
+        builder.setMessage("Are you sure you want to delete your account?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                deleteOrganizedActivities();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+        builder.show();
+    }
+
+
+    // 1) Delete organized activities and related chats
+    public void deleteOrganizedActivities() {
+        Log.d(TAG, "Entering deleteOrganizedActivities");
+        activityManager = new FirestoreActivityManager(FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
+        Log.d(TAG, "Created activityManager");
+        if (createdActivitiesId != null) {
+            if (createdActivitiesId.size() > 0) {
+                Log.d(TAG, "Entering if");
+                for (int i=0; i < createdActivitiesId.size(); i++) {
+                    createdActivityPath = createdActivitiesId.get(i);
+                    // 1.1) Delete organized activities document in Firebase Firestore
+                    activityManager.delete(createdActivityPath).addOnSuccessListener(new OnSuccessListener() {
+                        @Override
+                        public void onSuccess(Object o) {
+                            deleteActivitiesCounter += 1;
+                            Log.d(TAG, "deleteUserAccount - 1.1) ✅ Deleted organized activity n°: " + deleteActivitiesCounter);
+                            // 1.2) Delete chats related to organized activities
+                            deleteOrganizedActivityChat(createdActivityPath);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "deleteUserAccount - 1) ❌ FAILED to delete organized activity n°: " + deleteActivitiesCounter);
+                        }
+                    });
+                }
+            }
+        }
+        unregisterUserFromActivities();
+    }
+
+
+    // 1.2) Delete chats related to organized activities
+    public void deleteOrganizedActivityChat(String activityPath) {
+        Log.d(TAG, "Entering deleteOrganizedActivityChat");
+        chatManager = new FirebaseDBMessageManager(new MessageSerializer());
+        String activityChatPath = activityPath.replace(FirestoreActivityManager.ACTIVITIES_COLLECTION, ChatActivity.CHATS_CHILD);
+        chatManager.delete(activityChatPath);
+        Log.d(TAG, "deleteUserAccount - 1.2) ✅ deleted chat of organized activity n°: " + deleteActivitiesCounter);
+    }
+
+
+    // 2) Remove user from activities he registered to (to free up his place for other participants)
+    public void unregisterUserFromActivities() {
+        Log.d(TAG, "Entering unregisterUserFromActivities");
+        if (registeredActivitiesId != null) {
+            if (registeredActivitiesId.size() > 0) {
+                for (int i=0; i<registeredActivitiesId.size(); i++) {
+                    registeredActivityPath = registeredActivitiesId.get(i);
+                    activityManager.update(registeredActivityPath, ActivityDescriptionActivity.PARTICIPANT_ID_FIELD, userId, ActivityDescriptionActivity.UPDATE_FIELD_REMOVE);
+                }
+                Log.d(TAG, "✅ deleteUserAccount - 2) user successfully unregistered from all activities");
+            }
+        }
         deleteUserAccount(userId, firebaseUser);
     }
 
 
+    // 3) Delete user information
     @VisibleForTesting(otherwise=VisibleForTesting.PRIVATE)
     public void deleteUserAccount(String userId, FirebaseUser firebaseUser) {
-        // 1) Delete the profile picture of the user from Firebase Storage (in case it exists)
+        // 3.1) Delete the profile picture of the user from Firebase Storage (in case it exists)
+        Log.d(TAG, "deleteUserAccount - 3.1) Firebase Storage user profile picture deletion");
         String userImagePath = FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + userId
                 + ImageHandler.PATH_SEPARATOR + ImageHandler.USER_IMAGE_NAME;
-        StorageReference profileRef = BackendInstanceProvider.getStorageInstance().getReference().child(userImagePath);
-        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                deleteProfilePicture(profileRef, userId, firebaseUser);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.d(TAG, "deleteUserAccount - 1) ❌ Firebase Storage user profile picture could not be fetched because it probably doesn't exist!");
-                // 2) Deleting all the user data from Firebase Firestore
-                deleteFirestoreDataAndAuthentication(userId, firebaseUser);
-            }
-        });
+        imageBackendManager = new StorageImageManager();
+        imageBackendManager.delete(userImagePath);
+        // 3.2) Delete all the user data from Firebase Firestore
+        deleteFirestoreData(userId, firebaseUser);
     }
 
 
-    public void deleteProfilePicture(StorageReference profileRef, String userId, FirebaseUser firebaseUser) {
-        profileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d(TAG, "deleteUserAccount - 1) ✅ Firebase Storage user profile picture successfully deleted!");
-                // 2) Deleting all the user data from Firebase Firestore
-                deleteFirestoreDataAndAuthentication(userId, firebaseUser);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.d(TAG, "deleteUserAccount - 1) ❌ Firebase Storage user profile picture could not be deleted! User account won't be deleted!");
-            }
-        });
-    }
-
-
-    public void deleteFirestoreDataAndAuthentication(String userId, FirebaseUser firebaseUser) {
-        // Delete all user data from Firebase Firestore
+    // 3.2) Delete all the user data from Firebase Firestore
+    public void deleteFirestoreData(String userId, FirebaseUser firebaseUser) {
+        Log.d(TAG, "deleteUserAccount - 3.2) Firebase Firestore user data deletion");
         BackendManager<User> userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
-        userManager.delete(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + userId).addOnSuccessListener(new OnSuccessListener() {
-            @Override
-            public void onSuccess(Object o) {
-                Log.d(TAG, "deleteUserAccount - 2) ✅ Firebase Firestore user data successfully deleted!");
-                // 3) Deleting the user from Firebase Authentication
-                deleteUserFromFirebaseAuthentication(firebaseUser);
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "deleteUserAccount - 2) ❌ Firebase Firestore user document could not be fetched! User account won't be deleted!");
-            }
-        });
+        userManager.delete(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + userId);
+        deleteUserFromFirebaseAuthentication(firebaseUser);
     }
 
 
+    // 3.3) Delete the user from Firebase Authentication
     private void deleteUserFromFirebaseAuthentication(FirebaseUser firebaseUser) {
-        // Delete user from Firebase Authentication
-
         firebaseUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Log.d(TAG, "deleteUserAccount - 3) ✅ Firebase Authentication for current user successfully deleted!");
+                    Log.d(TAG, "deleteUserAccount - 3.3) ✅ Firebase Authentication for current user successfully deleted!");
                     Toast.makeText(EditProfileActivity.this, "Account deleted!", Toast.LENGTH_SHORT).show();
                     // Sending the user to HomeScreenActivity
                     Intent intent = new Intent(EditProfileActivity.this, HomeScreenActivity.class);
@@ -254,13 +302,10 @@ public class EditProfileActivity extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 } else {
-                    Log.d(TAG, "deleteUserAccount - 3) ❌ Firebase Authentication for current user could not be deleted! Error message: " + task.getException().getMessage());
+                    Log.d(TAG, "deleteUserAccount - 3.3) ❌ Firebase Authentication for current user could not be deleted! Error message: " + task.getException().getMessage());
+                    Toast.makeText(EditProfileActivity.this, "Account not properly deleted. " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
-    // TODO: to completely delete the user account, it would be great to delete all the activiies he created as an organiizer!
-    //  For this, we have to have access to all the activities he organized with an additional field in Firebase Firestore for user
-    //  That would be called "organizedActivitiesId" (in addition to the already existing "activitiesId" created by Roxane for the
-    //  ListOfActivities)
 }

@@ -24,7 +24,7 @@ public class DrawableMatcher extends TypeSafeMatcher<View> {
     static final int EMPTY = -1;
     static final int ANY = -2;
 
-    DrawableMatcher(int expectedId) {
+    public DrawableMatcher(int expectedId) {
         super(View.class);
         this.expectedId = expectedId;
     }
