@@ -56,16 +56,14 @@ public abstract class ActivitiesUpdater {
         allDocTask.addOnSuccessListener(queryDocumentSnapshots -> {
             // Calculate the number of newly added activities in the collection
             int size = queryDocumentSnapshots.getDocuments().size() - activities.size();
-
-            Log.d(TAG, "diff number of activities is " + size);
             //In case there is more activities in local than db (e.g if activities were deleted from db), than we clear the list and refetch
             if (size < 0) {
                 clearLocalActivities();
                 updateListActivities(onCompletelistener, eventListener);
                 return;
             }
-            //Either way, when updating the list, we update the map as well
             else if (size == 0) allDocTask.addOnCompleteListener(onCompletelistener);
+            //Either way, when updating the list, we update the map as well
             else addActivitiesOnSuccess(firestoreActivityManager.getRecentlyAddedActivities(size), eventListener).addOnCompleteListener(onCompletelistener);;
         });
     }
@@ -82,7 +80,6 @@ public abstract class ActivitiesUpdater {
                 activities.add(act);
                 //for the given activity, we make sure that it will always be updated on map
                 firestoreActivityManager.setActivitiesUpdateListener(act, eventListener);
-                Log.d(TAG, "activities size is " + activities.size());
             }
         }).addOnFailureListener(e -> Log.d(TAG, e.toString()));
     }

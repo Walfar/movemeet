@@ -202,21 +202,18 @@ public class ChatActivity extends AppCompatActivity {
 
     public void getRegisteredUserData() {
         Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + "/" + userId);
-        document.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        UserSerializer userSerializer = new UserSerializer();
-                        user = userSerializer.deserialize(document.getData());
-                        fullNameString = user.getFullName();
-                    } else {
-                        Log.d(TAG, "No such document!");
-                    }
+        document.addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document1 = task.getResult();
+                if (document1.exists()) {
+                    UserSerializer userSerializer = new UserSerializer();
+                    user = userSerializer.deserialize(document1.getData());
+                    fullNameString = user.getFullName();
                 } else {
-                    Log.d(TAG, "Get failed with: ", task.getException());
+                    Log.d(TAG, "No such document!");
                 }
+            } else {
+                Log.d(TAG, "Get failed with: ", task.getException());
             }
         });
     }
@@ -307,20 +304,12 @@ public class ChatActivity extends AppCompatActivity {
                 // After the image loads, get a URI for the image
                 // and add it to the message.
                 taskSnapshot.getMetadata().getReference().getDownloadUrl()
-                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            Message imageMessage = new Message(fullNameString, noMessageText, userId, uri.toString(), Long.toString(new Date().getTime()));
-                            messageManager.set(imageMessage, chatRoom.toString().split(ImageHandler.PATH_SEPARATOR, 4)[3] + ImageHandler.PATH_SEPARATOR + key);
-                        }
+                    .addOnSuccessListener(uri -> {
+                        Message imageMessage = new Message(fullNameString, noMessageText, userId, uri.toString(), Long.toString(new Date().getTime()));
+                        messageManager.set(imageMessage, chatRoom.toString().split(ImageHandler.PATH_SEPARATOR, 4)[3] + ImageHandler.PATH_SEPARATOR + key);
                     });
             }
-        }).addOnFailureListener(this, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Image upload task was not successful.", e);
-            }
-        });
+        }).addOnFailureListener(this, e -> Log.w(TAG, "Image upload task was not successful.", e));
 
     }
 

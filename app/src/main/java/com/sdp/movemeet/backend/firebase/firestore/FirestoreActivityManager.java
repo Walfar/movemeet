@@ -31,7 +31,6 @@ public class FirestoreActivityManager extends FirestoreManager<Activity> {
 
     @Override
     public Task<QuerySnapshot> search(String field, Object value) {
-        // TODO: return 50 closest activities and execute query on those
         return super.search(field, value);
     }
 

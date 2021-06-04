@@ -144,17 +144,8 @@ public class EditProfileActivity extends AppCompatActivity {
         final String email = profileEmail.getText().toString();
 
         if (firebaseUser != null) {
-            firebaseUser.updateEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    accessFirestoreUsersCollectionForUpdate();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(EditProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
+            firebaseUser.updateEmail(email).addOnSuccessListener(aVoid -> accessFirestoreUsersCollectionForUpdate())
+                    .addOnFailureListener(e -> Toast.makeText(EditProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
         }
     }
 
@@ -170,12 +161,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                 finish();
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "onFailure: " + e.toString());
-            }
-        });
+        }).addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e.toString()));
     }
 
 
@@ -190,18 +176,11 @@ public class EditProfileActivity extends AppCompatActivity {
         String userImagePath = FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + userId
                 + ImageHandler.PATH_SEPARATOR + ImageHandler.USER_IMAGE_NAME;
         StorageReference profileRef = BackendInstanceProvider.getStorageInstance().getReference().child(userImagePath);
-        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                deleteProfilePicture(profileRef, userId, firebaseUser);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.d(TAG, "deleteUserAccount - 1) ❌ Firebase Storage user profile picture could not be fetched because it probably doesn't exist!");
-                // 2) Deleting all the user data from Firebase Firestore
-                deleteFirestoreDataAndAuthentication(userId, firebaseUser);
-            }
+        profileRef.getDownloadUrl().addOnSuccessListener(uri -> deleteProfilePicture(profileRef, userId, firebaseUser))
+                .addOnFailureListener(exception -> {
+                    Log.d(TAG, "deleteUserAccount - 1) ❌ Firebase Storage user profile picture could not be fetched because it probably doesn't exist!");
+                    // 2) Deleting all the user data from Firebase Firestore
+                    deleteFirestoreDataAndAuthentication(userId, firebaseUser);
         });
     }
 
@@ -214,12 +193,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 // 2) Deleting all the user data from Firebase Firestore
                 deleteFirestoreDataAndAuthentication(userId, firebaseUser);
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.d(TAG, "deleteUserAccount - 1) ❌ Firebase Storage user profile picture could not be deleted! User account won't be deleted!");
-            }
-        });
+        }).addOnFailureListener(exception -> Log.d(TAG, "deleteUserAccount - 1) ❌ Firebase Storage user profile picture could not be deleted! User account won't be deleted!"));
     }
 
 
@@ -234,37 +208,25 @@ public class EditProfileActivity extends AppCompatActivity {
                 deleteUserFromFirebaseAuthentication(firebaseUser);
 
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "deleteUserAccount - 2) ❌ Firebase Firestore user document could not be fetched! User account won't be deleted!");
-            }
-        });
+        }).addOnFailureListener(e -> Log.d(TAG, "deleteUserAccount - 2) ❌ Firebase Firestore user document could not be fetched! User account won't be deleted!"));
     }
 
 
     private void deleteUserFromFirebaseAuthentication(FirebaseUser firebaseUser) {
         // Delete user from Firebase Authentication
 
-        firebaseUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "deleteUserAccount - 3) ✅ Firebase Authentication for current user successfully deleted!");
-                    Toast.makeText(EditProfileActivity.this, "Account deleted!", Toast.LENGTH_SHORT).show();
-                    // Sending the user to HomeScreenActivity
-                    Intent intent = new Intent(EditProfileActivity.this, HomeScreenActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                } else {
-                    Log.d(TAG, "deleteUserAccount - 3) ❌ Firebase Authentication for current user could not be deleted! Error message: " + task.getException().getMessage());
-                }
+        firebaseUser.delete().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d(TAG, "deleteUserAccount - 3) ✅ Firebase Authentication for current user successfully deleted!");
+                Toast.makeText(EditProfileActivity.this, "Account deleted!", Toast.LENGTH_SHORT).show();
+                // Sending the user to HomeScreenActivity
+                Intent intent = new Intent(EditProfileActivity.this, HomeScreenActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            } else {
+                Log.d(TAG, "deleteUserAccount - 3) ❌ Firebase Authentication for current user could not be deleted! Error message: " + task.getException().getMessage());
             }
         });
     }
-    // TODO: to completely delete the user account, it would be great to delete all the activiies he created as an organiizer!
-    //  For this, we have to have access to all the activities he organized with an additional field in Firebase Firestore for user
-    //  That would be called "organizedActivitiesId" (in addition to the already existing "activitiesId" created by Roxane for the
-    //  ListOfActivities)
 }

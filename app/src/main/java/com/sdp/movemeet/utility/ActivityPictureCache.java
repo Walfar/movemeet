@@ -70,9 +70,7 @@ public abstract class ActivityPictureCache {
      * @return the bitmap loaded from cache, or null if failed to load
      */
     public static Bitmap loadFromCache(String path) {
-        Log.d(TAG, "Loading image from cache");
         String imagePath = Environment.getExternalStorageDirectory().toString() + "/" + path;
-        Log.d(TAG, "path is " + imagePath);
         try {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;

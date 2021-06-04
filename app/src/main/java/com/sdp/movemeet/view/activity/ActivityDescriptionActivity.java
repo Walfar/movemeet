@@ -136,42 +136,42 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Modify the visibility of buttons in the layout
      */
     private void setButton() {
-  View recButton = findViewById(R.id.activityGPSRecDescription);
-        if (activity.getParticipantId().contains(userId)) {
-            findViewById(R.id.activityRegisterDescription).setVisibility(View.GONE);
-            findViewById(R.id.activityChatDescription).setVisibility(View.VISIBLE);
-           if (activity.getSport() == Sport.Running) {
-            recButton.setVisibility(View.VISIBLE);
-            recButton.setEnabled(true);
-            if (userId != null && activity.getParticipantRecordings().containsKey(userId)) {
-                displayParticipantStats();
+      View recButton = findViewById(R.id.activityGPSRecDescription);
+            if (activity.getParticipantId().contains(userId)) {
+                findViewById(R.id.activityRegisterDescription).setVisibility(View.GONE);
+                findViewById(R.id.activityChatDescription).setVisibility(View.VISIBLE);
+               if (activity.getSport() == Sport.Running) {
+                recButton.setVisibility(View.VISIBLE);
+                recButton.setEnabled(true);
+                if (userId != null && activity.getParticipantRecordings().containsKey(userId)) {
+                    displayParticipantStats();
+                } else {
+                    findViewById(R.id.activity_description_stats_layout).setVisibility(View.GONE);
+                    findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
+                }
             } else {
+                recButton.setVisibility(View.INVISIBLE);
+                recButton.setEnabled(false);
                 findViewById(R.id.activity_description_stats_layout).setVisibility(View.GONE);
                 findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
-            }
-        } else {
-            recButton.setVisibility(View.INVISIBLE);
-            recButton.setEnabled(false);
-            findViewById(R.id.activity_description_stats_layout).setVisibility(View.GONE);
-            findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
-           }
-        } else {
-            recButton.setVisibility(View.INVISIBLE);
-            recButton.setEnabled(false);
-            findViewById(R.id.activity_description_stats_layout).setVisibility(View.GONE);
-            findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
-            if (activity.getParticipantId().size() < activity.getNumberParticipant()) {
-                findViewById(R.id.activityRegisterDescription).setVisibility(View.VISIBLE);
-                findViewById(R.id.activityGPSRecDescription).setVisibility(View.GONE);
-                findViewById(R.id.activityChatDescription).setVisibility(View.GONE);
+               }
             } else {
-                findViewById(R.id.activityRegisterDescription).setVisibility(View.VISIBLE);
-                findViewById(R.id.activityRegisterDescription).setEnabled(false);
-                ((TextView) findViewById(R.id.activityRegisterDescription)).setText("No more free places");
-                findViewById(R.id.activityGPSRecDescription).setVisibility(View.GONE);
-                findViewById(R.id.activityChatDescription).setVisibility(View.GONE);
+                recButton.setVisibility(View.INVISIBLE);
+                recButton.setEnabled(false);
+                findViewById(R.id.activity_description_stats_layout).setVisibility(View.GONE);
+                findViewById(R.id.activity_description_stats_data_layout).setVisibility(View.GONE);
+                if (activity.getParticipantId().size() < activity.getNumberParticipant()) {
+                    findViewById(R.id.activityRegisterDescription).setVisibility(View.VISIBLE);
+                    findViewById(R.id.activityGPSRecDescription).setVisibility(View.GONE);
+                    findViewById(R.id.activityChatDescription).setVisibility(View.GONE);
+                } else {
+                    findViewById(R.id.activityRegisterDescription).setVisibility(View.VISIBLE);
+                    findViewById(R.id.activityRegisterDescription).setEnabled(false);
+                    ((TextView) findViewById(R.id.activityRegisterDescription)).setText("No more free places");
+                    findViewById(R.id.activityGPSRecDescription).setVisibility(View.GONE);
+                    findViewById(R.id.activityChatDescription).setVisibility(View.GONE);
+                }
             }
-        }
     }
 
     private void getParticipantNames() {
