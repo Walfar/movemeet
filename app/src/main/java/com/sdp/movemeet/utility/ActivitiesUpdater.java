@@ -7,7 +7,6 @@ import androidx.annotation.VisibleForTesting;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 
 public abstract class ActivitiesUpdater {
 
-    private static final BackendSerializer<Activity> serializer =new ActivitySerializer();
+    private static final BackendSerializer<Activity> serializer = new ActivitySerializer();
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static ArrayList<Activity> activities = new ArrayList<>();
     private static final FirestoreActivityManager firestoreActivityManager = new FirestoreActivityManager(FirestoreActivityManager.ACTIVITIES_COLLECTION, serializer);
@@ -53,7 +52,6 @@ public abstract class ActivitiesUpdater {
 
             Log.d(TAG, "diff number of activities is " + size);
             //In case there is more activities in local than db (e.g if activities were deleted from db), than we clear the list and refetch
-            //TODO: not an optimized way to do, might be interesting to rethink it
             if (size < 0) {
                 clearLocalActivities();
                 updateListActivities(listener);
@@ -61,7 +59,8 @@ public abstract class ActivitiesUpdater {
             }
             //Either way, when updating the list, we update the map as well
             else if (size == 0) allDocTask.addOnCompleteListener(listener);
-            else addActivitiesOnSuccess(firestoreActivityManager.getRecentlyAddedActivities(size)).addOnCompleteListener(listener);
+            else
+                addActivitiesOnSuccess(firestoreActivityManager.getRecentlyAddedActivities(size)).addOnCompleteListener(listener);
         });
     }
 

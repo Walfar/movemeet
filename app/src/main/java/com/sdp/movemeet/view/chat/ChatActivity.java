@@ -29,7 +29,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -110,7 +109,7 @@ public class ChatActivity extends AppCompatActivity {
             userId = fAuth.getCurrentUser().getUid();
         }
 
-        if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
+        if (enableNav) new Navigation(this, R.id.nav_home).createDrawer();
 
         // Initializing Firebase Realtime Database
         database = BackendInstanceProvider.getDatabaseInstance();
@@ -192,6 +191,7 @@ public class ChatActivity extends AppCompatActivity {
                     initialChatWelcomeMessage.setVisibility(View.VISIBLE);
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.v(TAG, "databaseError: " + databaseError);
@@ -277,8 +277,6 @@ public class ChatActivity extends AppCompatActivity {
     // making this method always public for testing and private otherwise
     public void createTempMessage(Uri uri, String fullNameString, String userId) {
         Message tempMessage = new Message(fullNameString, "Image loading...", userId, LOADING_IMAGE_URL, Long.toString(new Date().getTime()));
-        // TODO: Make abstraction for this part of code below (Firebase Realtime Database abstraction) --> difficult!
-        //  Probably add another .add method that can deal with "DatabaseReference.CompletionListener" ? --> ask Kepler for advice
         chatRoom.push().setValue(tempMessage, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -307,13 +305,13 @@ public class ChatActivity extends AppCompatActivity {
                 // After the image loads, get a URI for the image
                 // and add it to the message.
                 taskSnapshot.getMetadata().getReference().getDownloadUrl()
-                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            Message imageMessage = new Message(fullNameString, noMessageText, userId, uri.toString(), Long.toString(new Date().getTime()));
-                            messageManager.set(imageMessage, chatRoom.toString().split(ImageHandler.PATH_SEPARATOR, 4)[3] + ImageHandler.PATH_SEPARATOR + key);
-                        }
-                    });
+                        .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Message imageMessage = new Message(fullNameString, noMessageText, userId, uri.toString(), Long.toString(new Date().getTime()));
+                                messageManager.set(imageMessage, chatRoom.toString().split(ImageHandler.PATH_SEPARATOR, 4)[3] + ImageHandler.PATH_SEPARATOR + key);
+                            }
+                        });
             }
         }).addOnFailureListener(this, new OnFailureListener() {
             @Override

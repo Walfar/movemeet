@@ -21,12 +21,9 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 @RunWith(AndroidJUnit4.class)
 public class RegisterActivityTest {
@@ -41,10 +38,11 @@ public class RegisterActivityTest {
     public ActivityTestRule<RegisterActivity> RegisterTestRule = new ActivityTestRule<>(RegisterActivity.class);
 
     @Test
-    public void Empty_Register(){
-        try{
+    public void Empty_Register() {
+        try {
             Thread.sleep(1000);
-        } catch (Exception e){}
+        } catch (Exception e) {
+        }
 
         onView(withId(R.id.button_register)).perform(click());
 
@@ -52,18 +50,19 @@ public class RegisterActivityTest {
     }
 
     @Test
-    public void goToLogin(){
+    public void goToLogin() {
         onView(withId(R.id.text_view_login_here)).perform(click());
-        try{
+        try {
             Thread.sleep(400);
-        } catch (Exception e){}
+        } catch (Exception e) {
+        }
         // Ensuring that we precisely land on LoginActivity by checking the presence of the Login
         // button
         onView(withId(R.id.button_login)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void Empty_Password(){
+    public void Empty_Password() {
         onView(withId(R.id.edit_text_email))
                 .perform(replaceText(email), closeSoftKeyboard());
         onView(withId(R.id.button_register)).perform(click());
@@ -72,7 +71,7 @@ public class RegisterActivityTest {
     }
 
     @Test
-    public void Short_Password(){
+    public void Short_Password() {
         onView(withId(R.id.edit_text_email))
                 .perform(replaceText(email), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password))
@@ -83,7 +82,7 @@ public class RegisterActivityTest {
     }
 
     @Test
-    public void Right_AlreadyRegister(){
+    public void Right_AlreadyRegister() {
         onView(withId(R.id.edit_text_email))
                 .perform(replaceText(email), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password))
@@ -92,7 +91,7 @@ public class RegisterActivityTest {
     }
 
     @Test
-    public void Right_NewRegister(){
+    public void Right_NewRegister() {
         onView(withId(R.id.edit_text_email))
                 .perform(replaceText(email), closeSoftKeyboard());
         onView(withId(R.id.edit_text_password))
@@ -102,7 +101,7 @@ public class RegisterActivityTest {
 
 
     @Test
-    public void AccountAlreadyExists(){
+    public void AccountAlreadyExists() {
         onView(withId(R.id.edit_text_full_name))
                 .perform(replaceText("Antho"), closeSoftKeyboard());
         onView(withId(R.id.edit_text_email))
@@ -114,21 +113,11 @@ public class RegisterActivityTest {
 
         onView(withId(R.id.button_register)).perform(click());
 
-        // TODO: check why the test cannot intercept the toast when we attempt to create an account
-        //  with an already used email address
-        //---
-        //RegisterActivity activity = RegisterTestRule.getActivity();
-        //onView(withText(R.string.register_toast_account_already_exists)).
-        //        inRoot(withDecorView(not(is(activity.getWindow().getDecorView())))).
-        //        check(matches(isDisplayed()));
-        //---
 
-        // Checking that we are still on the RegisterActivity (i.e. that we have not been redirected
-        // to the MainActivity)
-
-        try{
+        try {
             Thread.sleep(1000);
-        } catch (Exception e){}
+        } catch (Exception e) {
+        }
 
         onView(withId(R.id.button_register)).check(matches(isDisplayed()));
 

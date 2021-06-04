@@ -21,14 +21,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreUserManager;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
-import com.sdp.movemeet.backend.providers.BackendInstanceProvider;
 import com.sdp.movemeet.backend.serialization.ActivitySerializer;
 import com.sdp.movemeet.backend.serialization.UserSerializer;
 import com.sdp.movemeet.models.Activity;
@@ -47,8 +44,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
-
-import static com.sdp.movemeet.utility.ActivityPictureCache.loadFromCache;
 
 /***
  * Activity for show the description of an activity. Informations about an activity are : sport, date and time, time estimate, organizer,
@@ -97,7 +92,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
         }
 
-        if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
+        if (enableNav) new Navigation(this, R.id.nav_home).createDrawer();
 
         Intent intent = getIntent();
 
@@ -272,16 +267,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                         Log.d(TAG, "Participant registered in Firebase Firestore!");
                         getParticipantNames();
                         setButton();
-                        // TODO: (By Victor) here --> get activity from the MainMapFragment and update it!
-                        //  (in order to sync the Firebase Firestore new updates with the local sport activities and their views)
-                        //  (because if we register, exit ActivityDescriptionActivity and then re-enter ActivityDescriptionActivity,
-                        //  then the Firebase Firestore backend works and is updated, but the local activity is not updated according
-                        //  to this version of the backend)
-                        //  Probable solution:
-                        //  Implement a method in the OnResume of MainMapFragment to clear the list of activities
-                        //  and then update them from Firebase Firestore (but this is not very optimal, because it takes time)
-                        //  --> OR: probably implement a kind of listener (as the one for the chat) that listens continuously to
-                        //  new entries in the database!
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

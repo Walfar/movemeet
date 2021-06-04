@@ -27,12 +27,12 @@ public class FirestoreActivityManager extends FirestoreManager<Activity> {
 
     @Override
     public Task<QuerySnapshot> search(String field, Object value) {
-        // TODO: return 50 closest activities and execute query on those
         return super.search(field, value);
     }
 
     /**
      * Returns a list of recently added activities, with the specified size
+     *
      * @param size number of recently added activities we want to get
      * @return a querySnapshot for size number of recently added activities
      */
@@ -43,6 +43,7 @@ public class FirestoreActivityManager extends FirestoreManager<Activity> {
 
     /**
      * Gets all documents in the corresponding collection
+     *
      * @return a querySnapshot for all documents in the collection
      */
     public Task<QuerySnapshot> getAll() {
