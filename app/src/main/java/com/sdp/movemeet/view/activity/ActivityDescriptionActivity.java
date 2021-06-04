@@ -21,8 +21,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.sdp.movemeet.R;
 import com.sdp.movemeet.backend.BackendManager;
 import com.sdp.movemeet.backend.firebase.firestore.FirestoreActivityManager;
@@ -48,6 +48,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
+import static com.sdp.movemeet.utility.ActivityPictureCache.loadFromCache;
+
 /***
  * Activity for show the description of an activity. Informations about an activity are : sport, date and time, time estimate, organizer,
  * a list of participants, a picture, address, and description. A user can register to an activity, and access to the chat.
@@ -67,8 +69,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     public static boolean enableNav = true;
     private TextView organizerView, numberParticipantsView, participantNamesView;
     private FirebaseAuth fAuth;
-    private FirebaseStorage fStorage;
-    private StorageReference storageReference;
     private String userId, organizerId, imagePath;
     private StringBuilder participantNamesString = new StringBuilder();
 
@@ -91,13 +91,13 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
             finish();
         } else {
             userId = fAuth.getCurrentUser().getUid();
-            fStorage = BackendInstanceProvider.getStorageInstance();
-            storageReference = fStorage.getReference();
+
             userManager = new FirestoreUserManager(FirestoreUserManager.USERS_COLLECTION, new UserSerializer());
             activityManager = new FirestoreActivityManager(FirestoreActivityManager.ACTIVITIES_COLLECTION, new ActivitySerializer());
+
         }
 
-        if (enableNav) new Navigation(this, R.id.nav_home).createDrawer();
+        if(enableNav) new Navigation(this, R.id.nav_home).createDrawer();
 
         Intent intent = getIntent();
 
@@ -437,8 +437,13 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         imagePath = activity.getDocumentPath() + ImageHandler.PATH_SEPARATOR + ImageHandler.ACTIVITY_IMAGE_NAME;
         Image image = new Image(null, activityImage);
         image.setDocumentPath(imagePath);
-        ImageHandler.loadImage(image, progressBar);
+        ImageHandler.loadImage(image, this);
     }
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
+
 
     /**
      * Launch the Gallery to select a header picture for the activity
@@ -460,7 +465,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                 Uri imageUri = data.getData();
                 Image image = new Image(imageUri, activityImage);
                 image.setDocumentPath(imagePath);
-                ImageHandler.uploadImage(image, progressBar);
+                ImageHandler.uploadImage(image, this);
             }
         }
     }

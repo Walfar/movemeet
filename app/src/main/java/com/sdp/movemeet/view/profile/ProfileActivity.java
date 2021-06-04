@@ -57,6 +57,8 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseAuth fAuth;
     private BackendManager<User> userManager;
 
+    private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +76,7 @@ public class ProfileActivity extends AppCompatActivity {
         if(enableNav) new Navigation(this, R.id.nav_edit_profile).createDrawer();
 
         ImageView profileImage = findViewById(R.id.image_view_profile_image);
-        ProgressBar progressBar = findViewById(R.id.progress_bar_profile);
+        progressBar = findViewById(R.id.progress_bar_profile);
 
         fullName = findViewById(R.id.text_view_activity_profile_name);
         email = findViewById(R.id.text_view_activity_profile_email);
@@ -89,7 +91,7 @@ public class ProfileActivity extends AppCompatActivity {
                 + ImageHandler.PATH_SEPARATOR + ImageHandler.USER_IMAGE_NAME;
         Image image = new Image(null, profileImage);
         image.setDocumentPath(userImagePath);
-        ImageHandler.loadImage(image, progressBar);
+        ImageHandler.loadImage(image, this);
     }
 
 
@@ -115,6 +117,10 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
     }
 
 

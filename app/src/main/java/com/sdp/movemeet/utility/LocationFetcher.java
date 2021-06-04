@@ -1,6 +1,7 @@
 package com.sdp.movemeet.utility;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -15,6 +16,8 @@ import com.google.android.gms.location.LocationRequest;
 
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.SupportMapFragment;
+
+import static com.sdp.movemeet.utility.PermissionChecker.isLocationPermissionGranted;
 
 /**
  * Utility class used to fetch and update the user's location
@@ -51,11 +54,12 @@ public class LocationFetcher {
     /**
      * Starts periodically requesting location updates to the fusedLocationProviderClient, if the permission is granted
      */
+    @SuppressLint("MissingPermission")
+    //Missing permission annotation because permissions are requested in isPermissionGranted() method
     public void startLocationUpdates() {
         if (!updatingLocation) {
             Activity activity = supportMapFragment.getActivity();
-            if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
+            if (isLocationPermissionGranted(activity)) {
                 //If permission is granted, request the fusedLocationProviderClient to update the location (and set the interval between each request)
                 LocationRequest locationRequest = LocationRequest.create();
                 locationRequest.setInterval(LOCATION_REQUEST_INTERVAL);
@@ -78,15 +82,6 @@ public class LocationFetcher {
     public void stopLocationUpdates() {
         if (updatingLocation) fusedLocationProviderClient.removeLocationUpdates(locationCallback);
         updatingLocation = false;
-    }
-
-    /**
-     * Checks that permission for accessing GPS location is granted
-     * @return true if permission is granted, false otherwise
-     */
-    public boolean isPermissionGranted() {
-        return (ActivityCompat.checkSelfPermission(supportMapFragment.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(supportMapFragment.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED);
     }
 
     /**
