@@ -141,7 +141,7 @@ public class GPSPath implements Serializable {
         if (time <= 0) throw new IllegalArgumentException();
         if (distance <= 0) return 0;
 
-        return (distance / 1000) / (time / 3600);
+        return (distance * 1000) / (time / 3600.0f);
     }
 
     /**
