@@ -7,15 +7,15 @@
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".view.activity.SplashActivity">
-        
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/foot"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:scaleType="fitXY"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/foot" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/foot"
+        android:layout_width="350dp"
+        android:layout_height="300dp"
+        android:scaleType="fitXY"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/ballon" />
 
 
     <TextView
@@ -26,5 +26,8 @@
         android:textColor="@color/black"
         android:textSize="36sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="20dp"
+
+        />
 </LinearLayout>

@@ -41,10 +41,6 @@
             android:name=".view.home.HomeScreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/Theme.movemeet.noActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" /> <!-- this activity is the entry point of the application -->
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity> <!-- Register activity -->
         <activity
             android:name=".view.home.RegisterActivity"
