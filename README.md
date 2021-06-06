@@ -134,7 +134,7 @@ We hope you will enjoy this application and that it will help you to easily orga
 
 
 <a name="sec_2"></a>
-## Technologies
+## 2. Technologies
 * This software is an Android app developed with Android Studio and written in Java.
 * Google Firebase is used for the backend data management (user accounts, sports activity parameters) and for the chat.
 * The location APIs available in Google Play services are used to implement our GPS tracking feature.  
@@ -142,7 +142,7 @@ We hope you will enjoy this application and that it will help you to easily orga
 
 
 <a name="sec_3"></a>
-## Requirements
+## 3. Requirements
 1. **Correctness**: Our application is easy to use and includes features which are consistent with the Android user experience.
 
 [comment]: <> (All of the app’s features must work as intended, in a way that is clear to users and coherent with the Android experience.)
@@ -178,7 +178,7 @@ We hope you will enjoy this application and that it will help you to easily orga
 
 
 <a name="sec_4"></a>
-## Developers
+## 4. Developers
 * Roxane Burri
 * Victor Carles
 * Anthony Guinchard
