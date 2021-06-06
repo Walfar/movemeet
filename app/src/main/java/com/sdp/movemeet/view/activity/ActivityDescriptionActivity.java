@@ -199,7 +199,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
         numberParticipantsView = findViewById(R.id.activity_number_description);
         participantNamesView = findViewById(R.id.activity_participants_description);
         numberParticipantsView.setText(activity.getParticipantId().size() + ImageHandler.PATH_SEPARATOR + activity.getNumberParticipant());
-        participantNamesView.setText(" participants");
+        participantNamesView.setText(" participants:");
     }
 
     /**
@@ -322,6 +322,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                         public void onSuccess(Object o) {
                             Log.d(TAG, "Participant unregistered from Firebase Firestore!");
                             getParticipantNames(activity);
+                            setButton(activity);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -424,8 +425,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         String participantName = (String) document.getData().get("fullName");
-                        participantNamesString.append(participantName).append(", ");
-                        participantNamesView.setText(" participants" + " (" + participantNamesString + ")");
+                        //participantNamesString.append(participantName).append(", ");
+                        participantNamesString.append("\n• ").append(participantName);
+                        participantNamesView.setText(" participants:" + participantNamesString);
                         Log.i(TAG, "current participantName: " + participantName);
                     } else {
                         Log.d(TAG, "No such document!");
