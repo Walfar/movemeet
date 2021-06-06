@@ -6,7 +6,6 @@ import java.util.ArrayList;
 /**
  * This class represents a user.
  */
-
 public class User implements Serializable, FirebaseObject {
 
     private final String fullName;

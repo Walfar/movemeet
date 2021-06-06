@@ -33,12 +33,8 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.movemeet.noActionBar.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
+    <!-- Workouts -->
     <style name="Theme.movemeet.noActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
     <style name="Theme.movemeet.noActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>

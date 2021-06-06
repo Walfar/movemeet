@@ -1,19 +1,18 @@
-package com.sdp.movemeet.ui.workout;
+package com.sdp.movemeet.view.workout;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.sdp.movemeet.R;
+import com.sdp.movemeet.models.Workout;
 
 import java.util.ArrayList;
 
@@ -28,7 +27,7 @@ public class PlaceholderFragment extends Fragment {
     String[] title;
     String[] description;
     int[] icon;
-    ArrayList<Model> arrayList = new ArrayList<Model>();
+    ArrayList<Workout> arrayList = new ArrayList<Workout>();
     private PageViewModel pageViewModel;
 
     public static PlaceholderFragment newInstance(int index) {
@@ -56,14 +55,6 @@ public class PlaceholderFragment extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_workout, container, false);
-        final TextView textView = root.findViewById(R.id.section_label);
-        pageViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-
 
         return root;
     }
@@ -80,7 +71,7 @@ public class PlaceholderFragment extends Fragment {
 
 
         for (int i = 0; i < title.length; i++) {
-            Model model = new Model(title[i], description[i], icon[i]);
+            Workout model = new Workout(title[i], description[i], icon[i]);
             arrayList.add(model);
         }
 

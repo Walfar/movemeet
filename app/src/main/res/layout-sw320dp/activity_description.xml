@@ -155,17 +155,17 @@
                             android:id="@+id/activity_participants_description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="15dp"
                             android:fontFamily="@font/armata"
+                            android:paddingLeft="15dp"
                             android:text="@string/activity_description_participants" />
 
                         <TextView
                             android:id="@+id/activity_additional_participants"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"
+                            android:fontFamily="@font/armata"
                             android:paddingLeft="15dp"
-                            android:fontFamily="@font/armata" />
+                            android:visibility="gone" />
 
                     </LinearLayout>
 
@@ -434,4 +434,5 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:menu="@menu/main_menu" />
+
 </androidx.drawerlayout.widget.DrawerLayout>

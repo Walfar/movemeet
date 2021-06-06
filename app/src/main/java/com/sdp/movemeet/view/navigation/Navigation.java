@@ -7,7 +7,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.VisibleForTesting;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,7 +17,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sdp.movemeet.R;
-import com.sdp.movemeet.ui.workout.WorkoutActivity;
+import com.sdp.movemeet.view.workout.WorkoutActivity;
 import com.sdp.movemeet.backend.providers.AuthenticationInstanceProvider;
 import com.sdp.movemeet.view.activity.UploadActivityActivity;
 import com.sdp.movemeet.view.home.LoginActivity;

@@ -1,13 +1,13 @@
-package com.sdp.movemeet.workout;
+package com.sdp.movemeet.view.workout;
 
 import android.util.Log;
 
 import androidx.test.core.app.ActivityScenario;
 
 import com.sdp.movemeet.R;
-import com.sdp.movemeet.ui.workout.Model;
-import com.sdp.movemeet.ui.workout.TextWorkoutActivity;
-import com.sdp.movemeet.ui.workout.WorkoutActivity;
+import com.sdp.movemeet.models.Workout;
+import com.sdp.movemeet.view.workout.TextWorkoutActivity;
+import com.sdp.movemeet.view.workout.WorkoutActivity;
 
 import org.junit.Test;
 
@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 public class WorkoutTest {
     @Test
     public void WorkoutModelIsCorrect() {
-        Model model = new Model("title", "description", 0);
+        Workout model = new Workout("title", "description", 0);
 
         assertEquals("title", model.getTitle());
         assertEquals("description", model.getDesc());

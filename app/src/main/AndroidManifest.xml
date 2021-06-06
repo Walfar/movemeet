@@ -31,11 +31,19 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-        <activity android:name=".ui.workout.TextWorkoutActivity"></activity>
+        <activity android:name=".view.workout.TextWorkoutActivity"
+            android:parentActivityName=".view.workout.WorkoutActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.movemeet">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sdp.movemeet.view.workout.WorkoutActivity" />
+        </activity>
         <activity
-            android:name=".ui.workout.WorkoutActivity"
+            android:name=".view.workout.WorkoutActivity"
             android:label="@string/title_activity_workout"
-            android:theme="@style/Theme.movemeet.noActionBar.NoActionBar" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.movemeet.noActionBar" />
         <!-- Homescreen activity -->
         <activity
             android:name=".view.home.HomeScreenActivity"

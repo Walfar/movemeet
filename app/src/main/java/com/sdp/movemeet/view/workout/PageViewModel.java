@@ -1,4 +1,4 @@
-package com.sdp.movemeet.ui.workout;
+package com.sdp.movemeet.view.workout;
 
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModel;
 
 public class PageViewModel extends ViewModel {
 
-    private final MutableLiveData<Integer> mIndex = new MutableLiveData<>();
-    private final LiveData<String> mText = Transformations.map(mIndex, new Function<Integer, String>() {
+    private final MutableLiveData<Integer> index = new MutableLiveData<>();
+    private final LiveData<String> text = Transformations.map(index, new Function<Integer, String>() {
         @Override
         public String apply(Integer input) {
             switch (input) {
@@ -25,28 +25,11 @@ public class PageViewModel extends ViewModel {
         }
     });
 
-    /*
-
-    private LiveData<String> mText = Transformations.map(mIndex, new Function<Integer, String>() {
-        @Override
-        public String apply(Integer input) {
-            switch (input) {
-                case 1:
-                    return "Text-based descriptions of workouts";
-                case 2:
-                    return "Images of workouts";
-                case 3:
-                    return "Workouts in PDF format";
-            }
-        }
-    });
-     */
-
     public void setIndex(int index) {
-        mIndex.setValue(index);
+        this.index.setValue(index);
     }
 
     public LiveData<String> getText() {
-        return mText;
+        return text;
     }
 }
