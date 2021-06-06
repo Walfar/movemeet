@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.workout.TextWorkoutActivity">
+    android:padding="10dp"
+    tools:context=".view.workout.TextWorkoutActivity">
+
     <TextView
         android:id="@+id/textView"
-        android:text="Item Detail Here..."
-        android:textSize="30sp"
-        android:textColor="#000"
-
+        android:fontFamily="@font/armata"
+        android:textColor="@color/black"
+        android:textSize="17sp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-     ></TextView>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

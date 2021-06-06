@@ -1,4 +1,4 @@
-package com.sdp.movemeet.ui.workout;
+package com.sdp.movemeet.view.workout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,13 +15,12 @@ public class TextWorkoutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_workout);
 
-        //ActionBar actionBar = getSupportActionBar();
-        TextView mDetailTv = findViewById(R.id.textView);
+        TextView detailTv = findViewById(R.id.textView);
 
         Intent intent = getIntent();
-        String mContent = intent.getStringExtra("contentTv");
+        String content = intent.getStringExtra("contentTv");
 
-        mDetailTv.setText(mContent);
+        detailTv.setText(content);
 
     }
 }
