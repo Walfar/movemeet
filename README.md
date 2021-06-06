@@ -28,12 +28,12 @@ This app was created for the CS-306 Software Development Project course.
 * Kepler Warrington-Arroyo
 
 ### The application
-Welcome to Movemeet !
+Welcome to **movemeet**!
 
 <img src="Application_screenshots/home.jpg"
 width="200"/>
 
-The application is very easy to use with a drop-down panel
+The application contains a navigation drawer and is very easy to use.
 
 <img src="Application_screenshots/navigation_view.jpg"
 width="200"/>
