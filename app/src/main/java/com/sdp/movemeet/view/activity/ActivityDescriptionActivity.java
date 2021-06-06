@@ -208,6 +208,9 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Number of participants of the activity
      */
     private void createParticipantNumberView(Activity activity) {
+        numberParticipantsView = findViewById(R.id.activity_number_description);
+        participantNamesView = findViewById(R.id.activity_participants_description);
+        additionalParticipantsView = findViewById(R.id.activity_additional_participants);
         numberParticipantsView.setText(activity.getParticipantId().size() + ImageHandler.PATH_SEPARATOR + activity.getNumberParticipant() + " participants:");
     }
 
@@ -215,9 +218,6 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Description of the activity
      */
     private void createDescriptionView() {
-        numberParticipantsView = findViewById(R.id.activity_number_description);
-        participantNamesView = findViewById(R.id.activity_participants_description);
-        additionalParticipantsView = findViewById(R.id.activity_additional_participants);
         TextView descriptionView = findViewById(R.id.activity_description_description);
         if (activity.getDescription() == null || activity.getDescription().isEmpty()) {
             findViewById(R.id.activity_description_description).setVisibility(View.GONE);
