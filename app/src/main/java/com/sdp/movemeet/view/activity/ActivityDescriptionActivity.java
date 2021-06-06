@@ -69,7 +69,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE = 1000;
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     public static boolean enableNav = true;
-    private TextView organizerView, numberParticipantsView, participantNamesView;
+    private TextView organizerView, numberParticipantsView, participantNamesView, additionalParticipantsView;
     private FirebaseAuth fAuth;
     private String userId, organizerId, imagePath;
     private StringBuilder participantNamesString = new StringBuilder();
@@ -175,14 +175,26 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
 
     private void getParticipantNames(Activity activity) {
         ArrayList<String> participantIds = activity.getParticipantId();
+        additionalParticipantsView.setVisibility(View.GONE);
         participantNamesString = new StringBuilder();
-        for (int i = 0; i < participantIds.size(); i++) {
+        Boolean finishList = false;
+        int bound, additionalParticipants;
+        if (participantIds.size() > 3) {
+            bound = 3;
+            additionalParticipants = participantIds.size() - 3;
+        } else {
+            bound = participantIds.size();
+            additionalParticipants = 0;
+        }
+        for (int i = 0; i < bound; i++) {
             String currentParticipantId = participantIds.get(i);
             Log.i(TAG, "current currentParticipantId: " + currentParticipantId);
-            getCurrentParticipantName(currentParticipantId);
+            if (i == (bound-1) && additionalParticipants > 0) {
+                finishList = true;
+            }
+            getCurrentParticipantName(currentParticipantId, finishList, additionalParticipants);
         }
     }
-
 
     /**
      * Title of the activity
@@ -196,16 +208,16 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
      * Number of participants of the activity
      */
     private void createParticipantNumberView(Activity activity) {
-        numberParticipantsView = findViewById(R.id.activity_number_description);
-        participantNamesView = findViewById(R.id.activity_participants_description);
-        numberParticipantsView.setText(activity.getParticipantId().size() + ImageHandler.PATH_SEPARATOR + activity.getNumberParticipant());
-        participantNamesView.setText(" participants:");
+        numberParticipantsView.setText(activity.getParticipantId().size() + ImageHandler.PATH_SEPARATOR + activity.getNumberParticipant() + " participants:");
     }
 
     /**
      * Description of the activity
      */
     private void createDescriptionView() {
+        numberParticipantsView = findViewById(R.id.activity_number_description);
+        participantNamesView = findViewById(R.id.activity_participants_description);
+        additionalParticipantsView = findViewById(R.id.activity_additional_participants);
         TextView descriptionView = findViewById(R.id.activity_description_description);
         if (activity.getDescription() == null || activity.getDescription().isEmpty()) {
             findViewById(R.id.activity_description_description).setVisibility(View.GONE);
@@ -416,7 +428,7 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
     /**
      * Fetch the name of a participant from Firebase Firestore using his userId
      */
-    private void getCurrentParticipantName(String participantId) {
+    private void getCurrentParticipantName(String participantId, Boolean finishList, int additionalParticipants) {
         Task<DocumentSnapshot> document = (Task<DocumentSnapshot>) userManager.get(FirestoreUserManager.USERS_COLLECTION + ImageHandler.PATH_SEPARATOR + participantId);
         document.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -425,10 +437,13 @@ public class ActivityDescriptionActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         String participantName = (String) document.getData().get("fullName");
-                        //participantNamesString.append(participantName).append(", ");
                         participantNamesString.append("\n• ").append(participantName);
-                        participantNamesView.setText(" participants:" + participantNamesString);
                         Log.i(TAG, "current participantName: " + participantName);
+                        if (finishList) {
+                            additionalParticipantsView.setVisibility(View.VISIBLE);
+                            additionalParticipantsView.setText("• " + additionalParticipants + " more ...");
+                        }
+                        participantNamesView.setText(participantNamesString);
                     } else {
                         Log.d(TAG, "No such document!");
                     }
